@@ -1,0 +1,57 @@
+<!-- <div id="vimeography-gallery-{{gallery_id}}" class="vimeography-container vimeography-trainer">
+	
+	<div class="vimeography-loader">
+		<div class="vimeography-player">
+			{{#featured}}
+				<iframe id="vimeography-embed-{{gallery_id}}" src="http://player.vimeo.com/video/{{id}}?title=0&byline=0&portrait=0&api=1&player_id=vimeography-embed-{{gallery-id}}" width="820" height="461" frameborder="0" webkitAllowFullScreen mozallowfullscreen allowFullScreen></iframe>
+			{{/featured}}
+		</div>
+	</div>
+	
+	<div class="vimeography-thumbnails">
+		{{#info}}
+			<a class="vimeography-thumbnail" href="#" data-id="{{id}}" title="{{title}}"><img src="{{thumbnail_large}}" alt="{{title}}" /></a>
+		{{/info}}
+	</div>
+	
+	<div class="clearfix"></div>
+	
+</div>
+
+-->
+
+<div id="vimeography-gallery-{{gallery_id}}" class="vimeography-default">
+	{{#info}}
+		<a href="{{url}}"><img class="iframe" src="{{thumbnail_large}}" alt="{{title}}"></a>
+	{{/info}}    	
+</div>
+
+<script charset="utf-8" type="text/javascript">
+	// capture the gallery id, for use in any other enqueued scripts
+	var gallery_id = {{gallery_id}};
+</script>
+
+<style type="text/css">
+	.galleria-stage .galleria-image {
+		position: relative;
+        padding-bottom: 56.25% !important; /* 16:9 */
+        padding-top: 0px !important;
+        height: 0 !important;
+       }
+	#vimeography-gallery-{{gallery_id}} { /*height: 580px;*/ max-width: 820px; width: 100%; clear: both; margin: 20px auto;}
+	#vimeography-gallery-{{gallery_id}} iframe {
+	
+		position: absolute;
+	top: 0;
+	left: 0;
+	width: 100% !important;
+	height: 100% !important;
+
+	
+	}
+</style>
+
+
+<!-- (width of thumb * number of thumbs) + (gutter space * number of gutters) = video width
+use vm-info, vm-data ids
+-->

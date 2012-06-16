@@ -1,0 +1,90 @@
+/* Browser Resets */
+.flex-container a:active,
+.flexslider a:active,
+.flex-container a:focus,
+.flexslider a:focus  {outline: none;}
+.slides,
+.flex-control-nav,
+.flex-direction-nav {margin: 0 !important; padding: 0 !important; list-style: none !important;} 
+
+/* FlexSlider Necessary Styles
+*********************************/ 
+.flexslider {margin: 0; padding: 0;}
+.flexslider .slides > li {display: none; -webkit-backface-visibility: hidden;} /* Hide the slides before the JS is loaded. Avoids image jumping */
+.flexslider .slides img {width: 100%; display: block;}
+.flex-pauseplay span {text-transform: capitalize;}
+
+/* Clearfix for the .slides element */
+.slides:after {content: "."; display: block; clear: both; visibility: hidden; line-height: 0; height: 0;} 
+html[xmlns] .slides {display: block;} 
+* html .slides {height: 1%;}
+
+/* No JavaScript Fallback */
+/* If you are not using another script, such as Modernizr, make sure you
+ * include js that eliminates this class on page load */
+.no-js .slides > li:first-child {display: block;}
+
+
+/* FlexSlider Default Theme
+*********************************/
+.flexslider {margin: 0; background: transparent; position: relative; -webkit-border-radius: 4px; -moz-border-radius: 4px; -o-border-radius: 4px; border-radius: 4px; -webkit-box-shadow: 0 1px 4px rgba(0,0,0,.2); zoom: 1;}
+.flex-viewport {max-height: 2000px; -webkit-transition: all 1s ease; -moz-transition: all 1s ease; transition: all 1s ease;}
+.loading .flex-viewport {max-height: 300px;}
+.flexslider .slides {zoom: 1;}
+
+.carousel li {margin-right: 5px}
+
+/* Direction Nav */
+.flex-direction-nav a {width: 36px; height: 39px; margin: -20px 0 0; display: block; background: url(../img/arrows.png) no-repeat 0 0; position: absolute; top: 50%; cursor: pointer; text-indent: -9999px; opacity: 0; filter: alpha(opacity=0); -webkit-transition: all .3s ease;}
+.flexslider:hover .flex-next {opacity: 1; filter: alpha(opacity=100); right: 0;}
+.flexslider:hover .flex-prev {opacity: 1; filter: alpha(opacity=100); left: 0;}
+
+.flex-direction-nav .flex-next.flex-disabled,
+.flex-direction-nav .flex-next.disabled,
+.flex-direction-nav .flex-prev.flex-disabled,
+.flex-direction-nav .flex-prev.disabled {opacity: .3!important; filter:alpha(opacity=30); cursor: default;}
+
+.flex-direction-nav .flex-next.flex-disabled,
+.flex-direction-nav .flex-next.disabled {right: 0;}
+
+.flex-direction-nav .flex-prev.flex-disabled,
+.flex-direction-nav .flex-prev.disabled {left: 0;}
+
+/* Control Nav */
+.flex-control-nav {width: 100%; position: absolute; bottom: -30px; text-align: center;}
+.flex-control-nav li {margin: 0 0 0 5px; display: inline-block; zoom: 1; *display: inline;}
+.flex-control-nav li:first-child {margin: 0;}
+.flex-control-paging li a {width: 11px; height: 11px; display: block; background: #dedede; cursor: pointer; text-indent: -9999px; -webkit-border-radius: 20px; -moz-border-radius: 20px; -o-border-radius: 20px; border-radius: 20px;}
+.flex-control-paging li a:hover {background: #a4a4a4;}
+.flex-control-paging li a.active {background: #ff5454; cursor: default;}
+
+.flex-control-thumbs {margin: 5px 0 0; position: static; overflow: hidden;}
+.flex-control-thumbs li {width: 25%; float: left; margin: 0;}
+.flex-control-thumbs img {width: 100%; display: block; opacity: .7; filter: alpha(opacity=70); cursor: pointer;}
+.flex-control-thumbs img:hover {opacity: 1; filter: alpha(opacity=100);}
+.flex-control-thumbs .active {opacity: 1; filter: alpha(opacity=100); cursor: default;}
+
+@media screen and (max-width: 860px) {
+  .flex-direction-nav .flex-prev {opacity: 1; filter: alpha(opacity=100); left: 0;}
+  .flex-direction-nav .flex-next {opacity: 1; filter: alpha(opacity=100); right: 0;}
+}
+
+/* Custom Modifications */
+
+.vimeography-bugsauce { clear: both; margin: 20px auto; width: 100%; max-width: 820px;}
+.vimeography-bugsauce .vimeography-thumbnails .slides li {width: 189px !important; margin-right: 5px; cursor: pointer;}
+.vimeography-bugsauce .vimeography-thumbnails .slides li img {border: 1px solid #DDDDDD; border-radius: 4px 4px 4px 4px; box-shadow: 0 1px 1px rgba(0, 0, 0, 0.075); display: block;}
+
+.vimeography-bugsauce .vimeography-thumbnails .slides li:hover {opacity: .95;}
+.vimeography-bugsauce .vimeography-thumbnails .slides li.flex-active-slide img {opacity: .95; border-color:#0088cc;-webkit-box-shadow:0 1px 4px rgba(0, 105, 214, 0.25);-moz-box-shadow:0 1px 4px rgba(0, 105, 214, 0.25);box-shadow:0 1px 4px rgba(0, 105, 214, 0.25);}
+
+.vimeography-bugsauce .vimeography-main .flex-direction-nav a {width: 62px; height: 124px;}
+.vimeography-bugsauce .vimeography-main .flex-direction-nav .flex-next {background-position: -62px 0;}
+.vimeography-bugsauce .vimeography-main .flex-direction-nav .flex-prev {background-position: 0 0;}
+
+.vimeography-bugsauce .vimeography-thumbnails {margin-top: 10px; padding: 0 23px;}
+.vimeography-bugsauce .vimeography-thumbnails .flex-direction-nav a {width: 23px; height: 40px;}
+.vimeography-bugsauce .vimeography-thumbnails .flex-direction-nav .flex-next {right: 0; background-position: -154px 0px;}
+.vimeography-bugsauce .vimeography-thumbnails .flex-direction-nav .flex-prev {left: 0; background-position: -127px 0;}
+
+

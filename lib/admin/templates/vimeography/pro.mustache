@@ -1,0 +1,103 @@
+<div class="wrap wp_bootstrap">
+	<!-- Display Plugin Icon, Header, and Description -->
+	<div class="icon32" id="icon-options-general"><br></div>
+	<h2 class="page-title">Vimeography Pro</h2>
+	
+	<div class="alert alert-info fade in">
+		<a class="close" data-dismiss="alert" href="#">&times;</a>
+		<h4 class="alert-heading">Coming soon!</h4>
+		<strong>Get custom! </strong>With Vimeography Pro, you can sort your videos, create playlists, show unlimited videos, add comments and more.
+	</div>
+	
+	{{! hide the below for now, since this will be a while.}}
+	
+	{{#hide_this_stuff}}
+	
+	<h2>Register your App (Free)</h2>
+	<ol>
+		<li>Visit <a href="https://developer.vimeo.com/apps" title="Create a new Vimeo application">https://developer.vimeo.com/apps</a> and click "Create a new app"</li>
+		<li>Fill out the form with the following values:</li>
+		<div class="container pull-left">
+		    <table class="table table-striped">
+			    <thead>
+				    <tr>
+					    <th>Form Option</th>
+					    <th>Your Response</th>
+				    </tr>
+			    </thead>
+			    <tbody>
+				    <tr>
+					    <td><strong>App Name:</strong></td>
+					    <td>Vimeography Wordpress plugin</td>
+				    </tr>
+				    <tr>
+					    <td><strong>App Description:</strong></td>
+					    <td>Displays videos with a custom theme on {{home_url}}</td>
+				    </tr>
+				    <tr>
+					    <td><strong>App URL:</strong></td>
+					    <td>http://vimeography.com</td>
+				    </tr>
+				    <tr>
+					    <td><strong>App Logo URL:</strong></td>
+					    <td>[leave this blank]</td>
+				    </tr>
+				    <tr>
+					    <td><strong>App Callback URL:</strong></td>
+					    <td>[leave this blank]</td>
+				    </tr>
+				    <tr>
+					    <td><strong>Terms of Service:</strong></td>
+					    <td>[check the box]</td>
+				    </tr>
+			    </tbody>
+		    </table>
+		</div>
+		<li style="clear:left;">Under the section called "Your access token", copy and paste the keycodes from "Access token" and "Access token secret" below:</li>
+	</ol>
+	
+	<form id="vimeography-advanced-settings-form" method="post" action="options.php">
+	
+		{{secure_form}}
+		
+		<table class="form-table">							
+			<tr>
+				<th scope="row"><h2>client id</h2></th>
+				<td>
+					<h2>
+						<input type="text" size="40" name="vimeography_advanced_settings[client_id]" value="" />
+					</h2>
+				</td>
+			</tr>
+			<tr>
+				<th scope="row"><h2>client secret</h2></th>
+				<td>
+					<h2>
+						<input type="text" size="40" name="vimeography_advanced_settings[client_secret]" value="" />
+					</h2>
+				</td>
+			</tr>
+			<tr>
+				<th scope="row"><h2>access token</h2></th>
+				<td>
+					<h2>
+						<input type="text" size="40" name="vimeography_advanced_settings[access_token]" value="" />
+					</h2>
+				</td>
+			</tr>
+			<tr>
+				<th scope="row"><h2>access token secret</h2></th>
+				<td>
+					<h2>
+						<input type="text" size="40" name="vimeography_advanced_settings[access_token_secret]" value="" />
+					</h2>
+				</td>
+			</tr>
+		</table>
+		<hr />
+		<input class="btn btn-primary btn-large" type="submit" value="Register my App">
+	</form>
+	
+	{{/hide_this_stuff}}
+		
+</div> <!-- End Advanced Settings -->

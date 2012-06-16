@@ -1,0 +1,175 @@
+<div class="wrap wp_bootstrap">
+	<!-- Display Plugin Icon, Header, and Description -->
+	<div class="icon32" id="icon-options-general"><br></div>
+	<h2 class="page-title">Gallery Editor {{#gallery}}:: {{title}}{{/gallery}}</h2>
+		
+	<script type="text/javascript">
+		(function($){
+			$(document).ready(function(){
+				$('.nav-tabs li a[href="#vimeography-{{tab_to_show}}"]').tab('show');
+			});
+		})(jQuery)
+	</script>
+		
+	{{#messages}}
+		<div class="alert alert-{{type}} fade in">
+			<a class="close" data-dismiss="alert" href="#">&times;</a>
+			<h3 class="alert-heading">{{heading}}</h3>
+			<p>{{message}}</p>
+		</div>
+	{{/messages}}
+	
+	{{#gallery}}
+		<div class="tabbable">
+		    <ul class="nav nav-tabs">
+			    <li class="active"><a href="#vimeography-basic-settings" data-toggle="tab">Basic Settings</a></li>
+			    <li><a href="#vimeography-appearance" data-toggle="tab">Appearance</a></li>
+			    <li><a href="#vimeography-advanced-settings" data-toggle="tab">Advanced Settings</a></li>
+			</ul>
+			
+			<div class="tab-content">
+			
+				<div class="tab-pane active" id="vimeography-basic-settings">
+					<div class="alert alert-info fade in">
+						<a class="close" data-dismiss="alert" href="#">&times;</a>
+				    	<strong>Confused?</strong> Visit the Help page to learn how to create your gallery. <a href="{{admin_url}}help" title="">Let's go &rarr;</a>
+				    </div>
+				
+					<form id="vimeography-basic-settings-form" method="post" action="{{admin_url}}edit-galleries&id={{id}}">
+													
+						<table class="form-table">
+							<tr>
+								<th scope="row"><h2>gallery title</h2></th>
+								<td>
+									<h2>
+										<input type="text" size="20" name="vimeography_basic_settings[gallery_title]" value="{{title}}" />
+									</h2>
+								</td>
+							</tr>
+							<tr>
+								<th scope="row"><h2>show the videos from</h2></th>
+								<td>
+									<h2>
+										<select id="vimeography-source" name="vimeography_basic_settings[source]">
+											<option value='user' {{#selected}}{{#user}}selected="selected"{{/user}}{{/selected}}>my Vimeo username</option>
+											<option value='album' {{#selected}}{{#album}}selected="selected"{{/album}}{{/selected}}>a Vimeo album</option>
+											<option value='group' {{#selected}}{{#group}}selected="selected"{{/group}}{{/selected}}>a Vimeo group</option>
+											<option value='channel' {{#selected}}{{#channel}}selected="selected"{{/channel}}{{/selected}}>a Vimeo channel</option>
+										</select>
+									</h2>
+								</td>
+							</tr>
+							<tr>
+								<th scope="row"><h2>located at</h2></th>
+								<td>
+									<h2>
+										<span id="vimeography-source-url">http://vimeo.com/<span></span></span>
+										<input type="text" size="20" name="vimeography_basic_settings[named]" value="{{source_name}}" />
+									</h2>
+								</td>
+							</tr>
+						</table>
+						<hr />
+						{{{basic_nonce}}}
+						<input class="btn btn-primary btn-large" type="submit" value="Save Changes">
+					</form>
+		
+			    </div> <!-- End Basic Settings -->
+			    				    
+			    <div class="tab-pane" id="vimeography-appearance">
+				    <div class="alert alert-info fade in">
+						<a class="close" data-dismiss="alert" href="#">&times;</a>
+				    	<strong>Heads up!</strong> You can insert this gallery on a post or page by typing <strong>[vimeography id="{{id}}"]</strong>
+				    </div>
+					<div style="width: 1000px; max-width: 100%; margin: 20px auto; clear: both;">
+						{{{vimeography}}}
+					</div>
+					<hr />
+				    <form id="vimeography-appearance-form" method="post" action="{{admin_url}}edit-galleries&id={{id}}">
+				    	<div class="alert alert-info">
+				    		<h3 class="alert-heading">Switch Themes</h3>
+				    		<p>Select a theme below to change the appearance of your gallery.</p>
+				    	</div>
+						<ul id="themes">
+							{{#themes}}
+									<li>
+										<div class="theme-container {{#active}}active{{/active}}">
+											<div class="theme-image">
+												<img alt="{{name}}" src="{{thumbnail}}">
+											</div>
+											
+											<div class="theme-details">
+												<a href="#" data-theme="{{name}}">{{name}}</a> 
+												<span>{{#active}}in use{{/active}}</span>
+											</div>
+											
+											<a href="#" data-theme="{{name}}" class="theme-info" style="opacity: 0;">
+												<strong>{{name}}</strong>
+												<span>{{description}}</span>
+												{{^active}}<span>use this theme &rarr;</span>{{/active}}
+											</a>
+										</div>
+									</li>
+							{{/themes}}
+						</ul>
+						<input id="selected-vimeography-theme" type="hidden" name="vimeography_appearance_settings[theme_name]" value="{{theme}}" />
+						{{{appearance_nonce}}}
+					</form>
+			    </div> <!-- End Appearance -->
+			    				    				    
+			    <div class="tab-pane" id="vimeography-advanced-settings">
+		    		<div class="alert">
+			    		<strong>Want more?</strong> With Vimeography Pro, you can sort your videos, create playlists, show unlimited videos, add comments and more.
+			    		<a href="{{admin_url}}pro" title="Learn more about Vimeography Pro">Learn more &rarr;</a>
+		    		</div>
+			    	
+					<form id="vimeography-advanced-settings-form" method="post" action="{{admin_url}}edit-galleries&id={{id}}">
+													
+						<table class="form-table">
+							<tr>
+								<th scope="row"><h2>refresh the videos every</h2></th>
+								<td>
+									<h2>
+									<select id="vimeography-cache" name="vimeography_advanced_settings[cache_timeout]">
+										<option value='0' {{#selected}}{{#0}}selected="selected"{{/0}}{{/selected}}>page load</option>
+										<option value='900' {{#selected}}{{#900}}selected="selected"{{/900}}{{/selected}}>15 minutes</option>
+										<option value='1800' {{#selected}}{{#1800}}selected="selected"{{/1800}}{{/selected}}>30 minutes</option>
+										<option value='3600' {{#selected}}{{#3600}}selected="selected"{{/3600}}{{/selected}}>hour</option>
+										<option value='86400' {{#selected}}{{#86400}}selected="selected"{{/86400}}{{/selected}}>day</option>
+										<option value='604800' {{#selected}}{{#604800}}selected="selected"{{/604800}}{{/selected}}>week</option>
+										<option value='2419200' {{#selected}}{{#2419200}}selected="selected"{{/2419200}}{{/selected}}>month</option>
+									</select>
+									</h2>
+								</td>
+							</tr>
+							<tr>
+								<th scope="row"><h2>number of videos to show</h2></th>
+								<td>
+									<h2>
+										<input type="text" size="20" name="vimeography_advanced_settings[video_count]" value="{{video_count}}" />
+									</h2>
+								</td>
+							</tr>
+							<tr>
+								<th scope="row"><h2>feature the video located at</h2></th>
+								<td>
+									<h2>
+										<span>http://vimeo.com/</span><input type="text" size="20" name="vimeography_advanced_settings[featured_video]" value="{{featured_video}}" />
+									</h2>
+								</td>
+							</tr>
+						</table>
+						
+						<hr />
+						{{{advanced_nonce}}}
+						<input class="btn btn-primary btn-large" type="submit" value="Save Changes">
+					</form>
+								    	
+			    </div> <!-- End Advanced Settings -->
+			    
+		    </div>
+		</div> <!-- end tabbable -->
+	
+	{{/gallery}}
+	
+</div>

@@ -1,0 +1,30 @@
+<div class="wrap wp_bootstrap">
+
+	<!-- Display Plugin Icon, Header, and Description -->
+	<div class="icon32" id="icon-options-general"><br></div>
+	<h2 class="page-title">Help</h2>
+	
+	<h3>How do I add my gallery to a post or page?</h3>
+	<p>Easy! All you have to do is type <code>[vimeography id="<span style="color:blue;">#</span>"]</code>, where <span style="color:blue;">#</span> is replaced by the ID number of your gallery.</p>
+	
+	<h3>Where do I find the ID number of my gallery?</h3>
+	<p>Each gallery's ID number is located next to the gallery's title in the first column on the <a href="">edit galleries</a> page.</p>
+	
+	<h3>Can I override my gallery settings in the shortcode?</h3>
+	<p>Sure thing! You can define all of the properties found in the admin panel right in your shortcode as well. Try using one, any, or all of the following parameters:</p>
+	<code>[vimeography id="3" theme="thumbs" featured="28380190" source="channel" named="staffpicks" cache="3600"]</code>
+	
+	<h3>Can I add the gallery to my theme's sidebar/footer/header etc.?</h3>
+	<p>Yes, but you'll need some PHP knowledge to do it! Open the file you want to add the gallery to, and type <code>&lt;?php do_shortcode('[vimeography id="<span style="color:blue;">#</span>"]</strong>'); ?&gt;</code>, where <span style="color:blue;">#</span> is replaced by the ID number of your gallery.</p>
+	
+	<h3>Can I change the colors/layout of my theme?</h3>
+	<p>Not yet! All themes are set in stone, but we do have plans to add a custom css editor.</p>
+	
+	<h3>Coming soon:</h3>
+	<ul>
+		<li>Vimeography Pro</li>
+		<li>Theme Customization (colors, width, thumbnail size)</li>
+		<li>Custom CSS Editor</li>
+		<li>Define width and height of container in shortcode</li>
+	</ul>
+</div> <!-- End Help -->

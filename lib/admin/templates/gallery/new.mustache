@@ -1,0 +1,59 @@
+<div class="wrap wp_bootstrap">
+
+	<!-- Display Plugin Icon, Header, and Description -->
+	<div class="icon32" id="icon-options-general"><br></div>
+	<h2 class="page-title">New Gallery</h2>
+	
+	{{#messages}}
+		<div class="alert alert-{{type}} fade in">
+			<a class="close" data-dismiss="alert" href="#">&times;</a>
+			<h3 class="alert-heading">{{heading}}</h3>
+			<p>{{message}}</p>
+		</div>
+	{{/messages}}
+	
+	<div class="alert alert-info fade in">
+		<a class="close" data-dismiss="alert" href="#">&times;</a>
+    	<strong>Confused?</strong> Visit the Help page to learn how to create your gallery. <a href="{{admin_url}}help" title="">Let's go &rarr;</a>
+    </div>
+
+	<form id="vimeography-basic-settings-form" method="post" action="{{admin_url}}new-gallery&noheader=true">
+			
+		<table class="form-table">		
+			<tr>
+				<th scope="row"><h2>gallery title</h2></th>
+				<td>
+					<h2>
+						<input type="text" size="20" name="vimeography_basic_settings[gallery_title]" value="" />
+					</h2>
+				</td>
+			</tr>
+			<tr>
+				<th scope="row"><h2>show the videos from</h2></th>
+				<td>
+					<h2>
+						<select id="vimeography-source" name='vimeography_basic_settings[source_type]'>
+							<option value='user'{{#selected}}{{#user}} selected="selected"{{/user}}{{/selected}}>my Vimeo username</option>
+							<option value='album'{{#selected}}{{#album}} selected="selected"{{/album}}{{/selected}}>a Vimeo album</option>
+							<option value='group'{{#selected}}{{#group}} selected="selected"{{/group}}{{/selected}}>a Vimeo group</option>
+							<option value='channel'{{#selected}}{{#channel}} selected="selected"{{/channel}}{{/selected}}>a Vimeo channel</option>
+						</select>
+					</h2>
+				</td>
+			</tr>
+			<tr>
+				<th scope="row"><h2>located at</h2></th>
+				<td>
+					<h2>
+						<span id="vimeography-source-url">http://vimeo.com/<span></span></span>
+						<input type="text" size="20" name="vimeography_basic_settings[source_name]" value="{{#defaults}}{{source_name}}{{/defaults}}" />
+					</h2>
+				</td>
+			</tr>
+		</table>
+		
+		<hr />
+		{{{nonce}}}
+		<input class="btn btn-primary btn-large" type="submit" value="Create Gallery">
+	</form>
+</div>
