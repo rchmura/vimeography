@@ -28,7 +28,9 @@ class Vimeography_Gallery_Edit extends Mustache
 		{
 			$this->tab_to_show = 'appearance';
 			$this->messages[] = array('type' => 'success', 'heading' => 'Gallery created.', 'message' => 'Welp, that was easy.');
-		}		
+		}
+		
+		if (!isset($this->tab_to_show)) $this->tab_to_show = 'appearance';	
 	}
 	
 	/**
@@ -115,7 +117,7 @@ class Vimeography_Gallery_Edit extends Mustache
 			$local_path = VIMEOGRAPHY_THEME_PATH . $theme_info['name'] . '/' . $theme_info['name'] .'.jpg';
 			
 			$theme_info['thumbnail'] = file_exists($local_path) ? VIMEOGRAPHY_THEME_URL . $theme_info['name'] . '/' . $theme_info['name'] .'.jpg' : 'http://placekitten.com/g/200/150';
-			$theme_info['active'] = strtolower($theme_info['name']) == $this->gallery[0]->theme_name ? TRUE : FALSE;
+			$theme_info['active'] = $theme_info['name'] == $this->gallery[0]->theme_name ? TRUE : FALSE;
 									
 			$themes[] = $theme_info;
 		}

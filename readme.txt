@@ -1,9 +1,9 @@
 === Vimeography ===
 Contributors: iamdavekiss
 Tags: vimeo, videos, gallery
-Requires at least: 3.1
-Tested up to: 3.3.2
-Stable tag: 0.5.1
+Requires at least: 3.3
+Tested up to: 3.4
+Stable tag: 0.5.2
 License: MIT
 
 The easiest way to create beautiful Vimeo galleries on your Wordpress blog.
@@ -64,15 +64,20 @@ Not yet! All themes are set in stone, but we do have plans to add a custom css e
 
 == Screenshots ==
 
-1. screenshot-1.jpg description, placed in the root dir
-2. screenshot-2.jpg description
+1. Create a gallery in 3 easy steps.
+2. Preview your gallery and customize its appearance.
+3. Manage your galleries with a simple interface.
+4. Get new styles by installing gallery themes.
 
 == Changelog ==
+= 0.5.2 =
+* Screenshots are now shown on the WordPress plugin page.
+* Updates to the Bugsauce theme.
 
 = 0.5.1 =
-* Move themes folder to wp-uploads
-* Changed default theme to bugsauce
-* Switched to flexslider
+* Move themes folder to wp-uploads.
+* Changed default theme to Bugsauce.
+* Switched to flexslider.
 
 = 0.5 =
 * First public release.
