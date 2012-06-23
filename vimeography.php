@@ -3,7 +3,7 @@
 Plugin Name: Vimeography
 Plugin URI: http://vimeography.com
 Description: Vimeography is the easiest way to set up a custom Vimeo gallery on your site.
-Version: 0.5.2
+Version: 0.5.3
 Author: Dave Kiss
 Author URI: http://davekiss.com
 License: MIT
@@ -21,7 +21,7 @@ define( 'VIMEOGRAPHY_PATH', plugin_dir_path(__FILE__) );
 define( 'VIMEOGRAPHY_THEME_URL', $wp_upload_dir['baseurl'].'/vimeography-themes/' );
 define( 'VIMEOGRAPHY_THEME_PATH', $wp_upload_dir['basedir'].'/vimeography-themes/' );
 define( 'VIMEOGRAPHY_BASENAME', plugin_basename( __FILE__ ) );
-define( 'VIMEOGRAPHY_VERSION', '0.5.2');
+define( 'VIMEOGRAPHY_VERSION', '0.5.3');
 define( 'VIMEOGRAPHY_GALLERY_TABLE', $wpdb->prefix . "vimeography_gallery");
 define( 'VIMEOGRAPHY_GALLERY_META_TABLE', $wpdb->prefix . "vimeography_gallery_meta");
 define( 'VIMEOGRAPHY_CURRENT_PAGE', basename($_SERVER['PHP_SELF']));
@@ -399,7 +399,13 @@ class Vimeography
      */
     private function _move_theme($args = array())
     {
-	    WP_Filesystem();
+		// Replaces simple `WP_Filesystem();` call to prevent any extraction issues
+		// @link http://wpquestions.com/question/show/id/2685
+		function __return_direct() { return 'direct'; }
+		add_filter( 'filesystem_method', '__return_direct' );	
+		WP_Filesystem();
+		remove_filter( 'filesystem_method', '__return_direct' );
+		
 	    global $wp_filesystem;
 		$defaults = array( 'source' => '', 'destination' => '', //Please always pass these
 						'clear_destination' => false, 'clear_working' => false,
@@ -411,7 +417,7 @@ class Vimeography
 		@set_time_limit( 300 );
 
 		if ( empty($source) || empty($destination) )
-			return new WP_Error('bad_request', $this->strings['bad_request']);
+			return new WP_Error('bad_request', 'bad request.');
 			
 		// $this->skin->feedback('installing_package');
 

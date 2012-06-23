@@ -8,10 +8,7 @@ class Vimeography_Gallery_Edit extends Mustache
 	public $gallery;
 	
 	public function __construct()
-	{
-		//wp_register_style('cloud.css', plugins_url('media/css/cloud.css', __FILE__ ));
-		//wp_enqueue_style('cloud.css');
-		
+	{		
 		if (isset($_POST))
 			$this->_validate_form();
 
@@ -117,7 +114,7 @@ class Vimeography_Gallery_Edit extends Mustache
 			$local_path = VIMEOGRAPHY_THEME_PATH . $theme_info['name'] . '/' . $theme_info['name'] .'.jpg';
 			
 			$theme_info['thumbnail'] = file_exists($local_path) ? VIMEOGRAPHY_THEME_URL . $theme_info['name'] . '/' . $theme_info['name'] .'.jpg' : 'http://placekitten.com/g/200/150';
-			$theme_info['active'] = $theme_info['name'] == $this->gallery[0]->theme_name ? TRUE : FALSE;
+			$theme_info['active'] = strtolower($theme_info['name']) == $this->gallery[0]->theme_name ? TRUE : FALSE;
 									
 			$themes[] = $theme_info;
 		}
@@ -242,7 +239,7 @@ class Vimeography_Gallery_Edit extends Mustache
 			try
 			{
 				global $wpdb;
-				$settings['theme_name'] = $wpdb->escape(wp_filter_nohtml_kses($input['vimeography_appearance_settings']['theme_name']));
+				$settings['theme_name'] = strtolower($wpdb->escape(wp_filter_nohtml_kses($input['vimeography_appearance_settings']['theme_name'])));
 						
 				$result = $wpdb->update( VIMEOGRAPHY_GALLERY_META_TABLE, array('theme_name' => $settings['theme_name']), array( 'gallery_id' => $id ) );
 				if ($result === FALSE)

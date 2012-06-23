@@ -32,27 +32,19 @@ class Vimeography_Theme_List extends Mustache
 	{
 	   return wp_nonce_field('vimeography-install-theme','vimeography-theme-verification');
 	}
-	
-	
-	/*
-	
-	function __return_direct() { return 'direct'; }
-
-	add_filter( 'filesystem_method', '__return_direct' );
-	
-	WP_Filesystem();
-	
-	remove_filter( 'filesystem_method', '__return_direct' );
-
-	
-	*/
+		
 	protected function _validate_form()
 	{
 		// if this fails, check_admin_referer() will automatically print a "failed" page and die.
 		if ( !empty($_FILES) && check_admin_referer('vimeography-install-theme','vimeography-theme-verification') )
 		{
 			
+			// Replaces simple `WP_Filesystem();` call to prevent any extraction issues
+			// @link http://wpquestions.com/question/show/id/2685
+			function __return_direct() { return 'direct'; }
+			add_filter( 'filesystem_method', '__return_direct' );	
 			WP_Filesystem();
+			remove_filter( 'filesystem_method', '__return_direct' );
 			
 			$name = substr(wp_filter_nohtml_kses($_FILES['vimeography-theme']['name']), 0, -4);
 			

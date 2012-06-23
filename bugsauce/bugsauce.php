@@ -18,7 +18,7 @@ class Vimeography_Themes_Bugsauce extends Mustache
 	{
 		// Without the @, this generates warnings?
 		// Notice: Undefined offset: 0 in /Users/davekiss/Sites/vimeography.com/wp-includes/plugin.php on line 762/780
-		@add_action('wp_enqueue_scripts', $this->_load_scripts());
+		@add_action('wp_enqueue_scripts', $this->_load_scripts());		
 	}
 	
 	public function _load_scripts()
@@ -49,7 +49,7 @@ class Vimeography_Themes_Bugsauce extends Mustache
     	$helpers = new Vimeography_Helpers;
     	
     	// add featured video to the beginning of the array
-    	if (is_array($this->featured))
+    	if (is_array($this->featured))  		
     		array_unshift($this->data, $this->featured[0]);
     	
     	$items = array();

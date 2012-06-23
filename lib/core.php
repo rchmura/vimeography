@@ -58,50 +58,10 @@ class Vimeography_Core extends Vimeography
 		$this->_debug = $debug;
 		return $this;
 	}
-				
-	/**
-	 * Build the endpoint url based on the provided information.
-	 * 
-	 * @access protected
-	 * @param mixed $data
-	 * @return void
-	 */
-	protected function _build_url($source)
-	{
-		switch ($source)
-		{
-			case 'album':
-				$result = 'album/'.$this->_named.'/'.$this->_type;
-				break;
-			case 'channel':
-				$result = 'channel/'.$this->_named.'/'.$this->_type;
-				break;
-			case 'group':
-				$result = $this->_named.'/'.$this->_type;
-				break;
-			case 'user':
-				$result = $this->_named.'/'.$this->_type;
-				break;
-			case 'video':
-				$result = 'video/'.$this->_named;
-				break;
-			default:
-				if (empty($source))
-				{
-					throw new Vimeography_Exception('You must provide a source from where to retrieve Vimeo videos.');
-				}
-				else
-				{
-					throw new Vimeography_Exception($source.' is not a valid Vimeo source parameter.');
-				}
-				break;
-		}
-		
-		return self::ENDPOINT.$result.self::FORMAT;
-	}
-		
+	
 	/**
 	 * Retrieves the requested data from Vimeo API.
+	 * This is called by the class loaded in the factory method.
 	 * 
 	 * TODO: This could potentially return a 404 page, and we don't want that, nor do we want to show it in the exception.
 	 * @access protected
@@ -170,24 +130,90 @@ class Vimeography_Core extends Vimeography
 					
 				}
 				$main_request = FALSE;
-				$result[] = $videos;
+				$result[] = $videos;				
 			}
 			else
 			{
-				// Remove the last video in the array to make room for the featured video . NOTE: Don't want to do this when the featured video exists in the video_object
-				/*$video_object = json_decode($result[0]);
-				unset($video_object[count($video_object) - 1]);
-				$result[0] = json_encode($video_object);*/
-				
-				// Make featured vid request here.
+				// A featured video was set, let's get it.
 				$featured_video = $this->_make_vimeo_request($url, 1);
+				
+				// Now, we need to check if the featured video already exists in the main video request object.				
+				$video_to_check = json_decode($featured_video, true);
+				$video_object = json_decode($result[0], true);
+				$video_found = FALSE;
+												
+				// If it does exist, we should remove it.
+				foreach ($video_object as $video_key => $video_data)
+				{
+					if ($video_data['id'] === $video_to_check[0]['id'])
+					{
+						unset($video_object[$video_key]);
+						$video_found = TRUE;
+					}
+				}
+				
+				// If it does not exist, we need to remove the last video in the array to make room for the featured video.
+				if ($video_found == FALSE)
+					unset($video_object[count($video_object) - 1]);
+					
+				$result[0] = json_encode(array_values($video_object));
 				$result[] = $featured_video;
 			}
 		
 		}
 		return $result;
 	}
+				
+	/**
+	 * Build the endpoint url based on the provided information.
+	 * 
+	 * @access private
+	 * @param mixed $data
+	 * @return void
+	 */
+	private function _build_url($source)
+	{
+		switch ($source)
+		{
+			case 'album':
+				$result = 'album/'.$this->_named.'/'.$this->_type;
+				break;
+			case 'channel':
+				$result = 'channel/'.$this->_named.'/'.$this->_type;
+				break;
+			case 'group':
+				$result = $this->_named.'/'.$this->_type;
+				break;
+			case 'user':
+				$result = $this->_named.'/'.$this->_type;
+				break;
+			case 'video':
+				$result = 'video/'.$this->_named;
+				break;
+			default:
+				if (empty($source))
+				{
+					throw new Vimeography_Exception('You must provide a source from where to retrieve Vimeo videos.');
+				}
+				else
+				{
+					throw new Vimeography_Exception($source.' is not a valid Vimeo source parameter.');
+				}
+				break;
+		}
+		
+		return self::ENDPOINT.$result.self::FORMAT;
+	}
+		
 	
+	/**
+	 * Send a cURL Wordpress request to retrieve the requested data from the Vimeo simple API.
+	 * 
+	 * @access private
+	 * @param mixed $url
+	 * @param mixed $page
+	 * @return void
+	 */
 	private function _make_vimeo_request($url, $page)
 	{
 		$response = wp_remote_get($url.'?page='.$page);
@@ -223,29 +249,20 @@ class Vimeography_Core extends Vimeography
 						
 			$mustache = new $class;
 			$theme = $this->_load_theme($this->_theme);
-						
+												
 			$mustache->data = json_decode($data[0]);
-			
+						
 			if (isset($data[1]))
 			{
 				// featured video option is set
-				$featured = json_decode($data[1]);
-				
-				// check if featured video is in the source array, and if so, remove it to avoid duplicates.
-				$i = 0;
-				foreach ($mustache->data as $video)
-				{
-					if ($video->id === $featured[0]->id)
-						unset($mustache->data[$i]);
-					$i++;
-				}
+				$featured = json_decode($data[1]);				
 			}
 			else
 			{
 				$data = json_decode($data[0]);
 				$featured = $data[0];
 			}
-						
+									
 			$mustache->featured = $featured;
 			$mustache->gallery_id = $this->_gallery_id;
 							
@@ -261,7 +278,15 @@ class Vimeography_Core extends Vimeography
 		}
 	}
 	
-	protected function _load_theme($name)
+	/**
+	 * Retrieves the contents of a Vimeography theme's mustache template.
+	 * 
+	 * @access private
+	 * @static
+	 * @param mixed $name
+	 * @return void
+	 */
+	private static function _load_theme($name)
 	{
 		$path = VIMEOGRAPHY_THEME_PATH . $name . '/videos.mustache';
 		if (! $result = @file_get_contents($path))
