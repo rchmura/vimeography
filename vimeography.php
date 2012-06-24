@@ -3,7 +3,7 @@
 Plugin Name: Vimeography
 Plugin URI: http://vimeography.com
 Description: Vimeography is the easiest way to set up a custom Vimeo gallery on your site.
-Version: 0.5.3
+Version: 0.5.4
 Author: Dave Kiss
 Author URI: http://davekiss.com
 License: MIT
@@ -20,8 +20,10 @@ define( 'VIMEOGRAPHY_URL', plugin_dir_url(__FILE__) );
 define( 'VIMEOGRAPHY_PATH', plugin_dir_path(__FILE__) );
 define( 'VIMEOGRAPHY_THEME_URL', $wp_upload_dir['baseurl'].'/vimeography-themes/' );
 define( 'VIMEOGRAPHY_THEME_PATH', $wp_upload_dir['basedir'].'/vimeography-themes/' );
+define( 'VIMEOGRAPHY_ASSETS_URL', $wp_upload_dir['baseurl'].'/vimeography-assets/' );
+define( 'VIMEOGRAPHY_ASSETS_PATH', $wp_upload_dir['basedir'].'/vimeography-assets/' );
 define( 'VIMEOGRAPHY_BASENAME', plugin_basename( __FILE__ ) );
-define( 'VIMEOGRAPHY_VERSION', '0.5.3');
+define( 'VIMEOGRAPHY_VERSION', '0.5.4');
 define( 'VIMEOGRAPHY_GALLERY_TABLE', $wpdb->prefix . "vimeography_gallery");
 define( 'VIMEOGRAPHY_GALLERY_META_TABLE', $wpdb->prefix . "vimeography_gallery_meta");
 define( 'VIMEOGRAPHY_CURRENT_PAGE', basename($_SERVER['PHP_SELF']));
@@ -283,6 +285,7 @@ class Vimeography
 		
 		// Let's also move the bugsauce folder to the vimeography_theme_path (wp-content/uploads)			    	    
 		$this->_move_theme(array('source' => VIMEOGRAPHY_PATH . 'bugsauce/', 'destination' => VIMEOGRAPHY_THEME_PATH.'bugsauce/', 'clear_destination' => true, 'clear_working' => true));
+		$this->_move_theme(array('source' => VIMEOGRAPHY_PATH . 'theme-assets/', 'destination' => VIMEOGRAPHY_ASSETS_PATH, 'clear_destination' => true, 'clear_working' => true));
 	    
 	}
 																   	
@@ -401,7 +404,11 @@ class Vimeography
     {
 		// Replaces simple `WP_Filesystem();` call to prevent any extraction issues
 		// @link http://wpquestions.com/question/show/id/2685
-		function __return_direct() { return 'direct'; }
+		if (! function_exists('__return_direct'))
+		{
+			function __return_direct() { return 'direct'; }
+		}
+		
 		add_filter( 'filesystem_method', '__return_direct' );	
 		WP_Filesystem();
 		remove_filter( 'filesystem_method', '__return_direct' );
@@ -424,6 +431,8 @@ class Vimeography
 		//Retain the Original source and destinations
 		$remote_source = $source;
 		$local_destination = $destination;
+		
+		if (! $wp_filesystem->dirlist($remote_source)) return FALSE;
 
 		$source_files = array_keys( $wp_filesystem->dirlist($remote_source) );
 		$remote_destination = $wp_filesystem->find_folder($local_destination);

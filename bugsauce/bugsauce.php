@@ -2,7 +2,7 @@
 /*
 Theme Name: Bugsauce
 Theme URI: vimeography.com/themes/bugsauce
-Version: .2
+Version: 0.4
 Description: is the base theme that comes prepackaged with Vimeography.
 Author: Dave Kiss
 Author URI: vimeography.com
@@ -27,12 +27,15 @@ class Vimeography_Themes_Bugsauce extends Mustache
 		wp_deregister_script('jquery');
 		wp_register_script('jquery', ("http://ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js"), false, '1.7.2');
 		wp_enqueue_script('jquery');  
-  
+		
+		// Register our common scripts
 		wp_register_script('froogaloop', 'http://a.vimeocdn.com/js/froogaloop2.min.js');
-		wp_register_script('flexslider.js', VIMEOGRAPHY_THEME_URL.'bugsauce/media/js/plugins/jquery.flexslider.js', array('jquery'));
-		wp_register_script('fitvids.js', VIMEOGRAPHY_THEME_URL.'bugsauce/media/js/plugins/jquery.fitvids.js', array('jquery'));
-		wp_register_script('bugsauce.js', VIMEOGRAPHY_THEME_URL.'bugsauce/media/js/bugsauce.js', array('jquery'));
-		wp_register_style('bugsauce.css', VIMEOGRAPHY_THEME_URL.'bugsauce/media/css/bugsauce.css');
+		wp_register_script('flexslider.js', VIMEOGRAPHY_ASSETS_URL.'js/plugins/jquery.flexslider.js', array('jquery'));
+		wp_register_script('fitvids.js', VIMEOGRAPHY_ASSETS_URL.'js/plugins/jquery.fitvids.js', array('jquery'));
+
+		// Register our custom scripts
+		wp_register_script('bugsauce.js', VIMEOGRAPHY_THEME_URL.'bugsauce/media/bugsauce.js', array('jquery', 'flexslider.js', 'fitvids.js'));
+		wp_register_style('bugsauce.css', VIMEOGRAPHY_THEME_URL.'bugsauce/media/bugsauce.css');
 		
 		wp_enqueue_script('froogaloop');		
 		wp_enqueue_script('flexslider.js');
