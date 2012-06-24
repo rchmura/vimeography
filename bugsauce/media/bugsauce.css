@@ -35,7 +35,7 @@ html[xmlns] .slides {display: block;}
 .vimeography-bugsauce .carousel li {margin-right: 5px}
 
 /* Direction Nav */
-.vimeography-bugsauce .flex-direction-nav a {width: 36px; height: 39px; margin: -20px 0 0; display: block; background: url(../img/arrows.png) no-repeat 0 0; position: absolute; top: 50%; cursor: pointer; text-indent: -9999px; opacity: 0; filter: alpha(opacity=0); -webkit-transition: all .3s ease;}
+.vimeography-bugsauce .flex-direction-nav a {width: 36px; height: 39px; margin: -20px 0 0; display: block; background: url(img/arrows.png) no-repeat 0 0; position: absolute; top: 50%; cursor: pointer; text-indent: -9999px; opacity: 0; filter: alpha(opacity=0); -webkit-transition: all .3s ease;}
 .vimeography-bugsauce .flexslider:hover .flex-next {opacity: 1; filter: alpha(opacity=100); right: 0;}
 .vimeography-bugsauce .flexslider:hover .flex-prev {opacity: 1; filter: alpha(opacity=100); left: 0;}
 
@@ -79,7 +79,7 @@ html[xmlns] .slides {display: block;}
 .vimeography-bugsauce .vimeography-thumbnails .slides li img:hover {opacity: .95;}
 .vimeography-bugsauce .vimeography-thumbnails .slides li.flex-active-slide img {opacity: .95; border-color:#0088cc;-webkit-box-shadow:0 1px 4px rgba(0, 105, 214, 0.25);-moz-box-shadow:0 1px 4px rgba(0, 105, 214, 0.25);box-shadow:0 1px 4px rgba(0, 105, 214, 0.25);}
 
-.vimeography-bugsauce .vimeography-main {background: url(../img/loader.gif) no-repeat 50% 50% transparent;}
+.vimeography-bugsauce .vimeography-main {background: url(img/loader.gif) no-repeat 50% 50% transparent;}
 .vimeography-bugsauce .vimeography-main .slides {margin: 0;}
 .vimeography-bugsauce .vimeography-main .flex-direction-nav {margin: 0;}
 .vimeography-bugsauce .vimeography-main .flex-direction-nav a {width: 62px; height: 124px;}

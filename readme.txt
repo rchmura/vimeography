@@ -3,7 +3,7 @@ Contributors: iamdavekiss
 Tags: vimeo, videos, gallery
 Requires at least: 3.3
 Tested up to: 3.4
-Stable tag: 0.5.4
+Stable tag: 0.5.5
 License: MIT
 
 The easiest way to create beautiful Vimeo galleries on your Wordpress blog.
@@ -70,6 +70,8 @@ Not yet! All themes are set in stone, but we do have plans to add a custom css e
 4. Get new styles by installing gallery themes.
 
 == Changelog ==
+= 0.5.5 =
+* Fixed an issue where the Bugsauce images would not load properly.
 
 = 0.5.4 =
 * Fixed an issue where plugin activation cause error messages.
