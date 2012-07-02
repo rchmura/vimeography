@@ -18,9 +18,9 @@ class Vimeography_Theme_List extends Mustache
 		
 		foreach ($theme_data as $theme_info)
 		{
-			$local_path = VIMEOGRAPHY_THEME_PATH . $theme_info['name'] . '/' . $theme_info['name'] .'.jpg';
-			
-			$theme_info['thumbnail'] = file_exists($local_path) ? VIMEOGRAPHY_THEME_URL . $theme_info['name'] . '/' . $theme_info['name'] .'.jpg' : 'http://placekitten.com/g/200/150';
+			$local_path = VIMEOGRAPHY_THEME_PATH . strtolower($theme_info['name']) . '/' . strtolower($theme_info['name']) .'.jpg';
+						
+			$theme_info['thumbnail'] = file_exists($local_path) ? VIMEOGRAPHY_THEME_URL . strtolower($theme_info['name']) . '/' . strtolower($theme_info['name']) .'.jpg' : 'http://placekitten.com/g/200/150';
 			
 			$themes[] = $theme_info;
 		}
