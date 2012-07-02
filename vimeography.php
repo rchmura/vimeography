@@ -3,7 +3,7 @@
 Plugin Name: Vimeography
 Plugin URI: http://vimeography.com
 Description: Vimeography is the easiest way to set up a custom Vimeo gallery on your site.
-Version: 0.5.6
+Version: 0.5.7
 Author: Dave Kiss
 Author URI: http://davekiss.com
 License: MIT
@@ -23,7 +23,7 @@ define( 'VIMEOGRAPHY_THEME_PATH', $wp_upload_dir['basedir'].'/vimeography-themes
 define( 'VIMEOGRAPHY_ASSETS_URL', $wp_upload_dir['baseurl'].'/vimeography-assets/' );
 define( 'VIMEOGRAPHY_ASSETS_PATH', $wp_upload_dir['basedir'].'/vimeography-assets/' );
 define( 'VIMEOGRAPHY_BASENAME', plugin_basename( __FILE__ ) );
-define( 'VIMEOGRAPHY_VERSION', '0.5.6');
+define( 'VIMEOGRAPHY_VERSION', '0.5.7');
 define( 'VIMEOGRAPHY_GALLERY_TABLE', $wpdb->prefix . "vimeography_gallery");
 define( 'VIMEOGRAPHY_GALLERY_META_TABLE', $wpdb->prefix . "vimeography_gallery_meta");
 define( 'VIMEOGRAPHY_CURRENT_PAGE', basename($_SERVER['PHP_SELF']));
@@ -323,7 +323,7 @@ class Vimeography
 			$gallery_info = $wpdb->get_results('SELECT * from '.VIMEOGRAPHY_GALLERY_META_TABLE.' AS meta JOIN '.VIMEOGRAPHY_GALLERY_TABLE.' AS gallery ON meta.gallery_id = gallery.id WHERE meta.gallery_id = '.$settings['id'].' LIMIT 1;');
 			if ($gallery_info)
 			{
-				$settings['theme']    = ($settings['theme'] != $default_settings['theme_name'] OR $settings['theme'] == 'bugsauce') ? $settings['theme'] : $gallery_info[0]->theme_name;
+				$settings['theme']    = ($settings['theme'] != $default_settings['theme_name'] OR $atts['theme'] == $default_settings['theme_name']) ? $settings['theme'] : $gallery_info[0]->theme_name;
 				$settings['featured'] = $gallery_info[0]->featured_video;
 				$settings['from']     = $gallery_info[0]->source_type;
 				$settings['named']    = $gallery_info[0]->source_name;
