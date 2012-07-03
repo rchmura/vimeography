@@ -15,7 +15,15 @@ class Vimeography_Gallery_Edit extends Mustache
 		global $wpdb;
 		
 		if (isset($_GET['id']))
+		{
 			$gallery_id = $wpdb->escape(intval($_GET['id']));
+			
+			if (isset($_GET['refresh']) AND $_GET['refresh'] == 1)
+			{
+				$this->delete_vimeography_cache($gallery_id);
+				$this->messages[] = array('type' => 'success', 'heading' => 'So fresh.', 'message' => 'Your videos have been refreshed.');
+			}
+		}
 			
 		$this->gallery = $wpdb->get_results('SELECT * from '.VIMEOGRAPHY_GALLERY_META_TABLE.' AS meta JOIN '.VIMEOGRAPHY_GALLERY_TABLE.' AS gallery ON meta.gallery_id = gallery.id WHERE meta.gallery_id = '.$gallery_id.' LIMIT 1;');
 		if (! $this->gallery)
@@ -85,7 +93,6 @@ class Vimeography_Gallery_Edit extends Mustache
 	public function selected()
 	{
 		return array(
-			$this->gallery[0]->source_type => TRUE,
 			$this->gallery[0]->cache_timeout => TRUE,
 		);
 	}
@@ -204,17 +211,16 @@ class Vimeography_Gallery_Edit extends Mustache
 			{
 				global $wpdb;
 				
-				$settings['source_type'] = $wpdb->escape(wp_filter_nohtml_kses($input['vimeography_basic_settings']['source']));
-				$settings['source_name'] = $wpdb->escape(wp_filter_nohtml_kses($input['vimeography_basic_settings']['named']));
 				$settings['title'] = $wpdb->escape(wp_filter_nohtml_kses($input['vimeography_basic_settings']['gallery_title']));
-						
+				$settings['source_url'] = $wpdb->escape(wp_filter_nohtml_kses($input['vimeography_basic_settings']['source_url']));
+				
 				if ($wpdb->update( VIMEOGRAPHY_GALLERY_TABLE, array('title' => $settings['title']), array( 'id' => $id ) ) === FALSE)
 				{
 					throw new Exception('Your basic gallery title and settings were not updated.');
 				}
 				else
 				{			
-					if ($wpdb->update( VIMEOGRAPHY_GALLERY_META_TABLE, array('source_name' => $settings['source_name'], 'source_type' => $settings['source_type']), array( 'gallery_id' => $id ) ) === FALSE)
+					if ($wpdb->update( VIMEOGRAPHY_GALLERY_META_TABLE, array('source_url' => $settings['source_url']), array( 'gallery_id' => $id ) ) === FALSE)
 					{
 						//$wpdb->print_error();
 						throw new Exception('Your basic gallery settings were not updated.');
@@ -265,9 +271,9 @@ class Vimeography_Gallery_Edit extends Mustache
 				$settings['cache_timeout'] = $wpdb->escape(wp_filter_nohtml_kses($input['vimeography_advanced_settings']['cache_timeout']));
 				$settings['featured_video'] = $wpdb->escape(wp_filter_nohtml_kses($input['vimeography_advanced_settings']['featured_video']));
 				
-				$settings['video_count'] = intval($input['vimeography_advanced_settings']['video_count']) <= 60 ? $input['vimeography_advanced_settings']['video_count'] : 60;
+				$settings['video_limit'] = intval($input['vimeography_advanced_settings']['video_limit']) <= 60 ? $input['vimeography_advanced_settings']['video_limit'] : 60;
 													
-				$result = $wpdb->update( VIMEOGRAPHY_GALLERY_META_TABLE, array('cache_timeout' => $settings['cache_timeout'], 'featured_video' => $settings['featured_video'], 'video_count' => $settings['video_count']), array( 'gallery_id' => $id ) );
+				$result = $wpdb->update( VIMEOGRAPHY_GALLERY_META_TABLE, array('cache_timeout' => $settings['cache_timeout'], 'featured_video' => $settings['featured_video'], 'video_limit' => $settings['video_limit']), array( 'gallery_id' => $id ) );
 				
 				if ($result === FALSE)
 					throw new Exception('Your advanced settings could not be updated.');

@@ -24,7 +24,7 @@
 				<th scope="row"><h2>gallery title</h2></th>
 				<td>
 					<h2>
-						<input type="text" size="20" name="vimeography_basic_settings[gallery_title]" value="" />
+						<input type="text" size="40" name="vimeography_basic_settings[gallery_title]" placeholder="eg. Staff Picks" value="" />
 					</h2>
 				</td>
 			</tr>
@@ -32,21 +32,7 @@
 				<th scope="row"><h2>show the videos from</h2></th>
 				<td>
 					<h2>
-						<select id="vimeography-source" name='vimeography_basic_settings[source_type]'>
-							<option value='user'{{#selected}}{{#user}} selected="selected"{{/user}}{{/selected}}>my Vimeo username</option>
-							<option value='album'{{#selected}}{{#album}} selected="selected"{{/album}}{{/selected}}>a Vimeo album</option>
-							<option value='group'{{#selected}}{{#group}} selected="selected"{{/group}}{{/selected}}>a Vimeo group</option>
-							<option value='channel'{{#selected}}{{#channel}} selected="selected"{{/channel}}{{/selected}}>a Vimeo channel</option>
-						</select>
-					</h2>
-				</td>
-			</tr>
-			<tr>
-				<th scope="row"><h2>located at</h2></th>
-				<td>
-					<h2>
-						<span id="vimeography-source-url">http://vimeo.com/<span></span></span>
-						<input type="text" size="20" name="vimeography_basic_settings[source_name]" value="{{#defaults}}{{source_name}}{{/defaults}}" />
+						<input type="text" size="40" name="vimeography_basic_settings[source_url]" placeholder="eg. {{#defaults}}{{source_url}}{{/defaults}}" />
 					</h2>
 				</td>
 			</tr>

@@ -38,15 +38,14 @@ class Vimeography_Gallery_New extends Mustache
 			{				
 				$input = $_POST['vimeography_basic_settings'];
 							
-				if (empty($input['gallery_title']) OR empty($input['source_type']) OR empty($input['source_name']))
+				if (empty($input['gallery_title']) OR empty($input['source_url']))
 					throw new Exception(__('Make sure you fill out all of the fields below!'));
 												
 				global $wpdb;
 				
 				$settings['gallery_title'] = $wpdb->escape(wp_filter_nohtml_kses($input['gallery_title']));
-				$settings['source_type'] = $wpdb->escape(wp_filter_nohtml_kses($input['source_type']));
-				$settings['source_name'] = $wpdb->escape(wp_filter_nohtml_kses($input['source_name']));
-				
+				$settings['source_url'] = $wpdb->escape(wp_filter_nohtml_kses($input['source_url']));
+								
 				$result = $wpdb->insert( VIMEOGRAPHY_GALLERY_TABLE, array( 'title' => $settings['gallery_title'], 'date_created' => current_time('mysql'),  'is_active' => 1 ) );
 				
 				if (!$result)
@@ -56,7 +55,7 @@ class Vimeography_Gallery_New extends Mustache
 				else
 				{
 					$gallery_id = $wpdb->insert_id;
-					$result = $wpdb->insert( VIMEOGRAPHY_GALLERY_META_TABLE, array( 'gallery_id' => $gallery_id, 'source_type' => $settings['source_type'], 'source_name' => $settings['source_name'], 'video_count' => 20, 'featured_video' => NULL, 'cache_timeout' => 3600, 'theme_name' => 'bugsauce' ) );
+					$result = $wpdb->insert( VIMEOGRAPHY_GALLERY_META_TABLE, array( 'gallery_id' => $gallery_id, 'source_url' => $settings['source_url'], 'video_limit' => 20, 'featured_video' => NULL, 'cache_timeout' => 3600, 'theme_name' => 'bugsauce' ) );
 					
 					if (!$result)
 						throw new Exception(__('We couldn\'t save your gallery settings. Try reinstalling the Vimeography plugin.'));

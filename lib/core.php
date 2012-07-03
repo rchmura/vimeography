@@ -9,7 +9,6 @@ class Vimeography_Core extends Vimeography
 	const FORMAT = '.json';
 		
 	protected $_source;
-	protected $_named;
 	protected $_type;
 	
 	protected $_theme;
@@ -40,8 +39,7 @@ class Vimeography_Core extends Vimeography
 		
 		$this->_theme      = $settings['theme'];
 		$this->_featured   = $settings['featured'];
-		$this->_source     = $settings['from'];
-		$this->_named      = $settings['named'];
+		$this->_source     = $settings['source'];
 		$this->_limit      = $settings['limit'];
 		$this->_gallery_id = $settings['id'];
 	}
@@ -165,7 +163,7 @@ class Vimeography_Core extends Vimeography
 	}
 				
 	/**
-	 * Build the endpoint url based on the provided information.
+	 * Build the endpoint url based on the provided Vimeo URL.
 	 * 
 	 * @access private
 	 * @param mixed $data
@@ -173,38 +171,60 @@ class Vimeography_Core extends Vimeography
 	 */
 	private function _build_url($source)
 	{
-		switch ($source)
+
+		$scheme = parse_url($source);
+		if (empty($scheme['scheme'])) $source = 'https://' . $source;
+
+		if ((($url = parse_url($source)) !== FALSE) && (preg_match('~vimeo[.]com$~', $url['host']) > 0))
+	    {
+	    	// The URL is a valid Vimeo URL. Break it into an array containing the URL parts
+	        $url = array_filter(explode('/', $url['path']), 'strlen');
+	        
+	        // If the array doesn't contain one of the following strings, it must be either a user or a video
+	        if (in_array($url[1], array('album', 'channels', 'groups')) !== TRUE)
+	        {
+	        	if (is_numeric($url[1]))
+	        	{
+	            	array_unshift($url, 'video');
+	        	}
+	        	else
+	        	{
+	            	array_unshift($url, 'users');
+	        	}
+	        }
+	        
+	        // Put the URL parts into a conventional array
+	        $parts = array('type' => rtrim(array_shift($url), 's'), 'name' => array_shift($url));	        
+	    }
+	    else
+	    {
+			throw new Vimeography_Exception('You must provide a valid Vimeo source from where to retrieve Vimeo videos.');
+	    }
+	    		
+		switch ($parts['type'])
 		{
 			case 'album':
-				$result = 'album/'.$this->_named.'/'.$this->_type;
+				$result = 'album/'.$parts['name'].'/'.$this->_type;
 				break;
 			case 'channel':
-				$result = 'channel/'.$this->_named.'/'.$this->_type;
+				$result = 'channel/'.$parts['name'].'/'.$this->_type;
 				break;
 			case 'group':
-				$result = $this->_named.'/'.$this->_type;
+				$result = 'group/'.$parts['name'].'/'.$this->_type;
 				break;
 			case 'user':
-				$result = $this->_named.'/'.$this->_type;
+				$result = $parts['name'].'/'.$this->_type;
 				break;
 			case 'video':
-				$result = 'video/'.$this->_named;
+				$result = 'video/'.$parts['name'];
 				break;
 			default:
-				if (empty($source))
-				{
-					throw new Vimeography_Exception('You must provide a source from where to retrieve Vimeo videos.');
-				}
-				else
-				{
-					throw new Vimeography_Exception($source.' is not a valid Vimeo source parameter.');
-				}
+				throw new Vimeography_Exception($parts['type'].' is not a valid Vimeo source parameter.');
 				break;
 		}
 		
 		return self::ENDPOINT.$result.self::FORMAT;
 	}
-		
 	
 	/**
 	 * Send a cURL Wordpress request to retrieve the requested data from the Vimeo simple API.

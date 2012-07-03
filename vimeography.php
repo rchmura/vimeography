@@ -3,7 +3,7 @@
 Plugin Name: Vimeography
 Plugin URI: http://vimeography.com
 Description: Vimeography is the easiest way to set up a custom Vimeo gallery on your site.
-Version: 0.5.7
+Version: 0.6
 Author: Dave Kiss
 Author URI: http://davekiss.com
 License: MIT
@@ -23,7 +23,7 @@ define( 'VIMEOGRAPHY_THEME_PATH', $wp_upload_dir['basedir'].'/vimeography-themes
 define( 'VIMEOGRAPHY_ASSETS_URL', $wp_upload_dir['baseurl'].'/vimeography-assets/' );
 define( 'VIMEOGRAPHY_ASSETS_PATH', $wp_upload_dir['basedir'].'/vimeography-assets/' );
 define( 'VIMEOGRAPHY_BASENAME', plugin_basename( __FILE__ ) );
-define( 'VIMEOGRAPHY_VERSION', '0.5.7');
+define( 'VIMEOGRAPHY_VERSION', '0.6');
 define( 'VIMEOGRAPHY_GALLERY_TABLE', $wpdb->prefix . "vimeography_gallery");
 define( 'VIMEOGRAPHY_GALLERY_META_TABLE', $wpdb->prefix . "vimeography_gallery_meta");
 define( 'VIMEOGRAPHY_CURRENT_PAGE', basename($_SERVER['PHP_SELF']));
@@ -36,10 +36,12 @@ class Vimeography
 	{
 		add_action( 'init', array(&$this, 'vimeography_init') );
 		add_action( 'admin_init', array(&$this, 'vimeography_requires_wordpress_version') );
-		add_action( 'plugins_loaded', array(&$this, 'vimeography_update_db_check') );
+		add_action( 'admin_init', array(&$this, 'vimeography_check_if_db_exists') );
+		add_action( 'plugins_loaded', array(&$this, 'vimeography_update_db_to_0_6') );
+		add_action( 'plugins_loaded', array(&$this, 'vimeography_update_db_version') );
 		add_action( 'admin_menu', array(&$this, 'vimeography_add_menu') );
 		
-		register_activation_hook( VIMEOGRAPHY_BASENAME, array(&$this, 'vimeography_create_tables') );
+		register_activation_hook( VIMEOGRAPHY_BASENAME, array(&$this, 'vimeography_update_tables') );
 		
 		add_filter( 'plugin_action_links', array(&$this, 'vimeography_filter_plugin_actions'), 10, 2 );
 		add_shortcode( 'vimeography', array(&$this, 'vimeography_shortcode') );
@@ -91,17 +93,77 @@ class Vimeography
 		}
 	}
 	
+	public function vimeography_check_if_db_exists()
+	{
+		if (get_option('vimeography_db_version') == FALSE)
+			$this->vimeography_update_db_version();
+	}
+	
 	/**
-	 * Check if the Vimeography database needs updated based on the db version.
+	 * Check if the Vimeography database structure needs updated to version 0.6 based on the stored db version.
 	 * 
 	 * @access public
 	 * @return void
 	 */
-	public function vimeography_update_db_check()
+	public function vimeography_update_db_to_0_6()
 	{
-		if (get_option('vimeography_db_version') != VIMEOGRAPHY_VERSION)
-			$this->vimeography_create_tables();
+		if (get_option('vimeography_db_version') < 0.6)
+		{
+			global $wpdb;
+			$old_galleries = $wpdb->get_results('SELECT * FROM '.VIMEOGRAPHY_GALLERY_META_TABLE.' AS meta JOIN '.VIMEOGRAPHY_GALLERY_TABLE.' AS gallery ON meta.gallery_id = gallery.id;');
+			$new_galleries = array();
 			
+			if (is_array($old_galleries))
+			{
+				foreach ($old_galleries as $old_gallery)
+				{
+					$new_gallery = array();
+					
+					$new_gallery['gallery_id'] = $old_gallery->gallery_id; 
+					$new_gallery['video_limit']  = $old_gallery->video_count;
+					$new_gallery['featured_video'] = $old_gallery->featured_video;
+					$new_gallery['cache_timeout']  = $old_gallery->cache_timeout;
+					$new_gallery['theme_name']     = $old_gallery->theme_name;
+					switch ($old_gallery->source_type)
+					{
+						case 'user':
+							$new_gallery['source_url'] = 'https://vimeo.com/'.$old_gallery->source_name;
+							break;
+						case 'album':
+							$new_gallery['source_url'] = 'https://vimeo.com/album/'.$old_gallery->source_name;
+							break;
+						case 'group':
+							$new_gallery['source_url'] = 'https://vimeo.com/groups/'.$old_gallery->source_name;
+							break;
+						case 'channel':
+							$new_gallery['source_url'] = 'https://vimeo.com/channels/'.$old_gallery->source_name;
+							break;
+					}
+					$new_galleries[] = $new_gallery;							
+				}
+			}
+			$wpdb->query('DROP TABLE '.VIMEOGRAPHY_GALLERY_META_TABLE.';');
+			
+			$this->vimeography_update_tables();
+						
+			foreach ($new_galleries as $new_gallery)
+			{
+				$wpdb->insert(
+					VIMEOGRAPHY_GALLERY_META_TABLE,
+					$new_gallery
+				);
+			}
+		}
+	}
+	
+	/**
+	 * Updates the Vimeography version stored in the database.
+	 * 
+	 * @access public
+	 * @return void
+	 */
+	public function vimeography_update_db_version()
+	{
 		update_option('vimeography_db_version', VIMEOGRAPHY_VERSION);
 	}
 				
@@ -236,29 +298,28 @@ class Vimeography
 	 * @access public
 	 * @return void
 	 */
-	public function vimeography_create_tables() {
+	public function vimeography_update_tables() {
 		global $wpdb;
 		
 		delete_option('vimeography_default_settings');
 		delete_option('vimeography_advanced_settings');
-		
+				
 		add_option('vimeography_advanced_settings', array(
-			'active' => FALSE,
-			'client_id' => '',
-			'client_secret' => '',
-			'access_token' => '',
+			'active'              => FALSE,
+			'client_id'           => '',
+			'client_secret'       => '',
+			'access_token'        => '',
 			'access_token_secret' => '',
 		));
 		
 		add_option('vimeography_default_settings', array(
-			'source_type' => 'channel',
-			'source_name' => 'hd',
-			'video_count' => 20,
+			'source_url'     => 'https://vimeo.com/channels/staffpicks/',
+			'video_limit'    => 20,
 			'featured_video' => '',
-			'cache_timeout' => 3600,
-			'theme_name' => 'bugsauce',
+			'cache_timeout'  => 3600,
+			'theme_name'     => 'bugsauce',
 		));
-			      
+							      
 		$sql = 'CREATE TABLE '.VIMEOGRAPHY_GALLERY_TABLE.' (
 		id mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
 		title varchar(150) NOT NULL,
@@ -269,20 +330,18 @@ class Vimeography
 		CREATE TABLE '.VIMEOGRAPHY_GALLERY_META_TABLE.' (
 		id mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
 		gallery_id mediumint(8) unsigned NOT NULL,
-		source_type varchar(50) NOT NULL,
-		source_name varchar(50) NOT NULL,
-		video_count mediumint(7) NOT NULL,
+		source_url varchar(100) NOT NULL,
+		video_limit mediumint(7) NOT NULL,
 		featured_video int(9) unsigned DEFAULT NULL,
 		cache_timeout mediumint(7) NOT NULL,
 		theme_name varchar(50) NOT NULL,
 		PRIMARY KEY  (id)
 		);
 		';
-			
+					
 		require_once(ABSPATH . 'wp-admin/includes/upgrade.php');
 		dbDelta($sql);
-		add_option("vimeography_db_version", VIMEOGRAPHY_VERSION);
-		
+				
 		// Let's also move the bugsauce folder to the vimeography_theme_path (wp-content/uploads)			    	    
 		$this->_move_theme(array('source' => VIMEOGRAPHY_PATH . 'bugsauce/', 'destination' => VIMEOGRAPHY_THEME_PATH.'bugsauce/', 'clear_destination' => true, 'clear_working' => true));
 		$this->_move_theme(array('source' => VIMEOGRAPHY_PATH . 'theme-assets/', 'destination' => VIMEOGRAPHY_ASSETS_PATH, 'clear_destination' => true, 'clear_working' => true));
@@ -301,36 +360,33 @@ class Vimeography
 	public function vimeography_shortcode($atts)
 	{
 
-		// Get admin panel options
-		$default_settings = get_option('vimeography_default_settings');
-
-		// Get shortcode attributes
-		$settings = shortcode_atts( array(
-			'id' => '',
-			'theme' => $default_settings['theme_name'],
-			'featured' => $default_settings['featured_video'],
-			'from' => $default_settings['source_type'],
-			'named' => $default_settings['source_name'],
-			'limit' => $default_settings['video_count'],
-			'cache' => $default_settings['cache_timeout'],
-			'width' => '',
-			'height' => '',
-		), $atts );
-		
-		if (intval($settings['id']))
+		// Let's get the data for this gallery from the db
+		if (intval($atts['id']))
 		{
 			global $wpdb;
-			$gallery_info = $wpdb->get_results('SELECT * from '.VIMEOGRAPHY_GALLERY_META_TABLE.' AS meta JOIN '.VIMEOGRAPHY_GALLERY_TABLE.' AS gallery ON meta.gallery_id = gallery.id WHERE meta.gallery_id = '.$settings['id'].' LIMIT 1;');
-			if ($gallery_info)
-			{
-				$settings['theme']    = ($settings['theme'] != $default_settings['theme_name'] OR $atts['theme'] == $default_settings['theme_name']) ? $settings['theme'] : $gallery_info[0]->theme_name;
-				$settings['featured'] = $gallery_info[0]->featured_video;
-				$settings['from']     = $gallery_info[0]->source_type;
-				$settings['named']    = $gallery_info[0]->source_name;
-				$settings['limit']    = $gallery_info[0]->video_count;
-				$settings['cache']    = $gallery_info[0]->cache_timeout;
-			}
+			$gallery_info = $wpdb->get_results('SELECT * from '.VIMEOGRAPHY_GALLERY_META_TABLE.' AS meta JOIN '.VIMEOGRAPHY_GALLERY_TABLE.' AS gallery ON meta.gallery_id = gallery.id WHERE meta.gallery_id = '.$atts['id'].' LIMIT 1;');
 		}
+
+		// Get admin panel options
+		$default_settings = get_option('vimeography_default_settings');
+		
+		$gallery_settings['theme']    = isset($gallery_info[0]->theme_name)     ? $gallery_info[0]->theme_name     : $default_settings['theme_name'];
+		$gallery_settings['featured'] = isset($gallery_info[0]->featured_video) ? $gallery_info[0]->featured_video : $default_settings['featured_video'];
+		$gallery_settings['source']   = isset($gallery_info[0]->source_url)     ? $gallery_info[0]->source_url     : $default_settings['source_url'];
+		$gallery_settings['limit']    = isset($gallery_info[0]->video_limit)    ? $gallery_info[0]->video_limit    : $default_settings['video_limit'];
+		$gallery_settings['cache']    = isset($gallery_info[0]->cache_timeout)  ? $gallery_info[0]->cache_timeout  : $default_settings['cache_timeout'];
+
+		// Get shortcode attributes
+		$settings    = shortcode_atts( array(
+			'id'       => '',
+			'theme'    => $gallery_settings['theme'],
+			'featured' => $gallery_settings['featured'],
+			'source'   => $gallery_settings['source'],
+			'limit'    => $gallery_settings['limit'],
+			'cache'    => $gallery_settings['cache'],
+			'width'    => '',
+			'height'   => '',
+		), $atts );
 		
 		try
 		{

@@ -2,8 +2,8 @@
 Contributors: iamdavekiss
 Tags: vimeo, videos, gallery
 Requires at least: 3.3
-Tested up to: 3.4
-Stable tag: 0.5.7
+Tested up to: 3.4.1
+Stable tag: 0.6
 License: MIT
 
 The easiest way to create beautiful Vimeo galleries on your Wordpress blog.
@@ -64,12 +64,23 @@ Not yet! All themes are set in stone, but we do have plans to add a custom css e
 
 == Screenshots ==
 
-1. Create a gallery in 3 easy steps.
+1. Create a gallery in 2 easy steps.
 2. Preview your gallery and customize its appearance.
 3. Manage your galleries with a simple interface.
 4. Get new styles by installing gallery themes.
 
 == Changelog ==
+
+= 0.6 =
+* Added a "Refresh Now" button to advanced settings.
+* Added an "Active Theme" column to the gallery list page.
+* Added several new themes.
+* Updated the "New Gallery" page to make creating galleries even easier!
+* Updated the internal shortcode function.
+* Updated the database structure and database-related functions.
+* Updated first screenshot.
+* Fixed an issue where videos from groups may not have displayed properly.
+
 = 0.5.7 =
 * Actually fixed an issue where the gallery theme shortcode could not override the default settings.
 

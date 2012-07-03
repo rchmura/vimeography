@@ -36,13 +36,14 @@
 				    </div>
 				
 					<form id="vimeography-basic-settings-form" method="post" action="{{admin_url}}edit-galleries&id={{id}}">
-													
-						<table class="form-table">
+
+				
+						<table class="form-table">		
 							<tr>
 								<th scope="row"><h2>gallery title</h2></th>
 								<td>
 									<h2>
-										<input type="text" size="20" name="vimeography_basic_settings[gallery_title]" value="{{title}}" />
+										<input type="text" size="40" name="vimeography_basic_settings[gallery_title]" value="{{title}}" />
 									</h2>
 								</td>
 							</tr>
@@ -50,21 +51,7 @@
 								<th scope="row"><h2>show the videos from</h2></th>
 								<td>
 									<h2>
-										<select id="vimeography-source" name="vimeography_basic_settings[source]">
-											<option value='user' {{#selected}}{{#user}}selected="selected"{{/user}}{{/selected}}>my Vimeo username</option>
-											<option value='album' {{#selected}}{{#album}}selected="selected"{{/album}}{{/selected}}>a Vimeo album</option>
-											<option value='group' {{#selected}}{{#group}}selected="selected"{{/group}}{{/selected}}>a Vimeo group</option>
-											<option value='channel' {{#selected}}{{#channel}}selected="selected"{{/channel}}{{/selected}}>a Vimeo channel</option>
-										</select>
-									</h2>
-								</td>
-							</tr>
-							<tr>
-								<th scope="row"><h2>located at</h2></th>
-								<td>
-									<h2>
-										<span id="vimeography-source-url">http://vimeo.com/<span></span></span>
-										<input type="text" size="20" name="vimeography_basic_settings[named]" value="{{source_name}}" />
+										<input type="text" size="40" name="vimeography_basic_settings[source_url]" value="{{source_url}}" />
 									</h2>
 								</td>
 							</tr>
@@ -139,6 +126,8 @@
 										<option value='604800' {{#selected}}{{#604800}}selected="selected"{{/604800}}{{/selected}}>week</option>
 										<option value='2419200' {{#selected}}{{#2419200}}selected="selected"{{/2419200}}{{/selected}}>month</option>
 									</select>
+									<span>or</span>
+									<a href="{{admin_url}}edit-galleries&id={{id}}&refresh=1" class="btn btn-large"><em class="icon-refresh" style="margin-top: 3px;"></em> Refresh Now</a>
 									</h2>
 								</td>
 							</tr>
@@ -146,7 +135,7 @@
 								<th scope="row"><h2>number of videos to show</h2></th>
 								<td>
 									<h2>
-										<input type="text" size="20" name="vimeography_advanced_settings[video_count]" value="{{video_count}}" />
+										<input type="text" size="20" name="vimeography_advanced_settings[video_limit]" value="{{video_limit}}" />
 									</h2>
 								</td>
 							</tr>

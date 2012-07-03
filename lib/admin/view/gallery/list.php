@@ -43,26 +43,7 @@ class Vimeography_Gallery_List extends Mustache
 		foreach ($this->galleries as $gallery)
 		{
 			$gallery->edit_url = get_admin_url().'admin.php?page=vimeography-edit-galleries&id='.$gallery->id;
-			
-			switch($gallery->source_type)
-			{
-				case 'user':
-					$url = 'http://vimeo.com/';
-					break;
-				case 'group':
-					$url = 'http://vimeo.com/groups/';
-					break;
-				case 'album':
-					$url = 'http://vimeo.com/album/';
-					break;
-				case 'channel':
-					$url = 'http://vimeo.com/channels/';
-					break;
-				default:
-					break;
-			}
-			$gallery->source_url = $url.$gallery->source_name;
-						
+									
 			$galleries[] = $gallery;
 		}
 		
@@ -121,7 +102,7 @@ class Vimeography_Gallery_List extends Mustache
 				throw new Exception(__('Your gallery could not be duplicated.'));
 				
 			$gallery_id = $wpdb->insert_id;
-			$result = $wpdb->insert( VIMEOGRAPHY_GALLERY_META_TABLE, array( 'gallery_id' => $gallery_id, 'source_type' => $duplicate[0]->source_type, 'source_name' => $duplicate[0]->source_name, 'featured_video' => $duplicate[0]->featured_video, 'cache_timeout' => $duplicate[0]->cache_timeout, 'theme_name' => $duplicate[0]->theme_name ) );
+			$result = $wpdb->insert( VIMEOGRAPHY_GALLERY_META_TABLE, array( 'gallery_id' => $gallery_id, 'source_url' => $duplicate[0]->source_url, 'video_limit' => $duplicate[0]->video_limit, 'featured_video' => $duplicate[0]->featured_video, 'cache_timeout' => $duplicate[0]->cache_timeout, 'theme_name' => $duplicate[0]->theme_name ) );
 			
 			if ($result === FALSE)
 				throw new Exception(__('Your gallery could not be duplicated.'));
