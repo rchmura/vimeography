@@ -3,7 +3,7 @@
 Plugin Name: Vimeography
 Plugin URI: http://vimeography.com
 Description: Vimeography is the easiest way to set up a custom Vimeo gallery on your site.
-Version: 0.6.2
+Version: 0.6.3
 Author: Dave Kiss
 Author URI: http://davekiss.com
 License: MIT
@@ -23,7 +23,7 @@ define( 'VIMEOGRAPHY_THEME_PATH', $wp_upload_dir['basedir'].'/vimeography-themes
 define( 'VIMEOGRAPHY_ASSETS_URL', $wp_upload_dir['baseurl'].'/vimeography-assets/' );
 define( 'VIMEOGRAPHY_ASSETS_PATH', $wp_upload_dir['basedir'].'/vimeography-assets/' );
 define( 'VIMEOGRAPHY_BASENAME', plugin_basename( __FILE__ ) );
-define( 'VIMEOGRAPHY_VERSION', '0.6.2');
+define( 'VIMEOGRAPHY_VERSION', '0.6.3');
 define( 'VIMEOGRAPHY_GALLERY_TABLE', $wpdb->prefix . "vimeography_gallery");
 define( 'VIMEOGRAPHY_GALLERY_META_TABLE', $wpdb->prefix . "vimeography_gallery_meta");
 define( 'VIMEOGRAPHY_CURRENT_PAGE', basename($_SERVER['PHP_SELF']));
@@ -37,6 +37,7 @@ class Vimeography
 		add_action( 'init', array(&$this, 'vimeography_init') );
 		add_action( 'admin_init', array(&$this, 'vimeography_requires_wordpress_version') );
 		add_action( 'admin_init', array(&$this, 'vimeography_check_if_db_exists') );
+		add_action( 'plugins_loaded', array(&$this, 'vimeography_move_folders') );
 		add_action( 'plugins_loaded', array(&$this, 'vimeography_update_db_to_0_6') );
 		add_action( 'plugins_loaded', array(&$this, 'vimeography_update_db_version') );
 		add_action( 'admin_menu', array(&$this, 'vimeography_add_menu') );
@@ -97,6 +98,18 @@ class Vimeography
 	{
 		if (get_option('vimeography_db_version') == FALSE)
 			$this->vimeography_update_db_version();
+	}
+	
+	/**
+	 * Move the defined folders to the defined target path in wp-content/uploads.
+	 * 
+	 * @access public
+	 * @return void
+	 */
+	public function vimeography_move_folders()
+	{
+		$this->_move_folder(array('source' => VIMEOGRAPHY_PATH . 'bugsauce/', 'destination' => VIMEOGRAPHY_THEME_PATH.'bugsauce/', 'clear_destination' => true, 'clear_working' => true));
+		$this->_move_folder(array('source' => VIMEOGRAPHY_PATH . 'theme-assets/', 'destination' => VIMEOGRAPHY_ASSETS_PATH, 'clear_destination' => true, 'clear_working' => true));
 	}
 	
 	/**
@@ -340,12 +353,7 @@ class Vimeography
 		';
 					
 		require_once(ABSPATH . 'wp-admin/includes/upgrade.php');
-		dbDelta($sql);
-				
-		// Let's also move the bugsauce folder to the vimeography_theme_path (wp-content/uploads)			    	    
-		$this->_move_theme(array('source' => VIMEOGRAPHY_PATH . 'bugsauce/', 'destination' => VIMEOGRAPHY_THEME_PATH.'bugsauce/', 'clear_destination' => true, 'clear_working' => true));
-		$this->_move_theme(array('source' => VIMEOGRAPHY_PATH . 'theme-assets/', 'destination' => VIMEOGRAPHY_ASSETS_PATH, 'clear_destination' => true, 'clear_working' => true));
-	    
+		dbDelta($sql);	    
 	}
 																   	
 	/**
@@ -486,7 +494,7 @@ class Vimeography
      * @param array $args (default: array())
      * @return void
      */
-    private function _move_theme($args = array())
+    private function _move_folder($args = array())
     {
 		// Replaces simple `WP_Filesystem();` call to prevent any extraction issues
 		// @link http://wpquestions.com/question/show/id/2685
