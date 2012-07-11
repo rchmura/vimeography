@@ -3,7 +3,7 @@
 Plugin Name: Vimeography
 Plugin URI: http://vimeography.com
 Description: Vimeography is the easiest way to set up a custom Vimeo gallery on your site.
-Version: 0.6.3
+Version: 0.6.4
 Author: Dave Kiss
 Author URI: http://davekiss.com
 License: MIT
@@ -23,7 +23,7 @@ define( 'VIMEOGRAPHY_THEME_PATH', $wp_upload_dir['basedir'].'/vimeography-themes
 define( 'VIMEOGRAPHY_ASSETS_URL', $wp_upload_dir['baseurl'].'/vimeography-assets/' );
 define( 'VIMEOGRAPHY_ASSETS_PATH', $wp_upload_dir['basedir'].'/vimeography-assets/' );
 define( 'VIMEOGRAPHY_BASENAME', plugin_basename( __FILE__ ) );
-define( 'VIMEOGRAPHY_VERSION', '0.6.3');
+define( 'VIMEOGRAPHY_VERSION', '0.6.4');
 define( 'VIMEOGRAPHY_GALLERY_TABLE', $wpdb->prefix . "vimeography_gallery");
 define( 'VIMEOGRAPHY_GALLERY_META_TABLE', $wpdb->prefix . "vimeography_gallery_meta");
 define( 'VIMEOGRAPHY_CURRENT_PAGE', basename($_SERVER['PHP_SELF']));
@@ -37,7 +37,7 @@ class Vimeography
 		add_action( 'init', array(&$this, 'vimeography_init') );
 		add_action( 'admin_init', array(&$this, 'vimeography_requires_wordpress_version') );
 		add_action( 'admin_init', array(&$this, 'vimeography_check_if_db_exists') );
-		add_action( 'plugins_loaded', array(&$this, 'vimeography_move_folders') );
+		add_action( 'init', array(&$this, 'vimeography_move_folders') );
 		add_action( 'plugins_loaded', array(&$this, 'vimeography_update_db_to_0_6') );
 		add_action( 'plugins_loaded', array(&$this, 'vimeography_update_db_version') );
 		add_action( 'admin_menu', array(&$this, 'vimeography_add_menu') );
@@ -496,6 +496,7 @@ class Vimeography
      */
     private function _move_folder($args = array())
     {
+		require_once(ABSPATH . 'wp-admin/includes/upgrade.php');
 		// Replaces simple `WP_Filesystem();` call to prevent any extraction issues
 		// @link http://wpquestions.com/question/show/id/2685
 		if (! function_exists('__return_direct'))
