@@ -38,10 +38,12 @@ class Vimeography_Theme_List extends Mustache
 		// if this fails, check_admin_referer() will automatically print a "failed" page and die.
 		if ( !empty($_FILES) && check_admin_referer('vimeography-install-theme','vimeography-theme-verification') )
 		{
-			
 			// Replaces simple `WP_Filesystem();` call to prevent any extraction issues
 			// @link http://wpquestions.com/question/show/id/2685
-			function __return_direct() { return 'direct'; }
+			if (! function_exists('__return_direct'))
+			{
+				function __return_direct() { return 'direct'; }
+			}				
 			add_filter( 'filesystem_method', '__return_direct' );	
 			WP_Filesystem();
 			remove_filter( 'filesystem_method', '__return_direct' );
