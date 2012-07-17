@@ -591,7 +591,7 @@ body{margin:0;font-family:"Helvetica Neue",Helvetica,Arial,sans-serif;font-size:
 .wp_bootstrap a.thumbnail:hover{border-color:#0088cc;-webkit-box-shadow:0 1px 4px rgba(0, 105, 214, 0.25);-moz-box-shadow:0 1px 4px rgba(0, 105, 214, 0.25);box-shadow:0 1px 4px rgba(0, 105, 214, 0.25);}
 .wp_bootstrap .thumbnail>img{display:block;max-width:100%;margin-left:auto;margin-right:auto;}
 .wp_bootstrap .thumbnail .caption{padding:9px;}
-.wp_bootstrap .label{padding:2px 4px 3px;font-size:11.049999999999999px;font-weight:bold;color:#ffffff;text-shadow:0 -1px 0 rgba(0, 0, 0, 0.25);background-color:#999999;-webkit-border-radius:3px;-moz-border-radius:3px;border-radius:3px;}
+.wp_bootstrap .label{padding:1px 4px 2px;font-size:11.049999999999999px;font-weight:bold;color:#ffffff;text-shadow:0 -1px 0 rgba(0, 0, 0, 0.25);background-color:#999999;-webkit-border-radius:3px;-moz-border-radius:3px;border-radius:3px;}
 .wp_bootstrap .label:hover{color:#ffffff;text-decoration:none;}
 .wp_bootstrap .label-important{background-color:#b94a48;}
 .wp_bootstrap .label-important:hover{background-color:#953b39;}
