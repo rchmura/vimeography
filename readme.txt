@@ -1,16 +1,19 @@
 === Vimeography ===
 Contributors: iamdavekiss
-Tags: vimeo, videos, gallery
+Tags: vimeo, video, videos, gallery, vimeography, colorbox, media, player, playlist, showcase, skins, themes, video gallery
 Requires at least: 3.3
 Tested up to: 3.4.1
-Stable tag: 0.6.6
+Stable tag: 0.6.7
 License: MIT
 
 The easiest way to create beautiful Vimeo galleries on your Wordpress blog.
 
 == Description ==
 
-Vimeography is a Wordpress plugin that allows you to create beautiful, custom video galleries in 30 seconds, tops! 
+Vimeography is a Wordpress plugin that allows you to create beautiful, custom video galleries in 30 seconds, tops!
+
+A quick overview:
+https://vimeo.com/44555634
 
 For more information, check out [vimeography.com](http://vimeography.com/ "vimeography.com")
 
@@ -22,6 +25,12 @@ Some amazing features:
 * Change your gallery's appearance with custom themes
 * Built-in caching for quick page loads
 * Create unlimited galleries
+
+Make your gallery stand out with our custom themes!
+[http://vimeography.com/themes](http://vimeography.com/themes "vimeography.com/themes")
+
+For the latest updates, follow us!
+[http://twitter.com/vimeography](http://twitter.com/vimeography "twitter.com/vimeography")
 
 == Installation ==
 
@@ -45,7 +54,7 @@ Each gallery’s ID number is located next to the gallery’s title in the first
 = Can I override my Vimeography gallery settings in the shortcode? =
 
 Sure thing! You can define all of the properties found in the admin panel right in your shortcode as well. Try using one, any, or all of the following parameters:
-`[vimeography id="3" theme="thumbs" featured="28380190" source="channel" limit="60" named="staffpicks" cache="3600"]`
+`[vimeography id="3" theme="thumbs" featured="28380190" source="http://vimeo.com/channels/staffpicks" limit="60" cache="3600"]`
 
 = Can I add the Vimeography gallery to my theme’s sidebar/footer/header etc.? =
 
@@ -70,9 +79,13 @@ Not yet! All themes are set in stone, but we do have plans to add a custom css e
 4. Get new styles by installing gallery themes.
 
 == Changelog ==
+= 0.6.7 =
+* Added installed theme versions to Edit Galleries page.
+* Updated readme file.
+
 = 0.6.6 =
 * Updated admin Javascript code.
-* Added theme versions to My Themes page.
+* Added installed theme versions to My Themes page.
 
 = 0.6.5 =
 * Fixed an issue where the installation of a new theme may fail.
