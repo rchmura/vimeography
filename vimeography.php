@@ -3,7 +3,7 @@
 Plugin Name: Vimeography
 Plugin URI: http://vimeography.com
 Description: Vimeography is the easiest way to set up a custom Vimeo gallery on your site.
-Version: 0.6.7
+Version: 0.6.8
 Author: Dave Kiss
 Author URI: http://davekiss.com
 License: MIT
@@ -23,7 +23,7 @@ define( 'VIMEOGRAPHY_THEME_PATH', $wp_upload_dir['basedir'].'/vimeography-themes
 define( 'VIMEOGRAPHY_ASSETS_URL', $wp_upload_dir['baseurl'].'/vimeography-assets/' );
 define( 'VIMEOGRAPHY_ASSETS_PATH', $wp_upload_dir['basedir'].'/vimeography-assets/' );
 define( 'VIMEOGRAPHY_BASENAME', plugin_basename( __FILE__ ) );
-define( 'VIMEOGRAPHY_VERSION', '0.6.7');
+define( 'VIMEOGRAPHY_VERSION', '0.6.8');
 define( 'VIMEOGRAPHY_GALLERY_TABLE', $wpdb->prefix . "vimeography_gallery");
 define( 'VIMEOGRAPHY_GALLERY_META_TABLE', $wpdb->prefix . "vimeography_gallery_meta");
 define( 'VIMEOGRAPHY_CURRENT_PAGE', basename($_SERVER['PHP_SELF']));
@@ -39,8 +39,10 @@ class Vimeography
 		add_action( 'admin_init', array(&$this, 'vimeography_check_if_db_exists') );
 		add_action( 'init', array(&$this, 'vimeography_move_folders') );
 		add_action( 'plugins_loaded', array(&$this, 'vimeography_update_db_to_0_6') );
+		add_action( 'plugins_loaded', array(&$this, 'vimeography_update_db_to_0_7') );
 		add_action( 'plugins_loaded', array(&$this, 'vimeography_update_db_version') );
 		add_action( 'admin_menu', array(&$this, 'vimeography_add_menu') );
+		add_action( 'do_robots', array(&$this, 'vimeography_block_robots') );
 		
 		register_activation_hook( VIMEOGRAPHY_BASENAME, array(&$this, 'vimeography_update_tables') );
 		
@@ -51,6 +53,12 @@ class Vimeography
 		add_filter( 'widget_text', 'do_shortcode' );
 	}
 		
+	/**
+	 * Runs on every page load.
+	 * 
+	 * @access public
+	 * @return void
+	 */
 	public function vimeography_init()
 	{
 		if(in_array(VIMEOGRAPHY_CURRENT_PAGE, array('post.php', 'page.php', 'page-new.php', 'post-new.php'))){
@@ -61,7 +69,20 @@ class Vimeography
 			add_filter( 'mce_external_plugins', array(&$this, 'vimeography_add_editor_plugin' ));
 			add_filter( 'mce_buttons', array(&$this, 'vimeography_register_editor_button') );
 		}
-
+		
+		// Let's check if the user has a custom robots.txt file.
+		if (file_exists(ABSPATH.'/robots.txt'))
+		{
+			// See if our rule already exists inside of it.
+			$robotstxt = file_get_contents(ABSPATH.'/robots.txt');
+			if (strpos($robotstxt, 'Disallow: '.VIMEOGRAPHY_THEME_PATH) === FALSE)
+			{
+				// Write our rule.
+				$robotstxt .= "\nDisallow: ".VIMEOGRAPHY_THEME_PATH."\n";
+				file_put_contents(ABSPATH.'/robots.txt', $robotstxt);			
+			}
+		}
+		
 	}
 	
 	public function vimeography_register_editor_button($buttons)
@@ -110,6 +131,10 @@ class Vimeography
 	{
 		$this->_move_folder(array('source' => VIMEOGRAPHY_PATH . 'bugsauce/', 'destination' => VIMEOGRAPHY_THEME_PATH.'bugsauce/', 'clear_destination' => true, 'clear_working' => true));
 		$this->_move_folder(array('source' => VIMEOGRAPHY_PATH . 'theme-assets/', 'destination' => VIMEOGRAPHY_ASSETS_PATH, 'clear_destination' => true, 'clear_working' => true));
+		
+		// Now, check if the .htaccess exists in the VIMEOGRAPHY_THEME_PATH
+		if (! file_exists(VIMEOGRAPHY_THEME_PATH.'.htaccess'))
+			file_put_contents(VIMEOGRAPHY_THEME_PATH.'.htaccess', "Options All -Indexes\n<FilesMatch \".(htaccess|mustache)$\">\nOrder Allow,Deny\nDeny from all\n</FilesMatch>");
 	}
 	
 	/**
@@ -166,6 +191,20 @@ class Vimeography
 					$new_gallery
 				);
 			}
+		}
+	}
+	
+	/**
+	 * Check if the Vimeography database structure needs updated to version 0.7 based on the stored db version.
+	 * 
+	 * @access public
+	 * @return void
+	 */
+	public function vimeography_update_db_to_0_7()
+	{
+		if (get_option('vimeography_db_version') < 0.7)
+		{
+
 		}
 	}
 	
@@ -365,7 +404,7 @@ class Vimeography
 	 * @param mixed $atts
 	 * @return void
 	 */
-	public function vimeography_shortcode($atts)
+	public function vimeography_shortcode($atts, $content = NULL)
 	{
 
 		// Let's get the data for this gallery from the db
@@ -444,6 +483,18 @@ class Vimeography
 		{
 			return "Vimeography error: ".$e->getMessage();
 		}
+	}
+	
+	/**
+	 * Adds the VIMEOGRAPHY_THEME_PATH to the virtual robots.txt restricted list.
+	 * 
+	 * @access public
+	 * @static
+	 * @return void
+	 */
+	public static function vimeography_block_robots()
+	{
+		echo 'Disallow: '.VIMEOGRAPHY_THEME_PATH."\n";
 	}
 		
 	/**
