@@ -3,7 +3,7 @@ Contributors: iamdavekiss
 Tags: vimeo, video, videos, gallery, vimeography, colorbox, media, player, playlist, showcase, skins, themes, video gallery
 Requires at least: 3.3
 Tested up to: 3.4.1
-Stable tag: 0.6.8
+Stable tag: 0.6.8.1
 License: MIT
 
 The easiest way to create beautiful Vimeo galleries on your Wordpress blog.
@@ -13,7 +13,7 @@ The easiest way to create beautiful Vimeo galleries on your Wordpress blog.
 Vimeography is a Wordpress plugin that allows you to create beautiful, custom video galleries in 30 seconds, tops!
 
 A quick overview:
-[vimeo http://vimeo.com/44555634]
+[http://vimeo.com/44555634](http://vimeo.com/44555634 "http://vimeo.com/44555634")
 
 For more information, check out [vimeography.com](http://vimeography.com/ "vimeography.com")
 
@@ -79,6 +79,9 @@ Not yet! All themes are set in stone, but we do have plans to add a custom css e
 4. Get new styles by installing gallery themes.
 
 == Changelog ==
+= 0.6.8.1 =
+* Fixed an issue where themes may display incorrectly.
+
 = 0.6.8 =
 * Updated theme security methods.
 
