@@ -3,7 +3,7 @@
 Plugin Name: Vimeography
 Plugin URI: http://vimeography.com
 Description: Vimeography is the easiest way to set up a custom Vimeo gallery on your site.
-Version: 0.6.8.1
+Version: 0.6.9
 Author: Dave Kiss
 Author URI: http://davekiss.com
 License: MIT
@@ -23,7 +23,7 @@ define( 'VIMEOGRAPHY_THEME_PATH', $wp_upload_dir['basedir'].'/vimeography-themes
 define( 'VIMEOGRAPHY_ASSETS_URL', $wp_upload_dir['baseurl'].'/vimeography-assets/' );
 define( 'VIMEOGRAPHY_ASSETS_PATH', $wp_upload_dir['basedir'].'/vimeography-assets/' );
 define( 'VIMEOGRAPHY_BASENAME', plugin_basename( __FILE__ ) );
-define( 'VIMEOGRAPHY_VERSION', '0.6.8.1');
+define( 'VIMEOGRAPHY_VERSION', '0.6.9');
 define( 'VIMEOGRAPHY_GALLERY_TABLE', $wpdb->prefix . "vimeography_gallery");
 define( 'VIMEOGRAPHY_GALLERY_META_TABLE', $wpdb->prefix . "vimeography_gallery_meta");
 define( 'VIMEOGRAPHY_CURRENT_PAGE', basename($_SERVER['PHP_SELF']));
@@ -75,10 +75,12 @@ class Vimeography
 		{
 			// See if our rule already exists inside of it.
 			$robotstxt = file_get_contents(ABSPATH.'/robots.txt');
-			if (strpos($robotstxt, 'Disallow: '.VIMEOGRAPHY_THEME_PATH) === FALSE)
+			$blocked_path = str_ireplace(site_url(), '', VIMEOGRAPHY_THEME_URL);
+			
+			if (strpos($robotstxt, 'Disallow: '.$blocked_path === FALSE))
 			{
 				// Write our rule.
-				$robotstxt .= "\nDisallow: ".VIMEOGRAPHY_THEME_PATH."\n";
+				$robotstxt .= "\nDisallow: ".$blocked_path."\n";
 				file_put_contents(ABSPATH.'/robots.txt', $robotstxt);			
 			}
 		}
@@ -456,15 +458,16 @@ class Vimeography
 				if (($vimeography_data = $this->get_vimeography_cache($settings['id'])) === FALSE)
 				{
 			    	// cache not set, let's do a new request to the vimeo API
-			    	// and cache it
+			    	// and cache it if the cache settings aren't zero seconds
 			        $vimeography_data = $vimeography->get('videos');
-			        $transient = $this->set_vimeography_cache($settings['id'], $vimeography_data, $settings['cache']);
+			        if ($settings['cache'] != 0)
+			        	$transient = $this->set_vimeography_cache($settings['id'], $vimeography_data, $settings['cache']);
 				}
 			}
 			// Otherwise, let's see if a cache exists for these particular
 			// shortcode settings, and if not, we'll create one using an
 			// alternate cache name generated using an md5 of the serialized
-			// shortcode combines with the gallery id.
+			// shortcode combined with the gallery id.
 			
 			else
 			{
@@ -475,9 +478,10 @@ class Vimeography
 				if (($vimeography_data = $this->get_vimeography_cache($cache_hash)) === FALSE)
 				{
 			    	// cache not set, let's do a new request to the vimeo API
-			    	// and cache it
+			    	// and cache it if the cache settings aren't zero seconds
 			        $vimeography_data = $vimeography->get('videos');
-			        $transient = $this->set_vimeography_cache($cache_hash, $vimeography_data, $settings['cache']);
+			        if ($settings['cache'] != 0)
+			        	$transient = $this->set_vimeography_cache($cache_hash, $vimeography_data, $settings['cache']);
 				}
 			}
 			return $vimeography->render($vimeography_data);
@@ -497,7 +501,8 @@ class Vimeography
 	 */
 	public static function vimeography_block_robots()
 	{
-		echo 'Disallow: '.VIMEOGRAPHY_THEME_PATH."\n";
+		$blocked_path = str_ireplace(site_url(), '', VIMEOGRAPHY_THEME_URL);
+		echo 'Disallow: '.$blocked_path."\n";
 	}
 		
 	/**

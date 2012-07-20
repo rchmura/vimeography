@@ -123,7 +123,9 @@ class Vimeography_Core extends Vimeography
 						$videos = $videos.$response;
 					}
 					
-					// This stops the next request from occuring if the total video count on the Vimeo source is less than what the user specified that they would like to see
+					// This stops the next request from occuring if the total
+					// video count on the Vimeo source is less than what the
+					// user specified that they would like to see
 					if (count(json_decode($videos)) < 20) break;
 					
 				}
@@ -135,7 +137,8 @@ class Vimeography_Core extends Vimeography
 				// A featured video was set, let's get it.
 				$featured_video = $this->_make_vimeo_request($url, 1);
 				
-				// Now, we need to check if the featured video already exists in the main video request object.				
+				// Now, we need to check if the featured video already exists in
+				// the main video request object.
 				$video_to_check = json_decode($featured_video, true);
 				$video_object = json_decode($result[0], true);
 				$video_found = FALSE;
@@ -150,7 +153,8 @@ class Vimeography_Core extends Vimeography
 					}
 				}
 				
-				// If it does not exist, we need to remove the last video in the array to make room for the featured video.
+				// If it does not exist, we need to remove the last video in the
+				// array to make room for the featured video.
 				if ($video_found == FALSE)
 					unset($video_object[count($video_object) - 1]);
 					
@@ -180,7 +184,8 @@ class Vimeography_Core extends Vimeography
 	    	// The URL is a valid Vimeo URL. Break it into an array containing the URL parts
 	        $url = array_filter(explode('/', $url['path']), 'strlen');
 	        
-	        // If the array doesn't contain one of the following strings, it must be either a user or a video
+	        // If the array doesn't contain one of the following strings, it
+	        // must be either a user or a video
 	        if (in_array($url[1], array('album', 'channels', 'groups')) !== TRUE)
 	        {
 	        	if (is_numeric($url[1]))
