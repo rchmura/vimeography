@@ -3,7 +3,7 @@
 Plugin Name: Vimeography
 Plugin URI: http://vimeography.com
 Description: Vimeography is the easiest way to set up a custom Vimeo gallery on your site.
-Version: 0.6.9
+Version: 0.6.9.1
 Author: Dave Kiss
 Author URI: http://davekiss.com
 License: MIT
@@ -23,7 +23,7 @@ define( 'VIMEOGRAPHY_THEME_PATH', $wp_upload_dir['basedir'].'/vimeography-themes
 define( 'VIMEOGRAPHY_ASSETS_URL', $wp_upload_dir['baseurl'].'/vimeography-assets/' );
 define( 'VIMEOGRAPHY_ASSETS_PATH', $wp_upload_dir['basedir'].'/vimeography-assets/' );
 define( 'VIMEOGRAPHY_BASENAME', plugin_basename( __FILE__ ) );
-define( 'VIMEOGRAPHY_VERSION', '0.6.9');
+define( 'VIMEOGRAPHY_VERSION', '0.6.9.1');
 define( 'VIMEOGRAPHY_GALLERY_TABLE', $wpdb->prefix . "vimeography_gallery");
 define( 'VIMEOGRAPHY_GALLERY_META_TABLE', $wpdb->prefix . "vimeography_gallery_meta");
 define( 'VIMEOGRAPHY_CURRENT_PAGE', basename($_SERVER['PHP_SELF']));
@@ -75,12 +75,19 @@ class Vimeography
 		{
 			// See if our rule already exists inside of it.
 			$robotstxt = file_get_contents(ABSPATH.'/robots.txt');
-			$blocked_path = str_ireplace(site_url(), '', VIMEOGRAPHY_THEME_URL);
+			$blocked_theme_path = str_ireplace(site_url(), '', VIMEOGRAPHY_THEME_URL);
+			$blocked_asset_path = str_ireplace(site_url(), '', VIMEOGRAPHY_ASSETS_URL);
 			
-			if (strpos($robotstxt, 'Disallow: '.$blocked_path === FALSE))
+			if (strpos($robotstxt, 'Disallow: '.$blocked_theme_path === FALSE))
 			{
 				// Write our rule.
-				$robotstxt .= "\nDisallow: ".$blocked_path."\n";
+				$robotstxt .= "\nDisallow: ".$blocked_theme_path."\n";
+				file_put_contents(ABSPATH.'/robots.txt', $robotstxt);			
+			}
+			if (strpos($robotstxt, 'Disallow: '.$blocked_asset_path === FALSE))
+			{
+				// Write our rule.
+				$robotstxt .= "\nDisallow: ".$blocked_asset_path."\n";
 				file_put_contents(ABSPATH.'/robots.txt', $robotstxt);			
 			}
 		}
@@ -471,7 +478,7 @@ class Vimeography
 			
 			else
 			{
-				$cache_hash = $settings['id'].'_'.md5(serialize($gallery_settings));
+				$cache_hash = $settings['id'].'_'.md5(serialize($settings_check));
 				
 				// if cache is set, render it. otherwise, get the json, set the
 				// cache, and render it
@@ -493,7 +500,7 @@ class Vimeography
 	}
 	
 	/**
-	 * Adds the VIMEOGRAPHY_THEME_PATH to the virtual robots.txt restricted list.
+	 * Adds the VIMEOGRAPHY_THEME_URL and VIMEOGRAPHY_ASSETS_URL to the virtual robots.txt restricted list.
 	 * 
 	 * @access public
 	 * @static
@@ -501,8 +508,10 @@ class Vimeography
 	 */
 	public static function vimeography_block_robots()
 	{
-		$blocked_path = str_ireplace(site_url(), '', VIMEOGRAPHY_THEME_URL);
-		echo 'Disallow: '.$blocked_path."\n";
+		$blocked_theme_path = str_ireplace(site_url(), '', VIMEOGRAPHY_THEME_URL);
+		$blocked_asset_path = str_ireplace(site_url(), '', VIMEOGRAPHY_ASSETS_URL);
+		echo 'Disallow: '.$blocked_theme_path."\n";
+		echo 'Disallow: '.$blocked_asset_path."\n";
 	}
 		
 	/**

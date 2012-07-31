@@ -1,7 +1,8 @@
 <?php
 
 // Require Mustache.php
-require_once(VIMEOGRAPHY_PATH . '/vendor/mustache/Mustache.php');
+if (! class_exists('Mustache'))
+	require_once(VIMEOGRAPHY_PATH . '/vendor/mustache/Mustache.php');
 
 class Vimeography_Core extends Vimeography
 {
