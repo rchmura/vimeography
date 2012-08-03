@@ -34,23 +34,24 @@ class Vimeography_Helpers
 	 * @access public
 	 * @param mixed $string
 	 * @param mixed $limit
-	 * @param string $break (default: ".")
+	 * @param string $break (default: " ")
 	 * @param string $pad (default: "...")
 	 * @return void
 	 */
-	public function truncate($string, $limit, $break=".", $pad="...") 
+	public function truncate($string, $limit, $break = ' ', $pad = '...') 
 	{ 
 		// return with no change if string is shorter than $limit 
-		if(strlen($string) <= $limit) return $string; 
-		// is $break present between $limit and the end of the string? 
-		if(false !== ($breakpoint = strpos($string, $break, $limit))) 
-		{ 
-			if($breakpoint < strlen($string) - 1) 
-			{ 
-				$string = substr($string, 0, $breakpoint) . $pad; 
-			} 
-		} 
-		return $string; 
+		if (strlen($string) <= $limit)
+			return $string;
+			 
+		$string = substr($string, 0, $limit);
+		 
+		if (false !== ($breakpoint = strrpos($string, $break)))
+		{
+			$string = substr($string, 0, $breakpoint); 
+		}
+		
+		return $string . $pad;
 	}
 	
 	/**
