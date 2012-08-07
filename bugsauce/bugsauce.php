@@ -2,7 +2,7 @@
 /*
 Theme Name: Bugsauce
 Theme URI: vimeography.com/themes/bugsauce
-Version: 1.3
+Version: 1.4
 Description: is the base theme that comes prepackaged with Vimeography.
 Author: Dave Kiss
 Author URI: vimeography.com
@@ -10,10 +10,11 @@ Author URI: vimeography.com
 
 class Vimeography_Themes_Bugsauce extends Mustache
 {
-	public $version = '1.3';
+	public $version = '1.4';
     public $data;
     public $featured;
     public $gallery_id;
+    public $gallery_width;
     
 	public function __construct()
 	{
@@ -65,4 +66,5 @@ class Vimeography_Themes_Bugsauce extends Mustache
     	    	    	
     	return $items;
     }
+    
 }

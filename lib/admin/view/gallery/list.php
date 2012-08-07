@@ -11,8 +11,10 @@ class Vimeography_Gallery_List extends Mustache
 		if (isset($_POST))
 			$this->_validate_form();
 
-		wp_register_script( 'bootstrap_tooltip_js', VIMEOGRAPHY_URL.'media/js/bootstrap-tooltip.js');
-		wp_enqueue_script( 'bootstrap_tooltip_js');
+		wp_register_script( 'bootstrap-tooltip', VIMEOGRAPHY_URL.'media/js/bootstrap-tooltip.js');
+		wp_register_script( 'bootstrap-popover', VIMEOGRAPHY_URL.'media/js/bootstrap-popover.js');
+		wp_enqueue_script( 'bootstrap-tooltip');
+		wp_enqueue_script( 'bootstrap-popover');
 		$this->galleries = $this->_get_galleries_to_display();	
 	}
 	

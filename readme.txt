@@ -3,7 +3,7 @@ Contributors: iamdavekiss
 Tags: vimeo, video, videos, gallery, vimeography, colorbox, media, player, playlist, showcase, skins, themes, video gallery
 Requires at least: 3.3
 Tested up to: 3.4.1
-Stable tag: 0.6.9.2
+Stable tag: 0.7
 License: MIT
 
 The easiest way to create beautiful Vimeo galleries on your Wordpress blog.
@@ -70,9 +70,8 @@ Not yet! All themes are set in stone, but we do have plans to add a custom css e
 = What features do you have planned in future versions of Vimeography? =
 
 - Vimeography Pro
-- Theme Customization (colors, width, thumbnail size)
+- Theme Customization
 - Custom CSS Editor
-- Define width and height of container in shortcode
 
 == Screenshots ==
 
@@ -82,6 +81,14 @@ Not yet! All themes are set in stone, but we do have plans to add a custom css e
 4. Get new styles by installing gallery themes.
 
 == Changelog ==
+= 0.7 =
+* New! Galleries now automatically fit the width of their containers.
+* New! Added an admin setting to control each gallery's width (theme update required).
+* New! Added a shortcode setting to control each gallery's width (theme update required).
+* New! Quickview allows you to see all of your gallery settings from the gallery list page.
+* Updated bugsauce theme.
+* Updated admin styles.
+
 = 0.6.9.2 =
 * Updated Bugsauce theme.
 * Updated jQuery inclusion method.

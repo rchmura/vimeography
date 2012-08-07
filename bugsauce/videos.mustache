@@ -1,4 +1,4 @@
-<div id="vimeography-gallery-{{gallery_id}}" class="vimeography-bugsauce" data-version="{{version}}">
+<div id="vimeography-gallery-{{gallery_id}}" class="vimeography-bugsauce" data-version="{{version}}"{{#gallery_width}} style="max-width: {{gallery_width}};"{{/gallery_width}}>
 
 	<div class="vimeography-main">
 		{{#featured}}
@@ -30,8 +30,6 @@
 				slideshow: false,
 				itemWidth: 186,
 				itemMargin: 8,
-				maxItems: 4,
-				minItems: 2,
 				useCSS: false
 			});
 			

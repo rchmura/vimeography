@@ -55,7 +55,7 @@ class Vimeography_Gallery_New extends Mustache
 				else
 				{
 					$gallery_id = $wpdb->insert_id;
-					$result = $wpdb->insert( VIMEOGRAPHY_GALLERY_META_TABLE, array( 'gallery_id' => $gallery_id, 'source_url' => $settings['source_url'], 'video_limit' => 20, 'featured_video' => NULL, 'cache_timeout' => 3600, 'theme_name' => 'bugsauce' ) );
+					$result = $wpdb->insert( VIMEOGRAPHY_GALLERY_META_TABLE, array( 'gallery_id' => $gallery_id, 'source_url' => $settings['source_url'], 'video_limit' => 20, 'featured_video' => NULL, 'gallery_width' => NULL, 'cache_timeout' => 3600, 'theme_name' => 'bugsauce' ) );
 					
 					if (!$result)
 						throw new Exception(__('We couldn\'t save your gallery settings. Try reinstalling the Vimeography plugin.'));

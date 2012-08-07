@@ -3,6 +3,19 @@
 	$(document).ready(function(){
 		$('.vimeography-question').tooltip();
 		
+		$('.vimeography-gallery-settings').popover({
+			placement: 'bottom', 
+			content: function(){
+				return '<ul style="margin: -10px 5px 5px;">' +
+							'<li><strong>Active Theme: </strong>'+$(this).attr('data-active-theme')+'</li>'+
+							'<li><strong>Video Limit: </strong>'+$(this).attr('data-video-limit')+'</li>'+
+							'<li><strong>Featured Video: </strong>'+$(this).attr('data-featured-video')+'</li>'+
+							'<li><strong>Cache Timeout: </strong>'+$(this).attr('data-cache-timeout')+'</li>'+
+							'<li><strong>Created On: </strong>'+$(this).attr('data-created-on')+'</li>'+
+						'</ul>';
+			}
+		});
+		
 		$('.vimeography-duplicate-gallery').click(function(e){
 			var id = $(this).attr('data-id');
 			$('#vimeography-list-action').val('duplicate');
@@ -65,9 +78,9 @@
 		            <th class="manage-column column-cb check-column" id="active" scope="col"></th>
 		            <th style="width:50px;" class="manage-column" id="id" scope="col">Id</th>
 		            <th width="360" class="manage-column column-title" id="title" scope="col">Title</th>
-		            <th style="" class="manage-column column-author" id="author" scope="col">Video Source  <div class="wp_bootstrap" style="display:inline-block;"><a class="vimeography-question" href="#" rel="tooltip" title="This tells you the location of the videos that your gallery is using."><i class="icon-question-sign"></i></a></div></th>
+		            <th style="" class="manage-column column-author" id="author" scope="col">Video Source  <div class="wp_bootstrap" style="display:inline-block;"><a class="vimeography-question" href="#" rel="tooltip" title="The location of the videos that your gallery is using."><i class="icon-question-sign"></i></a></div></th>
 		            <th style="" class="manage-column" id="template" scope="col">Shortcode  <div class="wp_bootstrap" style="display:inline-block;"><a class="vimeography-question" href="#" rel="tooltip" title="Copy and paste this on to your post or page to show the gallery!"><i class="icon-question-sign"></i></a></div></th>
-		            <th style="" class="manage-column" id="theme-name" scope="col">Active Theme  <div class="wp_bootstrap" style="display:inline-block;"><a class="vimeography-question" href="#" rel="tooltip" title="The theme that is currently applied to your gallery."><i class="icon-question-sign"></i></a></div></th>
+		            <th style="" class="manage-column" id="theme-name" scope="col">Quickview  <div class="wp_bootstrap" style="display:inline-block;"><a class="vimeography-question" href="#" rel="tooltip" title="A glance at the settings that are currently applied to your gallery."><i class="icon-question-sign"></i></a></div></th>
 		        </tr>
 		    </thead>
 		
@@ -79,7 +92,7 @@
 		            <th width="350" class="manage-column column-title" id="title" scope="col">Title</th>
 		            <th style="" class="manage-column column-author" id="source" scope="col">Video Source</th>
 		            <th style="" class="manage-column" id="shortcode" scope="col">Shortcode</th>
-		            <th style="" class="manage-column column-author" id="theme" scope="col">Active Theme</th>
+		            <th style="" class="manage-column column-author" id="theme" scope="col">Quickview</th>
 		        </tr>
 		    </tfoot>
 		
@@ -101,9 +114,9 @@
 								<span class="edit"><a class="vimeography-delete-gallery" data-id="{{id}}" href="#" title="Delete">Delete</a></span>
 							</div>
 				        </td>
-				        <td class="column-date"><strong><a href="{{source_url}}" target="_blank" title="{{source_url}}">{{source_url}}</a></strong></td>
-				        <td class="column-date"><strong>[vimeography id="{{id}}"]</strong></td>
-				        <td class="column-date"><strong>{{theme_name}}</strong></td>
+				        <td><strong><a href="{{source_url}}" target="_blank" title="{{source_url}}">{{source_url}}</a></strong></td>
+				        <td><strong>[vimeography id="{{id}}"]</strong></td>
+				        <td><span class="wp_bootstrap"><button class="vimeography-gallery-settings btn btn-mini btn-info dropdown-toggle" style="cursor: default;" title="Quickview for {{title}}" data-active-theme="{{theme_name}}" data-video-limit="{{video_limit}}" data-featured-video="{{featured_video}}" data-cache-timeout="{{cache_timeout}}" data-created-on="{{date_created}}">Gallery Quickview <span class="caret"></span></button></span></td>
 				    </tr>
 		    	{{/galleries}}	
 								

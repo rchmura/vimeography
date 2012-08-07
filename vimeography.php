@@ -3,7 +3,7 @@
 Plugin Name: Vimeography
 Plugin URI: http://vimeography.com
 Description: Vimeography is the easiest way to set up a custom Vimeo gallery on your site.
-Version: 0.6.9.2
+Version: 0.7
 Author: Dave Kiss
 Author URI: http://davekiss.com
 License: MIT
@@ -23,7 +23,7 @@ define( 'VIMEOGRAPHY_THEME_PATH', $wp_upload_dir['basedir'].'/vimeography-themes
 define( 'VIMEOGRAPHY_ASSETS_URL', $wp_upload_dir['baseurl'].'/vimeography-assets/' );
 define( 'VIMEOGRAPHY_ASSETS_PATH', $wp_upload_dir['basedir'].'/vimeography-assets/' );
 define( 'VIMEOGRAPHY_BASENAME', plugin_basename( __FILE__ ) );
-define( 'VIMEOGRAPHY_VERSION', '0.6.9.2');
+define( 'VIMEOGRAPHY_VERSION', '0.7');
 define( 'VIMEOGRAPHY_GALLERY_TABLE', $wpdb->prefix . "vimeography_gallery");
 define( 'VIMEOGRAPHY_GALLERY_META_TABLE', $wpdb->prefix . "vimeography_gallery_meta");
 define( 'VIMEOGRAPHY_CURRENT_PAGE', basename($_SERVER['PHP_SELF']));
@@ -222,7 +222,7 @@ class Vimeography
 	{
 		if (get_option('vimeography_db_version') < 0.7)
 		{
-
+			$this->vimeography_update_tables();
 		}
 	}
 	
@@ -403,6 +403,7 @@ class Vimeography
 		source_url varchar(100) NOT NULL,
 		video_limit mediumint(7) NOT NULL,
 		featured_video int(9) unsigned DEFAULT NULL,
+		gallery_width varchar(10) DEFAULT NULL,
 		cache_timeout mediumint(7) NOT NULL,
 		theme_name varchar(50) NOT NULL,
 		PRIMARY KEY  (id)
@@ -416,7 +417,7 @@ class Vimeography
 	/**
 	 * Read the shortcode and return the output.
 	 * example:
-	 * [vimeography from='user' named='davekiss' theme='apple']
+	 * [vimeography id="1" theme='apple']
 	 * 
 	 * @access public
 	 * @param mixed $atts
@@ -440,6 +441,7 @@ class Vimeography
 		$gallery_settings['source']   = isset($gallery_info[0]->source_url)     ? $gallery_info[0]->source_url     : $default_settings['source_url'];
 		$gallery_settings['limit']    = isset($gallery_info[0]->video_limit)    ? $gallery_info[0]->video_limit    : $default_settings['video_limit'];
 		$gallery_settings['cache']    = isset($gallery_info[0]->cache_timeout)  ? $gallery_info[0]->cache_timeout  : $default_settings['cache_timeout'];
+		$gallery_settings['width']    = isset($gallery_info[0]->gallery_width)  ? $gallery_info[0]->gallery_width  : '';
 
 		// Get shortcode attributes
 		$settings    = shortcode_atts( array(
@@ -449,8 +451,34 @@ class Vimeography
 			'source'   => $gallery_settings['source'],
 			'limit'    => $gallery_settings['limit'],
 			'cache'    => $gallery_settings['cache'],
+			'width'    => $gallery_settings['width'],
 		), $atts );
 		
+		if (!empty($settings['width']))
+		{			
+			preg_match('/(\d*)(px|%?)/', $settings['width'], $matches);
+			// If a number value is set...
+			if (!empty($matches[1]))
+			{
+				// If a '%' or 'px' is set...
+				if (!empty($matches[2]))
+				{
+					// Accept the valid matching string
+					$settings['width'] = $matches[0];
+				}
+				else
+				{
+					// Append a 'px' value to the matching number
+					$settings['width'] = $matches[1] . 'px';
+				}
+			}
+			else
+			{
+				// Not a valid width
+				$settings['width'] = '';
+			}
+		}
+				
 		try
 		{
 			require_once(VIMEOGRAPHY_PATH . 'lib/core.php');

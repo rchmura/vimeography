@@ -72,7 +72,7 @@ html[xmlns] .slides {display: block;}
 
 /* Custom Modifications */
 
-.vimeography-bugsauce { clear: both; margin: 20px auto; width: 100%; max-width: 820px;}
+.vimeography-bugsauce { clear: both; margin: 20px auto; width: 100%;}
 .vimeography-bugsauce .vimeography-thumbnails .slides li {width: 186px; height: 108px; overflow: hidden; margin: 0 8px 0 0; cursor: pointer;}
 .vimeography-bugsauce .vimeography-thumbnails .slides li:last-child {margin-right: 0;}
 .vimeography-bugsauce .vimeography-thumbnails .slides li img {width: 184px; height: 105px; border: 1px solid #DDDDDD; border-radius: 4px 4px 4px 4px; box-shadow: 0 1px 1px rgba(0, 0, 0, 0.075); display: block;}

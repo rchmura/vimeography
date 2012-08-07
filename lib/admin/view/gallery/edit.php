@@ -268,12 +268,37 @@ class Vimeography_Gallery_Edit extends Mustache
 			try
 			{
 				global $wpdb;
-				$settings['cache_timeout'] = $wpdb->escape(wp_filter_nohtml_kses($input['vimeography_advanced_settings']['cache_timeout']));
+				$settings['cache_timeout']  = $wpdb->escape(wp_filter_nohtml_kses($input['vimeography_advanced_settings']['cache_timeout']));
 				$settings['featured_video'] = $wpdb->escape(wp_filter_nohtml_kses($input['vimeography_advanced_settings']['featured_video']));
 				
+				if (!empty($input['vimeography_advanced_settings']['gallery_width']))
+				{			
+					preg_match('/(\d*)(px|%?)/', $input['vimeography_advanced_settings']['gallery_width'], $matches);
+					// If a number value is set...
+					if (!empty($matches[1]))
+					{
+						// If a '%' or 'px' is set...
+						if (!empty($matches[2]))
+						{
+							// Accept the valid matching string
+							$settings['gallery_width'] = $matches[0];
+						}
+						else
+						{
+							// Append a 'px' value to the matching number
+							$settings['gallery_width'] = $matches[1] . 'px';
+						}
+					}
+					else
+					{
+						// Not a valid width
+						$settings['gallery_width'] = '';
+					}
+				}
+								
 				$settings['video_limit'] = intval($input['vimeography_advanced_settings']['video_limit']) <= 60 ? $input['vimeography_advanced_settings']['video_limit'] : 60;
 													
-				$result = $wpdb->update( VIMEOGRAPHY_GALLERY_META_TABLE, array('cache_timeout' => $settings['cache_timeout'], 'featured_video' => $settings['featured_video'], 'video_limit' => $settings['video_limit']), array( 'gallery_id' => $id ) );
+				$result = $wpdb->update( VIMEOGRAPHY_GALLERY_META_TABLE, array('cache_timeout' => $settings['cache_timeout'], 'featured_video' => $settings['featured_video'], 'gallery_width' => $settings['gallery_width'], 'video_limit' => $settings['video_limit']), array( 'gallery_id' => $id ) );
 				
 				if ($result === FALSE)
 					throw new Exception('Your advanced settings could not be updated.');
