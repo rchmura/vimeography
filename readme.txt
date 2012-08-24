@@ -3,7 +3,7 @@ Contributors: iamdavekiss
 Tags: vimeo, video, videos, gallery, vimeography, colorbox, media, player, playlist, showcase, skins, themes, video gallery
 Requires at least: 3.3
 Tested up to: 3.4.1
-Stable tag: 0.7
+Stable tag: 0.8
 License: MIT
 
 The easiest way to create beautiful Vimeo galleries on your Wordpress blog.
@@ -23,6 +23,7 @@ Some amazing features:
 * Easily insert galleries on a page, post or template with the gallery helper or shortcode
 * Set a featured video to appear as the first video in your gallery
 * Change your gallery's appearance with custom themes
+* Control the gallery width using pixels or percentages
 * Built-in caching for quick page loads
 * Create unlimited galleries
 
@@ -57,7 +58,7 @@ Each gallery’s ID number is located next to the gallery’s title in the first
 = Can I override my Vimeography gallery settings in the shortcode? =
 
 Sure thing! You can define all of the properties found in the admin panel right in your shortcode as well. Try using one, any, or all of the following parameters:
-`[vimeography id="3" theme="thumbs" featured="28380190" source="http://vimeo.com/channels/staffpicks" limit="60" cache="3600"]`
+`[vimeography id="3" theme="thumbs" featured="http://vimeo.com/28380190" source="http://vimeo.com/channels/staffpicks" limit="60" cache="3600" width="600px"]`
 
 = Can I add the Vimeography gallery to my theme’s sidebar/footer/header etc.? =
 
@@ -75,12 +76,20 @@ Not yet! All themes are set in stone, but we do have plans to add a custom css e
 
 == Screenshots ==
 
-1. Create a gallery in 2 easy steps.
+1. Create a gallery in 30 seconds, tops!
 2. Preview your gallery and customize its appearance.
 3. Manage your galleries with a simple interface.
 4. Get new styles by installing gallery themes.
 
 == Changelog ==
+= 0.8 =
+* New! Gallery editor has a new intuitive UI.
+* New! Featured video now accepts a video URL.
+* Updated help files, introduction video and screenshots.
+* Updated flexslider to v2.1.
+* Updated admin javascript plugins.
+* Fixed an issue where theme installation occasionally failed.
+
 = 0.7 =
 * New! Galleries now automatically fit the width of their containers.
 * New! Added an admin setting to control each gallery's width (theme update required).

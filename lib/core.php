@@ -75,7 +75,9 @@ class Vimeography_Core extends Vimeography
 		$urls[] = $this->_build_url($this->_source);
 		
 		if (!empty($this->_featured))
-			$urls[] = self::ENDPOINT.'video/'.$this->_featured.self::FORMAT;
+		{
+			$urls[] = $this->_build_url($this->_featured);
+		}
 		
 		$result = array();
 		$videos = '';

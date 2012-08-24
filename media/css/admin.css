@@ -52,19 +52,20 @@ select#vimeography-source
 	clear: both;
 }
 
-ul#themes {
+ul.vimeography-theme-list {
 	list-style-type: none;
+	margin: 0;
+	padding: 0;
 }
 
-ul#themes li {
-    float: left;
-    margin: 0 40px 30px 0;
+ul.vimeography-theme-list li {
+    margin: 20px 25px 0;
     padding: 0;
     position: relative;
     width: 220px;
 }
 
-ul#themes li .theme-container {
+ul.vimeography-theme-list li .theme-container {
 	background: none repeat scroll 0 0 #FFFFFF;
     box-shadow: 0 1px 2px rgba(0, 0, 0, 0.25);
     clear: left;
@@ -73,33 +74,33 @@ ul#themes li .theme-container {
     padding: 10px;
 }
 
-ul#themes li .theme-container.active {
+ul.vimeography-theme-list li .theme-container.active {
 	background-color: #FDFFB7;
 }
 
-ul#themes li div.theme-image {
+ul.vimeography-theme-list li div.theme-image {
 	height: 150px;
 	overflow: hidden;
 	width: 200px;
 }
 
-ul#themes div.theme-details {
+ul.vimeography-theme-list div.theme-details {
 	font-size: 12px;
 	color: #aaa;
 	margin-top: 5px;
 }
 
-ul#themes div.theme-details a {
+ul.vimeography-theme-list div.theme-details a {
 	text-decoration: none;
 	color: #666;
 	font-weight: bold;
 }
 
-ul#themes div.theme-details span {
+ul.vimeography-theme-list div.theme-details span {
 	float: right;
 }
 
-ul#themes a.theme-info {
+ul.vimeography-theme-list a.theme-info {
   	background: none repeat scroll 0 0 rgba(255, 255, 255, 0.95);
     color: #888888;
     font-size: 12px;
@@ -116,7 +117,7 @@ ul#themes a.theme-info {
     width: 180px;
 }
 
-ul#themes a.theme-info strong {
+ul.vimeography-theme-list a.theme-info strong {
     color: #444444;
     display: block;
     font-size: 14px;
@@ -125,9 +126,354 @@ ul#themes a.theme-info strong {
     margin: 0 0 4px;
 }
 
-ul#themes a.theme-info span {
+ul.vimeography-theme-list a.theme-info span {
     display: block;
     font-size: 12px;
     line-height: 1.4;
     margin: 0 0 10px;
+}
+
+/* New gallery editor */
+#vimeography-gallery-editor {
+	position: relative;
+	height: 100%;
+}
+
+#vimeography-gallery-editor form {
+	margin: 0;
+}
+
+#vimeography-gallery-menu-container h1 {
+	font-size: 16px;
+	line-height: 16px;
+	margin: 0;
+	padding: 5px 0;
+}
+
+#vimeography-gallery-menu-container h2 {
+	font-size: 12px;
+	line-height: 12px;
+	color: #808080;
+	margin: 0;
+	padding: 0;
+}
+
+#vimeography-gallery-menu-container {
+	overflow: hidden;
+	position: absolute;
+	left: 0;
+	top: 0;
+	bottom: 0;
+	height: 600px;
+	width: 280px;
+	border: 1px solid #c4c4c4;
+	-webkit-border-radius: 4px;
+	-moz-border-radius: 4px;
+	border-radius: 4px;
+	display: block;
+	background: #f4f4f4; /* Old browsers */
+	/* IE9 SVG, needs conditional override of 'filter' to 'none' */
+	background: url(data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiA/Pgo8c3ZnIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIgd2lkdGg9IjEwMCUiIGhlaWdodD0iMTAwJSIgdmlld0JveD0iMCAwIDEgMSIgcHJlc2VydmVBc3BlY3RSYXRpbz0ibm9uZSI+CiAgPGxpbmVhckdyYWRpZW50IGlkPSJncmFkLXVjZ2ctZ2VuZXJhdGVkIiBncmFkaWVudFVuaXRzPSJ1c2VyU3BhY2VPblVzZSIgeDE9IjAlIiB5MT0iMCUiIHgyPSIwJSIgeTI9IjEwMCUiPgogICAgPHN0b3Agb2Zmc2V0PSIwJSIgc3RvcC1jb2xvcj0iI2Y0ZjRmNCIgc3RvcC1vcGFjaXR5PSIxIi8+CiAgICA8c3RvcCBvZmZzZXQ9IjEwMCUiIHN0b3AtY29sb3I9IiNlNWU1ZTgiIHN0b3Atb3BhY2l0eT0iMSIvPgogIDwvbGluZWFyR3JhZGllbnQ+CiAgPHJlY3QgeD0iMCIgeT0iMCIgd2lkdGg9IjEiIGhlaWdodD0iMSIgZmlsbD0idXJsKCNncmFkLXVjZ2ctZ2VuZXJhdGVkKSIgLz4KPC9zdmc+);
+	background: -moz-linear-gradient(top,  #f4f4f4 0%, #e5e5e8 100%); /* FF3.6+ */
+	background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#f4f4f4), color-stop(100%,#e5e5e8)); /* Chrome,Safari4+ */
+	background: -webkit-linear-gradient(top,  #f4f4f4 0%,#e5e5e8 100%); /* Chrome10+,Safari5.1+ */
+	background: -o-linear-gradient(top,  #f4f4f4 0%,#e5e5e8 100%); /* Opera 11.10+ */
+	background: -ms-linear-gradient(top,  #f4f4f4 0%,#e5e5e8 100%); /* IE10+ */
+	background: linear-gradient(to bottom,  #f4f4f4 0%,#e5e5e8 100%); /* W3C */
+	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#f4f4f4', endColorstr='#e5e5e8',GradientType=0 ); /* IE6-8 */
+}
+
+.vimeography-gallery-meta {
+	display: block;
+	padding: 10px 13px 15px;
+	height: 38px;
+	border-top: 1px solid #fff;
+	border-bottom: 1px solid #ddd;
+	background: #f7f7f7; /* Old browsers */
+	/* IE9 SVG, needs conditional override of 'filter' to 'none' */
+	background: url(data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiA/Pgo8c3ZnIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIgd2lkdGg9IjEwMCUiIGhlaWdodD0iMTAwJSIgdmlld0JveD0iMCAwIDEgMSIgcHJlc2VydmVBc3BlY3RSYXRpbz0ibm9uZSI+CiAgPGxpbmVhckdyYWRpZW50IGlkPSJncmFkLXVjZ2ctZ2VuZXJhdGVkIiBncmFkaWVudFVuaXRzPSJ1c2VyU3BhY2VPblVzZSIgeDE9IjAlIiB5MT0iMCUiIHgyPSIwJSIgeTI9IjEwMCUiPgogICAgPHN0b3Agb2Zmc2V0PSIwJSIgc3RvcC1jb2xvcj0iI2Y3ZjdmNyIgc3RvcC1vcGFjaXR5PSIxIi8+CiAgICA8c3RvcCBvZmZzZXQ9IjEwMCUiIHN0b3AtY29sb3I9IiNlOWU5ZTkiIHN0b3Atb3BhY2l0eT0iMSIvPgogIDwvbGluZWFyR3JhZGllbnQ+CiAgPHJlY3QgeD0iMCIgeT0iMCIgd2lkdGg9IjEiIGhlaWdodD0iMSIgZmlsbD0idXJsKCNncmFkLXVjZ2ctZ2VuZXJhdGVkKSIgLz4KPC9zdmc+);
+	background: -moz-linear-gradient(top,  #f7f7f7 0%, #e9e9e9 100%); /* FF3.6+ */
+	background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#f7f7f7), color-stop(100%,#e9e9e9)); /* Chrome,Safari4+ */
+	background: -webkit-linear-gradient(top,  #f7f7f7 0%,#e9e9e9 100%); /* Chrome10+,Safari5.1+ */
+	background: -o-linear-gradient(top,  #f7f7f7 0%,#e9e9e9 100%); /* Opera 11.10+ */
+	background: -ms-linear-gradient(top,  #f7f7f7 0%,#e9e9e9 100%); /* IE10+ */
+	background: linear-gradient(to bottom,  #f7f7f7 0%,#e9e9e9 100%); /* W3C */
+	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#f7f7f7', endColorstr='#e9e9e9',GradientType=0 ); /* IE6-8 */
+}
+
+#vimeography-gallery-main-menu-container,
+#vimeography-gallery-themes-container
+{
+	width: 280px;
+	float: left;
+	height: 100%;
+	position: relative;
+}
+
+#vimeography-gallery-main-menu,
+#vimeography-themes-container {
+	position: absolute;
+	bottom: 0;
+	top: 65px;
+	width: 280px;
+}
+
+.vimeography-gallery-menu-group {
+	border-bottom: 1px solid #ddd;
+}
+
+.vimeography-gallery-menu-heading {
+	background: #f6f6f6;
+	box-shadow: 0px 0px 2px rgba(0,0,0,0.10);
+}
+
+.vimeography-gallery-menu-heading:hover {
+	background: #f9f9f9;
+}
+
+.vimeography-gallery-menu-heading a {
+	font-size: 13px;
+	line-height: 13px;
+	font-weight: 500;
+	color: #333;
+	margin: 0;
+	padding: 13px 13px 13px 16px;
+	display: block;
+	text-shadow: 0px 1px 0px #fff;
+}
+
+.vimeography-gallery-menu-heading a:hover {
+	text-decoration: none;
+	color: #232323;
+} 
+
+.vimeography-gallery-menu-heading.active {
+	background-color: #383838;
+   -moz-box-shadow:    inset 0 0 5px #000000;
+   -webkit-box-shadow: inset 0 0 5px #000000;
+   box-shadow:         inset 0 0 5px #000000;
+   border: none;
+}
+
+.vimeography-gallery-menu-heading.active a {
+	color: #f4f4f4;
+	text-shadow: none;
+}
+
+.vimeography-gallery-menu-content {
+	padding: 0 17px;
+	background-color: #e3e3e3;
+}
+
+.vimeography-gallery-menu-setting {
+	padding: 15px 0;
+	border-bottom: 1px solid #d4d4d4;
+	border-top: 1px solid #f3f3f3;
+}
+
+.vimeography-gallery-menu-setting.first {border-top: none;}
+.vimeography-gallery-menu-setting.last {border-bottom: none;}
+
+.vimeography-gallery-menu-setting label {
+	color: #444;
+	font-weight: 700;
+	text-shadow: 0px 1px 0px #fff;
+	margin: 0 0 5px 2px;
+}
+
+.vimeography-gallery-menu-setting input, .vimeography-gallery-menu-setting select {
+	font-size: 13px;
+}
+
+.popover-content p {margin: 0;}
+#vimeography-gallery-menu-container.affix {position: fixed; top: 40px; left: 165px;}
+
+/* Custom Scrollbar */
+/* basic scrollbar styling */
+/* vertical scrollbar */
+.mCSB_container{
+	width:auto;
+	margin-right:30px;
+	overflow:hidden;
+}
+.mCSB_container.mCS_no_scrollbar{
+	margin-right:0;
+}
+.mCustomScrollBox .mCSB_scrollTools{
+	width:16px;
+	height:100%;
+	top:0;
+	right:0;
+	margin: 5px 0;
+}
+.mCSB_scrollTools .mCSB_draggerContainer{
+	height:100%;
+	-webkit-box-sizing:border-box;
+	-moz-box-sizing:border-box;
+	box-sizing:border-box;
+}
+.mCSB_scrollTools .mCSB_buttonUp+.mCSB_draggerContainer{
+	padding-bottom:40px;
+}
+.mCSB_scrollTools .mCSB_draggerRail{
+	width:2px;
+	height:100%;
+	margin:0 auto;
+	-webkit-border-radius:10px;
+	-moz-border-radius:10px;
+	border-radius:10px;
+}
+.mCSB_scrollTools .mCSB_dragger{
+	cursor:pointer;
+	width:100%;
+	height:30px;
+}
+.mCSB_scrollTools .mCSB_dragger .mCSB_dragger_bar{
+	width:4px;
+	height:100%;
+	margin:0 auto;
+	-webkit-border-radius:10px;
+	-moz-border-radius:10px;
+	border-radius:10px;
+	text-align:center;
+}
+.mCSB_scrollTools .mCSB_buttonUp,
+.mCSB_scrollTools .mCSB_buttonDown{
+	height:20px;
+	overflow:hidden;
+	margin:0 auto;
+	cursor:pointer;
+}
+.mCSB_scrollTools .mCSB_buttonDown{
+	bottom:0;
+	margin-top:-40px;
+}
+/* horizontal scrollbar */
+.mCSB_horizontal .mCSB_container{
+	height:auto;
+	margin-right:0;
+	margin-bottom:30px;
+	overflow:hidden;
+}
+.mCSB_horizontal .mCSB_container.mCS_no_scrollbar{
+	margin-bottom:0;
+}
+.mCSB_horizontal.mCustomScrollBox .mCSB_scrollTools{
+	width:100%;
+	height:16px;
+	top:auto;
+	right:auto;
+	bottom:0;
+	left:0;
+	overflow:hidden;
+}
+.mCSB_horizontal .mCSB_scrollTools .mCSB_draggerContainer{
+	height:100%;
+	width:auto;
+	-webkit-box-sizing:border-box;
+	-moz-box-sizing:border-box;
+	box-sizing:border-box;
+	overflow:hidden;
+}
+.mCSB_horizontal .mCSB_scrollTools .mCSB_buttonLeft+.mCSB_draggerContainer{
+	padding-bottom:0;
+	padding-right:20px;
+}
+.mCSB_horizontal .mCSB_scrollTools .mCSB_draggerRail{
+	width:100%;
+	height:2px;
+	margin:7px 0;
+	-webkit-border-radius:10px;
+	-moz-border-radius:10px;
+	border-radius:10px;
+}
+.mCSB_horizontal .mCSB_scrollTools .mCSB_dragger{
+	width:30px;
+	height:100%;
+}
+.mCSB_horizontal .mCSB_scrollTools .mCSB_dragger .mCSB_dragger_bar{
+	width:100%;
+	height:4px;
+	margin:6px auto;
+	-webkit-border-radius:10px;
+	-moz-border-radius:10px;
+	border-radius:10px;
+}
+.mCSB_horizontal .mCSB_scrollTools .mCSB_buttonLeft,
+.mCSB_horizontal .mCSB_scrollTools .mCSB_buttonRight{
+	width:20px;
+	height:100%;
+	overflow:hidden;
+	margin:0 auto;
+	cursor:pointer;
+	float:left;
+}
+.mCSB_horizontal .mCSB_scrollTools .mCSB_buttonRight{
+	right:0;
+	bottom:auto;
+	margin-left:-40px;
+	margin-top:-16px;
+	float:right;
+}
+
+/* default scrollbar colors and backgrounds */
+.mCustomScrollBox .mCSB_scrollTools{
+	opacity:0.75;
+}
+.mCustomScrollBox:hover .mCSB_scrollTools{
+	opacity:1;
+}
+.mCSB_scrollTools .mCSB_draggerRail{
+	background:#ccc; /* rgba fallback */
+	background:rgba(0,0,0,0.15);
+	filter:"alpha(opacity=15)"; -ms-filter:"alpha(opacity=15)"; /* old ie */
+}
+.mCSB_scrollTools .mCSB_dragger .mCSB_dragger_bar{
+	background:#999; /* rgba fallback */
+	background:rgba(0,0,0,0.45);
+	filter:"alpha(opacity=45)"; -ms-filter:"alpha(opacity=45)"; /* old ie */
+}
+.mCSB_scrollTools .mCSB_dragger:hover .mCSB_dragger_bar{
+	background:rgba(255,255,255,0.85);
+	filter:"alpha(opacity=85)"; -ms-filter:"alpha(opacity=85)"; /* old ie */
+}
+.mCSB_scrollTools .mCSB_dragger:active .mCSB_dragger_bar,
+.mCSB_scrollTools .mCSB_dragger.mCSB_dragger_onDrag .mCSB_dragger_bar{
+	background:rgba(255,255,255,0.9);
+	filter:"alpha(opacity=90)"; -ms-filter:"alpha(opacity=90)"; /* old ie */
+}
+.mCSB_scrollTools .mCSB_buttonUp,
+.mCSB_scrollTools .mCSB_buttonDown,
+.mCSB_scrollTools .mCSB_buttonLeft,
+.mCSB_scrollTools .mCSB_buttonRight{
+	background-image:url(mCSB_buttons.png);
+	background-repeat:no-repeat;
+	opacity:0.4;
+	filter:"alpha(opacity=40)"; -ms-filter:"alpha(opacity=40)"; /* old ie */
+}
+.mCSB_scrollTools .mCSB_buttonUp{
+	background-position:0 0;
+}
+.mCSB_scrollTools .mCSB_buttonDown{
+	background-position:0 -20px;
+}
+.mCSB_scrollTools .mCSB_buttonLeft{
+	background-position:0 -40px;
+}
+.mCSB_scrollTools .mCSB_buttonRight{
+	background-position:0 -56px;
+}
+.mCSB_scrollTools .mCSB_buttonUp:hover,
+.mCSB_scrollTools .mCSB_buttonDown:hover,
+.mCSB_scrollTools .mCSB_buttonLeft:hover,
+.mCSB_scrollTools .mCSB_buttonRight:hover{
+	opacity:0.75;
+	filter:"alpha(opacity=75)"; -ms-filter:"alpha(opacity=75)"; /* old ie */
+}
+.mCSB_scrollTools .mCSB_buttonUp:active,
+.mCSB_scrollTools .mCSB_buttonDown:active,
+.mCSB_scrollTools .mCSB_buttonLeft:active,
+.mCSB_scrollTools .mCSB_buttonRight:active{
+	opacity:0.9;
+	filter:"alpha(opacity=90)"; -ms-filter:"alpha(opacity=90)"; /* old ie */
 }

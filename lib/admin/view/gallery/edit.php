@@ -2,7 +2,6 @@
 
 class Vimeography_Gallery_Edit extends Mustache
 {
-	public $tab_to_show;
 	public $messages = array();
 	
 	public $gallery;
@@ -11,7 +10,26 @@ class Vimeography_Gallery_Edit extends Mustache
 	{		
 		if (isset($_POST))
 			$this->_validate_form();
-
+			
+		wp_register_script( 'bootstrap-tooltip', VIMEOGRAPHY_URL.'media/js/bootstrap-tooltip.js');
+		wp_register_script( 'bootstrap-popover', VIMEOGRAPHY_URL.'media/js/bootstrap-popover.js');
+		wp_register_script( 'bootstrap-collapse', VIMEOGRAPHY_URL.'media/js/bootstrap-collapse.js');
+		wp_register_script( 'bootstrap-affix', VIMEOGRAPHY_URL.'media/js/bootstrap-affix.js');
+		if (! wp_script_is('jquery-ui'))
+		{
+			wp_register_script('jquery-ui', "http" . ($_SERVER['SERVER_PORT'] == 443 ? "s" : "") . "://ajax.googleapis.com/ajax/libs/jqueryui/1.8/jquery-ui.min.js", false, null);
+			wp_enqueue_script('jquery-ui');
+		}
+		wp_register_script( 'jquery-mousewheel', VIMEOGRAPHY_URL.'media/js/jquery.mousewheel.min.js', 'jquery');
+		wp_register_script( 'jquery-custom-scrollbar', VIMEOGRAPHY_URL.'media/js/jquery.mCustomScrollbar.js', 'jquery');
+		
+		wp_enqueue_script( 'bootstrap-collapse');
+		wp_enqueue_script( 'bootstrap-tooltip');
+		wp_enqueue_script( 'bootstrap-popover');
+		wp_enqueue_script( 'bootstrap-affix');
+		wp_enqueue_script( 'jquery-mousewheel');
+		wp_enqueue_script( 'jquery-custom-scrollbar');
+		
 		global $wpdb;
 		
 		if (isset($_GET['id']))
@@ -31,11 +49,8 @@ class Vimeography_Gallery_Edit extends Mustache
 					
 		if (isset($_GET['created']) && $_GET['created'] == 1)
 		{
-			$this->tab_to_show = 'appearance';
 			$this->messages[] = array('type' => 'success', 'heading' => 'Gallery created.', 'message' => 'Welp, that was easy.');
-		}
-		
-		if (!isset($this->tab_to_show)) $this->tab_to_show = 'appearance';	
+		}		
 	}
 	
 	/**
@@ -74,22 +89,17 @@ class Vimeography_Gallery_Edit extends Mustache
     {
     	return delete_transient('vimeography_cache_'.$id);
     }
-	
+    
 	public static function basic_nonce()
 	{
 	   return wp_nonce_field('vimeography-basic-action','vimeography-basic-verification');
 	}
-	
+		
 	public static function appearance_nonce()
 	{
 	   return wp_nonce_field('vimeography-appearance-action','vimeography-appearance-verification');
 	}
-	
-	public static function advanced_nonce()
-	{
-	   return wp_nonce_field('vimeography-advanced-action','vimeography-advanced-verification');
-	}
-	
+		
 	public function selected()
 	{
 		return array(
@@ -99,7 +109,7 @@ class Vimeography_Gallery_Edit extends Mustache
 	
 	public function gallery()
 	{
-		$this->gallery[0]->featured_video = $this->gallery[0]->featured_video == 0 ? '' : $this->gallery[0]->featured_video;
+		$this->gallery[0]->featured_video = $this->gallery[0]->featured_video === 0 ? '' : $this->gallery[0]->featured_video;
 		return $this->gallery;
 	}
 	
@@ -184,62 +194,23 @@ class Vimeography_Gallery_Edit extends Mustache
 		global $wpdb;
 		$id = $wpdb->escape(intval($_GET['id']));
 		
-		if (!empty($_POST['vimeography_basic_settings']))
-		{
-			$messages = $this->_vimeography_validate_basic_settings($id, $_POST);
-		}
-		elseif (!empty($_POST['vimeography_appearance_settings']))
+		if (!empty($_POST['vimeography_appearance_settings']))
 		{
 			$messages = $this->_vimeography_validate_appearance_settings($id, $_POST);
 		}
-		elseif (!empty($_POST['vimeography_advanced_settings']))
+		elseif (!empty($_POST['vimeography_basic_settings']))
 		{
-			$messages = $this->_vimeography_validate_advanced_settings($id, $_POST);
+			$messages = $this->_vimeography_validate_basic_settings($id, $_POST);
 		}
 		else
 		{
 			return FALSE;
 		}		
 	}
-		
-	private function _vimeography_validate_basic_settings($id, $input)
-	{
-		// if this fails, check_admin_referer() will automatically print a "failed" page and die.
-		if (check_admin_referer('vimeography-basic-action','vimeography-basic-verification') )
-		{
-			try
-			{
-				global $wpdb;
-				
-				$settings['title'] = $wpdb->escape(wp_filter_nohtml_kses($input['vimeography_basic_settings']['gallery_title']));
-				$settings['source_url'] = $wpdb->escape(wp_filter_nohtml_kses($input['vimeography_basic_settings']['source_url']));
-				
-				if ($wpdb->update( VIMEOGRAPHY_GALLERY_TABLE, array('title' => $settings['title']), array( 'id' => $id ) ) === FALSE)
-				{
-					throw new Exception('Your basic gallery title and settings were not updated.');
-				}
-				else
-				{			
-					if ($wpdb->update( VIMEOGRAPHY_GALLERY_META_TABLE, array('source_url' => $settings['source_url']), array( 'gallery_id' => $id ) ) === FALSE)
-					{
-						//$wpdb->print_error();
-						throw new Exception('Your basic gallery settings were not updated.');
-					}
-				}
-				
-				$this->delete_vimeography_cache($id);
-				$this->messages[] = array('type' => 'success', 'heading' => __('Settings updated.'), 'message' => __('Nice work. You are pretty good at this.'));
-				$this->tab_to_show = 'basic-settings';
-			}
-			catch (Exception $e)
-			{
-				$this->messages[] = array('type' => 'error', 'heading' => 'Ruh roh.', 'message' => $e->getMessage());
-			}
-		}        
-	}
-	
+			
 	private function _vimeography_validate_appearance_settings($id, $input)
 	{
+		// if this fails, check_admin_referer() will automatically print a "failed" page and die.
 		if (check_admin_referer('vimeography-appearance-action','vimeography-appearance-verification') )
 		{
 			try
@@ -252,7 +223,6 @@ class Vimeography_Gallery_Edit extends Mustache
 					throw new Exception('Your theme could not be updated.');
 				
 	        	$this->messages[] = array('type' => 'success', 'heading' => __('Theme updated.'), 'message' => __('You are now using the "') . $settings['theme_name'] . __('" theme.'));
-	        	$this->tab_to_show = 'appearance';
 			}
 			catch (Exception $e)
 			{
@@ -261,19 +231,20 @@ class Vimeography_Gallery_Edit extends Mustache
 		}
 	}
 	
-	private function _vimeography_validate_advanced_settings($id, $input)
+	private function _vimeography_validate_basic_settings($id, $input)
 	{
-		if (check_admin_referer('vimeography-advanced-action','vimeography-advanced-verification') )
+		if (check_admin_referer('vimeography-basic-action','vimeography-basic-verification') )
 		{
 			try
 			{
 				global $wpdb;
-				$settings['cache_timeout']  = $wpdb->escape(wp_filter_nohtml_kses($input['vimeography_advanced_settings']['cache_timeout']));
-				$settings['featured_video'] = $wpdb->escape(wp_filter_nohtml_kses($input['vimeography_advanced_settings']['featured_video']));
+				$settings['cache_timeout']  = $wpdb->escape(wp_filter_nohtml_kses($input['vimeography_basic_settings']['cache_timeout']));
+				$settings['featured_video'] = $wpdb->escape(wp_filter_nohtml_kses($input['vimeography_basic_settings']['featured_video']));
+				$settings['video_limit'] = intval($input['vimeography_basic_settings']['video_limit']) <= 60 ? $input['vimeography_basic_settings']['video_limit'] : 60;
 				
-				if (!empty($input['vimeography_advanced_settings']['gallery_width']))
+				if (!empty($input['vimeography_basic_settings']['gallery_width']))
 				{			
-					preg_match('/(\d*)(px|%?)/', $input['vimeography_advanced_settings']['gallery_width'], $matches);
+					preg_match('/(\d*)(px|%?)/', $input['vimeography_basic_settings']['gallery_width'], $matches);
 					// If a number value is set...
 					if (!empty($matches[1]))
 					{
@@ -295,13 +266,17 @@ class Vimeography_Gallery_Edit extends Mustache
 						$settings['gallery_width'] = '';
 					}
 				}
-								
-				$settings['video_limit'] = intval($input['vimeography_advanced_settings']['video_limit']) <= 60 ? $input['vimeography_advanced_settings']['video_limit'] : 60;
-													
+				else
+				{
+					// blank setting
+					$settings['gallery_width'] = '';
+				}
+																					
 				$result = $wpdb->update( VIMEOGRAPHY_GALLERY_META_TABLE, array('cache_timeout' => $settings['cache_timeout'], 'featured_video' => $settings['featured_video'], 'gallery_width' => $settings['gallery_width'], 'video_limit' => $settings['video_limit']), array( 'gallery_id' => $id ) );
 				
 				if ($result === FALSE)
-					throw new Exception('Your advanced settings could not be updated.');
+					throw new Exception('Your settings could not be updated.');
+					//$wpdb->print_error();
 					
 				$this->delete_vimeography_cache($id);
 				$this->messages[] = array('type' => 'success', 'heading' => __('Settings updated.'), 'message' => __('Nice work. You are pretty good at this.'));
@@ -310,7 +285,6 @@ class Vimeography_Gallery_Edit extends Mustache
 			{
 				$this->messages[] = array('type' => 'error', 'heading' => 'Ruh roh.', 'message' => $e->getMessage());
 			}
-	        $this->tab_to_show = 'advanced-settings';
 		}
 	}
 }

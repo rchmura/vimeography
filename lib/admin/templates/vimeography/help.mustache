@@ -4,6 +4,9 @@
 	<div class="icon32" id="icon-options-general"><br></div>
 	<h2 class="page-title">Help</h2>
 	
+	<h3>Help! My theme doesn't look right!</h3>
+	<p>Okay, deep breath. More than likely, it is another plugin causing this issue. See if you can pinpoint which one by disabling your plugins, one by one, and really determining if you need it. If that task sounds daunting, try disabling plugins that are used for photo galleries, minifying scripts, widgets, or otherwise alter your blog's appearance.</p>
+		
 	<h3>How do I add my gallery to a post or page?</h3>
 	<p>Easy! All you have to do is type <code>[vimeography id="<span style="color:blue;">#</span>"]</code>, where <span style="color:blue;">#</span> is replaced by the ID number of your gallery.</p>
 	
@@ -12,19 +15,21 @@
 	
 	<h3>Can I override my gallery settings in the shortcode?</h3>
 	<p>Sure thing! You can define all of the properties found in the admin panel right in your shortcode as well. Try using one, any, or all of the following parameters:</p>
-	<code>[vimeography id="3" theme="thumbs" featured="28380190" source="channel" named="staffpicks" cache="3600"]</code>
+	<code>[vimeo<em></em>graphy id="3" theme="thumbs" featured="http://vimeo.com/28380190" source="http://vimeo.com/channels/staffpicks" cache="3600" width="600px"]</code>
 	
 	<h3>Can I add the gallery to my theme's sidebar/footer/header etc.?</h3>
 	<p>Yes, but you'll need some PHP knowledge to do it! Open the file you want to add the gallery to, and type <code>&lt;?php do_shortcode('[vimeography id="<span style="color:blue;">#</span>"]</strong>'); ?&gt;</code>, where <span style="color:blue;">#</span> is replaced by the ID number of your gallery.</p>
 	
-	<h3>Can I change the colors/layout of my theme?</h3>
-	<p>Not yet! All themes are set in stone, but we do have plans to add a custom css editor.</p>
+	<h3>How do I change the order of my videos in my gallery?</h3>
+	<p>While this is a feature planned for Vimeography Pro, you can do this by creating a new channel or album on Vimeo and using their custom sorting option.</p>
 	
-	<h3>Coming soon:</h3>
+	<h3>Can I change the colors/layout of my theme?</h3>
+	<p>Not yet! All themes are set in stone, but there are plans to add a custom CSS editor.</p>
+	
+	<h3>What features do you have planned in future versions of Vimeography?</h3>
 	<ul>
 		<li>Vimeography Pro</li>
 		<li>Theme Customization (colors, width, thumbnail size)</li>
 		<li>Custom CSS Editor</li>
-		<li>Define width and height of container in shortcode</li>
 	</ul>
 </div> <!-- End Help -->

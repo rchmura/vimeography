@@ -3,7 +3,7 @@
 Plugin Name: Vimeography
 Plugin URI: http://vimeography.com
 Description: Vimeography is the easiest way to set up a custom Vimeo gallery on your site.
-Version: 0.7
+Version: 0.8
 Author: Dave Kiss
 Author URI: http://davekiss.com
 License: MIT
@@ -23,7 +23,7 @@ define( 'VIMEOGRAPHY_THEME_PATH', $wp_upload_dir['basedir'].'/vimeography-themes
 define( 'VIMEOGRAPHY_ASSETS_URL', $wp_upload_dir['baseurl'].'/vimeography-assets/' );
 define( 'VIMEOGRAPHY_ASSETS_PATH', $wp_upload_dir['basedir'].'/vimeography-assets/' );
 define( 'VIMEOGRAPHY_BASENAME', plugin_basename( __FILE__ ) );
-define( 'VIMEOGRAPHY_VERSION', '0.7');
+define( 'VIMEOGRAPHY_VERSION', '0.8');
 define( 'VIMEOGRAPHY_GALLERY_TABLE', $wpdb->prefix . "vimeography_gallery");
 define( 'VIMEOGRAPHY_GALLERY_META_TABLE', $wpdb->prefix . "vimeography_gallery_meta");
 define( 'VIMEOGRAPHY_CURRENT_PAGE', basename($_SERVER['PHP_SELF']));
@@ -40,6 +40,7 @@ class Vimeography
 		add_action( 'init', array(&$this, 'vimeography_move_folders') );
 		add_action( 'plugins_loaded', array(&$this, 'vimeography_update_db_to_0_6') );
 		add_action( 'plugins_loaded', array(&$this, 'vimeography_update_db_to_0_7') );
+		add_action( 'plugins_loaded', array(&$this, 'vimeography_update_db_to_0_8') );
 		add_action( 'plugins_loaded', array(&$this, 'vimeography_update_db_version') );
 		add_action( 'admin_menu', array(&$this, 'vimeography_add_menu') );
 		add_action( 'do_robots', array(&$this, 'vimeography_block_robots') );
@@ -227,6 +228,51 @@ class Vimeography
 	}
 	
 	/**
+	 * Check if the Vimeography database structure needs updated to version 0.8 based on the stored db version.
+	 * In this update, we're converting the featured video field to contain an entire URL, not just the video ID.
+	 * 
+	 * @access public
+	 * @return void
+	 */
+	public function vimeography_update_db_to_0_8()
+	{
+		if (get_option('vimeography_db_version') < 0.8)
+		{
+			global $wpdb;
+			$old_galleries = $wpdb->get_results('SELECT * FROM '.VIMEOGRAPHY_GALLERY_META_TABLE.' AS meta JOIN '.VIMEOGRAPHY_GALLERY_TABLE.' AS gallery ON meta.gallery_id = gallery.id;');
+			$new_galleries = array();
+			
+			if (is_array($old_galleries))
+			{
+				foreach ($old_galleries as $old_gallery)
+				{
+					$new_gallery = array();
+					
+					$new_gallery['gallery_id']     = $old_gallery->gallery_id;
+					$new_gallery['source_url']     = $old_gallery->source_url;
+					$new_gallery['video_limit']    = $old_gallery->video_limit;
+					$new_gallery['featured_video'] = empty($old_gallery->featured_video) ? '' : 'https://vimeo.com/'.$old_gallery->featured_video;
+					$new_gallery['cache_timeout']  = $old_gallery->cache_timeout;
+					$new_gallery['theme_name']     = $old_gallery->theme_name;
+					$new_gallery['gallery_width']  = $old_gallery->gallery_width;
+					$new_galleries[] = $new_gallery;							
+				}
+			}
+			$wpdb->query('DROP TABLE '.VIMEOGRAPHY_GALLERY_META_TABLE.';');
+			
+			$this->vimeography_update_tables();
+						
+			foreach ($new_galleries as $new_gallery)
+			{
+				$wpdb->insert(
+					VIMEOGRAPHY_GALLERY_META_TABLE,
+					$new_gallery
+				);
+			}
+		}
+	}
+	
+	/**
 	 * Updates the Vimeography version stored in the database.
 	 * 
 	 * @access public
@@ -296,19 +342,20 @@ class Vimeography
 			wp_die( __( 'You do not have sufficient permissions to access this page.' ) );
 		}
 		
-		wp_register_style( 'bootstrap_css', VIMEOGRAPHY_URL.'media/css/bootstrap.min.css');
-		wp_register_style( 'bootstrap_responsive_css', VIMEOGRAPHY_URL.'media/css/bootstrap-responsive.min.css');
-		wp_register_style( 'vimeography-admin.css', VIMEOGRAPHY_URL.'media/css/admin.css');
-		wp_register_script( 'bootstrap_tab_js', VIMEOGRAPHY_URL.'media/js/bootstrap-tab.js');
-		wp_register_script( 'bootstrap_alert_js', VIMEOGRAPHY_URL.'media/js/bootstrap-alert.js');
-		wp_register_script( 'vimeography-admin.js', VIMEOGRAPHY_URL.'media/js/admin.js', 'jquery');
+		wp_register_style( 'bootstrap', VIMEOGRAPHY_URL.'media/css/bootstrap.min.css');
+		wp_register_style( 'bootstrap-responsive', VIMEOGRAPHY_URL.'media/css/bootstrap-responsive.min.css');
+		wp_register_style( 'vimeography-admin', VIMEOGRAPHY_URL.'media/css/admin.css');
 		
-		wp_enqueue_style( 'bootstrap_css');
-		wp_enqueue_style( 'bootstrap_responsive_css');
-		wp_enqueue_style( 'vimeography-admin.css');
-		wp_enqueue_script( 'jquery');
-		wp_enqueue_script( 'bootstrap_tab_js');
-		wp_enqueue_script( 'bootstrap_alert_js');
+		wp_register_script( 'bootstrap-transition', VIMEOGRAPHY_URL.'media/js/bootstrap-transition.js');
+		wp_register_script( 'bootstrap-alert', VIMEOGRAPHY_URL.'media/js/bootstrap-alert.js');
+		wp_register_script( 'vimeography-admin.js', VIMEOGRAPHY_URL.'media/js/admin.js', 'jquery');
+						
+		wp_enqueue_style( 'bootstrap');
+		wp_enqueue_style( 'bootstrap-responsive');
+		wp_enqueue_style( 'vimeography-admin');
+		
+		wp_enqueue_script( 'bootstrap-transition');
+		wp_enqueue_script( 'bootstrap-alert');
 		wp_enqueue_script( 'vimeography-admin.js');
 				
 		switch(current_filter())
@@ -402,7 +449,7 @@ class Vimeography
 		gallery_id mediumint(8) unsigned NOT NULL,
 		source_url varchar(100) NOT NULL,
 		video_limit mediumint(7) NOT NULL,
-		featured_video int(9) unsigned DEFAULT NULL,
+		featured_video varchar(100) DEFAULT NULL,
 		gallery_width varchar(10) DEFAULT NULL,
 		cache_timeout mediumint(7) NOT NULL,
 		theme_name varchar(50) NOT NULL,

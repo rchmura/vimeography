@@ -1,5 +1,5 @@
 /*
- * jQuery FlexSlider v2.0
+ * jQuery FlexSlider v2.1
  * http://www.woothemes.com/flexslider/
  *
  * Copyright 2012 WooThemes
@@ -112,9 +112,9 @@
         if (vars.slideshow) {
           if (vars.pauseOnHover) {
             slider.hover(function() {
-              slider.pause();
+              if (!slider.manualPlay && !slider.manualPause) slider.pause();
             }, function() {
-              if (!slider.manualPause) slider.play();
+              if (!slider.manualPause && !slider.manualPlay) slider.play();
             });
           }
           // initialize animation
@@ -265,16 +265,18 @@
         },
         update: function() {
           var disabledClass = namespace + 'disabled';
-          if (!vars.animationLoop) {
-            if (slider.pagingCount === 1) {
-             slider.directionNav.addClass(disabledClass);
-            } else if (slider.animatingTo === 0) {
+          if (slider.pagingCount === 1) {
+            slider.directionNav.addClass(disabledClass);
+          } else if (!vars.animationLoop) {
+            if (slider.animatingTo === 0) {
               slider.directionNav.removeClass(disabledClass).filter('.' + namespace + "prev").addClass(disabledClass);
             } else if (slider.animatingTo === slider.last) {
               slider.directionNav.removeClass(disabledClass).filter('.' + namespace + "next").addClass(disabledClass);
             } else {
               slider.directionNav.removeClass(disabledClass);
             }
+          } else {
+            slider.directionNav.removeClass(disabledClass);
           }
         }
       },
@@ -290,18 +292,19 @@
             slider.append(pausePlayScaffold);
             slider.pausePlay = $('.' + namespace + 'pauseplay a', slider);
           }
-        
-          // slider.pausePlay.addClass(pausePlayState).text((pausePlayState == 'pause') ? vars.pauseText : vars.playText);
+
           methods.pausePlay.update((vars.slideshow) ? namespace + 'pause' : namespace + 'play');
-        
+
           slider.pausePlay.bind(eventType, function(event) {
             event.preventDefault();
             if ($(this).hasClass(namespace + 'pause')) {
-              slider.pause();
               slider.manualPause = true;
+              slider.manualPlay = false;
+              slider.pause();
             } else {
-              slider.play();
               slider.manualPause = false;
+              slider.manualPlay = true;
+              slider.play();
             }
           });
           // Prevent iOS click event bug
@@ -367,7 +370,7 @@
             var updateDx = (reverse) ? -dx : dx,
                 target = (updateDx > 0) ? slider.getTarget('next') : slider.getTarget('prev');
             
-            if (slider.canAdvance(target) && (Number(new Date()) - startT < 550 && Math.abs(updateDx) > 20 || Math.abs(updateDx) > cwidth/2)) {
+            if (slider.canAdvance(target) && (Number(new Date()) - startT < 550 && Math.abs(updateDx) > 50 || Math.abs(updateDx) > cwidth/2)) {
               slider.flexAnimate(target, vars.pauseOnAction);
             } else {
               slider.flexAnimate(slider.currentSlide, vars.pauseOnAction, true);
@@ -425,7 +428,9 @@
     
     // public methods
     slider.flexAnimate = function(target, pause, override, withSync, fromNav) {
-      if (!slider.animating && (slider.canAdvance(target) || override) && slider.is(":visible")) {
+      if (asNav && slider.pagingCount === 1) slider.direction = (slider.currentItem < target) ? "next" : "prev";
+
+      if (!slider.animating && (slider.canAdvance(target, fromNav) || override) && slider.is(":visible")) {
         if (asNav && withSync) {
           var master = $(vars.asNavFor).data('flexslider');
           slider.atEnd = target === 0 || target === slider.count - 1;
@@ -553,10 +558,12 @@
       // SYNC:
       if (slider.syncExists) methods.sync("play");
     }
-    slider.canAdvance = function(target) {
+    slider.canAdvance = function(target, fromNav) {
       // ASNAV:
       var last = (asNav) ? slider.pagingCount - 1 : slider.last;
-      return (asNav && slider.currentItem === 0 && target === slider.pagingCount - 1 && slider.direction !== "next") ? false :
+      return (fromNav) ? true :
+             (asNav && slider.currentItem === slider.count - 1 && target === 0 && slider.direction === "prev") ? true :
+             (asNav && slider.currentItem === 0 && target === slider.pagingCount - 1 && slider.direction !== "next") ? false :
              (target === slider.currentSlide && !asNav) ? false :
              (vars.animationLoop) ? true :
              (slider.atEnd && slider.currentSlide === 0 && target === last && slider.direction !== "next") ? false :
@@ -611,7 +618,7 @@
         var sliderOffset, arr;
             
         if (type === "init") {
-          slider.viewport = $('<div class="flex-viewport"></div>').css({"overflow": "hidden", "position": "relative"}).appendTo(slider).append(slider.container);
+          slider.viewport = $('<div class="' + namespace + 'viewport"></div>').css({"overflow": "hidden", "position": "relative"}).appendTo(slider).append(slider.container);
           // INFINITE LOOP:
           slider.cloneCount = 0;
           slider.cloneOffset = 0;
@@ -686,7 +693,7 @@
         slider.pagingCount = Math.ceil(((slider.count - slider.visible)/slider.move) + 1);
         slider.last =  slider.pagingCount - 1;
         slider.limit = (slider.pagingCount === 1) ? 0 :
-                       (vars.itemWidth > slider.w) ? ((slider.itemW + (slideMargin * 2)) * slider.count) - slider.w - slideMargin : ((slider.itemW + slideMargin) * slider.count) - slider.w;
+                       (vars.itemWidth > slider.w) ? ((slider.itemW + (slideMargin * 2)) * slider.count) - slider.w - slideMargin : ((slider.itemW + slideMargin) * slider.count) - slider.w - slideMargin;
       } else {
         slider.itemW = slider.w;
         slider.pagingCount = slider.count;
@@ -843,7 +850,8 @@
 
   //FlexSlider: Plugin Function
   $.fn.flexslider = function(options) {
-    options = options || {};
+    if (options === undefined) options = {};
+    
     if (typeof options === "object") {
       return this.each(function() {
         var $this = $(this),

@@ -35,30 +35,41 @@ class Vimeography_Theme_List extends Mustache
 		
 	protected function _validate_form()
 	{
+		$url = wp_nonce_url('admin.php?page=vimeography-my-themes');
+		
+		if (false === ($creds = request_filesystem_credentials($url) ) )
+		{
+			// if we get here, then we don't have credentials yet,
+			// but have just produced a form for the user to fill in, 
+			// so stop processing for now
+			
+			return true; // stop the normal page form from displaying
+		}
+			
+		// now we have some credentials, try to get the wp_filesystem running
+		if ( ! WP_Filesystem($creds) )
+		{
+			// our credentials were no good, ask the user for them again
+			request_filesystem_credentials($url);
+			return true;
+		}
+		
+		if (empty($_FILES)) return;
+		
 		// if this fails, check_admin_referer() will automatically print a "failed" page and die.
 		if ( !empty($_FILES) && check_admin_referer('vimeography-install-theme','vimeography-theme-verification') )
-		{
-			// Replaces simple `WP_Filesystem();` call to prevent any extraction issues
-			// @link http://wpquestions.com/question/show/id/2685
-			if (! function_exists('__return_direct'))
-			{
-				function __return_direct() { return 'direct'; }
-			}				
-			add_filter( 'filesystem_method', '__return_direct' );	
-			WP_Filesystem();
-			remove_filter( 'filesystem_method', '__return_direct' );
-			
+		{			
 			$name = substr(wp_filter_nohtml_kses($_FILES['vimeography-theme']['name']), 0, -4);
 			
 			if ($_FILES['vimeography-theme']['type'] != 'application/zip')
 			{
-				$this->messages[] = array('type' => 'error', 'heading' => 'Ruh Roh.', 'message' => 'You tried uploading an invalid theme file. Please try again!');
+				$this->messages[] = array('type' => 'error', 'heading' => 'Ruh Roh.', 'message' => 'Make sure you are uploading the actual .zip file, not a subfolder or file.');
 			}
 			else
 			{
-				$result = unzip_file($_FILES['vimeography-theme']['tmp_name'], VIMEOGRAPHY_THEME_PATH);
+				global $wp_filesystem;
 				
-				if ($result != 1)
+				if (! unzip_file($_FILES['vimeography-theme']['tmp_name'], VIMEOGRAPHY_THEME_PATH))
 				{
 					$this->messages[] = array('type' => 'error', 'heading' => 'Ruh Roh.', 'message' => 'The theme could not be installed.');
 				}
