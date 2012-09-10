@@ -60,12 +60,10 @@ class Vimeography_Theme_List extends Mustache
 		if ( !empty($_FILES) && check_admin_referer('vimeography-install-theme','vimeography-theme-verification') )
 		{			
 			$name = substr(wp_filter_nohtml_kses($_FILES['vimeography-theme']['name']), 0, -4);
+			$ext = substr($_FILES['vimeography-theme']['name'], -4);
 			
-			$zip = zip_open($_FILES['vimeography-theme']['tmp_name']);
-			
-			if (is_resource($zip))
+			if ($ext == '.zip')
 			{
-				zip_close($zip); // always close handle if you were just checking
 				global $wp_filesystem;
 				
 				if (! unzip_file($_FILES['vimeography-theme']['tmp_name'], VIMEOGRAPHY_THEME_PATH))
@@ -79,7 +77,7 @@ class Vimeography_Theme_List extends Mustache
 			}
 			else
 			{
-			$this->messages[] = array('type' => 'error', 'heading' => 'Ruh Roh.', 'message' => 'Make sure you are uploading the actual .zip file, not a subfolder or file.');
+				$this->messages[] = array('type' => 'error', 'heading' => 'Ruh Roh.', 'message' => 'Make sure you are uploading the actual .zip file, not a subfolder or file.');
 			}
 			
 		}
