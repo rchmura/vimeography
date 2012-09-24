@@ -3,7 +3,7 @@ Contributors: iamdavekiss
 Tags: vimeo, video, videos, gallery, vimeography, colorbox, media, player, playlist, showcase, skins, themes, video gallery
 Requires at least: 3.3
 Tested up to: 3.4.2
-Stable tag: 0.8.2
+Stable tag: 0.8.3
 License: MIT
 
 The easiest way to create beautiful Vimeo galleries on your Wordpress blog.
@@ -82,6 +82,10 @@ Not yet! All themes are set in stone, but we do have plans to add a custom css e
 4. Get new styles by installing gallery themes.
 
 == Changelog ==
+= 0.8.3 =
+* Fixed an issue where the video count setting occasionally failed.
+* Added developer bundle.
+
 = 0.8.2 =
 * Fixed the theme installation issue, hopefully for good!
 

@@ -131,7 +131,7 @@ class Vimeography_Core extends Vimeography
 					// This stops the next request from occuring if the total
 					// video count on the Vimeo source is less than what the
 					// user specified that they would like to see
-					if (count(json_decode($videos)) < 20) break;
+					if (count(json_decode($videos)) < $video_page * 20) break;
 					
 				}
 				$main_request = FALSE;
