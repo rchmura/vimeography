@@ -1,5 +1,5 @@
 <div class="wrap wp_bootstrap">
-	<!-- Display Plugin Icon, Header, and Description -->
+
 	<div class="icon32" id="icon-options-general"><br></div>
 	<h2 class="page-title">Gallery Editor {{#gallery}}:: {{title}}{{/gallery}}</h2>
 			
@@ -13,23 +13,52 @@
 					$(this).prev().addClass('active').find('i').addClass('icon-white');
 				});
 				
+				// Switch to the theme list
 				$('#vimeography-switch-themes').click(function(e){
 					e.preventDefault();
 					$('#vimeography-menu-slider').animate({marginLeft: '-280px'});
 					$("#aujus").mCustomScrollbar("update");
 				});
 				
+				{{! Javascript below only appears if the theme supports custom settings}}
+				{{#theme_supports_settings}}
+    				$('#vimeography-edit-appearance, .theme-container.selected a').click(function(e){
+    					e.preventDefault();
+    					$('#vimeography-menu-slider').animate({marginLeft: '-560px'});
+    					$("#aujus2").mCustomScrollbar("update");
+    				});
+    				
+    				$('#vimeography-back-to-themes').click(function(e){
+    					e.preventDefault();
+    					$('#vimeography-menu-slider').animate({marginLeft: '-280px'});
+    				});
+    				
+    				$("#aujus2").mCustomScrollbar();
+				{{/theme_supports_settings}}
+				{{! End variable Javascript}}
+				
+				// Slide back to the main menu
 				$('#vimeography-back-to-main-menu').click(function(e){
 					e.preventDefault();
 					$('#vimeography-menu-slider').animate({marginLeft: '0px'});
 				});
 				
+				// Add support for the question popovers
 				$('.icon-question-sign').popover({trigger: 'hover'});
 				
+				// Create our scrollbar for the theme list menu panel
 				$("#aujus").mCustomScrollbar();
 				
+				// Affix the menu when we scroll
 				$('#vimeography-gallery-menu-container').affix({offset: 124});
-    
+				
+				// Fade in the check marks when we hover down the theme list menu panel
+				$('.theme-container').mouseover(function(){
+				  $(this).find('.icon-ok').stop(true, true).fadeIn(200);
+				}).mouseout(function(){
+				  $(this).find('.icon-ok').stop(true, true).fadeOut(200);
+				});
+           
 			});
 		})(jQuery)
 	</script>
@@ -42,17 +71,17 @@
 		</div>
 	{{/messages}}
 	
-	<div class="alert">
-		<strong>Want more?</strong> With Vimeography Pro, you can sort your videos, create playlists, show unlimited videos, add comments and more.
-	    <a href="{{admin_url}}pro" title="Learn more about Vimeography Pro">Learn more &rarr;</a>
-    </div>
+  <div class="alert">
+    <strong>Want more?</strong> With Vimeography Pro, you can sort your videos, create playlists, show unlimited videos, add comments and more.
+    <a href="{{admin_url}}pro" title="Learn more about Vimeography Pro">Learn more &rarr;</a>
+  </div>
 	
 	{{#gallery}}
 	
 	<div id="vimeography-gallery-editor">
 		
 		<div id="vimeography-gallery-menu-container">			
-			<div id="vimeography-menu-slider" style="height: 100%; width: 560px;">
+			<div id="vimeography-menu-slider" style="height: 100%; width: 840px;">
 						
 				<div id="vimeography-gallery-main-menu-container">
 					<div style="width: 100%; height: 100%;">
@@ -140,12 +169,15 @@
 												</ul>
 											{{/active}}
 										{{/themes}}
-										<a href="#" id="vimeography-switch-themes" class="btn btn-mini"><em class="icon-random"></em> Switch Themes</a>
+										<a href="#" id="vimeography-switch-themes" class="btn btn-mini"><em class="icon-random"></em> View Themes</a>
+										
+										{{! Only show the edit appearance button if the theme supports custom settings}}
+										{{#theme_supports_settings}}<a href="#" id="vimeography-edit-appearance" class="btn btn-mini"><em class="icon-pencil"></em> Edit Appearance</a>{{/theme_supports_settings}}
 									</div>						
-								</div>
-							</div>
+								</div> <!-- End Appearance -->
+							</div> <!-- End group -->
+							
 						</div><!-- End vimeography-gallery-main-menu -->
-					
 					</div>				
 				</div> <!-- End vimeography-gallery-main-menu-container -->
 				
@@ -156,43 +188,64 @@
 						<h2>Switch Themes</h2>
 					</div>
 					<div id="vimeography-themes-container">
-						<div id="aujus" style="position: absolute; overflow: hidden; top: 0; bottom: 0;">						
+						<div id="aujus" style="position: absolute; overflow: hidden; top: 0; bottom: 0;">			
 						
-						    <form id="vimeography-appearance-form" method="post" action="{{admin_url}}edit-galleries&id={{id}}" style="margin: 0; width: 250px; overflow-y: auto; overflow-x: hidden;">
-								<ul class="vimeography-theme-list">
-									{{#themes}}
-											<li>
-												<div class="theme-container {{#active}}active{{/active}}">
-													<div class="theme-image">
-														<img alt="{{name}}" src="{{thumbnail}}">
-													</div>
-													
-													<div class="theme-details">
-														<a href="#" data-theme="{{name}}">{{name}}</a> 
-														<span>{{#active}}in use{{/active}}{{^active}}<span class="label">v.{{version}}</span>{{/active}}</span>
-													</div>
-													
-													<a href="#" data-theme="{{name}}" class="theme-info" style="opacity: 0;">
-														<strong>{{name}}</strong>
-														<span>{{description}}</span>
-														{{^active}}<span>use this theme &rarr;</span>{{/active}}
-													</a>
-												</div>
-											</li>
-									{{/themes}}
-								</ul>
+						  <form id="vimeography-appearance-form" method="post" action="{{admin_url}}edit-galleries&id={{id}}" style="margin: 0; width: 260px; overflow-y: auto; overflow-x: hidden;">
+						    {{#themes}}
+						      <div class="vimeography-gallery-menu-group">
+    								<div class="vimeography-gallery-menu-heading theme-container {{#active}}selected{{/active}}">
+                      <a href="#" data-theme="{{name}}">
+                        <img alt="{{name}}" src="{{thumbnail}}" width="32" height="24" style="border: 1px solid #b0b0b0;">
+                        <span class="theme-name">{{name}}</span><br />
+                        <span class="theme-version">v.{{version}}</span>
+                        {{#theme_supports_settings}}{{#active}}<i class="icon-pencil icon-white pull-right"></i>{{/active}}{{/theme_supports_settings}}
+                        {{^active}}<i class="icon-ok pull-right"></i>{{/active}}
+                      </a>
+    								</div>
+						      </div>
+						    {{/themes}}
 								<input id="selected-vimeography-theme" type="hidden" name="vimeography_appearance_settings[theme_name]" value="{{theme}}" />
-								{{{appearance_nonce}}}
+								{{{theme_nonce}}}
 							</form>
+							
 						</div>
 					</div>
 				
 				</div> <!-- end gallery themes container -->
+				
+				{{#theme_supports_settings}} 
+    				<div id="vimeography-gallery-theme-settings-container">
+    					<div class="vimeography-gallery-meta">
+    						<a href="#" id="vimeography-back-to-themes" class="btn btn-mini pull-right"><em class="icon-arrow-left"></em> Themes</a>
+    						<h1>{{title}}</h1>
+    						<h2>Edit Theme Settings</h2>
+    					</div>
+    					<div id="vimeography-theme-settings-container">
+    						<div id="aujus2" style="position: absolute; overflow: hidden; top: 0; bottom: 0;">			
+    						
+    						  <form id="vimeography-theme-settings-form" method="post" action="{{admin_url}}edit-galleries&id={{id}}" style="margin: 0; width: 226px; padding: 0 17px; background-color: #e3e3e3; overflow-y: auto; overflow-x: hidden;">
+    						  {{#vimeography_theme_settings}}
+    						      {{{setting}}}
+    						  {{/vimeography_theme_settings}}
+    						    
+    						    <div class="vimeography-gallery-menu-setting last">
+    										{{{theme_settings_nonce}}}
+    										<input class="btn btn-primary" type="submit" value="Save Changes">
+    										<a href="{{admin_url}}edit-galleries&id={{id}}&delete-theme-settings=1" class="btn btn-error" title="Reset Theme Settings">Reset Settings</a>
+    								</div>
+    						  
+    							</form>
+    							
+    						</div>
+    					</div>
+    				
+    				</div> <!-- end gallery theme settings container -->
+				{{/theme_supports_settings}}
 			</div> <!-- end slider -->
 						
 		</div> <!-- End vimeography-gallery-menu-container -->
 	
-		<div style="max-width: 60%; margin-left: 305px;">
+		<div id="vimeography-gallery-container" style="max-width: 60%; margin-left: 305px;">
 			{{{vimeography}}}				    
 		</div>
 	</div>

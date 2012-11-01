@@ -6,7 +6,7 @@
     		$(this).stop().animate({opacity: 0}, 150);
     	});
     	    	
-    	$('.theme-container a').click(function(e){
+    	$('.theme-container a').not('.selected a').click(function(e){
     		e.preventDefault();
     		$('#selected-vimeography-theme').val($(this).attr('data-theme'));
     		$('#vimeography-appearance-form').submit();

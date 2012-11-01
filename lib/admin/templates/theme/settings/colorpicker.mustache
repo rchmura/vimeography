@@ -1,0 +1,96 @@
+<div class="vimeography-gallery-menu-setting vimeography-color-picker {{#settings}}{{id}}{{/settings}}">
+  <label for="{{#settings}}{{id}}{{/settings}}">{{#settings}}{{label}}{{/settings}}</label>
+  <div class="{{#settings}}{{id}}{{/settings}} colorSelector">
+    <div></div>
+  </div>
+  <input 
+    id="{{#settings}}{{id}}{{/settings}}" 
+    class="span2" 
+    type="text" 
+    name="vimeography_theme_settings[{{#settings}}{{id}}{{/settings}}][value]" 
+    value="" 
+    style="margin: 4px 6px;"
+  />
+    
+  <input 
+    type="hidden" 
+    name="vimeography_theme_settings[{{#settings}}{{id}}{{/settings}}][target]" 
+    value="{{#settings}}{{target}}{{/settings}}"
+  />
+  <input 
+    type="hidden" 
+    name="vimeography_theme_settings[{{#settings}}{{id}}{{/settings}}][attribute]" 
+    value="{{#settings}}{{attribute}}{{/settings}}"
+  />
+</div>
+    
+<script charset="utf-8" type="text/javascript">
+  (function($){
+  	$(window).load(function(){
+  	      
+      // credit: http://stackoverflow.com/questions/638948/background-color-hex-to-javascript-variable-jquery
+      function rgb_to_hex(rgbString)
+      {
+        var parts = rgbString.match(/^rgb\((\d+),\s*(\d+),\s*(\d+)\)$/);
+        // parts now should be ["rgb(0, 70, 255", "0", "70", "255"]
+        
+        console.log(parts);
+        
+        if (parts == null) {return rgbString;}
+        
+        delete (parts[0]);
+        for (var i = 1; i <= 3; ++i) {
+            parts[i] = parseInt(parts[i]).toString(16);
+            if (parts[i].length == 1) parts[i] = '0' + parts[i];
+        } 
+        var hexString ='#'+parts.join('').toUpperCase(); // "#0070FF"
+        return hexString;
+      }
+        	   
+      $('.{{#settings}}{{id}}{{/settings}}.colorSelector').ColorPicker({
+        color: '{{#settings}}{{value}}{{/settings}}',
+        onBeforeShow: function() {
+          $(this).ColorPickerSetColor($('#{{#settings}}{{id}}{{/settings}}').val());
+        },
+        onShow: function (colorpicker) {
+          $(colorpicker).fadeIn(250);
+          return false;
+        },
+        onChange: function (hsb, hex, rgb) {
+          $('.{{#settings}}{{id}}{{/settings}}.colorSelector div').css('backgroundColor', '#' + hex);
+          $('{{#settings}}{{target}}{{/settings}}').css('{{#settings}}{{attribute}}{{/settings}}', '#' + hex);
+          $('#{{#settings}}{{id}}{{/settings}}').val('#' + hex);
+        },
+        onSubmit: function(hsb, hex, rgb, colorpicker, parent) {
+          $('#{{#settings}}{{id}}{{/settings}}').val('#' + hex);
+          $(colorpicker).ColorPickerHide();
+        },
+        onHide: function (colorpicker) {
+          $(colorpicker).fadeOut(250);
+          return false;
+        }
+      });
+      
+      $('#{{#settings}}{{id}}{{/settings}}').bind('keyup', function(){ 
+        $('.{{#settings}}{{id}}{{/settings}}.colorSelector').ColorPickerSetColor($(this).val());
+        $('.{{#settings}}{{id}}{{/settings}}.colorSelector div').css('backgroundColor', $(this).val());
+        
+        $('{{#settings}}{{target}}{{/settings}}').css('{{#settings}}{{attribute}}{{/settings}}', $(this).val());
+        
+      });
+      
+      // set the value of the color picker field to the current value of the element      
+      // wait a few seconds to make sure everything is loaded before setting the colorpicker values
+      setTimeout(function() {
+        var target_attr = '{{#settings}}{{attribute}}{{/settings}}';
+        // convert the borderColor property to a jQuery-readable css attribute without actually affecting the saved property
+        if (target_attr == 'borderColor') {target_attr = 'border-left-color'}
+        var current_element_val = rgb_to_hex($('{{#settings}}{{target}}{{/settings}}').css(target_attr));
+        $('#{{#settings}}{{id}}{{/settings}}').val(current_element_val);
+        $('.{{#settings}}{{id}}{{/settings}}.colorSelector div').css('backgroundColor', $('#{{#settings}}{{id}}{{/settings}}').val());
+      }, 2000);
+                 
+  
+  	});
+  })(jQuery)
+</script>

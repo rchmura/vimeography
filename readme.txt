@@ -3,7 +3,7 @@ Contributors: iamdavekiss
 Tags: vimeo, video, videos, gallery, vimeography, colorbox, media, player, playlist, showcase, skins, themes, video gallery
 Requires at least: 3.3
 Tested up to: 3.4.2
-Stable tag: 0.8.3
+Stable tag: 0.9
 License: MIT
 
 The easiest way to create beautiful Vimeo galleries on your Wordpress blog.
@@ -23,6 +23,7 @@ Some amazing features:
 * Easily insert galleries on a page, post or template with the gallery helper or shortcode
 * Set a featured video to appear as the first video in your gallery
 * Change your gallery's appearance with custom themes
+* Tweak your theme's look with the appearance editor
 * Control the gallery width using pixels or percentages
 * Built-in caching for quick page loads
 * Create unlimited galleries
@@ -64,15 +65,13 @@ Sure thing! You can define all of the properties found in the admin panel right 
 
 Yes, but you’ll need some PHP knowledge to do it! Open the file you want to add the gallery to, and type `<?php do_shortcode('[vimeography id="#"]'); ?>`, where `#` is replaced by the ID number of your gallery.
 
-= Can I change the colors/layout of my Vimeography theme? =
+= Can I change the look of my Vimeography theme? =
 
-Not yet! All themes are set in stone, but we do have plans to add a custom css editor.
+Heck yeah! Use the appearance editor to change your theme's style so that it matches your site perfectly.
 
 = What features do you have planned in future versions of Vimeography? =
 
-- Vimeography Pro
-- Theme Customization
-- Custom CSS Editor
+- Vimeography Pro, which will include inline galleries, comments, unlimited videos and more!
 
 == Screenshots ==
 
@@ -82,6 +81,11 @@ Not yet! All themes are set in stone, but we do have plans to add a custom css e
 4. Get new styles by installing gallery themes.
 
 == Changelog ==
+= 0.9 =
+* New! Introduced theme customization controls. You can now edit the theme and gallery appearance! 
+* New! The theme list in the gallery editor now has a fresh look.
+* NOTE: If you purchased a theme prior to this release, you will be emailed an updated version in the coming weeks so that you can take advantage of this feature.
+
 = 0.8.3 =
 * Fixed an issue where the video count setting occasionally failed.
 * Added developer bundle.

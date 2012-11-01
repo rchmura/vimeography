@@ -3,7 +3,7 @@
 Plugin Name: Vimeography
 Plugin URI: http://vimeography.com
 Description: Vimeography is the easiest way to set up a custom Vimeo gallery on your site.
-Version: 0.8.3
+Version: 0.9
 Author: Dave Kiss
 Author URI: http://davekiss.com
 License: MIT
@@ -23,7 +23,7 @@ define( 'VIMEOGRAPHY_THEME_PATH', $wp_upload_dir['basedir'].'/vimeography-themes
 define( 'VIMEOGRAPHY_ASSETS_URL', $wp_upload_dir['baseurl'].'/vimeography-assets/' );
 define( 'VIMEOGRAPHY_ASSETS_PATH', $wp_upload_dir['basedir'].'/vimeography-assets/' );
 define( 'VIMEOGRAPHY_BASENAME', plugin_basename( __FILE__ ) );
-define( 'VIMEOGRAPHY_VERSION', '0.8.3');
+define( 'VIMEOGRAPHY_VERSION', '0.9');
 define( 'VIMEOGRAPHY_GALLERY_TABLE', $wpdb->prefix . "vimeography_gallery");
 define( 'VIMEOGRAPHY_GALLERY_META_TABLE', $wpdb->prefix . "vimeography_gallery_meta");
 define( 'VIMEOGRAPHY_CURRENT_PAGE', basename($_SERVER['PHP_SELF']));
@@ -64,7 +64,7 @@ class Vimeography
 	{
 		if (! wp_script_is('jquery'))
 		{
-			wp_register_script('jquery', "http" . ($_SERVER['SERVER_PORT'] == 443 ? "s" : "") . "://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js", false, null);
+			wp_register_script('jquery', "http" . ($_SERVER['SERVER_PORT'] == 443 ? "s" : "") . "://ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js", false, null);
 			wp_enqueue_script('jquery');
 		}
 		
@@ -336,6 +336,12 @@ class Vimeography
 
 	}
 	
+	/**
+	 * Renders the admin template for the current page.
+	 * 
+	 * @access public
+	 * @return void
+	 */
 	public function vimeography_render_template()
 	{
 		if ( !current_user_can( 'manage_options' ) )  {
@@ -401,6 +407,13 @@ class Vimeography
 		echo $mustache->render($template);
 	}
 	
+	/**
+	 * Returns the file contents for the provided mustache template. Common Function.
+	 * 
+	 * @access protected
+	 * @param mixed $name
+	 * @return void
+	 */
 	protected function _load_template($name)
 	{
 		$path = VIMEOGRAPHY_PATH . 'lib/admin/templates/' . $name .'.mustache';

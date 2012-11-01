@@ -1,18 +1,18 @@
 /* Browser Resets */
-.flex-container a:active,
+.vimeography-bugsauce-container a:active,
 .flexslider a:active,
-.flex-container a:focus,
+.vimeography-bugsauce-container a:focus,
 .flexslider a:focus  {outline: none;}
 .slides,
-.flex-control-nav,
-.flex-direction-nav {margin: 0; padding: 0 !important; list-style: none !important; list-style-type: none !important;} 
+.vimeography-bugsauce-control-nav,
+.vimeography-bugsauce-direction-nav {margin: 0; padding: 0 !important; list-style: none !important; list-style-type: none !important;} 
 
 /* FlexSlider Necessary Styles
 *********************************/ 
 .flexslider {margin: 0; padding: 0;}
 .flexslider .slides > li {display: none; -webkit-backface-visibility: hidden;} /* Hide the slides before the JS is loaded. Avoids image jumping */
 .flexslider .slides img {width: 100%; display: block;}
-.flex-pauseplay span {text-transform: capitalize;}
+.vimeography-bugsauce-pauseplay span {text-transform: capitalize;}
 
 /* Clearfix for the .slides element */
 .slides:after {content: "."; display: block; clear: both; visibility: hidden; line-height: 0; height: 0;} 
@@ -28,46 +28,83 @@ html[xmlns] .slides {display: block;}
 /* FlexSlider Default Theme
 *********************************/
 .vimeography-bugsauce .flexslider {margin: 0; background: transparent; position: relative; -webkit-border-radius: 4px; -moz-border-radius: 4px; -o-border-radius: 4px; border-radius: 4px; zoom: 1;}
-.vimeography-bugsauce .flex-viewport {max-height: 2000px; -webkit-transition: all 1s ease; -moz-transition: all 1s ease; transition: all 1s ease; margin-left: 4px;}
-.vimeography-bugsauce .loading .flex-viewport {max-height: 300px;}
+.vimeography-bugsauce .vimeography-bugsauce-viewport {max-height: 2000px; -webkit-transition: all 1s ease; -moz-transition: all 1s ease; transition: all 1s ease; margin-left: 4px;}
+.vimeography-bugsauce .loading .vimeography-bugsauce-viewport {max-height: 300px;}
 .vimeography-bugsauce .flexslider .slides {zoom: 1;}
 
 .vimeography-bugsauce .carousel li {margin-right: 5px}
 
 /* Direction Nav */
-.vimeography-bugsauce .flex-direction-nav li {list-style: none;}
-.vimeography-bugsauce .flex-direction-nav a {width: 36px; height: 39px; margin: -20px 0 0; display: block; background: url(img/arrows.png) no-repeat 0 0; position: absolute; top: 50%; cursor: pointer; text-indent: -9999px; opacity: 0; filter: alpha(opacity=0); -webkit-transition: all .3s ease;}
-.vimeography-bugsauce .flexslider:hover .flex-next {opacity: 1; filter: alpha(opacity=100); right: 0;}
-.vimeography-bugsauce .flexslider:hover .flex-prev {opacity: 1; filter: alpha(opacity=100); left: 0;}
+.vimeography-bugsauce .vimeography-bugsauce-direction-nav li {list-style: none;}
+.vimeography-bugsauce .vimeography-bugsauce-direction-nav a {
+  width: 36px; 
+  height: 39px; 
+  margin: -20px 0 0; 
+  display: block; 
+  /*background: url(img/arrows.png) no-repeat 0 0;*/
+  position: absolute; 
+  top: 50%; 
+  cursor: pointer; 
+  /*text-indent: -9999px;*/
+  opacity: 1; filter: alpha(opacity=1); -webkit-transition: all .3s ease;
+}
+.vimeography-bugsauce .vimeography-bugsauce-direction-nav a.vimeography-bugsauce-prev span {
+  width: 0px;
+  height: 0px;
+  border-style: solid;
+  border-width: 5px 5px 5px 0;
+  border-color: transparent #000000 transparent transparent;
+  -webkit-transform:rotate(360deg);
+  font-size: 0;
+  line-height: 0;
+  position: absolute;
+  right: 7px;
+  top: 10px;
+}
+.vimeography-bugsauce .vimeography-bugsauce-direction-nav a.vimeography-bugsauce-next span {
+  width: 0px;
+  height: 0px;
+  border-style: solid;
+  border-width: 5px 0 5px 5px;
+  border-color: transparent transparent transparent #000000;
+  -webkit-transform:rotate(360deg);
+  font-size: 0;
+  line-height: 0;
+  position: absolute;
+  top: 10px;
+  left: 9px;
+}
+.vimeography-bugsauce .flexslider:hover .vimeography-bugsauce-next {opacity: 1; filter: alpha(opacity=100); right: 0;}
+.vimeography-bugsauce .flexslider:hover .vimeography-bugsauce-prev {opacity: 1; filter: alpha(opacity=100); left: 0;}
 
-.vimeography-bugsauce .flex-direction-nav .flex-next.flex-disabled,
-.vimeography-bugsauce .flex-direction-nav .flex-next.disabled,
-.vimeography-bugsauce .flex-direction-nav .flex-prev.flex-disabled,
-.vimeography-bugsauce .flex-direction-nav .flex-prev.disabled {opacity: .3!important; filter:alpha(opacity=30); cursor: default;}
+.vimeography-bugsauce .vimeography-bugsauce-direction-nav .vimeography-bugsauce-next.vimeography-bugsauce-disabled,
+.vimeography-bugsauce .vimeography-bugsauce-direction-nav .vimeography-bugsauce-next.disabled,
+.vimeography-bugsauce .vimeography-bugsauce-direction-nav .vimeography-bugsauce-prev.vimeography-bugsauce-disabled,
+.vimeography-bugsauce .vimeography-bugsauce-direction-nav .vimeography-bugsauce-prev.disabled {opacity: .3!important; filter:alpha(opacity=30); cursor: default;}
 
-.flex-direction-nav .flex-next.flex-disabled,
-.flex-direction-nav .flex-next.disabled {right: 0;}
+.vimeography-bugsauce-direction-nav .vimeography-bugsauce-next.vimeography-bugsauce-disabled,
+.vimeography-bugsauce-direction-nav .vimeography-bugsauce-next.disabled {right: 0;}
 
-.flex-direction-nav .flex-prev.flex-disabled,
-.flex-direction-nav .flex-prev.disabled {left: 0;}
+.vimeography-bugsauce-direction-nav .vimeography-bugsauce-prev.vimeography-bugsauce-disabled,
+.vimeography-bugsauce-direction-nav .vimeography-bugsauce-prev.disabled {left: 0;}
 
 /* Control Nav */
-.vimeography-bugsauce .flex-control-nav {width: 100%; position: absolute; bottom: -30px; text-align: center;}
-.vimeography-bugsauce .flex-control-nav li {margin: 0 0 0 5px; display: inline-block; zoom: 1; *display: inline;}
-.vimeography-bugsauce .flex-control-nav li:first-child {margin: 0;}
-.vimeography-bugsauce .flex-control-paging li a {width: 11px; height: 11px; display: block; background: #dedede; cursor: pointer; text-indent: -9999px; -webkit-border-radius: 20px; -moz-border-radius: 20px; -o-border-radius: 20px; border-radius: 20px;}
-.vimeography-bugsauce .flex-control-paging li a:hover {background: #a4a4a4;}
-.vimeography-bugsauce .flex-control-paging li a.active {background: #ff5454; cursor: default;}
+.vimeography-bugsauce .vimeography-bugsauce-control-nav {width: 100%; position: absolute; bottom: -30px; text-align: center;}
+.vimeography-bugsauce .vimeography-bugsauce-control-nav li {margin: 0 0 0 5px; display: inline-block; zoom: 1; *display: inline;}
+.vimeography-bugsauce .vimeography-bugsauce-control-nav li:first-child {margin: 0;}
+.vimeography-bugsauce .vimeography-bugsauce-control-paging li a {width: 11px; height: 11px; display: block; background: #dedede; cursor: pointer; text-indent: -9999px; -webkit-border-radius: 20px; -moz-border-radius: 20px; -o-border-radius: 20px; border-radius: 20px;}
+.vimeography-bugsauce .vimeography-bugsauce-control-paging li a:hover {background: #a4a4a4;}
+.vimeography-bugsauce .vimeography-bugsauce-control-paging li a.active {background: #ff5454; cursor: default;}
 
-.vimeography-bugsauce .flex-control-thumbs {margin: 5px 0 0; position: static; overflow: hidden;}
-.vimeography-bugsauce .flex-control-thumbs li {width: 25%; float: left; margin: 0;}
-.vimeography-bugsauce .flex-control-thumbs img {width: 100%; display: block; opacity: .7; filter: alpha(opacity=70); cursor: pointer;}
-.vimeography-bugsauce .flex-control-thumbs img:hover {opacity: 1; filter: alpha(opacity=100);}
-.vimeography-bugsauce .flex-control-thumbs .active {opacity: 1; filter: alpha(opacity=100); cursor: default;}
+.vimeography-bugsauce .vimeography-bugsauce-control-thumbs {margin: 5px 0 0; position: static; overflow: hidden;}
+.vimeography-bugsauce .vimeography-bugsauce-control-thumbs li {width: 25%; float: left; margin: 0;}
+.vimeography-bugsauce .vimeography-bugsauce-control-thumbs img {width: 100%; display: block; opacity: .7; filter: alpha(opacity=70); cursor: pointer;}
+.vimeography-bugsauce .vimeography-bugsauce-control-thumbs img:hover {opacity: 1; filter: alpha(opacity=100);}
+.vimeography-bugsauce .vimeography-bugsauce-control-thumbs .active {opacity: 1; filter: alpha(opacity=100); cursor: default;}
 
 @media screen and (max-width: 860px) {
-  .vimeography-bugsauce .flex-direction-nav .flex-prev {opacity: 1; filter: alpha(opacity=100); left: 0;}
-  .vimeography-bugsauce .flex-direction-nav .flex-next {opacity: 1; filter: alpha(opacity=100); right: 0;}
+  .vimeography-bugsauce .vimeography-bugsauce-direction-nav .vimeography-bugsauce-prev {opacity: 1; filter: alpha(opacity=100); left: 0;}
+  .vimeography-bugsauce .vimeography-bugsauce-direction-nav .vimeography-bugsauce-next {opacity: 1; filter: alpha(opacity=100); right: 0;}
 }
 
 /* Custom Modifications */
@@ -78,17 +115,17 @@ html[xmlns] .slides {display: block;}
 .vimeography-bugsauce .vimeography-thumbnails .slides li img {width: 184px; height: 105px; border: 1px solid #DDDDDD; border-radius: 4px 4px 4px 4px; box-shadow: 0 1px 1px rgba(0, 0, 0, 0.075); display: block;}
 
 .vimeography-bugsauce .vimeography-thumbnails .slides li img:hover {opacity: .95;}
-.vimeography-bugsauce .vimeography-thumbnails .slides li.flex-active-slide img {opacity: .95; border-color:#0088cc;-webkit-box-shadow:0 1px 4px rgba(0, 105, 214, 0.25);-moz-box-shadow:0 1px 4px rgba(0, 105, 214, 0.25);box-shadow:0 1px 4px rgba(0, 105, 214, 0.25);}
+.vimeography-bugsauce .vimeography-thumbnails .slides li.vimeography-bugsauce-active-slide img {opacity: .95; border-color:#0088cc;-webkit-box-shadow:0 1px 4px rgba(0, 105, 214, 0.25);-moz-box-shadow:0 1px 4px rgba(0, 105, 214, 0.25);box-shadow:0 1px 4px rgba(0, 105, 214, 0.25);}
 
-.vimeography-bugsauce .vimeography-main {background: url(img/loader.gif) no-repeat 50% 50% transparent;}
+.vimeography-bugsauce .vimeography-main {background: no-repeat 50% 50% transparent;}
 .vimeography-bugsauce .vimeography-main .slides {margin: 0;}
-.vimeography-bugsauce .vimeography-main .flex-direction-nav {margin: 0;}
-.vimeography-bugsauce .vimeography-main .flex-direction-nav li {list-style: none !important;}
-.vimeography-bugsauce .vimeography-main .flex-direction-nav a {width: 62px; height: 124px;}
-.vimeography-bugsauce .vimeography-main .flex-direction-nav .flex-next {background-position: -62px 0;}
-.vimeography-bugsauce .vimeography-main .flex-direction-nav .flex-prev {background-position: 0 0;}
+.vimeography-bugsauce .vimeography-main .vimeography-bugsauce-direction-nav {margin: 0;}
+.vimeography-bugsauce .vimeography-main .vimeography-bugsauce-direction-nav li {list-style: none !important;}
+.vimeography-bugsauce .vimeography-main .vimeography-bugsauce-direction-nav a {width: 62px; height: 124px;}
+.vimeography-bugsauce .vimeography-main .vimeography-bugsauce-direction-nav .vimeography-bugsauce-next {background-position: -62px 0;}
+.vimeography-bugsauce .vimeography-main .vimeography-bugsauce-direction-nav .vimeography-bugsauce-prev {background-position: 0 0;}
 
 .vimeography-bugsauce .vimeography-thumbnails {margin-top: 10px; padding: 0 22px;}
-.vimeography-bugsauce .vimeography-thumbnails .flex-direction-nav a {width: 22px; height: 40px;}
-.vimeography-bugsauce .vimeography-thumbnails .flex-direction-nav .flex-next {right: 0; background-position: -154px 0px;}
-.vimeography-bugsauce .vimeography-thumbnails .flex-direction-nav .flex-prev {left: 0; background-position: -127px 0;}
+.vimeography-bugsauce .vimeography-thumbnails .vimeography-bugsauce-direction-nav a {width: 22px; height: 40px;}
+.vimeography-bugsauce .vimeography-thumbnails .vimeography-bugsauce-direction-nav .vimeography-bugsauce-next {right: 0; background-position: -154px 0px;}
+.vimeography-bugsauce .vimeography-thumbnails .vimeography-bugsauce-direction-nav .vimeography-bugsauce-prev {left: 0; background-position: -127px 0;}

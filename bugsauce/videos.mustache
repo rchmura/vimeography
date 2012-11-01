@@ -1,6 +1,6 @@
 <div id="vimeography-gallery-{{gallery_id}}" class="vimeography-bugsauce" data-version="{{version}}"{{#gallery_width}} style="max-width: {{gallery_width}};"{{/gallery_width}}>
 
-	<div class="vimeography-main">
+	<div class="vimeography-main">	
 		{{#featured}}
 			<iframe id="vimeography-embed-{{gallery_id}}" src="http://player.vimeo.com/video/{{id}}?title=0&byline=0&portrait=0&api=1&player_id=vimeography-embed-{{gallery_id}}" width="{{width}}" height="{{height}}" frameborder="0" webkitAllowFullScreen mozallowfullscreen allowFullScreen></iframe>
 		{{/featured}}
@@ -23,24 +23,29 @@
 	
 			$('#vimeography-gallery-{{gallery_id}}').fitVids();
 			
+			$('#vimeography-gallery-{{gallery_id}} .vimeography-main').spin('custom');
+			
 			$('#vimeography-gallery-{{gallery_id}} .vimeography-thumbnails').flexslider({
 				animation: "slide",
+        namespace: 'vimeography-bugsauce-',
 				controlNav: false,
 				animationLoop: false,
 				slideshow: false,
 				itemWidth: 186,
 				itemMargin: 8,
-				useCSS: false
+				useCSS: false,
+				prevText: "<span></span>",
+				nextText: "<span></span>"
 			});
 			
-			$('#vimeography-gallery-{{gallery_id}} .vimeography-thumbnails li').first().addClass('flex-active-slide');
+			$('#vimeography-gallery-{{gallery_id}} .vimeography-thumbnails li').first().addClass('vimeography-bugsauce-active-slide');
 			
 			$('#vimeography-gallery-{{gallery_id}} .vimeography-thumbnails img').click(function(e) {
 				var id = $(this).attr('data-id');
 				var src = 'http://player.vimeo.com/video/'+id+'?title=0&byline=0&portrait=0&autoplay=0&api=1&player_id=vimeography-embed-{{gallery_id}}';
 				
-				$('.flex-active-slide').removeClass('flex-active-slide');
-				$(this).parent().addClass('flex-active-slide');
+				$('.vimeography-bugsauce-active-slide').removeClass('vimeography-bugsauce-active-slide');
+				$(this).parent().addClass('vimeography-bugsauce-active-slide');
 							
 				
 				$('#vimeography-embed-{{gallery_id}}').animate({'opacity':0}, 300, 'linear', function(){
@@ -58,3 +63,17 @@
 	})(jQuery)
 	
 </script>
+
+{{#dynamic_css}}
+  {{#exists}}
+    <style type="text/css">
+  {{/exists}}
+  
+  {{#settings}}
+    #vimeography-gallery-{{gallery_id}}{{target}} { {{attribute}}: {{value}}; }
+  {{/settings}}
+  
+  {{#exists}}
+    </style>
+  {{/exists}}  
+{{/dynamic_css}}

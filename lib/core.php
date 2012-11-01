@@ -31,7 +31,7 @@ class Vimeography_Core extends Vimeography
 		}
 		else
 		{
-            throw new Vimeography_Exception('Class not found: '.$class_name);
+      throw new Vimeography_Exception('Class not found: '.$class_name);
 		}
 	}
 			

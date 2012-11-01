@@ -1,0 +1,5 @@
+= 2.0, released 11/1/12 =
+*Added support for customization, requires Vimeography v0.9
+*Now uses spin.min.js instead of loader gif
+*Now uses CSS triangles as direction nav instead of images
+*Added namespacing to flexslider
