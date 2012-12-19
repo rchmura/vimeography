@@ -1,0 +1,31 @@
+        <div id="vimeography-gallery-themes-container">
+          <div class="vimeography-gallery-meta">
+            <a href="#" id="vimeography-back-to-main-menu" class="btn btn-mini pull-right"><em class="icon-arrow-left"></em> Main Menu</a>
+            <h1>{{title}}</h1>
+            <h2>Switch Themes</h2>
+          </div>
+          <div id="vimeography-themes-container">
+            <div id="aujus" style="position: absolute; overflow: hidden; top: 0; bottom: 0;">
+
+              <form id="vimeography-appearance-form" method="post" action="{{admin_url}}edit-galleries&id={{id}}" style="margin: 0; width: 260px; overflow-y: auto; overflow-x: hidden;">
+                {{#themes}}
+                  <div class="vimeography-gallery-menu-group">
+                    <div class="vimeography-gallery-menu-heading theme-container {{#active}}selected{{/active}}">
+                      <a href="#" data-theme="{{name}}">
+                        <img alt="{{name}}" src="{{thumbnail}}" width="32" height="24" style="border: 1px solid #b0b0b0;">
+                        <span class="theme-name">{{name}}</span><br />
+                        <span class="theme-version">v.{{version}}</span>
+                        {{#theme_supports_settings}}{{#active}}<i class="icon-pencil icon-white pull-right"></i>{{/active}}{{/theme_supports_settings}}
+                        {{^active}}<i class="icon-ok pull-right"></i>{{/active}}
+                      </a>
+                    </div>
+                  </div>
+                {{/themes}}
+                <input id="selected-vimeography-theme" type="hidden" name="vimeography_appearance_settings[theme_name]" value="{{theme}}" />
+                {{{theme_nonce}}}
+              </form>
+
+            </div>
+          </div>
+
+        </div> <!-- end gallery themes container -->

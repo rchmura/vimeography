@@ -1,0 +1,38 @@
+              <div class="vimeography-gallery-menu-group">
+
+                <div class="vimeography-gallery-menu-heading">
+                  <a href="#vimeography-gallery-menu-appearance" data-parent="#vimeography-gallery-menu-container" data-target="#vimeography-gallery-menu-appearance" data-toggle="collapse">Appearance <i class="icon-search pull-right"></i></a>
+                </div>
+
+                <div id="vimeography-gallery-menu-appearance" class="vimeography-gallery-menu-content collapse">
+                    <div class="vimeography-gallery-menu-setting first last">
+                    {{#themes}}
+                      {{#active}}
+                      <ul class="vimeography-theme-list">
+                          <li style="margin: 0;">
+                            <div class="theme-container">
+                              <div class="theme-image">
+                                <img alt="{{name}}" src="{{thumbnail}}">
+                              </div>
+
+                              <div class="theme-details">
+                                <a href="#" data-theme="{{name}}">{{name}}</a>
+                                <span><span class="label">v.{{version}}</span></span>
+                              </div>
+
+                              <a href="#" data-theme="{{name}}" class="theme-info" style="opacity: 0;">
+                                <strong>{{name}}</strong>
+                                <span>{{description}}</span>
+                              </a>
+                            </div>
+                          </li>
+                        </ul>
+                      {{/active}}
+                    {{/themes}}
+                    <a href="#" id="vimeography-switch-themes" class="btn btn-mini"><em class="icon-random"></em> View Themes</a>
+
+                    {{! Only show the edit appearance button if the theme supports custom settings}}
+                    {{#theme_supports_settings}}<a href="#" id="vimeography-edit-appearance" class="btn btn-mini"><em class="icon-pencil"></em> Edit Appearance</a>{{/theme_supports_settings}}
+                  </div>
+                </div> <!-- End Appearance -->
+              </div> <!-- End group -->

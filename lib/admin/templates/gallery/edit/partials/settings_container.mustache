@@ -1,0 +1,28 @@
+        {{#theme_supports_settings}}
+            <div id="vimeography-gallery-theme-settings-container">
+              <div class="vimeography-gallery-meta">
+                <a href="#" id="vimeography-back-to-themes" class="btn btn-mini pull-right"><em class="icon-arrow-left"></em> Themes</a>
+                <h1>{{title}}</h1>
+                <h2>Edit Theme Settings</h2>
+              </div>
+              <div id="vimeography-theme-settings-container">
+                <div id="aujus2" style="position: absolute; overflow: hidden; top: 0; bottom: 0;">
+
+                  <form id="vimeography-theme-settings-form" method="post" action="{{admin_url}}edit-galleries&id={{id}}" style="margin: 0; width: 226px; padding: 0 17px; background-color: #e3e3e3; overflow-y: auto; overflow-x: hidden;">
+                  {{#vimeography_theme_settings}}
+                      {{{setting}}}
+                  {{/vimeography_theme_settings}}
+
+                    <div class="vimeography-gallery-menu-setting last">
+                        {{{theme_settings_nonce}}}
+                        <input class="btn btn-primary" type="submit" value="Save Changes">
+                        <a href="{{admin_url}}edit-galleries&id={{id}}&delete-theme-settings=1" class="btn btn-error" title="Reset Theme Settings">Reset Settings</a>
+                    </div>
+
+                  </form>
+
+                </div>
+              </div>
+
+            </div> <!-- end gallery theme settings container -->
+        {{/theme_supports_settings}}

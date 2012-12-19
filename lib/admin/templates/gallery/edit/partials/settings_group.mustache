@@ -1,0 +1,45 @@
+              <div class="vimeography-gallery-menu-group">
+
+                <div class="vimeography-gallery-menu-heading active">
+                  <a href="#vimeography-gallery-menu-settings" data-parent="#vimeography-gallery-menu-container" data-target="#vimeography-gallery-menu-settings" data-toggle="collapse">Settings <i class="icon-wrench icon-white pull-right"></i></a>
+                </div>
+
+                <div id="vimeography-gallery-menu-settings" class="vimeography-gallery-menu-content collapse in">
+                    <form method="post" action="{{admin_url}}edit-galleries&id={{id}}">
+                      <div class="vimeography-gallery-menu-setting first">
+                        <label>Refresh the videos every <i class="icon-question-sign pull-right" title="Video Cache Rate" data-content="Specifies how frequently Vimeography should check your Vimeo source for any new videos that may have been added."></i></label>
+                      <select id="vimeography-cache" class="span3" name="vimeography_basic_settings[cache_timeout]" style="width: 180px;">
+                        <option value='0' {{#selected}}{{#0}}selected="selected"{{/0}}{{/selected}}>page load</option>
+                        <option value='900' {{#selected}}{{#900}}selected="selected"{{/900}}{{/selected}}>15 minutes</option>
+                        <option value='1800' {{#selected}}{{#1800}}selected="selected"{{/1800}}{{/selected}}>30 minutes</option>
+                        <option value='3600' {{#selected}}{{#3600}}selected="selected"{{/3600}}{{/selected}}>hour</option>
+                        <option value='86400' {{#selected}}{{#86400}}selected="selected"{{/86400}}{{/selected}}>day</option>
+                        <option value='604800' {{#selected}}{{#604800}}selected="selected"{{/604800}}{{/selected}}>week</option>
+                        <option value='2419200' {{#selected}}{{#2419200}}selected="selected"{{/2419200}}{{/selected}}>month</option>
+                      </select>
+                      <a href="{{admin_url}}edit-galleries&id={{id}}&refresh=1" class="btn btn-mini" title="Refresh Now"><em class="icon-refresh"></em></a>
+                    </div>
+
+                      <div class="vimeography-gallery-menu-setting">
+                        <label>Number of videos <i class="icon-question-sign pull-right" title="Number of videos" data-content="Specifies the number of videos that will appear in your gallery. You can display a maximum of up to 60 videos."></i></label>
+                        <input type="text" class="span3" name="vimeography_basic_settings[video_limit]" value="{{video_limit}}" />
+                    </div>
+
+                      <div class="vimeography-gallery-menu-setting">
+                        <label>Max gallery width <i class="icon-question-sign pull-right" title="Max Gallery Width" data-content="Specifies the maximum width that your gallery container can expand to."></i></label>
+                        <input type="text" class="span3" name="vimeography_basic_settings[gallery_width]" placeholder="eg. 960px, 35%" value="{{gallery_width}}" />
+                    </div>
+
+                      <div class="vimeography-gallery-menu-setting">
+                        <label>Featured video URL <i class="icon-question-sign pull-right" title="Featured Video URL" data-content="Sets the specified video as the first video that appears in your gallery."></i></label>
+                        <input type="text" class="span3" name="vimeography_basic_settings[featured_video]" placeholder="eg. http://vimeo.com/3567483" value="{{featured_video}}" />
+                    </div>
+
+                    <div class="vimeography-gallery-menu-setting last">
+                      {{{basic_nonce}}}
+                      <input class="btn btn-primary" type="submit" value="Save Changes">
+                    </div>
+
+                    </form>
+                </div>
+              </div> <!-- end group -->

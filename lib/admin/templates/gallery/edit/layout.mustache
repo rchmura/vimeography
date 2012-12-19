@@ -1,0 +1,118 @@
+<div class="wrap wp_bootstrap">
+
+  <div class="icon32" id="icon-options-general"><br></div>
+  <h2 class="page-title">Gallery Editor {{#gallery}}:: {{title}}{{/gallery}} {{> test}}</h2>
+
+  <script type="text/javascript">
+    (function($){
+      $(document).ready(function() {
+        // Prevent the gallery page from jumping to the anchor links when navigating the collapsible menu
+        $('.vimeography-gallery-menu-heading a').click(function(e){
+          e.preventDefault();
+        });
+
+        // Contorl the color of the icon on the active and inactive menu options
+        $('.vimeography-gallery-menu-content').on('show', function () {
+          $('.vimeography-gallery-menu-heading.active').removeClass('active').find('i').removeClass('icon-white');
+          $(this).prev().addClass('active').find('i').addClass('icon-white');
+        });
+
+        // Switch to the theme list
+        $('#vimeography-switch-themes').click(function(e){
+          e.preventDefault();
+          $('#vimeography-menu-slider').animate({marginLeft: '-280px'});
+          $("#aujus").mCustomScrollbar("update");
+        });
+
+        {{! Javascript below only appears if the theme supports custom settings}}
+        {{#theme_supports_settings}}
+          $('#vimeography-edit-appearance, .theme-container.selected a').click(function(e){
+            e.preventDefault();
+            $('#vimeography-menu-slider').animate({marginLeft: '-560px'});
+            $("#aujus2").mCustomScrollbar("update");
+          });
+
+          $('#vimeography-back-to-themes').click(function(e){
+            e.preventDefault();
+            $('#vimeography-menu-slider').animate({marginLeft: '-280px'});
+          });
+
+          $("#aujus2").mCustomScrollbar();
+        {{/theme_supports_settings}}
+        {{! End variable Javascript}}
+
+        // Slide back to the main menu from the themes list
+        $('#vimeography-back-to-main-menu').click(function(e){
+          e.preventDefault();
+          $('#vimeography-menu-slider').animate({marginLeft: '0px'});
+        });
+
+        // Add support for the question popovers
+        $('.icon-question-sign').popover({trigger: 'hover'});
+
+        // Create our scrollbar for the theme list menu panel
+        $("#aujus").mCustomScrollbar();
+
+        // Affix the menu when we scroll
+        $('#vimeography-gallery-menu-container').affix({offset: 124});
+
+        // Fade in the check marks when we hover down the theme list menu panel
+        $('.theme-container').mouseover(function(){
+          $(this).find('.icon-ok').stop(true, true).fadeIn(200);
+        }).mouseout(function(){
+          $(this).find('.icon-ok').stop(true, true).fadeOut(200);
+        });
+
+      });
+    })(jQuery)
+  </script>
+
+  {{#messages}}
+    <div class="alert alert-{{type}} fade in">
+      <a class="close" data-dismiss="alert" href="#">&times;</a>
+      <h3 class="alert-heading">{{heading}}</h3>
+      <p>{{message}}</p>
+    </div>
+  {{/messages}}
+
+  <div class="alert">
+    <strong>Want more?</strong> With Vimeography Pro, you can sort your videos, create playlists, show unlimited videos, add comments and more.
+    <a href="{{admin_url}}pro" title="Learn more about Vimeography Pro">Learn more &rarr;</a>
+  </div>
+
+  {{#gallery}}
+
+  <div id="vimeography-gallery-editor">
+
+    <div id="vimeography-gallery-menu-container">
+      <div id="vimeography-menu-slider" style="height: 100%; width: 840px;">
+
+        <div id="vimeography-gallery-main-menu-container">
+          <div style="width: 100%; height: 100%;">
+            <div class="vimeography-gallery-meta">
+              <h1>{{title}}</h1>
+              <h2><a href="{{source_url}}" title="{{title}}" target="_blank">{{source_url}}</a></h2>
+            </div>
+
+            <div id="vimeography-gallery-main-menu">
+
+              {{> settings_group}}
+              {{> appearance_group}}
+
+            </div><!-- End vimeography-gallery-main-menu -->
+          </div>
+        </div> <!-- End vimeography-gallery-main-menu-container -->
+
+        {{> themes_container}}
+        {{> settings_container}}
+      </div> <!-- end slider -->
+
+    </div> <!-- End vimeography-gallery-menu-container -->
+
+    <div id="vimeography-gallery-container" style="max-width: 60%; margin-left: 305px;">
+      {{{vimeography}}}
+    </div>
+  </div>
+  {{/gallery}}
+
+</div>

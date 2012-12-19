@@ -233,7 +233,7 @@ ul.vimeography-theme-list a.theme-info span {
   background: #f0f0f0;
 }
 
-.vimeography-gallery-menu-heading:hover, 
+.vimeography-gallery-menu-heading:hover,
 .vimeography-gallery-menu-group:nth-child(odd) .theme-container:hover {
 	background: #f9f9f9;
 }
@@ -252,7 +252,7 @@ ul.vimeography-theme-list a.theme-info span {
 .vimeography-gallery-menu-heading a:hover {
 	text-decoration: none;
 	color: #232323;
-} 
+}
 
 .vimeography-gallery-menu-heading.active,
 .vimeography-gallery-menu-heading.selected  {
@@ -290,6 +290,10 @@ ul.vimeography-theme-list a.theme-info span {
 
 .vimeography-gallery-menu-heading .icon-ok {
   display: none;
+}
+
+.vimeography-gallery-menu-heading .icon-wrench {
+background-position: -360px -144px;
 }
 
 .vimeography-gallery-menu-content {

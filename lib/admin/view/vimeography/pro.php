@@ -1,11 +1,9 @@
 <?php
 
-class Vimeography_Pro extends Mustache 
+class Vimeography_Pro extends Vimeography_Base 
 {	
 	public function __construct()
 	{
-		//wp_register_style('cloud.css', plugins_url('media/css/cloud.css', __FILE__ ));
-		//wp_enqueue_style('cloud.css');
 	}
 	
 	public function home_url()

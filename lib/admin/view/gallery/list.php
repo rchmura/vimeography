@@ -1,58 +1,107 @@
 <?php
 
-class Vimeography_Gallery_List extends Mustache 
+class Vimeography_Gallery_List extends Vimeography_Base 
 {
-	public $galleries;
+	public $_galleries;
 	public $pagination;
-	public $messages;
     
 	public function __construct()
 	{
-		if (isset($_POST))
-			$this->_validate_form();
+		if (isset($_POST['vimeography-list']))
+			$this->_validate_form($_POST['vimeography-list']);
 
 		wp_register_script( 'bootstrap-tooltip', VIMEOGRAPHY_URL.'media/js/bootstrap-tooltip.js');
 		wp_register_script( 'bootstrap-popover', VIMEOGRAPHY_URL.'media/js/bootstrap-popover.js');
 		wp_enqueue_script( 'bootstrap-tooltip');
 		wp_enqueue_script( 'bootstrap-popover');
-		$this->galleries = $this->_get_galleries_to_display();	
+		
+		$this->_galleries = $this->_get_galleries_to_display();	
 	}
-	
+		
+	/**
+	 * Returns the URL to the new gallery page.
+	 * 
+	 * @access public
+	 * @return string
+	 */
 	public function new_gallery_url()
 	{
 		return get_admin_url().'admin.php?page=vimeography-new-gallery';
 	}
 	
-	public function admin_url()
-	{
-		return get_admin_url().'admin.php?page=vimeography-';
-	}
-	
+	/**
+	 * Returns several security form fields for the new gallery form.
+	 * 
+	 * @access public
+	 * @return mixed
+	 */
 	public function nonce()
 	{
 	   return wp_nonce_field('vimeography-list-action','vimeography-verification');
 	}
 		
+	/**
+	 * Determines if the user sees an empty list or a list of galleries.
+	 * 
+	 * @access public
+	 * @return bool
+	 */
 	public function galleries_to_show()
 	{
-		return (empty($this->galleries)) ? FALSE : TRUE;
+		return (empty($this->_galleries)) ? FALSE : TRUE;
 	}
 	
+	/**
+	 * If galleries exist, return the details about them.
+	 * 
+	 * @access public
+	 * @return array
+	 */
 	public function galleries()
 	{
 		$galleries = array();
 		
-		foreach ($this->galleries as $gallery)
+		foreach ($this->_galleries as $gallery)
 		{
 			$gallery->edit_url = get_admin_url().'admin.php?page=vimeography-edit-galleries&id='.$gallery->id;
+			$gallery->theme_name = ucfirst($gallery->theme_name);
 									
 			$galleries[] = $gallery;
 		}
 		
 		return $galleries;
 	}
+	
+	/**
+	 * Checks the incoming form to make sure it is completed.
+	 * 
+	 * @access private
+	 * @return void
+	 */
+	private function _validate_form($input)
+	{
+		// if this fails, check_admin_referer() will automatically print a "failed" page and die.
+		if ( check_admin_referer('vimeography-list-action','vimeography-verification') )
+		{
+			global $wpdb;
+			$id = $wpdb->escape(intval($input['id']));
+			$action = $wpdb->escape(wp_filter_nohtml_kses($input['action']));
+			
+			if ($action === 'delete')
+				$this->_delete_gallery($id);
+				
+			if ($action === 'duplicate')
+				$this->_duplicate_gallery($id);
+		}
+	}
 		
-	protected function _get_galleries_to_display()
+	/**
+	 * Get any galleries that might exist.
+	 * 
+	 * @access private
+	 * @return array
+	 */
+	private function _get_galleries_to_display()
 	{
 		global $wpdb;
 		$number_of_galleries = $wpdb->get_results('SELECT COUNT(*) as count from '. VIMEOGRAPHY_GALLERY_TABLE);
@@ -68,24 +117,7 @@ class Vimeography_Gallery_List extends Mustache
 
 		return $wpdb->get_results('SELECT * from '.VIMEOGRAPHY_GALLERY_META_TABLE.' AS meta JOIN '.VIMEOGRAPHY_GALLERY_TABLE.' AS gallery ON meta.gallery_id = gallery.id LIMIT '.$limit.' OFFSET '.$offset.';');
 	}
-	
-	protected function _validate_form()
-	{
-		// if this fails, check_admin_referer() will automatically print a "failed" page and die.
-		if ( !empty($_POST['vimeography-list']) && check_admin_referer('vimeography-list-action','vimeography-verification') )
-		{
-			global $wpdb;
-			$id = $wpdb->escape(intval($_POST['vimeography-list']['id']));
-			$action = $wpdb->escape(wp_filter_nohtml_kses($_POST['vimeography-list']['action']));
-			
-			if ($action === 'delete')
-				$this->_delete_gallery($id);
-				
-			if ($action === 'duplicate')
-				$this->_duplicate_gallery($id);
-		}
-	}
-	
+		
 	/**
 	 * Creates a copy of the given gallery id in the database.
 	 * 
@@ -175,12 +207,6 @@ class Vimeography_Gallery_List extends Mustache
 		}
 						
 		return $pagination;
-		
-	}
-	
-	public static function delete_vimeography_cache($id)
-    {
-    	return delete_transient('vimeography_cache_'.$id);
-    }
+	}	
 
 }
