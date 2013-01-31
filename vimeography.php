@@ -421,6 +421,10 @@ class Vimeography
 			{
 				$cache_hash = $settings['id'].'_'.md5(serialize($settings_check));
 
+				// The `option_name` column has a limit of 64 characters,
+				// so we need to shorten the generated hash.
+				$cache_hash = substr($cache_hash, 0, -10);
+
 				// If the cache isn't set,
 				if (($vimeography_data = $cache->get($cache_hash)) === FALSE)
 				{
