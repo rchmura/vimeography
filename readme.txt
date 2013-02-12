@@ -1,9 +1,9 @@
 === Vimeography ===
 Contributors: iamdavekiss
-Tags: vimeo, video, videos, gallery, vimeography, colorbox, media, player, playlist, showcase, skins, themes, video gallery
+Tags: vimeo, video, videos, gallery, vimeography, fancybox, media, player, playlist, showcase, skins, themes, video gallery
 Requires at least: 3.3
-Tested up to: 3.5
-Stable tag: 0.9.2
+Tested up to: 3.5.1
+Stable tag: 0.9.3
 License: MIT
 
 The easiest way to create beautiful Vimeo galleries on your Wordpress blog.
@@ -46,11 +46,28 @@ If you would like to use fancyBox for commercial purposes, you can purchase a li
 == Frequently Asked Questions ==
 = Help! My theme doesn't look right! =
 
-Okay, deep breath. More than likely, it is another plugin causing this issue. See if you can pinpoint which one by disabling your plugins, one by one, and really determining if you need it. If that task sounds daunting, try disabling plugins that are used for photo galleries, minifying scripts, widgets, or otherwise alter your blog's appearance.
+First of all, don't worry! I promise you that we can get it looking right. This can be caused by a multitude of things, so try the following (in the order of appearance):
+
+* Try surrounding your Vimeography shortcode in `[raw][/raw]` tags.
+* Make sure that your Wordpress theme is not including multiple versions of jQuery and is using the latest version.
+* Make sure that your theme is calling the `wp_footer()` function so that all of the Vimeography stylesheets are printed.
+* Try disabling other plugins that are used for photo galleries, minifying scripts, widgets, or otherwise alter your blog's appearance, one by one, and really determining if you need it.
+
+= I'm getting an error: Vimeography error: the plugin did not retrieve data from the Vimeo API! connect() timed out! =
+
+This usually means that Vimeo is having some network issues. Follow @Vimeo on twitter for updates. If Vimeo is not reporting any issues, you'll need to contact your host and ask why you are unable to connect to Vimeo's IP address. It may be that your host has blocked server access via a firewall.
+
+= I'm having trouble installing a theme. =
+
+Try uploading the unzipped theme folder manually to `wp-content/uploads/vimeography-themes/[your-theme-name]`
+
+= How do I get the latest updates for my themes? =
+
+You can visit [http://vimeography.com/themes/update](http://vimeography.com/themes/update "vimeography.com/themes/update") to get the latest versions of any individual theme you've purchased.
 
 = Why don’t you support YouTub/MetaHall/Flacker/PreschoolHumor? =
 
-Like many other video professionals, we believe that Vimeo is a beautiful website complete with clean design, a supportive community and a straightforward API. This makes Vimeo a great choice for professional looking portfolios. Yes, there are other crummier sites that may also do the job, but that’s like forcing down chicken nuggets for dinner when you could be having baked scallops and a caprese appetizer. Vimeo only; enough said.
+Like many other video professionals, I believe that Vimeo is a beautiful website complete with clean design, a supportive community and a straightforward API. This makes Vimeo a great choice for professional looking portfolios. Yes, there are other crummier sites that may also do the job, but that’s like forcing down squid nuggets for dinner when you could be having baked scallops and a caprese appetizer. Vimeo only; enough said.
 
 = How do I add my Vimeography gallery to a post or page? =
 
@@ -85,6 +102,11 @@ Heck yeah! Use the appearance editor to change your theme's style so that it mat
 4. Get new styles by installing gallery themes.
 
 == Changelog ==
+= 0.9.3 =
+* Added new caching engine.
+* Fixed a caching issue with galleries overridden by shortcode.
+* Updated help documentation.
+
 = 0.9.2 =
 * Updated fancybox and colorbox for jQuery 1.9 compatibility
 
