@@ -3,7 +3,7 @@
 Plugin Name: Vimeography
 Plugin URI: http://vimeography.com
 Description: Vimeography is the easiest way to set up a custom Vimeo gallery on your site.
-Version: 0.9.2
+Version: 0.9.3
 Author: Dave Kiss
 Author URI: http://davekiss.com
 License: MIT
@@ -24,7 +24,7 @@ define( 'VIMEOGRAPHY_THEME_PATH', $wp_upload_dir['basedir'].'/vimeography-themes
 define( 'VIMEOGRAPHY_ASSETS_URL', $wp_upload_dir['baseurl'].'/vimeography-assets/' );
 define( 'VIMEOGRAPHY_ASSETS_PATH', $wp_upload_dir['basedir'].'/vimeography-assets/' );
 define( 'VIMEOGRAPHY_BASENAME', plugin_basename( __FILE__ ) );
-define( 'VIMEOGRAPHY_VERSION', '0.9.2');
+define( 'VIMEOGRAPHY_VERSION', '0.9.3');
 define( 'VIMEOGRAPHY_GALLERY_TABLE', $wpdb->prefix . "vimeography_gallery");
 define( 'VIMEOGRAPHY_GALLERY_META_TABLE', $wpdb->prefix . "vimeography_gallery_meta");
 define( 'VIMEOGRAPHY_CURRENT_PAGE', basename($_SERVER['PHP_SELF']));
@@ -387,11 +387,22 @@ class Vimeography
 
 		try
 		{
-			require_once(VIMEOGRAPHY_PATH . 'lib/core.php');
-		    $vimeography = Vimeography_Core::factory('videos', $settings);
+			if ( file_exists( VIMEOGRAPHY_PATH . 'lib/pro/core.php' ) )
+			{
+				require_once(VIMEOGRAPHY_PATH . 'lib/pro/core.php');
+	    	$vimeography = Vimeography_Pro_Core::factory('videos', $settings);
+			}
+			else
+			{
+				require_once(VIMEOGRAPHY_PATH . 'lib/core.php');
+	    	$vimeography = Vimeography_Core::factory('videos', $settings);
+			}
 
-		    $settings_check = $settings;
-		    $unused_id = array_shift($settings_check);
+			require_once(VIMEOGRAPHY_PATH . 'lib/cache.php');
+	    $cache = new Vimeography_Cache;
+
+	    $settings_check = $settings;
+	    $unused_id = array_shift($settings_check);
 
 			// If the shortcode settings are equal to the DB settings, the
 			// gallery isn't being overloaded by shortcode, so proceed to render
@@ -399,38 +410,42 @@ class Vimeography
 
 			if ($settings_check == $gallery_settings)
 			{
-				// if cache is set, render it. otherwise, get the json, set the
-				// cache, and render it
-
-				if (($vimeography_data = $this->get_vimeography_cache($settings['id'])) === FALSE)
+				// If the cache isn't set,
+				if (($vimeography_data = $cache->get($settings['id'])) === FALSE)
 				{
-			    	// cache not set, let's do a new request to the vimeo API
-			    	// and cache it if the cache settings aren't zero seconds
-			        $vimeography_data = $vimeography->get('videos');
-			        if ($settings['cache'] != 0)
-			        	$transient = $this->set_vimeography_cache($settings['id'], $vimeography_data, $settings['cache']);
+			    // make the request,
+			    $vimeography_data = $vimeography->get('videos');
+
+			    // and cache the results.
+			    if ($settings['cache'] != 0)
+			    	$transient = $cache->set($settings['id'], $vimeography_data, $settings['cache']);
 				}
 			}
 			// Otherwise, let's see if a cache exists for these particular
 			// shortcode settings, and if not, we'll create one using an
 			// alternate cache name generated using an md5 of the serialized
 			// shortcode combined with the gallery id.
-
 			else
 			{
 				$cache_hash = $settings['id'].'_'.md5(serialize($settings_check));
 
-				// if cache is set, render it. otherwise, get the json, set the
-				// cache, and render it
-				if (($vimeography_data = $this->get_vimeography_cache($cache_hash)) === FALSE)
+				// The `option_name` column has a limit of 64 characters,
+				// so we need to shorten the generated hash.
+				$cache_hash = substr($cache_hash, 0, -10);
+
+				// If the cache isn't set,
+				if (($vimeography_data = $cache->get($cache_hash)) === FALSE)
 				{
-			    	// cache not set, let's do a new request to the vimeo API
-			    	// and cache it if the cache settings aren't zero seconds
-			        $vimeography_data = $vimeography->get('videos');
-			        if ($settings['cache'] != 0)
-			        	$transient = $this->set_vimeography_cache($cache_hash, $vimeography_data, $settings['cache']);
+			    // make the request,
+			    $vimeography_data = $vimeography->get('videos');
+
+			    // and cache the results.
+			    if ($settings['cache'] != 0)
+            $transient = $cache->set($cache_hash, $vimeography_data, $settings['cache']);
 				}
 			}
+
+			// Render that ish.
 			return $vimeography->render($vimeography_data);
 		}
 		catch (Vimeography_Exception $e)
@@ -453,47 +468,6 @@ class Vimeography
 		echo 'Disallow: '.$blocked_theme_path."\n";
 		echo 'Disallow: '.$blocked_asset_path."\n";
 	}
-
-	/**
-	 * Get the JSON data stored in the Vimeography cache for the provided gallery id.
-	 *
-	 * @access public
-	 * @static
-	 * @param mixed $id
-	 * @return void
-	 */
-	public static function get_vimeography_cache($id)
-	{
-  	return FALSE === ( $vimeography_cache_results = get_transient( 'vimeography_cache_'.$id ) ) ? FALSE : $vimeography_cache_results;
-  }
-
-  /**
-   * Set the JSON data to the Vimeography cache for the provided gallery id.
-   *
-   * @access public
-   * @static
-   * @param mixed $id
-   * @param mixed $data
-   * @param mixed $cache_limit
-   * @return void
-   */
-  public static function set_vimeography_cache($id, $data, $cache_limit)
-  {
-    return set_transient( 'vimeography_cache_'.$id, $data, $cache_limit );
-  }
-
-  /**
-   * Clear the Vimeography cache for the provided gallery id.
-   *
-   * @access public
-   * @static
-   * @param mixed $id
-   * @return void
-   */
-  public static function delete_vimeography_cache($id)
-  {
-  	return delete_transient('vimeography_cache_'.$id);
-  }
 
   /**
    * Moves the given folder to the given destination.
