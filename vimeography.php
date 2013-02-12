@@ -390,12 +390,15 @@ class Vimeography
 			if ( file_exists( VIMEOGRAPHY_PATH . 'lib/pro/core.php' ) )
 			{
 				require_once(VIMEOGRAPHY_PATH . 'lib/pro/core.php');
-	    	$vimeography = Vimeography_Pro_Core::factory('videos', $settings);
+				require_once(VIMEOGRAPHY_PATH . 'lib/pro/renderer.php');
+
+				$vimeography = new Vimeography_Pro_Core($settings);
+				$renderer    = new Vimeography_Pro_Renderer($settings);
 			}
 			else
 			{
 				require_once(VIMEOGRAPHY_PATH . 'lib/core.php');
-	    	$vimeography = Vimeography_Core::factory('videos', $settings);
+	    	$vimeography = new Vimeography_Core($settings);
 			}
 
 			require_once(VIMEOGRAPHY_PATH . 'lib/cache.php');
