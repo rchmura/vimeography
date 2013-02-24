@@ -14,14 +14,14 @@ class Vimeography_Gallery_Edit extends Vimeography_Base
   {
     // setup the partial names and templates
     $this->_partials = array(
-      'settings_group' => $this->_load_template('gallery/edit/partials/settings_group'),
-      'appearance_group' => $this->_load_template('gallery/edit/partials/appearance_group'),
-      'themes_container' => $this->_load_template('gallery/edit/partials/themes_container'),
+      'settings_group'     => $this->_load_template('gallery/edit/partials/settings_group'),
+      'appearance_group'   => $this->_load_template('gallery/edit/partials/appearance_group'),
+      'themes_container'   => $this->_load_template('gallery/edit/partials/themes_container'),
       'settings_container' => $this->_load_template('gallery/edit/partials/settings_container'),
     );
 
     if (isset($_POST))
-    	$this->_validate_form();
+      $this->_validate_form();
 
     // Without the @, this generates warnings?
     // Notice: Undefined offset: 0 in /Users/davekiss/Sites/vimeography.com/wp-includes/plugin.php on line 762/780
@@ -31,30 +31,30 @@ class Vimeography_Gallery_Edit extends Vimeography_Base
 
     if (isset($_GET['id']))
     {
-    	$gallery_id = intval($_GET['id']);
+      $gallery_id = intval($_GET['id']);
 
-    	if (isset($_GET['refresh']) AND $_GET['refresh'] == 1)
-    	{
-    		$this->delete_vimeography_cache($gallery_id);
-    		$this->messages[] = array('type' => 'success', 'heading' => 'So fresh.', 'message' => __('Your videos have been refreshed.') );
-    	}
+      if (isset($_GET['refresh']) AND $_GET['refresh'] == 1)
+      {
+        $this->delete_vimeography_cache($gallery_id);
+        $this->messages[] = array('type' => 'success', 'heading' => 'So fresh.', 'message' => __('Your videos have been refreshed.') );
+      }
 
-    	if (isset($_GET['delete-theme-settings']) AND $_GET['delete-theme-settings'] == 1)
-    	{
-    		$transient = delete_transient('vimeography_theme_settings_'.$gallery_id);
-    		$this->messages[] = array('type' => 'success', 'heading' => __('Theme settings cleared.'), 'message' => __('Your gallery appearance has been reset.'));
-    	}
+      if (isset($_GET['delete-theme-settings']) AND $_GET['delete-theme-settings'] == 1)
+      {
+        $transient = delete_transient('vimeography_theme_settings_'.$gallery_id);
+        $this->messages[] = array('type' => 'success', 'heading' => __('Theme settings cleared.'), 'message' => __('Your gallery appearance has been reset.'));
+      }
     }
 
-		$this->_set_video_data($gallery_id);
+    $this->videos = $this->_set_video_data($gallery_id);
 
-		$this->_gallery = $wpdb->get_results('SELECT * from '.VIMEOGRAPHY_GALLERY_META_TABLE.' AS meta JOIN '.VIMEOGRAPHY_GALLERY_TABLE.' AS gallery ON meta.gallery_id = gallery.id WHERE meta.gallery_id = '.$gallery_id.' LIMIT 1;');
-		if (! $this->_gallery)
-		{
-			$this->messages[] = array('type' => 'error', 'heading' => 'Uh oh.', 'message' => __('That gallery no longer exists. It\'s gone. Kaput!') );
-		}
-		else
-		{
+    $this->_gallery = $wpdb->get_results('SELECT * from '.VIMEOGRAPHY_GALLERY_META_TABLE.' AS meta JOIN '.VIMEOGRAPHY_GALLERY_TABLE.' AS gallery ON meta.gallery_id = gallery.id WHERE meta.gallery_id = '.$gallery_id.' LIMIT 1;');
+    if (! $this->_gallery)
+    {
+      $this->messages[] = array('type' => 'error', 'heading' => 'Uh oh.', 'message' => __('That gallery no longer exists. It\'s gone. Kaput!') );
+    }
+    else
+    {
       // Check if the active theme has a settings file.
       $settings_file = VIMEOGRAPHY_THEME_PATH . $this->_gallery[0]->theme_name . '/settings.php';
 
@@ -63,45 +63,45 @@ class Vimeography_Gallery_Edit extends Vimeography_Base
         $this->theme_supports_settings = TRUE;
         $this->_settings_file = $settings_file;
       }
-		}
+    }
 
-		if (isset($_GET['created']) && $_GET['created'] == 1)
-		{
-			$this->messages[] = array('type' => 'success', 'heading' => __('Gallery created.'), 'message' => __('Well, that was easy.') );
-		}
-	}
+    if (isset($_GET['created']) && $_GET['created'] == 1)
+    {
+      $this->messages[] = array('type' => 'success', 'heading' => __('Gallery created.'), 'message' => __('Well, that was easy.') );
+    }
+  }
 
-	/**
-	 * Enqueues the scripts and styles to be loaded on the edit gallery page.
-	 *
-	 * @access private
-	 * @return void
-	 */
-	private static function _load_scripts()
-	{
-		wp_register_script( 'bootstrap-tooltip', VIMEOGRAPHY_URL.'media/js/bootstrap-tooltip.js');
+  /**
+   * Enqueues the scripts and styles to be loaded on the edit gallery page.
+   *
+   * @access private
+   * @return void
+   */
+  private static function _load_scripts()
+  {
+    wp_register_script( 'bootstrap-tooltip', VIMEOGRAPHY_URL.'media/js/bootstrap-tooltip.js');
     wp_register_script( 'bootstrap-popover', VIMEOGRAPHY_URL.'media/js/bootstrap-popover.js');
     wp_register_script( 'bootstrap-transition', VIMEOGRAPHY_URL.'media/js/bootstrap-transition.js');
-		wp_register_script( 'bootstrap-collapse', VIMEOGRAPHY_URL.'media/js/bootstrap-collapse.js');
-		wp_register_script( 'bootstrap-affix', VIMEOGRAPHY_URL.'media/js/bootstrap-affix.js');
-		if (! wp_script_is('jquery-ui'))
-		{
-			wp_register_script('jquery-ui', "http" . ($_SERVER['SERVER_PORT'] == 443 ? "s" : "") . "://ajax.googleapis.com/ajax/libs/jqueryui/1.8/jquery-ui.min.js", false, null);
-			wp_enqueue_script('jquery-ui');
-		}
-		wp_register_script( 'jquery-mousewheel', VIMEOGRAPHY_URL.'media/js/jquery.mousewheel.min.js', 'jquery');
-		wp_register_script( 'jquery-custom-scrollbar', VIMEOGRAPHY_URL.'media/js/jquery.mCustomScrollbar.js', 'jquery');
+    wp_register_script( 'bootstrap-collapse', VIMEOGRAPHY_URL.'media/js/bootstrap-collapse.js');
+    wp_register_script( 'bootstrap-affix', VIMEOGRAPHY_URL.'media/js/bootstrap-affix.js');
+    if (! wp_script_is('jquery-ui'))
+    {
+      wp_register_script('jquery-ui', "http" . ($_SERVER['SERVER_PORT'] == 443 ? "s" : "") . "://ajax.googleapis.com/ajax/libs/jqueryui/1.8/jquery-ui.min.js", false, null);
+      wp_enqueue_script('jquery-ui');
+    }
+    wp_register_script( 'jquery-mousewheel', VIMEOGRAPHY_URL.'media/js/jquery.mousewheel.min.js', 'jquery');
+    wp_register_script( 'jquery-custom-scrollbar', VIMEOGRAPHY_URL.'media/js/jquery.mCustomScrollbar.js', 'jquery');
 
     wp_enqueue_script( 'bootstrap-transition');
     wp_enqueue_script( 'bootstrap-collapse');
-		wp_enqueue_script( 'bootstrap-tooltip');
-		wp_enqueue_script( 'bootstrap-popover');
-		wp_enqueue_script( 'bootstrap-affix');
+    wp_enqueue_script( 'bootstrap-tooltip');
+    wp_enqueue_script( 'bootstrap-popover');
+    wp_enqueue_script( 'bootstrap-affix');
 
-		wp_enqueue_script( 'jquery-mousewheel');
-		wp_enqueue_script( 'jquery-custom-scrollbar');
+    wp_enqueue_script( 'jquery-mousewheel');
+    wp_enqueue_script( 'jquery-custom-scrollbar');
 
-	}
+  }
 
   /**
   * Returns the theme settings form to the admin panel.
@@ -150,95 +150,89 @@ class Vimeography_Gallery_Edit extends Vimeography_Base
     }
   }
 
-	public static function basic_nonce()
-	{
-	   return wp_nonce_field('vimeography-basic-action','vimeography-basic-verification');
-	}
+  public static function basic_nonce()
+  {
+    return wp_nonce_field('vimeography-basic-action','vimeography-basic-verification');
+  }
 
-	public static function theme_nonce()
-	{
-	   return wp_nonce_field('vimeography-theme-action','vimeography-theme-verification');
-	}
+  public static function theme_nonce()
+  {
+    return wp_nonce_field('vimeography-theme-action','vimeography-theme-verification');
+  }
 
-	public static function theme_settings_nonce()
-	{
-	   return wp_nonce_field('vimeography-theme-settings-action','vimeography-theme-settings-verification');
-	}
+  public static function theme_settings_nonce()
+  {
+    return wp_nonce_field('vimeography-theme-settings-action','vimeography-theme-settings-verification');
+  }
 
   public static function get_cached_videos_nonce()
   {
     return wp_create_nonce('vimeography-get-cached-videos');
   }
 
-	public function selected()
-	{
-		return array(
-			$this->_gallery[0]->cache_timeout => TRUE,
-		);
-	}
+  public function selected()
+  {
+    return array(
+      $this->_gallery[0]->cache_timeout => TRUE,
+    );
+  }
 
   /**
   * Sets the video data variables for the provided gallery id from the cache.
+  * This is so we can use the video information outside of the gallery on the
+  * gallery editor page.
   *
   * @access private
-  * @param mixed $gallery_id
-  * @return void
+  * @param int $gallery_id
+  * @return string
   */
   private function _set_video_data($gallery_id)
   {
-  	$data = $this->get_vimeography_cache($gallery_id);
-  	$this->videos = json_decode($data[0]);
-
-  	if (isset($data[1]))
-  	{
-  		// featured video option is set
-  		$featured = json_decode($data[1]);
-  		array_unshift($this->videos, $featured[0]);
-  	}
+    return json_decode($this->get_vimeography_cache($gallery_id));
   }
 
-	public function gallery()
-	{
-		$this->_gallery[0]->featured_video = $this->_gallery[0]->featured_video === 0 ? '' : $this->_gallery[0]->featured_video;
-		return $this->_gallery;
-	}
+  public function gallery()
+  {
+    $this->_gallery[0]->featured_video = $this->_gallery[0]->featured_video === 0 ? '' : $this->_gallery[0]->featured_video;
+    return $this->_gallery;
+  }
 
-	/**
-	 * Controls the POST data and sends it to the proper validation function.
-	 *
-	 * @access private
-	 * @return void
-	 */
-	private function _validate_form()
-	{
-		global $wpdb;
-		$id = $wpdb->escape(intval($_GET['id']));
+  /**
+   * Controls the POST data and sends it to the proper validation function.
+   *
+   * @access private
+   * @return void
+   */
+  private function _validate_form()
+  {
+    global $wpdb;
+    $id = $wpdb->escape(intval($_GET['id']));
 
-		if (!empty($_POST['vimeography_appearance_settings']))
-		{
-			$messages = $this->_vimeography_validate_appearance_settings($id, $_POST);
-		}
-		elseif (!empty($_POST['vimeography_basic_settings']))
-		{
-			$messages = $this->_vimeography_validate_basic_settings($id, $_POST);
-		}
-		elseif (!empty($_POST['vimeography_theme_settings']))
-		{
-			$messages = $this->_vimeography_validate_theme_settings($id, $_POST['vimeography_theme_settings']);
-		}
-		else
-		{
-			return FALSE;
-		}
-	}
+    if (!empty($_POST['vimeography_appearance_settings']))
+    {
+      $messages = $this->_vimeography_validate_appearance_settings($id, $_POST);
+    }
+    elseif (!empty($_POST['vimeography_basic_settings']))
+    {
+      $messages = $this->_vimeography_validate_basic_settings($id, $_POST);
+    }
+    elseif (!empty($_POST['vimeography_theme_settings']))
+    {
+      $messages = $this->_vimeography_validate_theme_settings($id, $_POST['vimeography_theme_settings']);
+    }
+    else
+    {
+      return FALSE;
+    }
+  }
 
-	private function _vimeography_validate_appearance_settings($id, $input)
-	{
-		// if this fails, check_admin_referer() will automatically print a "failed" page and die.
-		if (check_admin_referer('vimeography-theme-action','vimeography-theme-verification') )
-		{
-			try
-			{
+  private function _vimeography_validate_appearance_settings($id, $input)
+  {
+    // if this fails, check_admin_referer() will automatically print a "failed" page and die.
+    if (check_admin_referer('vimeography-theme-action','vimeography-theme-verification') )
+    {
+      try
+      {
         global $wpdb;
         $settings['theme_name'] = strtolower($wpdb->escape(wp_filter_nohtml_kses($input['vimeography_appearance_settings']['theme_name'])));
 
@@ -249,73 +243,73 @@ class Vimeography_Gallery_Edit extends Vimeography_Base
         $transient = delete_transient('vimeography_theme_settings_'.$id);
 
         $this->messages[] = array('type' => 'success', 'heading' => __('Theme updated.'), 'message' => __('You are now using the "') . $settings['theme_name'] . __('" theme.'));
-			}
-			catch (Exception $e)
-			{
-				$this->messages[] = array('type' => 'error', 'heading' => 'Ruh roh.', 'message' => $e->getMessage());
-			}
-		}
-	}
+      }
+      catch (Exception $e)
+      {
+        $this->messages[] = array('type' => 'error', 'heading' => 'Ruh roh.', 'message' => $e->getMessage());
+      }
+    }
+  }
 
-	private function _vimeography_validate_basic_settings($id, $input)
-	{
-		if (check_admin_referer('vimeography-basic-action','vimeography-basic-verification') )
-		{
-			try
-			{
-				global $wpdb;
-				$settings['cache_timeout']  = $wpdb->escape(wp_filter_nohtml_kses($input['vimeography_basic_settings']['cache_timeout']));
-				$settings['featured_video'] = $wpdb->escape(wp_filter_nohtml_kses($input['vimeography_basic_settings']['featured_video']));
-				$settings['video_limit'] = intval($input['vimeography_basic_settings']['video_limit']) <= 60 ? $input['vimeography_basic_settings']['video_limit'] : 60;
+  private function _vimeography_validate_basic_settings($id, $input)
+  {
+    if (check_admin_referer('vimeography-basic-action','vimeography-basic-verification') )
+    {
+      try
+      {
+        global $wpdb;
+        $settings['cache_timeout']  = $wpdb->escape(wp_filter_nohtml_kses($input['vimeography_basic_settings']['cache_timeout']));
+        $settings['featured_video'] = $wpdb->escape(wp_filter_nohtml_kses($input['vimeography_basic_settings']['featured_video']));
+        $settings['video_limit']    = intval($input['vimeography_basic_settings']['video_limit']) <= 20 ? $input['vimeography_basic_settings']['video_limit'] : 20;
 
-				if (!empty($input['vimeography_basic_settings']['gallery_width']))
-				{
-					preg_match('/(\d*)(px|%?)/', $input['vimeography_basic_settings']['gallery_width'], $matches);
-					// If a number value is set...
-					if (!empty($matches[1]))
-					{
-						// If a '%' or 'px' is set...
-						if (!empty($matches[2]))
-						{
-							// Accept the valid matching string
-							$settings['gallery_width'] = $matches[0];
-						}
-						else
-						{
-							// Append a 'px' value to the matching number
-							$settings['gallery_width'] = $matches[1] . 'px';
-						}
-					}
-					else
-					{
-						// Not a valid width
-						$settings['gallery_width'] = '';
-					}
-				}
-				else
-				{
-					// blank setting
-					$settings['gallery_width'] = '';
-				}
+        if (!empty($input['vimeography_basic_settings']['gallery_width']))
+        {
+          preg_match('/(\d*)(px|%?)/', $input['vimeography_basic_settings']['gallery_width'], $matches);
+          // If a number value is set...
+          if (!empty($matches[1]))
+          {
+            // If a '%' or 'px' is set...
+            if (!empty($matches[2]))
+            {
+              // Accept the valid matching string
+              $settings['gallery_width'] = $matches[0];
+            }
+            else
+            {
+              // Append a 'px' value to the matching number
+              $settings['gallery_width'] = $matches[1] . 'px';
+            }
+          }
+          else
+          {
+            // Not a valid width
+            $settings['gallery_width'] = '';
+          }
+        }
+        else
+        {
+          // blank setting
+          $settings['gallery_width'] = '';
+        }
 
-				$result = $wpdb->update( VIMEOGRAPHY_GALLERY_META_TABLE, array('cache_timeout' => $settings['cache_timeout'], 'featured_video' => $settings['featured_video'], 'gallery_width' => $settings['gallery_width'], 'video_limit' => $settings['video_limit']), array( 'gallery_id' => $id ) );
+        $result = $wpdb->update( VIMEOGRAPHY_GALLERY_META_TABLE, array('cache_timeout' => $settings['cache_timeout'], 'featured_video' => $settings['featured_video'], 'gallery_width' => $settings['gallery_width'], 'video_limit' => $settings['video_limit']), array( 'gallery_id' => $id ) );
 
-				if ($result === FALSE)
-					throw new Exception('Your settings could not be updated.');
-					//$wpdb->print_error();
+        if ($result === FALSE)
+          throw new Exception('Your settings could not be updated.');
+          //$wpdb->print_error();
 
-				$this->delete_vimeography_cache($id);
-				$this->messages[] = array('type' => 'success', 'heading' => __('Settings updated.'), 'message' => __('Nice work. You are pretty good at this.'));
-			}
-			catch (Exception $e)
-			{
-				$this->messages[] = array('type' => 'error', 'heading' => 'Ruh roh.', 'message' => $e->getMessage());
-			}
-		}
-	}
+        $this->delete_vimeography_cache($id);
+        $this->messages[] = array('type' => 'success', 'heading' => __('Settings updated.'), 'message' => __('Nice work. You are pretty good at this.'));
+      }
+      catch (Exception $e)
+      {
+        $this->messages[] = array('type' => 'error', 'heading' => 'Ruh roh.', 'message' => $e->getMessage());
+      }
+    }
+  }
 
-	private function _vimeography_validate_theme_settings($id, $input)
-	{
+  private function _vimeography_validate_theme_settings($id, $input)
+  {
     // if this fails, check_admin_referer() will automatically print a "failed" page and die.
     if (check_admin_referer('vimeography-theme-settings-action','vimeography-theme-settings-verification') )
     {
@@ -350,21 +344,21 @@ class Vimeography_Gallery_Edit extends Vimeography_Base
         $this->messages[] = array('type' => 'error', 'heading' => __('Oh no!'), 'message' => $e->getMessage());
       }
     }
-	}
+  }
 
-	/**
-	 * Returns the file contents for the provided mustache template. Common Function.
-	 *
-	 * @access protected
-	 * @param mixed $name
-	 * @return void
-	 */
-	protected function _load_template($name)
-	{
-		$path = VIMEOGRAPHY_PATH . 'lib/admin/templates/' . $name .'.mustache';
-		if (! $result = @file_get_contents($path))
-			wp_die('The admin template "'.$name.'" cannot be found.');
-		return $result;
-	}
+  /**
+   * Returns the file contents for the provided mustache template. Common Function.
+   *
+   * @access protected
+   * @param mixed $name
+   * @return void
+   */
+  protected function _load_template($name)
+  {
+    $path = VIMEOGRAPHY_PATH . 'lib/admin/templates/' . $name .'.mustache';
+    if (! $result = @file_get_contents($path))
+      wp_die('The admin template "'.$name.'" cannot be found.');
+    return $result;
+  }
 
 }

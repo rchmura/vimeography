@@ -48,11 +48,11 @@ class Vimeography_Renderer extends Vimeography_Core
       throw new Vimeography_Exception('The "'.$this->_theme.'" theme class does not exist or is improperly structured.');
 
     $mustache = new $class;
-    $theme = $this->_load_theme($this->_theme);
+    $theme    = $this->_load_theme($this->_theme);
 
-    $mustache->data          = json_decode($data[0]);
+    $mustache->data          = json_decode($data);
     $mustache->gallery_id    = $this->_gallery_id;
-    $mustache->featured      = $this->_get_featured_video($data);
+    $mustache->featured      = $mustache->data[0];
     $mustache->gallery_width = $this->_gallery_width;
 
     return $mustache->render($theme);
@@ -71,27 +71,6 @@ class Vimeography_Renderer extends Vimeography_Core
     print_r(json_decode($data));
     echo '</pre>';
     die;
-  }
-
-  /**
-   * Returns the video data for the video to appear
-   * first in the gallery.
-   *
-   * @param  array $data The video data for the current gallery
-   * @return mixed       An object or an array, depending on... (check the theme's php file for more info)
-   */
-  private static function _get_featured_video($data)
-  {
-    if (isset($data[1]))
-    {
-      // featured video option is set
-      return json_decode($data[1]);
-    }
-    else
-    {
-      $data = json_decode($data[0]);
-      return $data[0];
-    }
   }
 
   /**
