@@ -238,7 +238,7 @@ class Vimeography
         break;
       case 'vimeography_page_vimeography-pro':
         require_once(VIMEOGRAPHY_PATH . 'lib/admin/view/vimeography/pro.php');
-        $mustache = new Vimeography_Pro();
+        $mustache = new Vimeography_Pro_About();
         $template = $this->_load_template('vimeography/pro');
         break;
       case 'vimeography_page_vimeography-help':
@@ -331,38 +331,62 @@ class Vimeography
    */
   public function vimeography_shortcode($atts, $content = NULL)
   {
-
-    // Let's get the data for this gallery from the db
-    if (intval($atts['id']))
+    try
     {
-      global $wpdb;
-      $gallery_info = $wpdb->get_results('SELECT * from '.VIMEOGRAPHY_GALLERY_META_TABLE.' AS meta JOIN '.VIMEOGRAPHY_GALLERY_TABLE.' AS gallery ON meta.gallery_id = gallery.id WHERE meta.gallery_id = '.$atts['id'].' LIMIT 1;');
+      if (isset($atts['id']))
+      {
+        $atts['id'] = intval($atts['id']);
+        if ($atts['id'] != 0)
+        {
+          // Let's get the data for this gallery from the db
+          global $wpdb;
+          $db_gallery_settings = $wpdb->get_results('SELECT * from '.VIMEOGRAPHY_GALLERY_META_TABLE.' AS meta JOIN '.VIMEOGRAPHY_GALLERY_TABLE.' AS gallery ON meta.gallery_id = gallery.id WHERE meta.gallery_id = '.$atts['id'].' LIMIT 1;');
+
+          if ( empty($db_gallery_settings) )
+            throw new Vimeography_Exception('A gallery with the ID of '.$atts['id'].' was not found.');
+
+          $db_gallery_settings = $db_gallery_settings[0];
+        }
+        else
+        {
+          throw new Vimeography_Exception('You entered an invalid gallery ID.');
+        }
+      }
+      else
+      {
+        // ID not set, creating a gallery from shortcode
+        if (! empty($content))
+          throw new Vimeography_Exception('Inline galleries are not currently supported. Stay tuned!');
+      }
+    }
+    catch (Vimeography_Exception $e)
+    {
+      return "Error creating Vimeography gallery: ".$e->getMessage();
     }
 
-    // Get admin panel options
+    // Get admin panel options [starting basic shortcode]
     $default_settings = get_option('vimeography_default_settings');
 
-    $gallery_settings['theme']    = isset($gallery_info[0]->theme_name)     ? $gallery_info[0]->theme_name     : $default_settings['theme_name'];
-    $gallery_settings['featured'] = isset($gallery_info[0]->featured_video) ? $gallery_info[0]->featured_video : $default_settings['featured_video'];
-    $gallery_settings['source']   = isset($gallery_info[0]->source_url)     ? $gallery_info[0]->source_url     : $default_settings['source_url'];
-    $gallery_settings['limit']    = isset($gallery_info[0]->video_limit)    ? $gallery_info[0]->video_limit    : $default_settings['video_limit'];
-    $gallery_settings['cache']    = isset($gallery_info[0]->cache_timeout)  ? $gallery_info[0]->cache_timeout  : $default_settings['cache_timeout'];
-    $gallery_settings['width']    = isset($gallery_info[0]->gallery_width)  ? $gallery_info[0]->gallery_width  : '';
+    $fallback_gallery_settings['theme']    = isset($db_gallery_settings->theme_name)     ? $db_gallery_settings->theme_name     : $default_settings['theme_name'];
+    $fallback_gallery_settings['featured'] = isset($db_gallery_settings->featured_video) ? $db_gallery_settings->featured_video : $default_settings['featured_video'];
+    $fallback_gallery_settings['source']   = isset($db_gallery_settings->source_url)     ? $db_gallery_settings->source_url     : $default_settings['source_url'];
+    $fallback_gallery_settings['limit']    = isset($db_gallery_settings->video_limit)    ? $db_gallery_settings->video_limit    : $default_settings['video_limit'];
+    $fallback_gallery_settings['cache']    = isset($db_gallery_settings->cache_timeout)  ? $db_gallery_settings->cache_timeout  : $default_settings['cache_timeout'];
+    $fallback_gallery_settings['width']    = isset($db_gallery_settings->gallery_width)  ? $db_gallery_settings->gallery_width  : '';
 
     // Get shortcode attributes
-    $settings    = shortcode_atts( array(
-      'id'       => '',
-      'theme'    => $gallery_settings['theme'],
-      'featured' => $gallery_settings['featured'],
-      'source'   => $gallery_settings['source'],
-      'limit'    => $gallery_settings['limit'],
-      'cache'    => $gallery_settings['cache'],
-      'width'    => $gallery_settings['width'],
+    $shortcode_gallery_settings = shortcode_atts( array(
+      'theme'    => $fallback_gallery_settings['theme'],
+      'featured' => $fallback_gallery_settings['featured'],
+      'source'   => $fallback_gallery_settings['source'],
+      'limit'    => $fallback_gallery_settings['limit'],
+      'cache'    => $fallback_gallery_settings['cache'],
+      'width'    => $fallback_gallery_settings['width'],
     ), $atts );
 
-    if (!empty($settings['width']))
+    if (!empty($shortcode_gallery_settings['width']))
     {
-      preg_match('/(\d*)(px|%?)/', $settings['width'], $matches);
+      preg_match('/(\d*)(px|%?)/', $shortcode_gallery_settings['width'], $matches);
       // If a number value is set...
       if (!empty($matches[1]))
       {
@@ -370,85 +394,56 @@ class Vimeography
         if (!empty($matches[2]))
         {
           // Accept the valid matching string
-          $settings['width'] = $matches[0];
+          $shortcode_gallery_settings['width'] = $matches[0];
         }
         else
         {
           // Append a 'px' value to the matching number
-          $settings['width'] = $matches[1] . 'px';
+          $shortcode_gallery_settings['width'] = $matches[1] . 'px';
         }
       }
       else
       {
         // Not a valid width
-        $settings['width'] = '';
+        $shortcode_gallery_settings['width'] = '';
       }
     }
+    // end basic shortcode
+
+    // Create a token for the resulting shortcode gallery settings
+    // The `option_name` column has a limit of 64 characters,
+    // so we need to shorten the generated hash.
+    $token = substr(md5(serialize($shortcode_gallery_settings)), 0, -24);
 
     try
     {
-      if ( file_exists( VIMEOGRAPHY_PATH . 'lib/pro/core.php' ) )
+      if ( class_exists( 'Vimeography_Pro' ) )
       {
-        require_once(VIMEOGRAPHY_PATH . 'lib/pro/core.php');
-        require_once(VIMEOGRAPHY_PATH . 'lib/pro/renderer.php');
-
-        $vimeography = new Vimeography_Pro_Core($settings);
-        $renderer    = new Vimeography_Pro_Renderer($settings);
+        do_action('vimeography/load_pro');
+        $vimeography = new Vimeography_Pro_Core($shortcode_gallery_settings);
+        $renderer    = new Vimeography_Pro_Renderer($shortcode_gallery_settings);
       }
       else
       {
         require_once(VIMEOGRAPHY_PATH . 'lib/core.php');
         require_once(VIMEOGRAPHY_PATH . 'lib/renderer.php');
 
-        $vimeography = new Vimeography_Core($settings);
-        $renderer    = new Vimeography_Renderer($settings);
+        $vimeography = new Vimeography_Core($shortcode_gallery_settings);
+        $renderer    = new Vimeography_Renderer($shortcode_gallery_settings);
       }
 
       require_once(VIMEOGRAPHY_PATH . 'lib/cache.php');
       $cache = new Vimeography_Cache;
 
-      $settings_check = $settings;
-      $unused_id = array_shift($settings_check);
-
-      // If the shortcode settings are equal to the DB settings, the
-      // gallery isn't being overloaded by shortcode, so proceed to render
-      // the standard cache.
-
-      if ($settings_check == $gallery_settings)
+      // If the cache isn't set,
+      if (($video_set = $cache->get($token)) === FALSE)
       {
-        // If the cache isn't set,
-        if (($video_set = $cache->get($settings['id'])) === FALSE)
-        {
-          // make the request,
-          $video_set = $vimeography->fetch();
+        // make the request,
+        $video_set = $vimeography->fetch();
 
-          // and cache the results.
-          if ($settings['cache'] != 0)
-            $transient = $cache->set($settings['id'], $video_set, $settings['cache']);
-        }
-      }
-      // Otherwise, let's see if a cache exists for these particular
-      // shortcode settings, and if not, we'll create one using an
-      // alternate cache name generated using an md5 of the serialized
-      // shortcode combined with the gallery id.
-      else
-      {
-        $cache_hash = $settings['id'].'_'.md5(serialize($settings_check));
-
-        // The `option_name` column has a limit of 64 characters,
-        // so we need to shorten the generated hash.
-        $cache_hash = substr($cache_hash, 0, -10);
-
-        // If the cache isn't set,
-        if (($video_set = $cache->get($cache_hash)) === FALSE)
-        {
-          // make the request,
-          $video_set = $vimeography->fetch();
-
-          // and cache the results.
-          if ($settings['cache'] != 0)
-            $transient = $cache->set($cache_hash, $video_set, $settings['cache']);
-        }
+        // and cache the results.
+        if ($shortcode_gallery_settings['cache'] != 0)
+          $transient = $cache->set($token, $video_set, $shortcode_gallery_settings['cache']);
       }
 
       // Render that ish.
@@ -485,6 +480,7 @@ class Vimeography
   private function _move_folder($args = array())
   {
     require_once(ABSPATH . 'wp-admin/includes/upgrade.php');
+
     // Replaces simple `WP_Filesystem();` call to prevent any extraction issues
     // @link http://wpquestions.com/question/show/id/2685
     if (! function_exists('__return_direct'))
@@ -496,10 +492,16 @@ class Vimeography
     WP_Filesystem();
     remove_filter( 'filesystem_method', '__return_direct' );
 
-      global $wp_filesystem;
-    $defaults = array( 'source' => '', 'destination' => '', //Please always pass these
-            'clear_destination' => false, 'clear_working' => false,
-            'hook_extra' => array());
+    global $wp_filesystem;
+
+    // Always pass these
+    $defaults = array(
+      'source'            => '',
+      'destination'       => '',
+      'clear_destination' => false,
+      'clear_working'     => false,
+      'hook_extra'        => array(),
+    );
 
     $args = wp_parse_args($args, $defaults);
     extract($args);
@@ -509,15 +511,14 @@ class Vimeography
     if ( empty($source) || empty($destination) )
       return new WP_Error('bad_request', 'bad request.');
 
-    // $this->skin->feedback('installing_package');
-
     //Retain the Original source and destinations
-    $remote_source = $source;
+    $remote_source     = $source;
     $local_destination = $destination;
 
-    if (! $wp_filesystem->dirlist($remote_source)) return FALSE;
+    if (! $wp_filesystem->dirlist($remote_source))
+      return FALSE;
 
-    $source_files = array_keys( $wp_filesystem->dirlist($remote_source) );
+    $source_files       = array_keys( $wp_filesystem->dirlist($remote_source) );
     $remote_destination = $wp_filesystem->find_folder($local_destination);
 
     //Locate which directory to copy to the new folder, This is based on the actual folder holding the files.

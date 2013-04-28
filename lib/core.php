@@ -2,8 +2,8 @@
 
 class Vimeography_Core extends Vimeography
 {
-	const ENDPOINT = 'http://vimeo.com/api/v2/';
-	const FORMAT = '.json';
+  const ENDPOINT = 'http://vimeo.com/api/v2/';
+  const FORMAT = '.json';
 
   /**
    * The type of source that we're retrieving videos from.
@@ -28,10 +28,15 @@ class Vimeography_Core extends Vimeography
    */
   private $_featured_value;
 
+  /**
+   * Limit a gallery to show only this amount of videos.
+   *
+   * @var int
+   */
   private $_limit;
 
-	public function __construct($settings)
-	{
+  public function __construct($settings)
+  {
     if ($url = $this->_validate_vimeo_source($settings['source']))
     {
       $source_data         = $this->_get_vimeo_source_data($url);
@@ -39,7 +44,7 @@ class Vimeography_Core extends Vimeography
       $this->_source_value = $source_data['value'];
     }
 
-    if (isset($settings['featured']) AND $url = $this->_validate_vimeo_source($settings['source']))
+    if (isset($settings['featured']) AND !empty($settings['featured']) AND $url = $this->_validate_vimeo_source($settings['featured']))
     {
       $source_data           = $this->_get_vimeo_source_data($url);
       $this->_featured_value = $source_data['value'];
@@ -47,24 +52,22 @@ class Vimeography_Core extends Vimeography
 
     if (isset($settings['limit']))
       $this->_limit = $settings['limit'];
-	}
+  }
 
-	/**
-	 * Fetch the videos to be displayed in the Vimeography Gallery.
+  /**
+   * Fetch the videos to be displayed in the Vimeography Gallery.
    *
-	 * @return string  $result_set JSON Object of Vimeo Videos
-	 */
-	public function fetch()
-	{
-		$result = array();
-
+   * @return string  $result_set JSON Object of Vimeo Videos
+   */
+  public function fetch()
+  {
     $request_url = $this->_get_vimeo_request_url($this->_source_type, $this->_source_value);
     $video_set   = $this->_make_simple_vimeo_request($request_url);
 
-    if (! empty($this->_featured))
+    if (! empty($this->_featured_value))
     {
-			$request_url    = $this->_get_vimeo_request_url('video', $this->_featured_value);
-			$featured_video = $this->_make_simple_vimeo_request($request_url);
+      $request_url    = $this->_get_vimeo_request_url('video', $this->_featured_value);
+      $featured_video = $this->_make_simple_vimeo_request($request_url);
     }
     else
     {
@@ -76,10 +79,10 @@ class Vimeography_Core extends Vimeography
     if (isset($this->_limit))
       $result_set = $this->_limit_video_set($result_set);
 
-		// $combined_json = str_replace(']', ',', $videos) . str_replace('[', ' ', $response);
+    // $combined_json = str_replace(']', ',', $videos) . str_replace('[', ' ', $response);
 
-		return $result_set;
-	}
+    return $result_set;
+  }
 
   /**
    * Remove videos from the video set if there is an imposing limit.
@@ -119,7 +122,7 @@ class Vimeography_Core extends Vimeography
       // If so, remove it from the set and place at front.
       foreach ($video_set as $key => $video)
       {
-        if ($video['id'] === $video_to_check['id'])
+        if ($video['id'] === $video_to_check[0]['id'])
         {
           unset($video_set[$key]);
           $found = TRUE;
@@ -132,7 +135,7 @@ class Vimeography_Core extends Vimeography
         array_pop($video_set);
 
       // Add the featured video to the front.
-      array_unshift($video_set, $featured_video);
+      array_unshift($video_set, $video_to_check[0]);
 
       $video_set = json_encode(array_values($video_set));
     }
@@ -184,7 +187,7 @@ class Vimeography_Core extends Vimeography
       }
       else
       {
-      	array_unshift($url, 'users');
+        array_unshift($url, 'users');
       }
     }
 
@@ -201,54 +204,54 @@ class Vimeography_Core extends Vimeography
  * @param  string $source_value The source value [eg. staffpicks, hd]
  * @return string               Vimeo Simple API URL
  */
-	private static function _get_vimeo_request_url($source_type, $source_value)
-	{
-		switch ($source_type)
-		{
-			case 'album':
-				$result = 'album/' . $source_value . '/videos';
-				break;
-			case 'channel':
-				$result = 'channel/' . $source_value . '/videos';
-				break;
-			case 'group':
-				$result = 'group/' . $source_value . '/videos';
-				break;
-			case 'user':
-				$result = $source_value . '/videos';
-				break;
-			case 'video':
-				$result = 'video/' . $source_value;
-				break;
-			default:
-				throw new Vimeography_Exception($source_type.' is not a valid Vimeo source parameter.');
-				break;
-		}
+  private static function _get_vimeo_request_url($source_type, $source_value)
+  {
+    switch ($source_type)
+    {
+      case 'album':
+        $result = 'album/' . $source_value . '/videos';
+        break;
+      case 'channel':
+        $result = 'channel/' . $source_value . '/videos';
+        break;
+      case 'group':
+        $result = 'group/' . $source_value . '/videos';
+        break;
+      case 'user':
+        $result = $source_value . '/videos';
+        break;
+      case 'video':
+        $result = 'video/' . $source_value;
+        break;
+      default:
+        throw new Vimeography_Exception($source_type.' is not a valid Vimeo source parameter.');
+        break;
+    }
 
-		return self::ENDPOINT.$result.self::FORMAT;
-	}
+    return self::ENDPOINT.$result.self::FORMAT;
+  }
 
-	/**
+  /**
    * Send a cURL Wordpress request to retrieve the requested data from the Vimeo simple API.
    *
    * @param  string $url Vimeo API source
    * @return string      JSON string
    */
-	private static function _make_simple_vimeo_request($url)
-	{
-		$response = wp_remote_get($url, array('timeout' => 10));
+  private static function _make_simple_vimeo_request($url)
+  {
+    $response = wp_remote_get($url, array('timeout' => 10));
 
-		if (isset($response->errors))
-		{
-			foreach ($response->errors as $error)
-			{
-				throw new Vimeography_Exception('the plugin did not retrieve data from the Vimeo API! '. $error[0]);
-			}
-		}
+    if (isset($response->errors))
+    {
+      foreach ($response->errors as $error)
+      {
+        throw new Vimeography_Exception('the plugin did not retrieve data from the Vimeo API! '. $error[0]);
+      }
+    }
 
-		if (strpos($response['body'], 'not found'))
-			throw new Vimeography_Exception('the plugin could not retrieve data from the Vimeo API! '. $response['body']);
+    if (strpos($response['body'], 'not found'))
+      throw new Vimeography_Exception('the plugin could not retrieve data from the Vimeo API! '. $response['body']);
 
-		return $response['body'];
-	}
+    return $response['body'];
+  }
 }
