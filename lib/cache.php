@@ -13,7 +13,7 @@ class Vimeography_Cache extends Vimeography
    */
   protected static function get($id)
   {
-    return FALSE === ( $vimeography_cache_results = get_transient( 'vimeography_cache_'.$id ) ) ? FALSE : $vimeography_cache_results;
+    return FALSE === ( $vimeography_cache_results = get_transient( 'vimeography_'.$id ) ) ? FALSE : $vimeography_cache_results;
   }
 
   /**
@@ -28,7 +28,7 @@ class Vimeography_Cache extends Vimeography
    */
   protected static function set($id, $data, $cache_limit)
   {
-    return set_transient( 'vimeography_cache_'.$id, $data, $cache_limit );
+    return set_transient( 'vimeography_'.$id, $data, $cache_limit );
   }
 
   /**
@@ -41,6 +41,6 @@ class Vimeography_Cache extends Vimeography
    */
   protected static function delete($id)
   {
-    return delete_transient('vimeography_cache_'.$id);
+    return delete_transient('vimeography_'.$id);
   }
 }
