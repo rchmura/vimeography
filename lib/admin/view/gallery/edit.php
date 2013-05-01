@@ -115,31 +115,39 @@ class Vimeography_Gallery_Edit extends Vimeography_Base
     {
       // If so, include it here and loop through each setting.
       include_once($this->_settings_file);
+
       $results = array();
 
       foreach ($settings as $setting)
       {
-        // If the setting type isn't set, throw an error.
-        if (! isset($setting['type']))
-          throw new Vimeography_Exception(__('One of your active theme settings does not specify the type of setting it is.'));
+        try
+        {
+          // If the setting type isn't set, throw an error.
+          if (! isset($setting['type']))
+            throw new Vimeography_Exception(__('One of your active theme settings does not specify the type of setting it is.'));
 
-        // If the setting type class isn't found, throw an error.
-        if (!@require_once(VIMEOGRAPHY_PATH . 'lib/admin/view/theme/settings/'.$setting['type'].'.php'))
-          throw new Vimeography_Exception(__('"'.esc_attr($setting['type']).'" is not a valid Vimeography theme setting type.'));
+          // If the setting type class isn't found, throw an error.
+          if (! @include_once(VIMEOGRAPHY_PATH . 'lib/admin/view/theme/settings/'.$setting['type'].'.php'))
+            throw new Vimeography_Exception(__('"'.esc_attr($setting['type']).'" is not a valid Vimeography theme setting type.'));
 
-        // Otherwise, include the setting if there are no errors with the class.
-        $class = 'Vimeography_Theme_Settings_'.ucfirst($setting['type']);
+          // Otherwise, include the setting if there are no errors with the class.
+          $class = 'Vimeography_Theme_Settings_'.ucfirst($setting['type']);
 
-        if (!class_exists($class))
-          throw new Vimeography_Exception( __('The "') . $setting['type'] . __('" setting type does not exist or is improperly structured.') );
+          if (!class_exists($class))
+            throw new Vimeography_Exception( __('The "') . $setting['type'] . __('" setting type does not exist or is improperly structured.') );
 
-        // Load the template file for the current theme setting.
-        $mustache = new $class;
-        $template = $this->_load_template('theme/settings/'.$setting['type']);
+          // Load the template file for the current theme setting.
+          $mustache = new $class;
+          $template = $this->_load_template('theme/settings/'.$setting['type']);
 
-        // Populate the setting type class and render the results from the template.
-        $mustache->settings = $setting;
-        $results[]['setting'] = $mustache->render($template);
+          // Populate the setting type class and render the results from the template.
+          $mustache->settings = $setting;
+          $results[]['setting'] = $mustache->render($template);
+        }
+        catch (Vimeography_Exception $e)
+        {
+          wp_die("Vimeography error: ".$e->getMessage());
+        }
       }
 
       return $results;
