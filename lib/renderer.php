@@ -1,30 +1,43 @@
 <?php
 
-class Vimeography_Renderer extends Vimeography_Core
+class Vimeography_Renderer
 {
+  protected $_theme;
+
   /**
    * The gallery ID to be sent to the Mustache template.
-   * @var integer
+   *
+   * @var string
    */
   private $_gallery_id;
 
   /**
-   * The name of the theme, used to load the proper template.
-   * @var string
-   */
-  private $_theme;
-
-  /**
    * The gallery width to be sent to the Mustache template.
+   *
    * @var string
    */
   private $_gallery_width;
 
-  public function __construct($settings)
+  public function __construct($settings, $token)
   {
-    $this->_gallery_id    = $settings['id'];
-    $this->_theme         = $settings['theme'];
-    $this->_gallery_width = $settings['width'];
+    if (! isset($settings['theme']))
+      throw new Vimeography_Exception('You must specify a theme in either the admin panel or the shortcode.');
+
+    if (!@require_once(VIMEOGRAPHY_THEME_PATH . $settings['theme'] . '/'.$settings['theme'].'.php'))
+      throw new Vimeography_Exception('The "'.$settings['theme'].'" theme does not exist or is improperly structured.');
+
+    $class = 'Vimeography_Themes_'.ucfirst($settings['theme']);
+
+    if (! class_exists($class))
+      throw new Vimeography_Exception('The "'.$settings['theme'].'" theme class does not exist or is improperly structured.');
+
+    $mustache = new Mustache_Engine(array('loader' => new Mustache_Loader_FilesystemLoader(VIMEOGRAPHY_THEME_PATH),));
+
+    $this->_view  = new $class;
+    $this->_theme = $mustache->loadTemplate($settings['theme'] . '/videos');
+
+    $this->_view->gallery_id    = $token;
+    $this->_view->gallery_width = $settings['width'];
   }
 
   /**
@@ -34,28 +47,12 @@ class Vimeography_Renderer extends Vimeography_Core
    * @param  array $data [description]
    * @return string       [description]
    */
-  protected function render($data)
+  public function render($data)
   {
-    if (! isset($this->_theme))
-      throw new Vimeography_Exception('You must specify a theme in either the admin panel or the shortcode.');
+    $this->_view->data     = $data;
+    $this->_view->featured = $this->_view->data[0];
 
-    if (!@require_once(VIMEOGRAPHY_THEME_PATH . $this->_theme . '/'.$this->_theme.'.php'))
-      throw new Vimeography_Exception('The "'.$this->_theme.'" theme does not exist or is improperly structured.');
-
-    $class = 'Vimeography_Themes_'.ucfirst($this->_theme);
-
-    if (! class_exists($class))
-      throw new Vimeography_Exception('The "'.$this->_theme.'" theme class does not exist or is improperly structured.');
-
-    $mustache = new $class;
-    $theme    = $this->_load_theme($this->_theme);
-
-    $mustache->data          = json_decode($data);
-    $mustache->gallery_id    = $this->_gallery_id;
-    $mustache->featured      = $mustache->data[0];
-    $mustache->gallery_width = $this->_gallery_width;
-
-    return $mustache->render($theme);
+    return $this->_theme->render($this->_view);
   }
 
   /**
@@ -68,24 +65,9 @@ class Vimeography_Renderer extends Vimeography_Core
   {
     echo '<h1>Vimeography Debug</h1>';
     echo '<pre>';
-    print_r(json_decode($data));
+    print_r($data);
     echo '</pre>';
     die;
   }
 
-  /**
-   * Retrieves the contents of a Vimeography theme's mustache template.
-   *
-   * @access private
-   * @static
-   * @param mixed $name
-   * @return void
-   */
-  private static function _load_theme($name)
-  {
-    $path = VIMEOGRAPHY_THEME_PATH . $name . '/videos.mustache';
-    if (! $result = @file_get_contents($path))
-      throw new Vimeography_Exception('The gallery template for the "'.$name.'" theme cannot be found.');
-    return $result;
-  }
 }

@@ -32,8 +32,11 @@ define( 'VIMEOGRAPHY_CURRENT_PAGE', basename($_SERVER['PHP_SELF']));
 require_once(VIMEOGRAPHY_PATH . 'lib/exception.php');
 
 // Require Mustache.php
-if (! class_exists('Mustache'))
-  require_once(VIMEOGRAPHY_PATH . '/vendor/mustache/Mustache.php');
+if (! class_exists('Mustache_Engine'))
+{
+  require_once(VIMEOGRAPHY_PATH . '/vendor/mustache.php-master/src/Mustache/Autoloader.php');
+  Mustache_Autoloader::register();
+}
 
 class Vimeography
 {
@@ -208,64 +211,62 @@ class Vimeography
     wp_enqueue_script( 'bootstrap-alert');
     wp_enqueue_script( 'vimeography-admin.js');
 
+    $mustache = new Mustache_Engine(array('loader' => new Mustache_Loader_FilesystemLoader(VIMEOGRAPHY_PATH . 'lib/admin/templates'),));
     require_once(VIMEOGRAPHY_PATH . 'lib/admin/base.php');
 
     switch(current_filter())
     {
       case 'vimeography_page_vimeography-new-gallery':
         require_once(VIMEOGRAPHY_PATH . 'lib/admin/view/gallery/new.php');
-        $mustache = new Vimeography_Gallery_New();
-        $template = $this->_load_template('gallery/new');
+        $view = new Vimeography_Gallery_New;
+        $template = $mustache->loadTemplate('gallery/new');
         break;
       case 'toplevel_page_vimeography-edit-galleries':
         if (isset($_GET['id']))
         {
           require_once(VIMEOGRAPHY_PATH . 'lib/admin/view/gallery/edit.php');
-          $mustache = new Vimeography_Gallery_Edit();
-          $template = $this->_load_template('gallery/edit/layout');
+          $view = new Vimeography_Gallery_Edit;
+
+          $mustache->setPartialsLoader( new Mustache_Loader_CascadingLoader( array(
+              new Mustache_Loader_FilesystemLoader(VIMEOGRAPHY_PATH . 'lib/admin/templates/gallery/edit/partials'),
+            ) )
+          );
+
+          apply_filters('vimeography-pro/load-edit-partials', $mustache->getPartialsLoader());
+
+          //$mustache->setPartialsLoader(new Mustache_Loader_FilesystemLoader(VIMEOGRAPHY_PATH . 'lib/admin/templates/gallery/edit/partials'));
+
+          $template = $mustache->loadTemplate('gallery/edit/layout');
+
         }
         else
         {
           require_once(VIMEOGRAPHY_PATH . 'lib/admin/view/gallery/list.php');
-          $mustache = new Vimeography_Gallery_List();
-          $template = $this->_load_template('gallery/list');
+          $view = new Vimeography_Gallery_List;
+          $template = $mustache->loadTemplate('gallery/list');
         }
         break;
       case 'vimeography_page_vimeography-my-themes':
         require_once(VIMEOGRAPHY_PATH . 'lib/admin/view/theme/list.php');
-        $mustache = new Vimeography_Theme_List();
-        $template = $this->_load_template('theme/list');
+        $view = new Vimeography_Theme_List;
+        $template = $mustache->loadTemplate('theme/list');
         break;
       case 'vimeography_page_vimeography-pro':
         require_once(VIMEOGRAPHY_PATH . 'lib/admin/view/vimeography/pro.php');
-        $mustache = new Vimeography_Pro_About();
-        $template = $this->_load_template('vimeography/pro');
+        $view = new Vimeography_Pro_About;
+        $template = $mustache->loadTemplate('vimeography/pro');
         break;
       case 'vimeography_page_vimeography-help':
         require_once(VIMEOGRAPHY_PATH . 'lib/admin/view/vimeography/help.php');
-        $mustache = new Vimeography_Help();
-        $template = $this->_load_template('vimeography/help');
+        $view = new Vimeography_Help;
+        $template = $mustache->loadTemplate('vimeography/help');
         break;
       default:
         wp_die( __('The admin template for "'.current_filter().'" cannot be found.') );
       break;
     }
-    echo $mustache->render($template);
-  }
 
-  /**
-   * Returns the file contents for the provided mustache template. Common Function.
-   *
-   * @access protected
-   * @param mixed $name
-   * @return void
-   */
-  protected function _load_template($name)
-  {
-    $path = VIMEOGRAPHY_PATH . 'lib/admin/templates/' . $name .'.mustache';
-    if (! $result = @file_get_contents($path))
-      wp_die('The admin template "'.$name.'" cannot be found.');
-    return $result;
+    echo $template->render($view);
   }
 
   /**
@@ -417,19 +418,21 @@ class Vimeography
 
     try
     {
+      require_once(VIMEOGRAPHY_PATH . 'lib/core.php');
+      require_once(VIMEOGRAPHY_PATH . 'lib/renderer.php');
+
       if ( class_exists( 'Vimeography_Pro' ) )
       {
         do_action('vimeography/load_pro');
-        $vimeography = new Vimeography_Pro_Core($shortcode_gallery_settings);
-        $renderer    = new Vimeography_Pro_Renderer($shortcode_gallery_settings);
+        $vimeography = new Vimeography_Core_Pro($shortcode_gallery_settings);
+        $renderer    = new Vimeography_Pro_Renderer($shortcode_gallery_settings, $token);
       }
       else
       {
-        require_once(VIMEOGRAPHY_PATH . 'lib/core.php');
-        require_once(VIMEOGRAPHY_PATH . 'lib/renderer.php');
+        require_once(VIMEOGRAPHY_PATH . 'lib/core/basic.php');
 
-        $vimeography = new Vimeography_Core($shortcode_gallery_settings);
-        $renderer    = new Vimeography_Renderer($shortcode_gallery_settings);
+        $vimeography = new Vimeography_Core_Basic($shortcode_gallery_settings);
+        $renderer    = new Vimeography_Renderer($shortcode_gallery_settings, $token);
       }
 
       require_once(VIMEOGRAPHY_PATH . 'lib/cache.php');
@@ -442,8 +445,8 @@ class Vimeography
         $video_set = $vimeography->fetch();
 
         // and cache the results.
-        if ($shortcode_gallery_settings['cache'] != 0)
-          $transient = $cache->set($token, $video_set, $shortcode_gallery_settings['cache']);
+        // if ($shortcode_gallery_settings['cache'] != 0)
+        //   $transient = $cache->set($token, $video_set, $shortcode_gallery_settings['cache']);
       }
 
       // Render that ish.

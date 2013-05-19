@@ -12,13 +12,6 @@ class Vimeography_Gallery_Edit extends Vimeography_Base
 
   public function __construct()
   {
-    // setup the partial names and templates
-    $this->_partials = array(
-      'settings_group'     => $this->_load_template('gallery/edit/partials/settings_group'),
-      'appearance_group'   => $this->_load_template('gallery/edit/partials/appearance_group'),
-      'themes_container'   => $this->_load_template('gallery/edit/partials/themes_container'),
-      'settings_container' => $this->_load_template('gallery/edit/partials/settings_container'),
-    );
 
     if (isset($_POST))
       $this->_validate_form();
@@ -69,6 +62,7 @@ class Vimeography_Gallery_Edit extends Vimeography_Base
     {
       $this->messages[] = array('type' => 'success', 'heading' => __('Gallery created.'), 'message' => __('Well, that was easy.') );
     }
+
   }
 
   /**
@@ -134,12 +128,14 @@ class Vimeography_Gallery_Edit extends Vimeography_Base
           throw new Vimeography_Exception( __('The "') . $setting['type'] . __('" setting type does not exist or is improperly structured.') );
 
         // Load the template file for the current theme setting.
-        $mustache = new $class;
-        $template = $this->_load_template('theme/settings/'.$setting['type']);
+        $mustache = new Mustache_Engine(array('loader' => new Mustache_Loader_FilesystemLoader(VIMEOGRAPHY_PATH . 'lib/admin/templates/theme/settings'),));
+
+        $view = new $class;
+        $template = $mustache->loadTemplate($setting['type']);
 
         // Populate the setting type class and render the results from the template.
-        $mustache->settings = $setting;
-        $results[]['setting'] = $mustache->render($template);
+        $view->settings = $setting;
+        $results[]['setting'] = $template->render($view);
       }
 
       return $results;
@@ -344,21 +340,6 @@ class Vimeography_Gallery_Edit extends Vimeography_Base
         $this->messages[] = array('type' => 'error', 'heading' => __('Oh no!'), 'message' => $e->getMessage());
       }
     }
-  }
-
-  /**
-   * Returns the file contents for the provided mustache template. Common Function.
-   *
-   * @access protected
-   * @param mixed $name
-   * @return void
-   */
-  protected function _load_template($name)
-  {
-    $path = VIMEOGRAPHY_PATH . 'lib/admin/templates/' . $name .'.mustache';
-    if (! $result = @file_get_contents($path))
-      wp_die('The admin template "'.$name.'" cannot be found.');
-    return $result;
   }
 
 }
