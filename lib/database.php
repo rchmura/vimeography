@@ -120,4 +120,53 @@ class Vimeography_Database extends Vimeography
     }
   }
 
+  /**
+   * [vimeography_update_db_to_1_0 description]
+   * This is being called twice due to other functions in this class calling vimeography_update_tables() (i think?)
+   * dbdelta makes the modifications before the query below is even run.
+   * @return [type] [description]
+   */
+  public function vimeography_update_db_to_1_0()
+  {
+    if (get_option('vimeography_db_version') < 1)
+    {
+      global $wpdb;
+      $wpdb->hide_errors();
+
+      $wpdb->query('ALTER TABLE '.VIMEOGRAPHY_GALLERY_META_TABLE.' ADD resource_uri VARCHAR(50) NOT NULL AFTER source_url;');
+
+      $rows = $wpdb->get_results('SELECT gallery_id, source_url FROM '.VIMEOGRAPHY_GALLERY_META_TABLE.' WHERE 1');
+
+      if (!empty($rows))
+      {
+        foreach ($rows as $row)
+        {
+          try
+          {
+            // Convert source_url to resource, then update with value
+            $resource_uri = $this->validate_vimeo_source($row->source_url);
+            $wpdb->update( VIMEOGRAPHY_GALLERY_META_TABLE, array('resource_uri' => $resource_uri), array('gallery_id' => $row->gallery_id) );
+
+          }
+          catch (Vimeography_Exception $e)
+          {
+            // source_url was not valid, delete row from database
+            $wpdb->query(
+              $wpdb->prepare(
+                '
+                DELETE gallery, meta
+                FROM '.VIMEOGRAPHY_GALLERY_TABLE.' gallery, '.VIMEOGRAPHY_GALLERY_META_TABLE.' meta
+                WHERE gallery.id = %d
+                AND meta.gallery_id = %d
+                ',
+                $row->gallery_id, $row->gallery_id
+              )
+            );
+          }
+
+        }
+      }
+    }
+  }
+
 }

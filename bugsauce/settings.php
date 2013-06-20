@@ -1,57 +1,64 @@
 <?php
 
-/*
-Example setting:
-
+$settings = array(
   array(
-    'id'        => 'thumbnail-container-background-color',                  // arbitrary selector for the setting in the form
-    'target'    => '.vimeography-bugsauce .vimeography-thumbnail-container', // target elements to affect, separated by commas
-    'attribute' => 'color',
-    'label'     => __('Thumbnail Container Background Color'),              // setting field label text
-    'value'     => '#232323',                                               // target attribute value
-    'type'      => 'colorpicker',                                           // vimeography setting type
-    ),
-*/
-
-$settings        = array(
+    'type'       => 'colorpicker',
+    'label'      => __('Active Thumbnail Border Color'),
+    'id'         => 'active-thumbnail-border-color',
+    'value'      => '#0088CC',
+    'namespace'  => TRUE,
+    'properties' =>
+      array(
+        array('target' => '.vimeography-bugsauce .vimeography-thumbnails .vimeography-slides li.vimeography-bugsauce-active-slide img', 'attribute' => 'borderColor'),
+      )
+  ),
   array(
-    'id'        => 'active-thumbnail-border-color',
-    'target'    => '.vimeography-bugsauce .vimeography-thumbnails .slides li.vimeography-bugsauce-active-slide img',
-    'attribute' => 'borderColor',
-    'label'     => __('Active Thumbnail Border Color'),
-    'value'     => '#0088CC',
-    'type'      => 'colorpicker',
-    ),
+    'type'       => 'colorpicker',
+    'label'      => __('Inactive Thumbnail Border Color'),
+    'id'         => 'inactive-thumbnail-border-color',
+    'value'      => '#0088CC',
+    'namespace'  => TRUE,
+    'properties' =>
+      array(
+        array('target' => '.vimeography-bugsauce .vimeography-thumbnails .vimeography-slides li img', 'attribute' => 'borderColor'),
+      )
+  ),
   array(
-    'id'        => 'inactive-thumbnail-border-color',
-    'target'    => '.vimeography-bugsauce .vimeography-thumbnails .slides li img',
-    'attribute' => 'borderColor',
-    'label'     => __('Inactive Thumbnail Border Color'),
-    'value'     => '#0088CC',
-    'type'      => 'colorpicker',
-    ),
+    'type'       => 'colorpicker',
+    'label'      => __('Pager Arrow Color'),
+    'id'         => 'pager-arrow-color',
+    'value'      => '#000000',
+    'namespace'  => TRUE,
+    'properties' =>
+      array(
+        array('target' => '.vimeography-bugsauce .vimeography-bugsauce-direction-nav a.vimeography-bugsauce-prev span', 'attribute' => 'borderRightColor'),
+        array('target' => '.vimeography-bugsauce .vimeography-bugsauce-direction-nav a.vimeography-bugsauce-next span', 'attribute' => 'borderLeftColor'),
+      )
+  ),
   array(
-    'id'        => 'prev-arrow-color',
-    'target'    => '.vimeography-bugsauce .vimeography-bugsauce-direction-nav a.vimeography-bugsauce-prev span',
-    'attribute' => 'borderRightColor',
-    'label'     => __('Previous Arrow Color'),
-    'value'     => '#000000',
-    'type'      => 'colorpicker',
-    ),
+    'type'       => 'colorpicker',
+    'label'      => __('Loader Color'),
+    'id'         => 'loader-color',
+    'value'      => '#000000',
+    'namespace'  => TRUE,
+    'properties' =>
+      array(
+        array('target' => '.vimeography-bugsauce .vimeography-main .vimeography-spinner div div', 'attribute' => 'backgroundColor'),
+      )
+  ),
   array(
-    'id'        => 'next-arrow-color',
-    'target'    => '.vimeography-bugsauce .vimeography-bugsauce-direction-nav a.vimeography-bugsauce-next span',
-    'attribute' => 'borderLeftColor',
-    'label'     => __('Next Arrow Color'),
-    'value'     => '#000000',
-    'type'      => 'colorpicker',
-    ),
-  array(
-    'id'        => 'loader-color',
-    'target'    => '.vimeography-bugsauce .vimeography-main .spinner div div',
-    'attribute' => 'backgroundColor',
-    'label'     => __('Loader Color - must type !important after'),
-    'value'     => '#000000',
-    'type'      => 'colorpicker',
-    ),
+    'type'       => 'slider',
+    'label'      => __('Pager Arrow Size'),
+    'id'         => 'pager-arrow-size',
+    'value'      => '5',
+    'namespace'  => TRUE,
+    'properties' =>
+      array(
+        array('target' => '.vimeography-bugsauce .vimeography-bugsauce-direction-nav a.vimeography-bugsauce-prev span', 'attribute' => 'borderWidth'),
+        array('target' => '.vimeography-bugsauce .vimeography-bugsauce-direction-nav a.vimeography-bugsauce-next span', 'attribute' => 'borderWidth'),
+      ),
+    'min'       => '5',
+    'max'       => '10',
+    'step'      => '1',
+  ),
 );

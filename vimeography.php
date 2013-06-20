@@ -19,15 +19,18 @@ $wp_upload_dir = wp_upload_dir();
 // Define constants
 define( 'VIMEOGRAPHY_URL', plugin_dir_url(__FILE__) );
 define( 'VIMEOGRAPHY_PATH', plugin_dir_path(__FILE__) );
-define( 'VIMEOGRAPHY_THEME_URL', $wp_upload_dir['baseurl'].'/vimeography-themes/' );
-define( 'VIMEOGRAPHY_THEME_PATH', $wp_upload_dir['basedir'].'/vimeography-themes/' );
-define( 'VIMEOGRAPHY_ASSETS_URL', $wp_upload_dir['baseurl'].'/vimeography-assets/' );
-define( 'VIMEOGRAPHY_ASSETS_PATH', $wp_upload_dir['basedir'].'/vimeography-assets/' );
+define( 'VIMEOGRAPHY_THEME_URL',   WP_CONTENT_URL . '/vimeography/themes/' );
+define( 'VIMEOGRAPHY_THEME_PATH',  WP_CONTENT_DIR . '/vimeography/themes/' );
+define( 'VIMEOGRAPHY_ASSETS_URL',  WP_CONTENT_URL . '/vimeography/assets/' );
+define( 'VIMEOGRAPHY_ASSETS_PATH', WP_CONTENT_DIR . '/vimeography/assets/' );
+define( 'VIMEOGRAPHY_CACHE_URL',   WP_CONTENT_URL . '/vimeography/cache/' );
+define( 'VIMEOGRAPHY_CACHE_PATH',  WP_CONTENT_DIR . '/vimeography/cache/' );
 define( 'VIMEOGRAPHY_BASENAME', plugin_basename( __FILE__ ) );
 define( 'VIMEOGRAPHY_VERSION', '0.9.3');
 define( 'VIMEOGRAPHY_GALLERY_TABLE', $wpdb->prefix . "vimeography_gallery");
 define( 'VIMEOGRAPHY_GALLERY_META_TABLE', $wpdb->prefix . "vimeography_gallery_meta");
 define( 'VIMEOGRAPHY_CURRENT_PAGE', basename($_SERVER['PHP_SELF']));
+define( 'VIMEOGRAPHY_CLIENT_ID', 'a2beabbcbfc4cf69ae20acab8003df78');
 
 require_once(VIMEOGRAPHY_PATH . 'lib/exception.php');
 
@@ -107,6 +110,7 @@ class Vimeography
     $db->vimeography_update_db_to_0_6();
     $db->vimeography_update_db_to_0_7();
     $db->vimeography_update_db_to_0_8();
+    $db->vimeography_update_db_to_1_0();
     $this->vimeography_update_db_version();
   }
 
@@ -137,6 +141,18 @@ class Vimeography
   {
     $this->_move_folder(array('source' => VIMEOGRAPHY_PATH . 'bugsauce/', 'destination' => VIMEOGRAPHY_THEME_PATH.'bugsauce/', 'clear_destination' => true, 'clear_working' => true));
     $this->_move_folder(array('source' => VIMEOGRAPHY_PATH . 'theme-assets/', 'destination' => VIMEOGRAPHY_ASSETS_PATH, 'clear_destination' => true, 'clear_working' => true));
+
+    if (! file_exists(VIMEOGRAPHY_CACHE_PATH) )
+    {
+      if (! mkdir(VIMEOGRAPHY_CACHE_PATH) )
+      {
+        if( is_plugin_active( VIMEOGRAPHY_BASENAME ) )
+        {
+          deactivate_plugins( VIMEOGRAPHY_BASENAME );
+          wp_die( "Vimeography could not create the cache directory. Please contact your host and request permissions to write to your Wordpress installation's wp-content directory.<br /><br />Back to <a href='".admin_url()."'>WordPress admin</a>." );
+        }
+      }
+    }
 
     // Now, check if the .htaccess exists in the VIMEOGRAPHY_THEME_PATH
     if (file_exists(VIMEOGRAPHY_THEME_PATH.'.htaccess'))
@@ -281,17 +297,9 @@ class Vimeography
     delete_option('vimeography_default_settings');
     delete_option('vimeography_advanced_settings');
 
-    add_option('vimeography_advanced_settings', array(
-      'active'              => FALSE,
-      'client_id'           => '',
-      'client_secret'       => '',
-      'access_token'        => '',
-      'access_token_secret' => '',
-    ));
-
     add_option('vimeography_default_settings', array(
       'source_url'     => 'https://vimeo.com/channels/staffpicks/',
-      'video_limit'    => 20,
+      'resource_uri'   => '/channels/staffpicks',
       'featured_video' => '',
       'cache_timeout'  => 3600,
       'theme_name'     => 'bugsauce',
@@ -308,6 +316,7 @@ class Vimeography
     id mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
     gallery_id mediumint(8) unsigned NOT NULL,
     source_url varchar(100) NOT NULL,
+    resource_uri varchar(50) NOT NULL,
     video_limit mediumint(7) NOT NULL,
     featured_video varchar(100) DEFAULT NULL,
     gallery_width varchar(10) DEFAULT NULL,
@@ -321,6 +330,53 @@ class Vimeography
     dbDelta($sql);
   }
 
+    /**
+   * Checks if the provided Vimeo URL is valid and if so, returns an array
+   * containing the URL parts
+   *
+   * @param  string $source_url Source collection of Vimeo videos.
+   * @return string             Vimeo Resource
+   */
+  public static function validate_vimeo_source($source_url)
+  {
+    $scheme = parse_url($source_url);
+
+    if (empty($scheme['scheme']))
+      $source_url = 'https://' . $source_url;
+
+    if ((($url = parse_url($source_url)) !== FALSE) && (preg_match('~vimeo(?:pro)?\.com$~', $url['host']) > 0))
+    {
+
+      $url = array_filter(explode('/', $url['path']), 'strlen');
+
+      // If the array doesn't contain one of the following strings, it
+      // must be either a user or a video
+      if (in_array($url[1], array('album', 'channels', 'groups', 'categories')) !== TRUE)
+      {
+        if (is_numeric($url[1]))
+        {
+          array_unshift($url, 'videos');
+        }
+        elseif (isset($url[2]))
+        {
+          array_unshift($url, 'portfolios');
+        }
+        else
+        {
+          array_unshift($url, 'users');
+        }
+      }
+
+      // make sure the resource is plural
+      $resource  = '/' . rtrim(array_shift($url), 's') . 's/' . array_shift($url);
+      return $resource;
+    }
+    else
+    {
+      throw new Vimeography_Exception('That site doesn\'t look like a valid link to a Vimeo collection.');
+    }
+  }
+
   /**
    * Read the shortcode and return the output.
    * example:
@@ -332,130 +388,9 @@ class Vimeography
    */
   public function vimeography_shortcode($atts, $content = NULL)
   {
-    try
-    {
-      if (isset($atts['id']))
-      {
-        $atts['id'] = intval($atts['id']);
-        if ($atts['id'] != 0)
-        {
-          // Let's get the data for this gallery from the db
-          global $wpdb;
-          $db_gallery_settings = $wpdb->get_results('SELECT * from '.VIMEOGRAPHY_GALLERY_META_TABLE.' AS meta JOIN '.VIMEOGRAPHY_GALLERY_TABLE.' AS gallery ON meta.gallery_id = gallery.id WHERE meta.gallery_id = '.$atts['id'].' LIMIT 1;');
-
-          if ( empty($db_gallery_settings) )
-            throw new Vimeography_Exception('A gallery with the ID of '.$atts['id'].' was not found.');
-
-          $db_gallery_settings = $db_gallery_settings[0];
-        }
-        else
-        {
-          throw new Vimeography_Exception('You entered an invalid gallery ID.');
-        }
-      }
-      else
-      {
-        // ID not set, creating a gallery from shortcode
-        if (! empty($content))
-          throw new Vimeography_Exception('Inline galleries are not currently supported. Stay tuned!');
-      }
-    }
-    catch (Vimeography_Exception $e)
-    {
-      return "Error creating Vimeography gallery: ".$e->getMessage();
-    }
-
-    // Get admin panel options [starting basic shortcode]
-    $default_settings = get_option('vimeography_default_settings');
-
-    $fallback_gallery_settings['theme']    = isset($db_gallery_settings->theme_name)     ? $db_gallery_settings->theme_name     : $default_settings['theme_name'];
-    $fallback_gallery_settings['featured'] = isset($db_gallery_settings->featured_video) ? $db_gallery_settings->featured_video : $default_settings['featured_video'];
-    $fallback_gallery_settings['source']   = isset($db_gallery_settings->source_url)     ? $db_gallery_settings->source_url     : $default_settings['source_url'];
-    $fallback_gallery_settings['limit']    = isset($db_gallery_settings->video_limit)    ? $db_gallery_settings->video_limit    : $default_settings['video_limit'];
-    $fallback_gallery_settings['cache']    = isset($db_gallery_settings->cache_timeout)  ? $db_gallery_settings->cache_timeout  : $default_settings['cache_timeout'];
-    $fallback_gallery_settings['width']    = isset($db_gallery_settings->gallery_width)  ? $db_gallery_settings->gallery_width  : '';
-
-    // Get shortcode attributes
-    $shortcode_gallery_settings = shortcode_atts( array(
-      'theme'    => $fallback_gallery_settings['theme'],
-      'featured' => $fallback_gallery_settings['featured'],
-      'source'   => $fallback_gallery_settings['source'],
-      'limit'    => $fallback_gallery_settings['limit'],
-      'cache'    => $fallback_gallery_settings['cache'],
-      'width'    => $fallback_gallery_settings['width'],
-    ), $atts );
-
-    if (!empty($shortcode_gallery_settings['width']))
-    {
-      preg_match('/(\d*)(px|%?)/', $shortcode_gallery_settings['width'], $matches);
-      // If a number value is set...
-      if (!empty($matches[1]))
-      {
-        // If a '%' or 'px' is set...
-        if (!empty($matches[2]))
-        {
-          // Accept the valid matching string
-          $shortcode_gallery_settings['width'] = $matches[0];
-        }
-        else
-        {
-          // Append a 'px' value to the matching number
-          $shortcode_gallery_settings['width'] = $matches[1] . 'px';
-        }
-      }
-      else
-      {
-        // Not a valid width
-        $shortcode_gallery_settings['width'] = '';
-      }
-    }
-    // end basic shortcode
-
-    // Create a token for the resulting shortcode gallery settings
-    // The `option_name` column has a limit of 64 characters,
-    // so we need to shorten the generated hash.
-    $token = substr(md5(serialize($shortcode_gallery_settings)), 0, -24);
-
-    try
-    {
-      require_once(VIMEOGRAPHY_PATH . 'lib/core.php');
-      require_once(VIMEOGRAPHY_PATH . 'lib/renderer.php');
-
-      if ( class_exists( 'Vimeography_Pro' ) )
-      {
-        do_action('vimeography/load_pro');
-        $vimeography = new Vimeography_Core_Pro($shortcode_gallery_settings);
-        $renderer    = new Vimeography_Pro_Renderer($shortcode_gallery_settings, $token);
-      }
-      else
-      {
-        require_once(VIMEOGRAPHY_PATH . 'lib/core/basic.php');
-
-        $vimeography = new Vimeography_Core_Basic($shortcode_gallery_settings);
-        $renderer    = new Vimeography_Renderer($shortcode_gallery_settings, $token);
-      }
-
-      require_once(VIMEOGRAPHY_PATH . 'lib/cache.php');
-      $cache = new Vimeography_Cache;
-
-      // If the cache isn't set,
-      if (($video_set = $cache->get($token)) === FALSE)
-      {
-        // make the request,
-        $video_set = $vimeography->fetch();
-
-        // and cache the results.
-        // if ($shortcode_gallery_settings['cache'] != 0)
-        //   $transient = $cache->set($token, $video_set, $shortcode_gallery_settings['cache']);
-      }
-
-      // Render that ish.
-      return $renderer->render($video_set);
-    }
-    catch (Vimeography_Exception $e)
-    {
-      return "Vimeography error: ".$e->getMessage();
-    }
+    require_once(VIMEOGRAPHY_PATH . 'lib/shortcode.php');
+    $shortcode = new Vimeography_Shortcode($atts, $content);
+    return $shortcode->output();
   }
 
   /**

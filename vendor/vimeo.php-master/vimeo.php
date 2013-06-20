@@ -33,7 +33,7 @@ class Vimeo
      * @param  string $method [description]
      * @return [type]         [description]
      */
-    public function request($url, $params = array(), $method = 'GET')
+    public function request($url, $params = array(), $last_modified = NULL, $method = 'GET')
     {
         $params['client_id'] = $this->_client_id;
 
@@ -62,6 +62,9 @@ class Vimeo
         } else if (!empty($this->_client_id) && !empty($this->_client_secret)) {
             $headers[] = 'Authorization: Basic ' . base64_encode($this->_client_id . ':' . $this->_client_secret);
         }
+
+        if ($last_modified !== NULL)
+            $headers[] =  'If-Modified-Since: ' . $last_modified;
 
         $curl_opts[CURLOPT_HTTPHEADER] = $headers;
 

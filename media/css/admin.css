@@ -1,3 +1,4 @@
+body {position: relative;}
 hr { border: 0; height: 0; border-top: 1px solid rgba(0, 0, 0, 0.1); border-bottom: 1px solid rgba(255, 255, 255, 0.3); }
 
 .wp-admin select {
@@ -323,6 +324,7 @@ background-position: -360px -144px;
 
 .popover-content p {margin: 0;}
 #vimeography-gallery-menu-container.affix {position: fixed; top: 40px; left: 165px;}
+#vimeography-gallery-menu-container.affix-bottom {position: absolute; bottom: 150px;}
 
 /* Custom Scrollbar */
 /* basic scrollbar styling */

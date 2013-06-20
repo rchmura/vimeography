@@ -23,18 +23,23 @@ class Vimeography_Renderer
     if (! isset($settings['theme']))
       throw new Vimeography_Exception('You must specify a theme in either the admin panel or the shortcode.');
 
-    if (!@require_once(VIMEOGRAPHY_THEME_PATH . $settings['theme'] . '/'.$settings['theme'].'.php'))
-      throw new Vimeography_Exception('The "'.$settings['theme'].'" theme does not exist or is improperly structured.');
+    $theme = $settings['theme'];
 
-    $class = 'Vimeography_Themes_'.ucfirst($settings['theme']);
+    if (! require_once(VIMEOGRAPHY_THEME_PATH . $theme . '/' . $theme . '.php' ) )
+      throw new Vimeography_Exception('The "' . $theme . '" theme does not exist or is improperly structured.');
+
+    $class = 'Vimeography_Themes_'.ucfirst( $theme );
 
     if (! class_exists($class))
-      throw new Vimeography_Exception('The "'.$settings['theme'].'" theme class does not exist or is improperly structured.');
+      throw new Vimeography_Exception('The "' . $theme . '" theme class does not exist or is improperly structured.');
 
-    $mustache = new Mustache_Engine(array('loader' => new Mustache_Loader_FilesystemLoader(VIMEOGRAPHY_THEME_PATH),));
+    $mustache = new Mustache_Engine( array(
+      'loader' => new Mustache_Loader_FilesystemLoader(VIMEOGRAPHY_THEME_PATH . '/' . $theme),
+      'partials_loader' => new Mustache_Loader_FilesystemLoader(VIMEOGRAPHY_THEME_PATH . '/' . $theme . '/partials'),
+    ) );
 
     $this->_view  = new $class;
-    $this->_theme = $mustache->loadTemplate($settings['theme'] . '/videos');
+    $this->_theme = $mustache->loadTemplate( $theme );
 
     $this->_view->gallery_id    = $token;
     $this->_view->gallery_width = $settings['width'];
@@ -53,6 +58,15 @@ class Vimeography_Renderer
     $this->_view->featured = $this->_view->data[0];
 
     return $this->_theme->render($this->_view);
+  }
+
+  /**
+   * [set_paging description]
+   * @param [type] $paging [description]
+   */
+  public function set_paging($paging)
+  {
+    $this->_view->paging = $paging;
   }
 
   /**

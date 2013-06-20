@@ -2,32 +2,37 @@
 /*
 Theme Name: Bugsauce
 Theme URI: vimeography.com/themes/bugsauce
-Version: 2.0
+Version: 3.0
 Description: is the base theme that comes prepackaged with Vimeography.
 Author: Dave Kiss
 Author URI: vimeography.com
 */
 
-class Vimeography_Themes_Bugsauce extends Mustache
+class Vimeography_Themes_Bugsauce
 {
-  public $version = '2.0';
-  public $data;
-  public $featured;
-  public $gallery_id;
-  public $gallery_width;
-    
+  public $version = '3.0';
+
+  public $enable_byline = 0;
+  public $enable_title = 0;
+  public $enable_portrait = 0;
+
 	public function __construct()
 	{
 		// Without the @, this generates warnings?
 		// Notice: Undefined offset: 0 in /Users/davekiss/Sites/vimeography.com/wp-includes/plugin.php on line 762/780
-		@add_action('wp_enqueue_scripts', $this->_load_scripts());		
+		@add_action('wp_enqueue_scripts', $this->_load_scripts());
 	}
-	
+
+  public function __set($name, $value)
+  {
+    $this->$name = $value;
+  }
+
 	public function _load_scripts()
-	{		
+	{
 		// First things first. jQuery.
-		wp_enqueue_script('jquery');  
-	
+		wp_enqueue_script('jquery');
+
 		// Register our common scripts
 		wp_register_script('froogaloop', 'http://a.vimeocdn.com/js/froogaloop2.min.js');
 		wp_register_script('flexslider', VIMEOGRAPHY_ASSETS_URL.'js/plugins/jquery.flexslider.js', array('jquery'));
@@ -37,49 +42,38 @@ class Vimeography_Themes_Bugsauce extends Mustache
 
 		// Register our custom scripts
 		wp_register_style('bugsauce', VIMEOGRAPHY_THEME_URL.'bugsauce/media/bugsauce.css');
-		
-		wp_enqueue_script('froogaloop');		
+
+		wp_enqueue_script('froogaloop');
 		wp_enqueue_script('flexslider');
 		wp_enqueue_script('fitvids');
 		wp_enqueue_script('spin');
 		wp_enqueue_script('jquery-spin');
-				
+
 		wp_enqueue_style('bugsauce');
 	}
-	
-	public function dynamic_css()
-	{
-  	$custom_settings = get_transient('vimeography_theme_settings_'.$this->gallery_id);
-  	if ($custom_settings === FALSE) return FALSE;
-  	
-  	$settings['exists'] = TRUE;
-  	$settings['settings'] = $custom_settings;
-  	
-  	return $settings;
-	}
-	
-  public function info()
+
+  public function featured()
+  {
+    // optional helpers
+    require_once(VIMEOGRAPHY_PATH .'lib/helpers.php');
+    $helpers = new Vimeography_Helpers;
+
+    $this->featured->oembed = $helpers->get_featured_embed($this->featured->link);
+
+    return $this->featured;
+  }
+
+  public function videos()
   {
   	// optional helpers
-  	require_once(VIMEOGRAPHY_PATH .'lib/helpers.php');
+  	require_once VIMEOGRAPHY_PATH .'lib/helpers.php';
   	$helpers = new Vimeography_Helpers;
-  	
+
   	// add featured video to the beginning of the array
-  	if (is_array($this->featured))  		
+  	if (is_array($this->featured))
   		array_unshift($this->data, $this->featured[0]);
-  	
-  	$items = array();
-  	    	
-  	foreach($this->data as $item)
-  	{
-		if ($item->duration AND ! strpos($item->duration, ':'))
-		{
-			$item->duration = $helpers->seconds_to_minutes($item->duration);
-		}
-		$items[] = $item;
-  	}
-  	    	    	
-  	return $items;
+
+  	return $helpers->apply_common_formatting($this->data);
   }
-    
+
 }

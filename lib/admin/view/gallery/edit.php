@@ -35,6 +35,10 @@ class Vimeography_Gallery_Edit extends Vimeography_Base
       if (isset($_GET['delete-theme-settings']) AND $_GET['delete-theme-settings'] == 1)
       {
         $transient = delete_transient('vimeography_theme_settings_'.$gallery_id);
+
+        if (file_exists(VIMEOGRAPHY_ASSETS_PATH . 'css/vimeography-gallery-'.$gallery_id.'-custom.css'))
+          unlink(VIMEOGRAPHY_ASSETS_PATH . 'css/vimeography-gallery-'.$gallery_id.'-custom.css');
+
         $this->messages[] = array('type' => 'success', 'heading' => __('Theme settings cleared.'), 'message' => __('Your gallery appearance has been reset.'));
       }
     }
@@ -108,7 +112,7 @@ class Vimeography_Gallery_Edit extends Vimeography_Base
     if ($this->theme_supports_settings == TRUE)
     {
       // If so, include it here and loop through each setting.
-      include_once($this->_settings_file);
+      include_once $this->_settings_file;
       $results = array();
 
       foreach ($settings as $setting)
@@ -117,9 +121,22 @@ class Vimeography_Gallery_Edit extends Vimeography_Base
         if (! isset($setting['type']))
           throw new Vimeography_Exception(__('One of your active theme settings does not specify the type of setting it is.'));
 
-        // If the setting type class isn't found, throw an error.
-        if (!@require_once(VIMEOGRAPHY_PATH . 'lib/admin/view/theme/settings/'.$setting['type'].'.php'))
-          throw new Vimeography_Exception(__('"'.esc_attr($setting['type']).'" is not a valid Vimeography theme setting type.'));
+        //require_once VIMEOGRAPHY_PATH . 'lib/admin/view/theme/settings/kendoui.php';
+
+        if (file_exists(VIMEOGRAPHY_PATH . 'lib/admin/view/theme/settings/'.$setting['type'].'.php'))
+        {
+          require_once VIMEOGRAPHY_PATH . 'lib/admin/view/theme/settings/'.$setting['type'].'.php';
+          $template_dir = VIMEOGRAPHY_PATH;
+        }
+        elseif (file_exists(VIMEOGRAPHY_PRO_PATH . 'lib/admin/view/theme/settings/'.$setting['type'].'.php'))
+        {
+          require_once VIMEOGRAPHY_PRO_PATH . 'lib/admin/view/theme/settings/'.$setting['type'].'.php';
+          $template_dir = VIMEOGRAPHY_PRO_PATH;
+        }
+        else
+        {
+          continue;
+        }
 
         // Otherwise, include the setting if there are no errors with the class.
         $class = 'Vimeography_Theme_Settings_'.ucfirst($setting['type']);
@@ -128,13 +145,14 @@ class Vimeography_Gallery_Edit extends Vimeography_Base
           throw new Vimeography_Exception( __('The "') . $setting['type'] . __('" setting type does not exist or is improperly structured.') );
 
         // Load the template file for the current theme setting.
-        $mustache = new Mustache_Engine(array('loader' => new Mustache_Loader_FilesystemLoader(VIMEOGRAPHY_PATH . 'lib/admin/templates/theme/settings'),));
+        $mustache = new Mustache_Engine(array('loader' => new Mustache_Loader_FilesystemLoader($template_dir . 'lib/admin/templates/theme/settings'),));
 
-        $view = new $class;
+        // Populate the setting type class
+        $view = new $class($setting);
         $template = $mustache->loadTemplate($setting['type']);
 
-        // Populate the setting type class and render the results from the template.
-        $view->settings = $setting;
+        //and render the results from the template.
+
         $results[]['setting'] = $template->render($view);
       }
 
@@ -201,8 +219,7 @@ class Vimeography_Gallery_Edit extends Vimeography_Base
    */
   private function _validate_form()
   {
-    global $wpdb;
-    $id = $wpdb->escape(intval($_GET['id']));
+    $id = intval($_GET['id']);
 
     if (!empty($_POST['vimeography_appearance_settings']))
     {
@@ -256,7 +273,6 @@ class Vimeography_Gallery_Edit extends Vimeography_Base
         global $wpdb;
         $settings['cache_timeout']  = $wpdb->escape(wp_filter_nohtml_kses($input['vimeography_basic_settings']['cache_timeout']));
         $settings['featured_video'] = $wpdb->escape(wp_filter_nohtml_kses($input['vimeography_basic_settings']['featured_video']));
-        $settings['video_limit']    = intval($input['vimeography_basic_settings']['video_limit']) <= 20 ? $input['vimeography_basic_settings']['video_limit'] : 20;
 
         if (!empty($input['vimeography_basic_settings']['gallery_width']))
         {
@@ -288,7 +304,7 @@ class Vimeography_Gallery_Edit extends Vimeography_Base
           $settings['gallery_width'] = '';
         }
 
-        $result = $wpdb->update( VIMEOGRAPHY_GALLERY_META_TABLE, array('cache_timeout' => $settings['cache_timeout'], 'featured_video' => $settings['featured_video'], 'gallery_width' => $settings['gallery_width'], 'video_limit' => $settings['video_limit']), array( 'gallery_id' => $id ) );
+        $result = $wpdb->update( VIMEOGRAPHY_GALLERY_META_TABLE, array('cache_timeout' => $settings['cache_timeout'], 'featured_video' => $settings['featured_video'], 'gallery_width' => $settings['gallery_width']), array( 'gallery_id' => $id ) );
 
         if ($result === FALSE)
           throw new Exception('Your settings could not be updated.');
@@ -312,20 +328,39 @@ class Vimeography_Gallery_Edit extends Vimeography_Base
       try
       {
         $settings = array();
+
         foreach ($input as $setting)
         {
-          // Convert the jQuery attribute selector to an actual css property
-          $number_of_matches = preg_match_all('/[A-Z]/', esc_attr($setting['attribute']), $capitals, PREG_OFFSET_CAPTURE);
-          if ($number_of_matches === FALSE) break;
+          $attributes = array();
 
-          $i = 0; // offset in case of multiple capitals
-          foreach ($capitals[0] as $capital)
+          foreach ($setting['attributes'] as $attribute)
           {
-            $setting['attribute'] = strtolower(substr_replace($setting['attribute'], '-', $capital[1]+$i, 0));
-            $i++;
+            // Convert the jQuery attribute selector to an actual css property
+            $number_of_matches = preg_match_all('/[A-Z]/', esc_attr($attribute), $capitals, PREG_OFFSET_CAPTURE);
+
+            if ($number_of_matches == 0)
+            {
+              $attributes[] = $attribute;
+              continue;
+            }
+
+            $i = 0; // offset in case of multiple capitals
+            foreach ($capitals[0] as $capital)
+            {
+              $attribute = strtolower(substr_replace($attribute, '-', $capital[1]+$i, 0));
+              $i++;
+            }
+            $attributes[] = $attribute;
           }
 
-          $setting['target'] = esc_attr($setting['target']);
+          $setting['attributes'] = $attributes;
+
+          $targets = array();
+
+          foreach ($setting['targets'] as $target)
+            $targets[] = esc_attr($target);
+
+          $setting['targets'] = $targets;
           $setting['value'] = esc_attr($setting['value']);
           $settings[] = $setting;
         }

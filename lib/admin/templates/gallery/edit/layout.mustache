@@ -54,7 +54,7 @@
         $("#aujus").mCustomScrollbar();
 
         // Affix the menu when we scroll
-        $('#vimeography-gallery-menu-container').affix({offset: 124});
+        $('#vimeography-gallery-menu-container').affix({offset: $('#vimeography-gallery-menu-container').position()});
 
         // Fade in the check marks when we hover down the theme list menu panel
         $('.theme-container').mouseover(function(){

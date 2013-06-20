@@ -1,0 +1,87 @@
+<div id="vimeography-gallery-{{gallery_id}}" class="vimeography-bugsauce" data-version="{{version}}"{{#gallery_width}} style="max-width: {{gallery_width}};"{{/gallery_width}}>
+
+	<div class="vimeography-main">
+    {{#featured}}
+	    <div class="vimeography-player">
+	      {{{oembed}}}
+	    </div>
+    {{/featured}}
+	</div>
+
+	<div class="vimeography-thumbnails">
+		<ul class="vimeography-slides">
+			{{> videos}}
+		</ul>
+	</div>
+
+</div> <!-- End Gallery -->
+
+<script charset="utf-8" type="text/javascript">
+
+	(function($){
+		$(document).ready(function() {
+
+	    function vimeography_get_video(link)
+	    {
+	      var endpoint = 'http://vimeo.com/api/oembed.json';
+
+	      var enableByline = {{enable_byline}};
+	      var enableTitle = {{enable_title}};
+	      var enablePortrait = {{enable_portrait}};
+	      var enableApi = 1;
+
+	      // Put together the URL
+	      var url = endpoint
+	      + '?url=' + encodeURIComponent(link)
+	      + '&byline=' + enableByline
+	      + '&title=' + enableTitle
+	      + '&portrait=' + enablePortrait
+	      + '&api=' + enableApi;
+
+	      return $.get(url);
+	    }
+
+			$('#vimeography-gallery-{{gallery_id}}').fitVids();
+
+			$('#vimeography-gallery-{{gallery_id}} .vimeography-main').spin('custom');
+
+			$('#vimeography-gallery-{{gallery_id}} .vimeography-thumbnails').flexslider({
+				animation: "slide",
+        namespace: 'vimeography-bugsauce-',
+				controlNav: false,
+				animationLoop: false,
+				slideshow: false,
+				itemWidth: 186,
+				itemMargin: 8,
+				useCSS: false,
+				prevText: "<span></span>",
+				nextText: "<span></span>",
+				selector: ".vimeography-slides > li"
+			});
+
+			$('#vimeography-gallery-{{gallery_id}} .vimeography-thumbnails li').first().addClass('vimeography-bugsauce-active-slide');
+
+			$('#vimeography-gallery-{{gallery_id}} .vimeography-thumbnails img').click(function(e) {
+
+				$('.vimeography-bugsauce-active-slide').removeClass('vimeography-bugsauce-active-slide');
+				$(this).parent().addClass('vimeography-bugsauce-active-slide');
+
+				var link = $(this).attr('data-link');
+
+				$('#vimeography-gallery-{{gallery_id}} .vimeography-player').animate({'opacity':0}, 300, 'linear', function(){
+
+					var promise = vimeography_get_video(link);
+
+					promise.success(function (video) {
+						$('#vimeography-gallery-{{gallery_id}} .vimeography-player').html(video.html).fitVids().animate({'opacity':1}, 300);
+					});
+
+				});
+
+    		e.preventDefault();
+			});
+
+		});
+	})(jQuery)
+
+</script>
