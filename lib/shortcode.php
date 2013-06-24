@@ -229,7 +229,7 @@ class Vimeography_Shortcode extends Vimeography
         $renderer    = new Vimeography_Renderer($this->_gallery_settings, $this->token);
       }
 
-      $video_set = Vimeography::getVideoSet($vimeography, $this->_gallery_settings, $this->token);
+      $video_set = Vimeography_Core::getVideoSet($vimeography, $this->_gallery_settings, $this->token);
 
       $renderer->set_paging($paging);
       // Render that ish.
