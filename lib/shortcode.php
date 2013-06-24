@@ -229,45 +229,7 @@ class Vimeography_Shortcode extends Vimeography
         $renderer    = new Vimeography_Renderer($this->_gallery_settings, $this->token);
       }
 
-      require_once(VIMEOGRAPHY_PATH . 'lib/cache.php');
-      $cache = new Vimeography_Cache($this->_gallery_settings);
-
-      $cache_file = VIMEOGRAPHY_CACHE_PATH . $this->token . '.cache';
-
-      // If the cache exists,
-      if ( $cache->exists($cache_file) )
-      {
-        // and the cache is expired,
-        if ( ($last_modified = $cache->expired($cache_file) ) !== FALSE )
-        {
-          // make the request with a last modified header.
-          $video_set = $vimeography->fetch($last_modified);
-
-          // Here is where we need to check if $video_set exists, or if it
-          // returned a 304, in which case, we can safely update the cache's last modified
-          // and return it.
-          if ($video_set == NULL)
-          {
-            $cache->renew($cache_file);
-            $video_set = $cache->get($cache_file);
-          }
-        }
-        else
-        {
-          // If it isn't expired, return it.
-          $video_set = $cache->get($cache_file);
-        }
-      }
-      else
-      {
-        // If a cache doesn't exist, go get the videos, dude.
-        $video_set = $vimeography->fetch();
-        $paging = $vimeography->get_paging();
-      }
-
-      // Cache the results.
-      if ($this->_gallery_settings['cache'] != 0)
-        $cache->set($cache_file, $video_set);
+      $video_set = Vimeography::getVideoSet($vimeography, $this->_gallery_settings, $this->token);
 
       $renderer->set_paging($paging);
       // Render that ish.

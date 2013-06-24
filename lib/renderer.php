@@ -18,6 +18,19 @@ class Vimeography_Renderer
    */
   private $_gallery_width;
 
+  /**
+   * Creates the rendering engine
+   *
+   * $settings should contain at least
+   *  - theme = theme name to use
+   *  - width
+   * optionals are:
+   *  - partial =  if not full theme would be renderd
+   *
+   * @param unknown $settings
+   * @param unknown $token
+   * @throws Vimeography_Exception
+   */
   public function __construct($settings, $token)
   {
     if (! isset($settings['theme']))
@@ -39,7 +52,7 @@ class Vimeography_Renderer
     ) );
 
     $this->_view  = new $class;
-    $this->_theme = $mustache->loadTemplate( $theme );
+    $this->_theme = (isset($settings['partial'])) ? $mustache->loadPartial($settings['partial']) : $mustache->loadTemplate( $theme );
 
     $this->_view->gallery_id    = $token;
     $this->_view->gallery_width = $settings['width'];
