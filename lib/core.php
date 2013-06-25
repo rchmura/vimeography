@@ -52,12 +52,19 @@ abstract class Vimeography_Core
   /**
    * Fetch the videos to be displayed in the Vimeography Gallery.
    *
+   * @param $last_modified
+   * @param $perPage       How many items to return, if not set, use the defauls in $this->_params
+   * @param $page          Which page to fetch
+   *
    * @return string  $result_set JSON Object of Vimeo Videos
    */
-  public function fetch($last_modified = NULL)
+  public function fetch($last_modified = NULL, $perPage = NULL, $page = NULL)
   {
     if (! $this->_verify_vimeo_endpoint($this->_endpoint) )
-        throw new Vimeography_Exception('Endpoint is not valid.');
+        throw new Vimeography_Exception("Endpoint {$this->_endpoint} is not valid. Probably started with http://vimeo.com/, should not.");
+
+    if ($perPage) $this->_params['per_page'] = $perPage;
+    if ($page)    $this->_params['page']     = $page;
 
     $response  = $this->_make_vimeo_request($this->_endpoint, $this->_params, $last_modified);
     $video_set = $this->_get_video_set($response);
@@ -95,6 +102,7 @@ abstract class Vimeography_Core
    */
   private function _make_vimeo_request($endpoint, $params, $last_modified)
   {
+    if (isset($params['per_page']) && $params['per_page'] > 100) throw new Exception('Max per page is 100');
     $response = $this->_vimeo->request( $endpoint, $params, $last_modified );
 
     switch ($response['status'])
@@ -111,7 +119,7 @@ abstract class Vimeography_Core
         throw new Vimeography_Exception('the plugin could not retrieve data from the Vimeo API! '. $response['body']->error);
         break;
       default:
-        throw new Vimeography_Exception('Unknown response status '. $response['body']->error);
+        throw new Vimeography_Exception("Unknown response status #{$response['status']}, {$response['body']->error}");
         break;
     }
   }
@@ -158,6 +166,35 @@ abstract class Vimeography_Core
     return array_values($video_set);
   }
 
+
+  /**
+   * Get the videos paginated.
+   *
+   * Let's fetch the cache, and if the page is inside the cache, use the cache. If the page is out of the cache, fetch
+   * a new page. If the cache has part of the page, ignore the cache, we needed to fetch the rest anyway.
+   *
+   * @param Vimeography_Core $vimeography Required param for self::getVideoSet()
+   * @param array  $gallerySettings       Required param for self::getVideoSet()
+   * @param string $token                 Required param for self::getVideoSet()
+   * @param number $page                  Which page to fetch
+   * @param number $perPage               How many elements to return
+   *
+   * @return array
+   */
+  static public function getPagedVideos(Vimeography_Core $vimeography, $gallerySettings, $token, $page = 1, $perPage = 50)
+  {
+      $cache = self::getVideoSet($vimeography, $gallerySettings, $token);
+      $start = 1 + ($page * $perPage) - $perPage;
+      $end   =      $page * $perPage;
+
+      if (count($cache) > $end) {
+          $result = array_slice($cache, $start - 1, $perPage);
+      } else {
+          // $result = $vimeography->fetch();
+          $result = $vimeography->fetch(false, $perPage, $page);
+      }
+      return $result;
+  }
 
   /**
    * Gets the videos for gallery
