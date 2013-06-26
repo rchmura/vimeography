@@ -35,10 +35,14 @@ class Vimeo
      */
     public function request($url, $params = array(), $last_modified = NULL, $method = 'GET')
     {
-        $params['client_id'] = $this->_client_id;
+        // $params['client_id'] = $this->_client_id;
 
         if (strtoupper($method) == 'GET') {
-            $curl_url = self::ROOT_ENDPOINT . $url . '?' . http_build_query($params, '', '&');
+
+            if (! empty($params))
+                $url .= '?' . http_build_query($params, '', '&');
+
+            $curl_url = self::ROOT_ENDPOINT . $url;
             $curl_opts = array();
         }
         else if (strtoupper($method) == 'POST') {

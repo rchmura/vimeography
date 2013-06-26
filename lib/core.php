@@ -31,19 +31,12 @@ abstract class Vimeography_Core
   protected $_featured;
 
   /**
-   * Pagination details from the Vimeo request.
-   *
-   * @var object
-   */
-  protected $_paging;
-
-  /**
    * [__construct description]
    * @param [type] $settings [description]
    */
   public function __construct($settings)
   {
-    $this->_endpoint = $settings['source'] . '/videos';
+    $this->_endpoint = $settings['source'];
 
     if ( isset($settings['featured']) AND ! empty($settings['featured']) )
       $this->_featured = '/videos/' . preg_replace("/[^0-9]/", '', $settings['featured']);
@@ -53,23 +46,15 @@ abstract class Vimeography_Core
    * Fetch the videos to be displayed in the Vimeography Gallery.
    *
    * @param $last_modified
-   * @param $perPage       How many items to return, if not set, use the defauls in $this->_params
-   * @param $page          Which page to fetch
-   *
-   * @return string  $result_set JSON Object of Vimeo Videos
+   * @return string  $response  Modified response from Vimeo.
    */
-  public function fetch($last_modified = NULL, $perPage = NULL, $page = NULL)
+  public function fetch($last_modified = NULL)
   {
     if (! $this->_verify_vimeo_endpoint($this->_endpoint) )
         throw new Vimeography_Exception("Endpoint {$this->_endpoint} is not valid. Probably started with http://vimeo.com/, should not.");
 
-    if ($perPage) $this->_params['per_page'] = $perPage;
-    if ($page)    $this->_params['page']     = $page;
-
     $response  = $this->_make_vimeo_request($this->_endpoint, $this->_params, $last_modified);
     $video_set = $this->_get_video_set($response);
-
-    $this->_paging = $response->paging;
 
     if (! empty($this->_featured))
     {
@@ -82,14 +67,12 @@ abstract class Vimeography_Core
       $result_set = $video_set;
     }
 
+    unset($response->data);
+    $response->video_set = $result_set;
+
     // $combined_json = str_replace(']', ',', $videos) . str_replace('[', ' ', $response);
 
-    return $result_set;
-  }
-
-  public function get_paging()
-  {
-    return $this->_paging;
+    return $response;
   }
 
   abstract protected static function _verify_vimeo_endpoint($resource);
@@ -124,7 +107,12 @@ abstract class Vimeography_Core
     }
   }
 
-  private function _get_video_set($body)
+  /**
+   * [_get_video_set description]
+   * @param  [type] $body [description]
+   * @return [type]       [description]
+   */
+  private static function _get_video_set($body)
   {
     if (isset($body->data)) :
       return $body->data;
@@ -166,36 +154,6 @@ abstract class Vimeography_Core
     return array_values($video_set);
   }
 
-
-  /**
-   * Get the videos paginated.
-   *
-   * Let's fetch the cache, and if the page is inside the cache, use the cache. If the page is out of the cache, fetch
-   * a new page. If the cache has part of the page, ignore the cache, we needed to fetch the rest anyway.
-   *
-   * @param Vimeography_Core $vimeography Required param for self::getVideoSet()
-   * @param array  $gallerySettings       Required param for self::getVideoSet()
-   * @param string $token                 Required param for self::getVideoSet()
-   * @param number $page                  Which page to fetch
-   * @param number $perPage               How many elements to return
-   *
-   * @return array
-   */
-  static public function getPagedVideos(Vimeography_Core $vimeography, $gallerySettings, $token, $page = 1, $perPage = 50)
-  {
-      $cache = self::getVideoSet($vimeography, $gallerySettings, $token);
-      $start = 1 + ($page * $perPage) - $perPage;
-      $end   =      $page * $perPage;
-
-      if (count($cache) > $end) {
-          $result = array_slice($cache, $start - 1, $perPage);
-      } else {
-          // $result = $vimeography->fetch();
-          $result = $vimeography->fetch(false, $perPage, $page);
-      }
-      return $result;
-  }
-
   /**
    * Gets the videos for gallery
    *
@@ -204,10 +162,10 @@ abstract class Vimeography_Core
    *
    * @todo Move to a better library or model class.
    */
-  static public function getVideoSet (Vimeography_Core $vimeography, $gallerySettings, $token)
+  public function getVideoSet($expiration, $token)
   {
       require_once (VIMEOGRAPHY_PATH . 'lib/cache.php');
-      $cache = new Vimeography_Cache($gallerySettings);
+      $cache = new Vimeography_Cache($expiration);
 
       $cache_file = VIMEOGRAPHY_CACHE_PATH . $token . '.cache';
 
@@ -216,31 +174,30 @@ abstract class Vimeography_Core
           // and the cache is expired,
           if (($last_modified = $cache->expired($cache_file)) !== FALSE) {
               // make the request with a last modified header.
-              $video_set = $vimeography->fetch($last_modified);
+              $result = $this->fetch($last_modified);
 
               // Here is where we need to check if $video_set exists, or if it
               // returned a 304, in which case, we can safely update the
               // cache's last modified
               // and return it.
-              if ($video_set == NULL) {
+              if ($result == NULL) {
                   $cache->renew($cache_file);
-                  $video_set = $cache->get($cache_file);
+                  $result = $cache->get($cache_file);
               }
           } else {
               // If it isn't expired, return it.
-              $video_set = $cache->get($cache_file);
+              $result = $cache->get($cache_file);
           }
       } else {
           // If a cache doesn't exist, go get the videos, dude.
-          $video_set = $vimeography->fetch();
-          $paging = $vimeography->get_paging();
+          $result = $this->fetch();
       }
 
       // Cache the results.
-      if ($gallerySettings['cache'] != 0) {
-          $cache->set($cache_file, $video_set);
+      if ($expiration !== 0) {
+          $cache->set($cache_file, $result);
       }
-      return $video_set;
+      return $result;
   }
 
 

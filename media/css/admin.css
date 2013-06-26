@@ -297,6 +297,10 @@ ul.vimeography-theme-list a.theme-info span {
 background-position: -360px -144px;
 }
 
+.vimeography-gallery-menu-heading .icon-tasks {
+background-position: -384px -144px;
+}
+
 .vimeography-gallery-menu-content {
 	padding: 0 17px;
 	background-color: #e3e3e3;

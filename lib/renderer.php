@@ -5,25 +5,10 @@ class Vimeography_Renderer
   protected $_theme;
 
   /**
-   * The gallery ID to be sent to the Mustache template.
-   *
-   * @var string
-   */
-  private $_gallery_id;
-
-  /**
-   * The gallery width to be sent to the Mustache template.
-   *
-   * @var string
-   */
-  private $_gallery_width;
-
-  /**
    * Creates the rendering engine
    *
    * $settings should contain at least
    *  - theme = theme name to use
-   *  - width
    * optionals are:
    *  - partial =  if not full theme would be renderd
    *
@@ -54,8 +39,10 @@ class Vimeography_Renderer
     $this->_view  = new $class;
     $this->_theme = (isset($settings['partial'])) ? $mustache->loadPartial($settings['partial']) : $mustache->loadTemplate( $theme );
 
-    $this->_view->gallery_id    = $token;
-    $this->_view->gallery_width = $settings['width'];
+    $this->_view->token = $token;
+
+    if (isset($settings['width']))
+      $this->_view->gallery_width = $settings['width'];
   }
 
   /**
@@ -65,21 +52,12 @@ class Vimeography_Renderer
    * @param  array $data [description]
    * @return string       [description]
    */
-  public function render($data)
+  public function render($result)
   {
-    $this->_view->data     = $data;
+    $this->_view->data     = $result->data;
     $this->_view->featured = $this->_view->data[0];
 
     return $this->_theme->render($this->_view);
-  }
-
-  /**
-   * [set_paging description]
-   * @param [type] $paging [description]
-   */
-  public function set_paging($paging)
-  {
-    $this->_view->paging = $paging;
   }
 
   /**

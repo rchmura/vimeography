@@ -5,7 +5,7 @@ class Vimeography_Cache extends Vimeography
   /**
    * The user's cache expiration setting for the current gallery.
    *
-   * @var int
+   * @var int | NULL
    */
   private $_expiration;
 
@@ -13,9 +13,10 @@ class Vimeography_Cache extends Vimeography
    * [__construct description]
    * @param [type] $settings [description]
    */
-  public function __construct($settings)
+  public function __construct($expiration)
   {
-    $this->_expiration = intval($settings['cache']);
+    if ( isset($expiration) )
+      $this->_expiration = intval($expiration);
   }
 
   /**
@@ -36,6 +37,9 @@ class Vimeography_Cache extends Vimeography
    */
   public function expired($file)
   {
+    if (! isset($_expiration))
+      return FALSE;
+
     // Check if the cache is expired
     $last_modified = filemtime($file);
 

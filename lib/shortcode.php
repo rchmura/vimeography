@@ -101,6 +101,8 @@ class Vimeography_Shortcode extends Vimeography
     if ($shortcode_gallery_settings['source'] != $fallback_gallery_settings['endpoint'])
       $shortcode_gallery_settings['source'] = Vimeography::validate_vimeo_source($shortcode_gallery_settings['source']);
 
+    $shortcode_gallery_settings['source'] = $shortcode_gallery_settings['source'] . '/videos';
+
     return $shortcode_gallery_settings;
   }
 
@@ -255,12 +257,12 @@ class Vimeography_Shortcode extends Vimeography
         $renderer    = new Vimeography_Renderer($this->_gallery_settings, $this->_token);
       }
 
-      $video_set = Vimeography_Core::getVideoSet($vimeography, $this->_gallery_settings, $this->_token);
+      $result = $vimeography->getVideoSet($this->_gallery_settings['cache'], $this->_token);
 
-      $renderer->set_paging($paging);
+      //$result = Vimeography_Core::getVideoSet($vimeography, $this->_gallery_settings['cache'], $this->_token);
 
       // Render that ish.
-      return $renderer->render($video_set);
+      return $renderer->render($result);
     }
     catch (Vimeography_Exception $e)
     {
