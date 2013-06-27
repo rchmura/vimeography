@@ -257,9 +257,11 @@ class Vimeography_Shortcode extends Vimeography
         $renderer    = new Vimeography_Renderer($this->_gallery_settings, $this->_token);
       }
 
-      $result = $vimeography->getVideoSet($this->_gallery_settings['cache'], $this->_token);
-
-      //$result = Vimeography_Core::getVideoSet($vimeography, $this->_gallery_settings['cache'], $this->_token);
+      if (!$this->_videoSet) {
+          $result = $vimeography->getVideoSet($this->_gallery_settings['cache'], $this->_token);
+      } else {
+          $result = $this->_videoSet;
+      }
 
       // Render that ish.
       return $renderer->render($result);
