@@ -42,6 +42,58 @@ abstract class Vimeography_Core
       $this->_featured = '/videos/' . preg_replace("/[^0-9]/", '', $settings['featured']);
   }
 
+  abstract protected static function _verify_vimeo_endpoint($resource);
+
+  /**
+   * Gets the videos for gallery
+   *
+   * Code refactorized from Shortcode->output(). The code was used too in the
+   * ajax method. This looks like the right place to place the pagination logic
+   *
+   * @todo Move to a better library or model class.
+   */
+  public function get_videos($expiration, $gallery_id)
+  {
+    require_once VIMEOGRAPHY_PATH . 'lib/cache.php';
+    $cache = new Vimeography_Cache($gallery_id, $expiration);
+
+    // If the cache file exists,
+    if ( $cache->exists() )
+    {
+      // and the cache file is expired,
+      if (($last_modified = $cache->expired()) !== FALSE)
+      {
+        // make the request with a last modified header.
+        $result = $this->fetch($last_modified);
+
+        // Here is where we need to check if $video_set exists, or if it
+        // returned a 304, in which case, we can safely update the
+        // cache's last modified
+        // and return it.
+        if ($result == NULL)
+        {
+          $result = $cache->renew()->get();
+        }
+      }
+      else
+      {
+        // If it isn't expired, return it.
+        $result = $cache->get();
+      }
+    }
+    else
+    {
+      // If a cache doesn't exist, go get the videos, dude.
+      $result = $this->fetch();
+    }
+
+    // Cache the results.
+    if ($expiration !== 0)
+      $cache->set($result);
+
+    return $result;
+  }
+
   /**
    * Fetch the videos to be displayed in the Vimeography Gallery.
    *
@@ -51,7 +103,7 @@ abstract class Vimeography_Core
   public function fetch($last_modified = NULL)
   {
     if (! $this->_verify_vimeo_endpoint($this->_endpoint) )
-        throw new Vimeography_Exception("Endpoint {$this->_endpoint} is not valid. Probably started with http://vimeo.com/, should not.");
+        throw new Vimeography_Exception("Endpoint {$this->_endpoint} is not valid.");
 
     $response  = $this->_make_vimeo_request($this->_endpoint, $this->_params, $last_modified);
     $video_set = $this->_get_video_set($response);
@@ -74,8 +126,6 @@ abstract class Vimeography_Core
 
     return $response;
   }
-
-  abstract protected static function _verify_vimeo_endpoint($resource);
 
   /**
    * Send a cURL Wordpress request to retrieve the requested data from the Vimeo API.
@@ -153,52 +203,5 @@ abstract class Vimeography_Core
 
     return array_values($video_set);
   }
-
-  /**
-   * Gets the videos for gallery
-   *
-   * Code refactorized from Shortcode->output(). The code was used too in the
-   * ajax method. This looks like the right place to place the pagination logic
-   *
-   * @todo Move to a better library or model class.
-   */
-  public function getVideoSet($expiration, $token)
-  {
-      require_once (VIMEOGRAPHY_PATH . 'lib/cache.php');
-      $cache = new Vimeography_Cache($expiration);
-
-      $cache_file = VIMEOGRAPHY_CACHE_PATH . $token . '.cache';
-
-      // If the cache exists,
-      if ($cache->exists($cache_file)) {
-          // and the cache is expired,
-          if (($last_modified = $cache->expired($cache_file)) !== FALSE) {
-              // make the request with a last modified header.
-              $result = $this->fetch($last_modified);
-
-              // Here is where we need to check if $video_set exists, or if it
-              // returned a 304, in which case, we can safely update the
-              // cache's last modified
-              // and return it.
-              if ($result == NULL) {
-                  $cache->renew($cache_file);
-                  $result = $cache->get($cache_file);
-              }
-          } else {
-              // If it isn't expired, return it.
-              $result = $cache->get($cache_file);
-          }
-      } else {
-          // If a cache doesn't exist, go get the videos, dude.
-          $result = $this->fetch();
-      }
-
-      // Cache the results.
-      if ($expiration !== 0) {
-          $cache->set($cache_file, $result);
-      }
-      return $result;
-  }
-
 
 }

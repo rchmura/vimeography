@@ -9,6 +9,10 @@ require_once(VIMEOGRAPHY_PATH . 'vendor/vimeo.php-master/vimeo.php');
  */
 class Vimeography_Gallery_New extends Vimeography_Base
 {
+  /**
+   * Vimeo library instance
+   * @var [type]
+   */
   private $_vimeo;
   private $_token;
 
@@ -52,7 +56,7 @@ class Vimeography_Gallery_New extends Vimeography_Base
 
         $input['resource_uri'] = Vimeography::validate_vimeo_source($input['source_url']);
 
-        //$trigger = $this->_vimeography_subscribe_to_trigger($input['resource_uri']);
+        $trigger = $this->_vimeography_subscribe_to_trigger($input['resource_uri']);
 
 				if (($gallery_id = $this->_create_vimeography_gallery($input)) == FALSE)
   				throw new Vimeography_Exception(__('We couldn\'t create a new gallery. Try upgrading or reinstalling the Vimeography plugin.'));
@@ -114,11 +118,19 @@ class Vimeography_Gallery_New extends Vimeography_Base
    */
   private function _vimeography_subscribe_to_trigger($resource)
   {
+
+    // callback: network_site_url() . '/vimeography/' . $gallery_id . '/refresh/'
+
     $response = $this->_vimeo->request( '/triggers', array(
       'actions' => 'added, removed',
-      'callback' => 'http://requestb.in/xzszvixz',
+      'callback' => 'http://requestb.in/14jy4b91',
       'resource_uri' => $resource .'/videos'
     ), 'POST' );
+
+    echo '<pre>';
+    var_dump($response);
+    echo '</pre>';
+    die;
 
     switch ($response['status'])
     {
@@ -138,7 +150,7 @@ class Vimeography_Gallery_New extends Vimeography_Base
           throw new Vimeography_Exception('Looks like you don\'t have the permission to subscribe to this collection.');
         endif;
         break;
-      case 500:
+      case 405: case 500:
         // Unsupported container uri
         throw new Vimeography_Exception('The resource that was entered is currently unsupported.');
         break;

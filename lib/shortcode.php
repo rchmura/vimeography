@@ -18,19 +18,11 @@ class Vimeography_Shortcode extends Vimeography
   private $_content = NULL;
 
   /**
-   * A unique token generated from a serialized MD5 of the
-   * loaded shortcode gallery settings.
-   *
-   * @var string
-   */
-  protected $_token;
-
-  /**
    * The id number associated with a gallery entry in the database.
    *
-   * @var int
+   * @var int or tokenized string
    */
-  private $_gallery_id;
+  protected $_gallery_id;
 
   /**
    * The settings being used to render the current gallery.
@@ -51,12 +43,11 @@ class Vimeography_Shortcode extends Vimeography
   {
     $this->_atts       = $atts;
     $this->_content    = $content;
-    $this->_gallery_id = isset($this->_atts['id']) ? intval($this->_atts['id']) : NULL;
 
     try
     {
-      $this->_gallery_settings = $this->_apply_shortcode_gallery_settings();
-      $this->_token            = self::_get_gallery_token($this->_gallery_settings);
+      $this->_gallery_settings = self::_apply_shortcode_gallery_settings($this->_atts);
+      $this->_gallery_id       = isset($atts['id']) ? intval($atts['id']) : self::_get_inline_gallery_id($this->_gallery_settings);
 
       $this->_vimeography_register_customizations();
     }
@@ -73,10 +64,10 @@ class Vimeography_Shortcode extends Vimeography
    *
    * @return array  The gallery settings to be used to render the current gallery.
    */
-  private function _apply_shortcode_gallery_settings()
+  private static function _apply_shortcode_gallery_settings($atts)
   {
-    if (! empty($this->_gallery_id))
-      $db_gallery_settings = $this->_get_db_gallery_settings($this->_gallery_id);
+    if (! empty($atts['id']) )
+      $db_gallery_settings = self::_get_db_gallery_settings(intval($atts['id']));
 
     // Get admin panel options
     $default_settings = get_option('vimeography_default_settings');
@@ -94,7 +85,7 @@ class Vimeography_Shortcode extends Vimeography
       'source'   => $fallback_gallery_settings['endpoint'],
       'cache'    => $fallback_gallery_settings['cache'],
       'width'    => $fallback_gallery_settings['width'],
-    ), $this->_atts );
+    ), $atts );
 
     $shortcode_gallery_settings['width'] = self::_validate_gallery_width($shortcode_gallery_settings['width']);
 
@@ -166,69 +157,33 @@ class Vimeography_Shortcode extends Vimeography
   }
 
   /**
-   * Create a token for the resulting shortcode gallery settings
-   * The `option_name` column has a limit of 64 characters,
-   * so we need to shorten the generated hash.
+   * Create a gallery_id token for any inline gallery that doesn't have an id.
    *
    * @return string  A unique token representing the current gallery
    */
-  private static function _get_gallery_token($shortcode)
+  private static function _get_inline_gallery_id($shortcode)
   {
     return substr( md5( serialize($shortcode) ), 0, -24 );
   }
 
   /**
-   * Creates a static custom stylesheet based on any customizations
-   * the user has made to their gallery. This allows for selective namespacing
-   * of the CSS selectors, giving much more control over what we target.
-   *
-   * We have to do this here because the token is used inside this function.
-   * Tokens can only be generated when we know for sure which parameters
-   * are being used to render the current gallery.
-   *
-   * This is super rad.
-   *
-   * @return void
+   * [_vimeography_register_customizations description]
+   * @return [type] [description]
    */
   private function _vimeography_register_customizations()
   {
-    if (! empty($this->_gallery_id) )
+    $name = 'vimeography-gallery-' . $this->_gallery_id . '-custom';
+    $filename = $name . '.css';
+    $filepath = VIMEOGRAPHY_ASSETS_PATH . 'css/' . $filename;
+    $file_url = VIMEOGRAPHY_ASSETS_URL . 'css/' . $filename;
+
+    if (file_exists($filepath))
     {
-      $customizations = get_transient('vimeography_theme_settings_' . $this->_gallery_id);
-      if ( $customizations !== FALSE)
-      {
-        $css = '';
-        $name = 'vimeography-gallery-' . $this->_gallery_id . '-custom';
-        $filename = $name . '.css';
-        $filepath = VIMEOGRAPHY_ASSETS_PATH . 'css/' . $filename;
-        $file_url = VIMEOGRAPHY_ASSETS_URL . 'css/' . $filename;
-
-        foreach ($customizations as $setting)
-        {
-          $namespace = $setting['namespace'] == TRUE ? '#vimeography-gallery-'.$this->_token : '';
-
-          for ($i = 0; $i < count($setting['targets']); $i++)
-            $css .= $namespace . $setting['targets'][$i] . ' { ' . $setting['attributes'][$i] . ': ' . $setting['value'] . "; } \n";
-        }
-
-        if ( file_exists($filepath) )
-        {
-          $stylesheet = file_get_contents($filepath);
-          if ($stylesheet !== $css)
-          {
-            file_put_contents($filepath, $css);
-          }
-        }
-        else
-        {
-          file_put_contents($filepath, $css);
-        }
-
-        // Make sure the current theme's stylesheet handle is set as a dependency
-        wp_register_style($name, $file_url, array($this->_gallery_settings['theme']));
-        wp_enqueue_style($name);
-      }
+      // Make sure the current theme's stylesheet handle is set as a dependency
+      wp_register_style($name, $file_url, array($this->_gallery_settings['theme']));
+      wp_enqueue_style($name);
     }
+
   }
 
   /**
@@ -247,19 +202,17 @@ class Vimeography_Shortcode extends Vimeography
       {
         do_action('vimeography/load_pro');
         $vimeography = new Vimeography_Core_Pro($this->_gallery_settings);
-        $renderer    = new Vimeography_Pro_Renderer($this->_gallery_settings, $this->_token);
+        $renderer    = new Vimeography_Pro_Renderer($this->_gallery_settings, $this->_gallery_id);
       }
       else
       {
         require_once(VIMEOGRAPHY_PATH . 'lib/core/basic.php');
 
         $vimeography = new Vimeography_Core_Basic($this->_gallery_settings);
-        $renderer    = new Vimeography_Renderer($this->_gallery_settings, $this->_token);
+        $renderer    = new Vimeography_Renderer($this->_gallery_settings, $this->_gallery_id);
       }
 
-      $result = $vimeography->getVideoSet($this->_gallery_settings['cache'], $this->_token);
-
-      //$result = Vimeography_Core::getVideoSet($vimeography, $this->_gallery_settings['cache'], $this->_token);
+      $result = $vimeography->get_videos($this->_gallery_settings['cache'], $this->_gallery_id);
 
       // Render that ish.
       return $renderer->render($result);

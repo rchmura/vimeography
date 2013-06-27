@@ -16,7 +16,7 @@ class Vimeography_Renderer
    * @param unknown $token
    * @throws Vimeography_Exception
    */
-  public function __construct($settings, $token)
+  public function __construct($settings, $gallery_id)
   {
     if (! isset($settings['theme']))
       throw new Vimeography_Exception('You must specify a theme in either the admin panel or the shortcode.');
@@ -39,7 +39,7 @@ class Vimeography_Renderer
     $this->_view  = new $class;
     $this->_theme = (isset($settings['partial'])) ? $mustache->loadPartial($settings['partial']) : $mustache->loadTemplate( $theme );
 
-    $this->_view->token = $token;
+    $this->_view->gallery_id = $gallery_id;
 
     if (isset($settings['width']))
       $this->_view->gallery_width = $settings['width'];

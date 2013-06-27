@@ -44,32 +44,6 @@ class Vimeography_Base
 	}
 
 	/**
-	 * Get the JSON data stored in the Vimeography cache for the provided gallery id.
-	 *
-	 * @access public
-	 * @static
-	 * @param mixed $id
-	 * @return void
-	 */
-	public static function get_vimeography_cache($id)
-	{
-    return FALSE === ( $vimeography_cache_results = get_transient( 'vimeography_cache_'.$id ) ) ? FALSE : $vimeography_cache_results;
-  }
-
-	/**
-	 * Delete the transient cache entry for the given gallery id. This is a common function.
-	 *
-	 * @access public
-	 * @static
-	 * @param mixed $id
-	 * @return void
-	 */
-	public static function delete_vimeography_cache($id)
-  {
-    return delete_transient('vimeography_cache_'.$id);
-  }
-
-	/**
 	 * Gets the default settings created when Vimeography is installed.
 	 *
 	 * @access public
