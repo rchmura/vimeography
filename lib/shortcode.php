@@ -180,7 +180,8 @@ class Vimeography_Shortcode extends Vimeography
     if (file_exists($filepath))
     {
       // Make sure the current theme's stylesheet handle is set as a dependency
-      wp_register_style($name, $file_url, array($this->_gallery_settings['theme']));
+      $dependency = strtolower($this->_gallery_settings['theme']);
+      wp_register_style($name, $file_url, array($dependency));
       wp_enqueue_style($name);
     }
 

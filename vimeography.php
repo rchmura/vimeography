@@ -218,21 +218,17 @@ class Vimeography
     if ( !current_user_can( 'manage_options' ) )
       wp_die( __( 'You do not have sufficient permissions to access this page.' ) );
 
-    wp_register_style( 'bootstrap', VIMEOGRAPHY_URL.'media/css/bootstrap.min.css');
-    wp_register_style( 'bootstrap-responsive', VIMEOGRAPHY_URL.'media/css/bootstrap-responsive.min.css');
+    wp_register_style( 'vimeography-bootstrap', VIMEOGRAPHY_URL.'media/css/bootstrap.min.css');
     wp_register_style( 'vimeography-admin', VIMEOGRAPHY_URL.'media/css/admin.css');
 
-    wp_register_script( 'bootstrap-transition', VIMEOGRAPHY_URL.'media/js/bootstrap-transition.js');
-    wp_register_script( 'bootstrap-alert', VIMEOGRAPHY_URL.'media/js/bootstrap-alert.js');
-    wp_register_script( 'vimeography-admin.js', VIMEOGRAPHY_URL.'media/js/admin.js', 'jquery');
+    wp_register_script( 'vimeography-bootstrap', VIMEOGRAPHY_URL.'media/js/bootstrap.min.js');
+    wp_register_script( 'vimeography-admin', VIMEOGRAPHY_URL.'media/js/admin.js', 'jquery');
 
-    wp_enqueue_style( 'bootstrap');
-    wp_enqueue_style( 'bootstrap-responsive');
+    wp_enqueue_style( 'vimeography-bootstrap');
     wp_enqueue_style( 'vimeography-admin');
 
-    wp_enqueue_script( 'bootstrap-transition');
-    wp_enqueue_script( 'bootstrap-alert');
-    wp_enqueue_script( 'vimeography-admin.js');
+    wp_enqueue_script( 'vimeography-bootstrap');
+    wp_enqueue_script( 'vimeography-admin');
 
     $mustache = new Mustache_Engine(array('loader' => new Mustache_Loader_FilesystemLoader(VIMEOGRAPHY_PATH . 'lib/admin/templates'),));
     require_once(VIMEOGRAPHY_PATH . 'lib/admin/base.php');

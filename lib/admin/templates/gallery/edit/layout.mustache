@@ -48,7 +48,7 @@
         });
 
         // Add support for the question popovers
-        $('.icon-question-sign').popover({trigger: 'hover'});
+        $('.icon-question-sign').popover({container: 'body', trigger: 'hover'});
 
         // Create our scrollbar for the theme list menu panel
         $("#aujus").mCustomScrollbar();
@@ -64,7 +64,7 @@
         });
 
       });
-    })(jQuery)
+    }(jQuery))
   </script>
 
   {{#messages}}
@@ -75,10 +75,12 @@
     </div>
   {{/messages}}
 
-  <div class="alert">
-    <strong>Want more?</strong> With Vimeography Pro, you can sort your videos, create playlists, show unlimited videos, add comments and more.
-    <a href="{{admin_url}}pro" title="Learn more about Vimeography Pro">Learn more &rarr;</a>
-  </div>
+  {{^has_pro}}
+    <div class="alert">
+      <strong>Want more?</strong> With Vimeography Pro, you can sort your videos, create playlists, show unlimited videos, add comments and more.
+      <a href="{{admin_url}}pro" title="Learn more about Vimeography Pro">Learn more &rarr;</a>
+    </div>
+  {{/has_pro}}
 
   {{#gallery}}
 

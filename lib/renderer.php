@@ -32,7 +32,7 @@ class Vimeography_Renderer
       throw new Vimeography_Exception('The "' . $theme . '" theme class does not exist or is improperly structured.');
 
     $mustache = new Mustache_Engine( array(
-      'loader' => new Mustache_Loader_FilesystemLoader(VIMEOGRAPHY_THEME_PATH . '/' . $theme),
+      'loader'          => new Mustache_Loader_FilesystemLoader(VIMEOGRAPHY_THEME_PATH . '/' . $theme),
       'partials_loader' => new Mustache_Loader_FilesystemLoader(VIMEOGRAPHY_THEME_PATH . '/' . $theme . '/partials'),
     ) );
 
@@ -54,7 +54,7 @@ class Vimeography_Renderer
    */
   public function render($result)
   {
-    $this->_view->data     = $result->data;
+    $this->_view->data     = $result->video_set;
     $this->_view->featured = $this->_view->data[0];
 
     return $this->_theme->render($this->_view);

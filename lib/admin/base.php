@@ -44,6 +44,15 @@ class Vimeography_Base
 	}
 
 	/**
+	 * [has_pro description]
+	 * @return boolean [description]
+	 */
+	public static function has_pro()
+	{
+		return is_plugin_active('vimeography-pro/vimeography-pro.php');
+	}
+
+	/**
 	 * Gets the default settings created when Vimeography is installed.
 	 *
 	 * @access public
@@ -73,7 +82,7 @@ class Vimeography_Base
 			$theme_info['thumbnail'] = file_exists($local_path) ? VIMEOGRAPHY_THEME_URL . strtolower($theme_info['name']) . '/' . strtolower($theme_info['name']) .'.jpg' : 'http://placekitten.com/g/200/150';
 
 			if (isset($this->_gallery))
-			 $theme_info['active'] = strtolower($theme_info['name']) == $this->_gallery[0]->theme_name ? TRUE : FALSE;
+			 $theme_info['active'] = strtolower($theme_info['name']) == strtolower($this->_gallery[0]->theme_name) ? TRUE : FALSE;
 
 			$themes[] = $theme_info;
 		}

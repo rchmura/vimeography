@@ -100,10 +100,11 @@ class Vimeography_Init extends Vimeography
    */
   public function vimeography_add_mce_popup()
   {
+    $mustache = new Mustache_Engine(array('loader' => new Mustache_Loader_FilesystemLoader(VIMEOGRAPHY_PATH . 'lib/admin/templates'),));
     require_once(VIMEOGRAPHY_PATH . 'lib/admin/view/vimeography/mce.php');
-    $mustache = new Vimeography_MCE();
-    $template = $this->_load_template('vimeography/mce');
-    echo $mustache->render($template);
+    $view = new Vimeography_MCE;
+    $template = $mustache->loadTemplate('vimeography/mce');
+    echo $template->render($view);
   }
 
 }

@@ -81,7 +81,7 @@ class Vimeography_Gallery_Edit extends Vimeography_Base
    */
   private function _refresh_gallery_cache()
   {
-    if ($this->cache->exists())
+    if ($this->_cache->exists())
       $this->_cache->delete();
 
     $this->messages[] = array('type' => 'success', 'heading' => 'So fresh.', 'message' => __('Your videos have been refreshed.') );
@@ -108,11 +108,6 @@ class Vimeography_Gallery_Edit extends Vimeography_Base
    */
   private static function _load_scripts()
   {
-    wp_register_script( 'bootstrap-tooltip', VIMEOGRAPHY_URL.'media/js/bootstrap-tooltip.js');
-    wp_register_script( 'bootstrap-popover', VIMEOGRAPHY_URL.'media/js/bootstrap-popover.js');
-    wp_register_script( 'bootstrap-transition', VIMEOGRAPHY_URL.'media/js/bootstrap-transition.js');
-    wp_register_script( 'bootstrap-collapse', VIMEOGRAPHY_URL.'media/js/bootstrap-collapse.js');
-    wp_register_script( 'bootstrap-affix', VIMEOGRAPHY_URL.'media/js/bootstrap-affix.js');
     if (! wp_script_is('jquery-ui'))
     {
       wp_register_script('jquery-ui', "//ajax.googleapis.com/ajax/libs/jqueryui/1.8/jquery-ui.min.js", false, null);
@@ -120,12 +115,6 @@ class Vimeography_Gallery_Edit extends Vimeography_Base
     }
     wp_register_script( 'jquery-mousewheel', VIMEOGRAPHY_URL.'media/js/jquery.mousewheel.min.js', 'jquery');
     wp_register_script( 'jquery-custom-scrollbar', VIMEOGRAPHY_URL.'media/js/jquery.mCustomScrollbar.js', 'jquery');
-
-    wp_enqueue_script( 'bootstrap-transition');
-    wp_enqueue_script( 'bootstrap-collapse');
-    wp_enqueue_script( 'bootstrap-tooltip');
-    wp_enqueue_script( 'bootstrap-popover');
-    wp_enqueue_script( 'bootstrap-affix');
 
     wp_enqueue_script( 'jquery-mousewheel');
     wp_enqueue_script( 'jquery-custom-scrollbar');
@@ -151,17 +140,21 @@ class Vimeography_Gallery_Edit extends Vimeography_Base
         if (! isset($setting['type']))
           throw new Vimeography_Exception(__('One of your active theme settings does not specify the type of setting it is.'));
 
-        //require_once VIMEOGRAPHY_PATH . 'lib/admin/view/theme/settings/kendoui.php';
+        if ($setting['pro'] === TRUE AND $this->has_pro() === FALSE)
+          continue;
 
         if (file_exists(VIMEOGRAPHY_PATH . 'lib/admin/view/theme/settings/'.$setting['type'].'.php'))
         {
           require_once VIMEOGRAPHY_PATH . 'lib/admin/view/theme/settings/'.$setting['type'].'.php';
           $template_dir = VIMEOGRAPHY_PATH;
         }
-        elseif (file_exists(VIMEOGRAPHY_PRO_PATH . 'lib/admin/view/theme/settings/'.$setting['type'].'.php'))
+        elseif ( defined('VIMEOGRAPHY_PRO_PATH') )
         {
-          require_once VIMEOGRAPHY_PRO_PATH . 'lib/admin/view/theme/settings/'.$setting['type'].'.php';
-          $template_dir = VIMEOGRAPHY_PRO_PATH;
+          if (file_exists(VIMEOGRAPHY_PRO_PATH . 'lib/admin/view/theme/settings/'.$setting['type'].'.php'))
+          {
+            require_once VIMEOGRAPHY_PRO_PATH . 'lib/admin/view/theme/settings/'.$setting['type'].'.php';
+            $template_dir = VIMEOGRAPHY_PRO_PATH;
+          }
         }
         else
         {
@@ -293,6 +286,12 @@ class Vimeography_Gallery_Edit extends Vimeography_Base
     }
   }
 
+  /**
+   * [_vimeography_validate_basic_settings description]
+   * @param  [type] $id    [description]
+   * @param  [type] $input [description]
+   * @return [type]        [description]
+   */
   private function _vimeography_validate_basic_settings($id, $input)
   {
     if (check_admin_referer('vimeography-basic-action','vimeography-basic-verification') )
@@ -384,26 +383,24 @@ class Vimeography_Gallery_Edit extends Vimeography_Base
           $attributes = array();
 
           foreach ($setting['attributes'] as $attribute)
-          {
-            // Convert the jQuery attribute selector to an actual css property
-            $number_of_matches = preg_match_all('/[A-Z]/', esc_attr($attribute), $capitals, PREG_OFFSET_CAPTURE);
-
-            if ($number_of_matches == 0)
-            {
-              $attributes[] = $attribute;
-              continue;
-            }
-
-            $i = 0; // offset in case of multiple capitals
-            foreach ($capitals[0] as $capital)
-            {
-              $attribute = strtolower(substr_replace($attribute, '-', $capital[1]+$i, 0));
-              $i++;
-            }
-            $attributes[] = $attribute;
-          }
+            $attributes[] = self::_convert_jquery_css_attribute($attribute);
 
           $setting['attributes'] = $attributes;
+
+          if (isset($setting['expressions']) AND ! empty($setting['expressions']))
+          {
+
+            foreach ($setting['expressions'] as $selector => $attributes)
+            {
+              foreach ($attributes as $attribute => $value)
+              {
+                $new_attr = self::_convert_jquery_css_attribute($attribute);
+
+                unset($setting['expressions'][$selector][$attribute]);
+                $setting['expressions'][$selector][$new_attr] = $value;
+              }
+            }
+          }
 
           $targets = array();
 
@@ -425,9 +422,21 @@ class Vimeography_Gallery_Edit extends Vimeography_Base
         foreach ($settings as $setting)
         {
           $namespace = $setting['namespace'] == TRUE ? '#vimeography-gallery-'.$id : '';
+          $important = isset($setting['important']) ? ' !important' : '';
 
           for ($i = 0; $i < count($setting['targets']); $i++)
-            $css .= $namespace . $setting['targets'][$i] . ' { ' . $setting['attributes'][$i] . ': ' . $setting['value'] . "; } \n";
+          {
+            // If this is an expression, change the value to the expression value calculated by the appearance widget.
+            if (isset($setting['expressions']) AND array_key_exists($setting['targets'][$i], $setting['expressions']))
+            {
+              if (array_key_exists($setting['attributes'][$i], $setting['expressions'][$setting['targets'][$i]]))
+              {
+                $setting['value'] = $setting['expressions'][$setting['targets'][$i]][$setting['attributes'][$i]];
+              }
+            }
+
+            $css .= $namespace . $setting['targets'][$i] . ' { ' . $setting['attributes'][$i] . ': ' . $setting['value'] . $important . "; } \n";
+          }
         }
 
         file_put_contents($filepath, $css);
@@ -441,6 +450,28 @@ class Vimeography_Gallery_Edit extends Vimeography_Base
         $this->messages[] = array('type' => 'error', 'heading' => __('Oh no!'), 'message' => $e->getMessage());
       }
     }
+  }
+
+  /**
+   * [_convert_jquery_css_selector description]
+   * @param  [type] $selector [description]
+   * @return [type]           [description]
+   */
+  private function _convert_jquery_css_attribute($attribute)
+  {
+    // Convert the jQuery attribute selector to an actual css property
+    $number_of_matches = preg_match_all('/[A-Z]/', esc_attr($attribute), $capitals, PREG_OFFSET_CAPTURE);
+
+    if ($number_of_matches == 0)
+      return $attribute;
+
+    $i = 0; // offset in case of multiple capitals
+    foreach ($capitals[0] as $capital)
+    {
+      $attribute = strtolower(substr_replace($attribute, '-', $capital[1]+$i, 0));
+      $i++;
+    }
+    return $attribute;
   }
 
 }
