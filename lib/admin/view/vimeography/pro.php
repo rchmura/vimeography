@@ -3,14 +3,11 @@
 class Vimeography_Pro_About extends Vimeography_Base
 {
   public $messages;
-  public $has_pro;
 
 	public function __construct()
 	{
 		if ($_SERVER['REQUEST_METHOD'] == 'POST')
 			$this->_validate_form();
-
-    $this->has_pro = class_exists( 'Vimeography_Pro' ) ? TRUE : FALSE;
 	}
 
 	/**
@@ -79,34 +76,10 @@ class Vimeography_Pro_About extends Vimeography_Base
     // if this fails, check_admin_referer() will automatically print a "failed" page and die.
     if (check_admin_referer('vimeography-pro-registration','vimeography-pro-registration-verification') )
     {
-      $data['key']   = wp_filter_nohtml_kses($input['vimeography_pro_registration']['key']);
-      $data['key'] = 'E25P2B0B9154';
+      $data['key'] = wp_filter_nohtml_kses($input['vimeography_pro_registration']['key']);
 
-      $request = wp_remote_post( 'http://vimeography.com/pro/register/' . $data['key'] );
-
-      if( !is_wp_error($request) OR wp_remote_retrieve_response_code($request) === 200)
-      {
-        $response = json_decode($request['body']);
-      }
-      else
-      {
-        return FALSE;
-      }
-
-      if ($response->status == 'error')
-      {
-        foreach ($response->messages as $message)
-          $this->messages[] = array('type' => 'error', 'heading' => __('Whoops!'), 'message' => __($message));
-
-        return FALSE;
-      }
-
-      $plugins = array(
-          array('name' => 'vimeography-pro', 'path' => $response->url, 'install' => 'vimeography-pro/vimeography-pro.php'),
-      );
-      $this->_vimeography_mm_get_plugins($plugins);
-
-      $this->messages[] = array('type' => 'success', 'heading' => __('Congratulations!'), 'message' => __('Vimeography PRO is now installed and ready to rock!'));
+      //$this->messages[] = array('type' => 'success', 'heading' => __('Congratulations!'), 'message' => __('Vimeography Pro is now installed and ready to rock!'));
+      $this->messages[] = array('type' => 'error', 'heading' => __('Sorry!'), 'message' => __('Vimeography Pro is almost ready, but still needs a little work!'));
     }
   }
 
@@ -177,113 +150,5 @@ class Vimeography_Pro_About extends Vimeography_Base
 
     }
 	}
-
-  /**
-   * [_vimeography_mm_get_plugins description]
-   *
-   * @link http://stackoverflow.com/questions/10353859/is-it-possible-to-programmatically-install-plugins-from-wordpress-theme
-   * @param  [type] $plugins [description]
-   * @return [type]          [description]
-   */
-  private function _vimeography_mm_get_plugins($plugins)
-  {
-    $args = array(
-      'path' => ABSPATH.'wp-content/plugins/',
-      'preserve_zip' => false
-    );
-
-    foreach($plugins as $plugin)
-    {
-      $this->_vimeography_mm_plugin_download($plugin['path'], $args['path'].$plugin['name'].'.zip');
-      $this->_vimeography_mm_plugin_unpack($args, $args['path'].$plugin['name'].'.zip');
-      //$this->_vimeography_mm_plugin_activate($plugin['install']);
-    }
-  }
-
-  /**
-   * [_vimeography_mm_plugin_download description]
-   * @param  [type] $url  [description]
-   * @param  [type] $path [description]
-   * @return [type]       [description]
-   */
-  private function _vimeography_mm_plugin_download($url, $path)
-  {
-    $ch = curl_init($url);
-    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-    $data = curl_exec($ch);
-    curl_close($ch);
-    if(file_put_contents($path, $data))
-      return true;
-    else
-      return false;
-  }
-
-  /**
-   * [_vimeography_mm_plugin_unpack description]
-   * @param  [type] $args   [description]
-   * @param  [type] $target [description]
-   * @return [type]         [description]
-   */
-  private function _vimeography_mm_plugin_unpack($args, $target)
-  {
-    if($zip = zip_open($target))
-    {
-      while($entry = zip_read($zip))
-      {
-        $is_file = substr(zip_entry_name($entry), -1) == '/' ? false : true;
-        $file_path = $args['path'].zip_entry_name($entry);
-        if($is_file)
-        {
-          if(zip_entry_open($zip,$entry,"r"))
-          {
-            $fstream = zip_entry_read($entry, zip_entry_filesize($entry));
-            file_put_contents($file_path, $fstream );
-            chmod($file_path, 0777);
-            //echo "save: ".$file_path."<br />";
-          }
-          zip_entry_close($entry);
-        }
-        else
-        {
-          if(zip_entry_name($entry))
-          {
-            mkdir($file_path);
-            chmod($file_path, 0777);
-            //echo "create: ".$file_path."<br />";
-          }
-        }
-      }
-      zip_close($zip);
-    }
-    if($args['preserve_zip'] === false)
-    {
-      unlink($target);
-    }
-  }
-
-  /**
-   * [_vimeography_mm_plugin_activate description]
-   * @param  [type] $installer [description]
-   * @return [type]            [description]
-   */
-  private function _vimeography_mm_plugin_activate($installer)
-  {
-    $current = get_option('active_plugins');
-    $plugin = plugin_basename(trim($installer));
-
-    if(!in_array($plugin, $current))
-    {
-      $current[] = $plugin;
-      sort($current);
-      do_action('activate_plugin', trim($plugin));
-      update_option('active_plugins', $current);
-      do_action('activate_'.trim($plugin));
-      do_action('activated_plugin', trim($plugin));
-      return true;
-    }
-    else
-      return false;
-  }
-
 
 }

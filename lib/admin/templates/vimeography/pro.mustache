@@ -6,7 +6,7 @@
 	<div class="alert alert-info fade in">
 		<a class="close" data-dismiss="alert" href="#">&times;</a>
 		<h4 class="alert-heading">Coming soon!</h4>
-		<strong>Get custom! </strong>With Vimeography Pro, you can sort your videos, create playlists, show unlimited videos, add comments and more.
+		<strong>Get custom! </strong>With Vimeography Pro, you can sort your videos, create playlists, show unlimited videos and more.
 	</div>
 
 	{{#messages}}
@@ -18,9 +18,9 @@
 	{{/messages}}
 
 	{{#has_pro}}
+        {{^access_token}}
     	<ol>
-    		<li>Login to your Vimeo account.</li>
-    		<li>Visit <a href="https://developer.vimeo.com/apps" title="Create a new Vimeo application">https://developer.vimeo.com/apps</a> and click <strong>+Create a new app</strong>.</li>
+    		<li>Visit <a href="https://developer.vimeo.com/apps/new?oauth2=enabled" title="Create a new Vimeo application" target="_blank">https://developer.vimeo.com/apps/new?oauth2=enabled</a>.</li>
     		<li>Fill out the form with the following values:</li>
     		<div class="container pull-left">
     		    <table class="table table-striped">
@@ -33,7 +33,7 @@
     			    <tbody>
     				    <tr>
     					    <td><strong>App Name:</strong></td>
-    					    <td>Vimeography Wordpress plugin</td>
+    					    <td>Vimeography Pro Wordpress plugin</td>
     				    </tr>
     				    <tr>
     					    <td><strong>App Description:</strong></td>
@@ -51,14 +51,19 @@
     					    <td><strong>App Callback URL:</strong></td>
     					    <td>[leave this blank]</td>
     				    </tr>
-    				    <tr>
-    					    <td><strong>Terms of Service:</strong></td>
-    					    <td>[check the box]</td>
-    				    </tr>
+                        <tr>
+                            <td><strong>Enable OAuth 2</strong></td>
+                            <td>[check the box]</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Terms of Service:</strong></td>
+                            <td>[check the box]</td>
+                        </tr>
     			    </tbody>
     		    </table>
     		</div>
     	</ol>
+    {{/access_token}}
 
     <form method="post" action="">
     <table class="form-table acf-form-table">
@@ -67,7 +72,7 @@
     			<th scope="row">
     				<h3>Register Your App.</h3>
     				<p>Before you can use Vimeography Pro, you need to register your app with Vimeo.</p>
-    				<p><a href="http://developer.vimeo.com/apps" target="_blank">Register now.</a></p>
+    				<p><a href="https://developer.vimeo.com/apps/new?oauth2=enabled" target="_blank">Register now.</a></p>
     			</th>
     			<td>
     				<div class="wp-box">
@@ -108,8 +113,8 @@
       		<tr>
       			<th scope="row">
       				<h3>Activate PRO.</h3>
-      				<p>Vimeography PRO can be unlocked by purchasing a license key. Each key can be used on multiple sites.</p>
-      				<p><a href="http://www.vimeography.com/pro/" target="_blank">Buy PRO</a></p>
+      				<p>Vimeography PRO can be unlocked by purchasing an activation key. Each key can be used on multiple sites.</p>
+      				<p><a href="http://www.vimeography.com/pro/" target="_blank">Buy Pro</a></p>
       			</th>
       			<td>
       				<div class="wp-box">
@@ -122,12 +127,12 @@
       					</thead>
       					<tbody>
       						<tr>
-      							<td>Order ID</td>
+      							<td>Activation Key</td>
       							<td>
       									<input type="text" value="" name="vimeography_pro_registration[key]">
       									{{{registration_nonce}}}
 
-      									<input class="btn btn-primary" type="submit" value="Register Vimeography PRO">
+      									<input class="btn btn-primary" type="submit" value="Activate Vimeography Pro">
       							</td>
       						</tr>
       					</tbody>

@@ -52,15 +52,8 @@ class Vimeography_Init extends Vimeography
     {
       // See if our rule already exists inside of it.
       $robotstxt = file_get_contents(ABSPATH.'/robots.txt');
-      $blocked_theme_path = str_ireplace(site_url(), '', VIMEOGRAPHY_THEME_URL);
       $blocked_asset_path = str_ireplace(site_url(), '', VIMEOGRAPHY_ASSETS_URL);
 
-      if (strpos($robotstxt, 'Disallow: '.$blocked_theme_path === FALSE))
-      {
-        // Write our rule.
-        $robotstxt .= "\nDisallow: ".$blocked_theme_path."\n";
-        file_put_contents(ABSPATH.'/robots.txt', $robotstxt);
-      }
       if (strpos($robotstxt, 'Disallow: '.$blocked_asset_path === FALSE))
       {
         // Write our rule.

@@ -60,13 +60,17 @@ class Vimeography_Gallery_Edit extends Vimeography_Base
     }
     else
     {
-      // Check if the active theme has a settings file.
-      $settings_file = VIMEOGRAPHY_THEME_PATH . $this->_gallery[0]->theme_name . '/settings.php';
+      $vimeography = Vimeography::get_instance();
 
-      if (file_exists($settings_file))
+      if (! $vimeography->active_theme)
+        $vimeography->set_active_theme($this->_gallery[0]->theme_name);
+
+      $theme = $vimeography->active_theme;
+
+      if (file_exists($theme['settings_file']))
       {
         $this->theme_supports_settings = TRUE;
-        $this->_settings_file = $settings_file;
+        $this->_settings_file = $theme['settings_file'];
       }
     }
 
