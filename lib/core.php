@@ -123,9 +123,9 @@ abstract class Vimeography_Core
 
     if (! empty($this->_featured))
     {
-      $response       = $this->_make_vimeo_request($this->_featured);
-      $featured_video = $this->_get_video_set($response);
-      $result_set     = $this->_arrange_featured_video($video_set, $featured_video);
+      $featured_response = $this->_make_vimeo_request($this->_featured, array(), NULL);
+      $featured_video    = $this->_get_video_set($featured_response);
+      $result_set        = $this->_arrange_featured_video($video_set, $featured_video);
     }
     else
     {
