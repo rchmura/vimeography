@@ -57,6 +57,8 @@ class Vimeo
         $curl_opts[CURLOPT_HEADER] = 1;
         $curl_opts[CURLOPT_RETURNTRANSFER] = true;
         $curl_opts[CURLOPT_TIMEOUT] = 10;
+        $curl_opts[CURLOPT_TIMEOUT] = 10;
+        $curl_opts[CURLOPT_SSL_VERIFYPEER] = false;
 
         // add accept header hardcoded to version 3.0
         $headers[] = 'Accept: application/vnd.vimeo.*+json; version=3.0';
