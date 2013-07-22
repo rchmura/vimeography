@@ -2,45 +2,155 @@
 
 class Vimeography_Cache extends Vimeography
 {
+  /**
+   * The user's cache expiration setting for the current gallery.
+   *
+   * @var int | NULL
+   */
+  private $_expiration;
 
   /**
-   * Get the JSON data stored in the Vimeography cache for the provided gallery id.
+   * The path to the cache file, built in the constructor based on the
+   * provided gallery id.
    *
-   * @access protected
-   * @static
-   * @param integer $id
-   * @return string/bool
+   * @var string
    */
-  protected static function get($id)
+  private $_cache_file;
+
+  /**
+   * [__construct description]
+   * @param [type] $settings [description]
+   */
+  public function __construct($gallery_id, $expiration = NULL)
   {
-    return FALSE === ( $vimeography_cache_results = get_transient( 'vimeography_'.$id ) ) ? FALSE : $vimeography_cache_results;
+    $this->_cache_file = VIMEOGRAPHY_CACHE_PATH . 'vimeography-gallery-' . $gallery_id . '.cache';
+
+    if ( isset($expiration) )
+      $this->_expiration = intval($expiration);
   }
 
   /**
-   * Set the JSON data to the Vimeography cache for the provided gallery id.
+   * Checks if a cache file exists.
    *
-   * @access protected
-   * @static
-   * @param integer $id
-   * @param string  $data
-   * @param integer $cache_limit
-   * @return bool
+   * @param  string $file Path to the cache file.
+   * @return bool         TRUE if exists, FALSE if not.
    */
-  protected static function set($id, $data, $cache_limit)
+  public function exists()
   {
-    return set_transient( 'vimeography_'.$id, $data, $cache_limit );
+    return file_exists($this->_cache_file);
   }
 
   /**
-   * Clear the Vimeography cache for the provided gallery id.
+   * [expired description]
+   * @param  [type] $file [description]
+   * @return [type]       [description]
+   */
+  public function expired()
+  {
+    if (! isset($this->_expiration))
+      return FALSE;
+
+    // Check if the cache is expired
+    $last_modified = filemtime($this->_cache_file);
+
+    if (substr($this->_cache_file, -6) == '.cache' && ($last_modified + $this->_expiration) < time())
+    {
+      // The cache is expired, but we don't want to kill it here,
+      // We only want to remove it if we do not receive a 304 response or the user forces a cache refresh.
+      // Return $last_modified to make the request along with the modified time in the header.
+
+      // $est = new DateTimeZone("America/New_York");
+      // $date = new DateTime();
+      // $date->setTimestamp($last_modified);
+      // $date->setTimezone($est);
+      // return $date->format(DateTime::ISO8601);
+      return date(DATE_ISO8601, strtotime($last_modified));
+    }
+
+    return FALSE;
+  }
+
+  /**
+   * Get the serialized data stored in the Vimeography cache
    *
    * @access public
    * @static
-   * @param integer $id
-   * @return bool
+   * @param string  A cache filename
+   * @return object/bool
    */
-  protected static function delete($id)
+  public function get()
   {
-    return delete_transient('vimeography_'.$id);
+    if (file_exists($this->_cache_file))
+    {
+      return unserialize(file_get_contents($this->_cache_file));
+    }
+    else
+    {
+      return FALSE;
+    }
+  }
+
+  /**
+   * Writes the video set to a cache file.
+   *
+   * @access public
+   * @static
+   * @param string $file      A cache filename, equal to tokenized shortcode settings.
+   * @param object $video_set Vimeo collection data
+   */
+  public function set($data)
+  {
+    return file_put_contents($this->_cache_file, serialize($data));
+  }
+
+  /**
+   * If there is a 304 Not Changed, update the modified time to reset the expiration
+   * Changes the file modified time to current
+   *
+   * @param  string $file A cache filename, equal to tokenized shortcode settings.
+   * @return bool Whether the file was updated or not.
+   */
+  public function renew()
+  {
+    if ( touch($this->_cache_file) )
+    {
+      return $this;
+    }
+    else
+    {
+      return FALSE;
+    }
+  }
+
+  /**
+   * Delete a cache file if it is old or the user forces a refresh.
+   *
+   * @param  string $token A cache filename, equal to tokenized shortcode settings.
+   * @return bool          Success or failure deleting file.
+   */
+  public function delete()
+  {
+    if ( substr($this->_cache_file, -6) == '.cache' )
+      return unlink($this->_cache_file);
+  }
+
+  /**
+   * Remove any expired cache files from the cache directory.
+   * We can safely do this after the request was made, but we really shouldn't
+   * get rid of valid, expired files if the 304 is working properly.
+   *
+   * @return void
+   */
+  protected function cleanup()
+  {
+    $files = scandir(VIMEOGRAPHY_CACHE_PATH);
+
+    foreach ($files as $file)
+    {
+      $last_modified = filemtime(VIMEOGRAPHY_CACHE_PATH . $file);
+
+      if (substr($file, -6) == '.cache' && ($last_modified + $this->_expiration) < time())
+        unlink(VIMEOGRAPHY_CACHE_PATH . $file);
+    }
   }
 }

@@ -1,3 +1,4 @@
+body {position: relative;}
 hr { border: 0; height: 0; border-top: 1px solid rgba(0, 0, 0, 0.1); border-bottom: 1px solid rgba(255, 255, 255, 0.3); }
 
 .wp-admin select {
@@ -296,6 +297,10 @@ ul.vimeography-theme-list a.theme-info span {
 background-position: -360px -144px;
 }
 
+.vimeography-gallery-menu-heading .icon-tasks {
+background-position: -384px -144px;
+}
+
 .vimeography-gallery-menu-content {
 	padding: 0 17px;
 	background-color: #e3e3e3;
@@ -319,10 +324,24 @@ background-position: -360px -144px;
 
 .vimeography-gallery-menu-setting input, .vimeography-gallery-menu-setting select {
 	font-size: 13px;
+	margin: 0;
+}
+
+.vimeography-gallery-menu-setting input[type="text"].span3 {
+	width: 210px;
+	line-height: 18px;
+	padding: 4px;
+	height: auto;
 }
 
 .popover-content p {margin: 0;}
 #vimeography-gallery-menu-container.affix {position: fixed; top: 40px; left: 165px;}
+#vimeography-gallery-menu-container.affix-bottom {position: absolute; bottom: 150px;}
+
+.wp_bootstrap .form-table input {width: 460px; font-size: 22px; line-height: 22px; height: 35px;}
+table.widefat.fixed {border-collapse: separate;}
+
+.alert h3 {line-height: 20px;}
 
 /* Custom Scrollbar */
 /* basic scrollbar styling */

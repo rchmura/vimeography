@@ -2,9 +2,11 @@
 (function($){
 	$(document).ready(function(){
 		$('.vimeography-question').tooltip();
-		
+
 		$('.vimeography-gallery-settings').popover({
-			placement: 'bottom', 
+			placement: 'bottom',
+			trigger: 'hover',
+			html: true,
 			content: function(){
 				return '<ul style="margin: -10px 5px 5px;">' +
 							'<li><strong>Active Theme: </strong>'+$(this).attr('data-active-theme')+'</li>'+
@@ -15,14 +17,14 @@
 						'</ul>';
 			}
 		});
-		
+
 		$('.vimeography-duplicate-gallery').click(function(e){
 			var id = $(this).attr('data-id');
 			$('#vimeography-list-action').val('duplicate');
 			$('#vimeography-list-id').val(id);
 			$('#vimeography-list-form').submit();
 		});
-		
+
 		$('.vimeography-delete-gallery').click(function(e){
 			e.preventDefault();
 			var id = $(this).attr('data-id');
@@ -38,21 +40,7 @@
 </script>
 
 <style type="text/css">
-.clearfix{*zoom:1;}.clearfix:before,.clearfix:after{display:table;content:"";}
-.clearfix:after{clear:both;}
-.hide-text{font:0/0 a;color:transparent;text-shadow:none;background-color:transparent;border:0;}
-.input-block-level{display:block;width:100%;min-height:28px;-webkit-box-sizing:border-box;-moz-box-sizing:border-box;-ms-box-sizing:border-box;box-sizing:border-box;}
-.tooltip{position:absolute;z-index:1020;display:block;visibility:visible;padding:5px;font-size:11px;opacity:0;filter:alpha(opacity=0);}.tooltip.in{opacity:0.8;filter:alpha(opacity=80);}
-.tooltip.top{margin-top:-2px;}
-.tooltip.right{margin-left:2px;}
-.tooltip.bottom{margin-top:2px;}
-.tooltip.left{margin-left:-2px;}
-.tooltip.top .tooltip-arrow{bottom:0;left:50%;margin-left:-5px;border-left:5px solid transparent;border-right:5px solid transparent;border-top:5px solid #000000;}
-.tooltip.left .tooltip-arrow{top:50%;right:0;margin-top:-5px;border-top:5px solid transparent;border-bottom:5px solid transparent;border-left:5px solid #000000;}
-.tooltip.bottom .tooltip-arrow{top:0;left:50%;margin-left:-5px;border-left:5px solid transparent;border-right:5px solid transparent;border-bottom:5px solid #000000;}
-.tooltip.right .tooltip-arrow{top:50%;left:0;margin-top:-5px;border-top:5px solid transparent;border-bottom:5px solid transparent;border-right:5px solid #000000;}
-.tooltip-inner{max-width:200px;padding:3px 8px;color:#ffffff;text-align:center;text-decoration:none;background-color:#000000;-webkit-border-radius:4px;-moz-border-radius:4px;border-radius:4px;}
-.tooltip-arrow{position:absolute;width:0;height:0;}
+.vimeography-question {display: inline-block; width: 18px; height: 20px;}
 </style>
 
 <div class="wrap">
@@ -60,7 +48,7 @@
 		<!-- Display Plugin Icon, Header, and Description -->
 		<div class="icon32" id="icon-options-general"><br></div>
 		<h2 class="page-title">Edit Galleries <a href="{{new_gallery_url}}" class="button add-new-h2">Add New</a></h2>
-		
+
 		{{#messages}}
 			<div class="alert alert-{{type}} fade in">
 				<a class="close" data-dismiss="alert" href="#">&times;</a>
@@ -69,7 +57,7 @@
 			</div>
 		{{/messages}}
 	</div>
-	
+
 	{{#galleries_to_show}}
 		<table cellspacing="0" class="widefat fixed">
 			<thead>
@@ -77,36 +65,36 @@
 			        <th style="" class="manage-column column-cb check-column" id="cb" scope="col"><input type="checkbox" onclick="jQuery('.vimeography_list_checkbox').attr('checked', this.checked);" name="form_bulk_check_all"></th>
 		            <th class="manage-column column-cb check-column" id="active" scope="col"></th>
 		            <th style="width:50px;" class="manage-column" id="id" scope="col">Id</th>
-		            <th width="360" class="manage-column column-title" id="title" scope="col">Title</th>
-		            <th style="" class="manage-column column-author" id="author" scope="col">Video Source  <div class="wp_bootstrap" style="display:inline-block;"><a class="vimeography-question" href="#" rel="tooltip" title="The location of the videos that your gallery is using."><i class="icon-question-sign"></i></a></div></th>
-		            <th style="" class="manage-column" id="template" scope="col">Shortcode  <div class="wp_bootstrap" style="display:inline-block;"><a class="vimeography-question" href="#" rel="tooltip" title="Copy and paste this on to your post or page to show the gallery!"><i class="icon-question-sign"></i></a></div></th>
+		            <th style="width:300px" class="manage-column column-title" id="title" scope="col">Title</th>
+		            <th style="width:300px;" class="manage-column column-author" id="author" scope="col">Video Source  <div class="wp_bootstrap" style="display:inline-block;"><a class="vimeography-question" href="#" data-toggle="tooltip" title="The location of the videos that your gallery is using."><i class="icon-question-sign"></i></a></div></th>
+		            <th style="width: 200px;" class="manage-column" scope="col">Shortcode  <div class="wp_bootstrap" style="display:inline-block;"><a class="vimeography-question" href="#" rel="tooltip" title="Copy and paste this on to your post or page to show the gallery!"><i class="icon-question-sign"></i></a></div></th>
 		            <th style="" class="manage-column" id="theme-name" scope="col">Quickview  <div class="wp_bootstrap" style="display:inline-block;"><a class="vimeography-question" href="#" rel="tooltip" title="A glance at the settings that are currently applied to your gallery."><i class="icon-question-sign"></i></a></div></th>
 		        </tr>
 		    </thead>
-		
+
 		    <tfoot>
 		        <tr>
 		        	<th style="" class="manage-column column-cb check-column" id="cb" scope="col"><input type="checkbox" onclick="jQuery('.vimeography_list_checkbox').attr('checked', this.checked);" name="form_bulk_check_all"></th>
 		            <th class="manage-column column-cb check-column" id="active" scope="col"></th>
 		            <th class="manage-column" id="id" scope="col">Id</th>
-		            <th width="350" class="manage-column column-title" id="title" scope="col">Title</th>
-		            <th style="" class="manage-column column-author" id="source" scope="col">Video Source</th>
-		            <th style="" class="manage-column" id="shortcode" scope="col">Shortcode</th>
+		            <th style="width: 300px;" class="manage-column column-title" id="title" scope="col">Title</th>
+		            <th style="width:300px;" class="manage-column column-author" id="source" scope="col">Video Source</th>
+		            <th style="width: 200px;" class="manage-column" id="shortcode" scope="col">Shortcode</th>
 		            <th style="" class="manage-column column-author" id="theme" scope="col">Quickview</th>
 		        </tr>
 		    </tfoot>
-		
+
 		    <tbody class="list:user user-list">
-		    
+
 		    	{{#galleries}}
 					<tr valign="top" class="author-self status-inherit">
 						<th class="check-column" scope="row"><input type="checkbox" class="vimeography_list_checkbox" value="{{id}}" name="form[]"></th>
-			                                    
+
 			            <td><div class="wp_bootstrap"><i class="icon-ok" style="cursor:pointer;"></i></div></td>
 			            <td class="column-id">{{id}}</td>
 			            <td class="column-title">
 				            <strong><a title="Edit" href="{{edit_url}}" class="row-title">{{title}}</a></strong>
-				            
+
 				            <div class="row-actions">
 				                <span class="edit"><a href="{{edit_url}}" title="Edit this gallery">Edit</a> |</span>
 				                <span class="edit"><a target="_blank" href="{{edit_url}}" title="Preview this gallery">Preview</a> |</span>
@@ -118,8 +106,8 @@
 				        <td><strong>[vimeography id="{{id}}"]</strong></td>
 				        <td><span class="wp_bootstrap"><button class="vimeography-gallery-settings btn btn-mini btn-info dropdown-toggle" style="cursor: default;" title="Quickview for {{title}}" data-active-theme="{{theme_name}}" data-video-limit="{{video_limit}}" data-featured-video="{{featured_video}}" data-cache-timeout="{{cache_timeout}}" data-created-on="{{date_created}}">Gallery Quickview <span class="caret"></span></button></span></td>
 				    </tr>
-		    	{{/galleries}}	
-								
+		    	{{/galleries}}
+
 			</tbody>
 		</table>
 		<form id="vimeography-list-form" method="post" action="{{admin_url}}edit-galleries">
@@ -137,11 +125,11 @@
 					    {{/pages}}
 					    <li{{^next-page}} class="disabled{{/next-page}}"><a href="{{#next-page}}{{admin_url}}edit-galleries&p={{next-page}}{{/next-page}}{{^next-page}}#{{/next-page}}">&rarr;</a></li>
 				    </ul>
-			    </div>		
+			    </div>
 			</div>
 		{{/pagination}}
 	{{/galleries_to_show}}
-	
+
 	{{^galleries_to_show}}
 		<h1>You don't have any galleries. <a href="{{new_gallery_url}}" title="Create a new gallery">Care to make one?</a></h1>
 	{{/galleries_to_show}}

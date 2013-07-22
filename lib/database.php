@@ -120,4 +120,65 @@ class Vimeography_Database extends Vimeography
     }
   }
 
+  /**
+   * Database changes for version 1.0
+   *
+   *  - Adds a resource_uri column, which contains the resource
+   *    being fetched by the new API
+   *
+   *  - Converts the existing source URL to the resource
+   *
+   *  - Drops the video limit
+   *
+   * @return [type] [description]
+   */
+  public function vimeography_update_db_to_1_0()
+  {
+
+    if (get_option('vimeography_db_version') < 1)
+    {
+      global $wpdb;
+      $wpdb->hide_errors();
+
+      $wpdb->query('ALTER TABLE '.VIMEOGRAPHY_GALLERY_META_TABLE.' ADD resource_uri VARCHAR(50) NOT NULL AFTER source_url;');
+
+      $rows = $wpdb->get_results('SELECT gallery_id, source_url FROM '.VIMEOGRAPHY_GALLERY_META_TABLE.' WHERE 1');
+
+      if (!empty($rows))
+      {
+        foreach ($rows as $row)
+        {
+          try
+          {
+            // Convert source_url to resource, then update with value
+            $resource_uri = $this->validate_vimeo_source($row->source_url);
+            $wpdb->update( VIMEOGRAPHY_GALLERY_META_TABLE, array('resource_uri' => $resource_uri), array('gallery_id' => $row->gallery_id) );
+
+          }
+          catch (Vimeography_Exception $e)
+          {
+            // source_url was not valid, delete row from database
+            $wpdb->query(
+              $wpdb->prepare(
+                '
+                DELETE gallery, meta
+                FROM '.VIMEOGRAPHY_GALLERY_TABLE.' gallery, '.VIMEOGRAPHY_GALLERY_META_TABLE.' meta
+                WHERE gallery.id = %d
+                AND meta.gallery_id = %d
+                ',
+                $row->gallery_id, $row->gallery_id
+              )
+            );
+          }
+        }
+
+      } // end row manipulation
+
+      // Drop the video limit.
+      $result = $wpdb->query('ALTER TABLE '. VIMEOGRAPHY_GALLERY_META_TABLE .' DROP COLUMN video_limit');
+
+      $this->vimeography_update_tables();
+    }
+  }
+
 }
