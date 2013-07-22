@@ -1,22 +1,22 @@
 <?php
 
-class Vimeography_Theme_List extends Vimeography_Base 
+class Vimeography_Theme_List extends Vimeography_Base
 {
 	/**
 	 * Checks if there is an incoming form submission.
-	 * 
+	 *
 	 * @access public
 	 * @return void
 	 */
 	public function __construct()
 	{
-		if (isset($_FILES['vimeography-theme']))
+		if (isset($_POST['vimeography-activation-key']))
 			$this->_validate_form();
 	}
-	
+
 	/**
 	 * Returns several security form fields for the new gallery form.
-	 * 
+	 *
 	 * @access public
 	 * @return mixed
 	 */
@@ -24,53 +24,46 @@ class Vimeography_Theme_List extends Vimeography_Base
 	{
 	   return wp_nonce_field('vimeography-install-theme','vimeography-theme-verification');
 	}
-		
+
+	/**
+	 * [_validate_form description]
+	 * @return [type] [description]
+	 */
 	private function _validate_form()
 	{
-		$url = wp_nonce_url('admin.php?page=vimeography-my-themes');
-		
-		if (false === ($creds = request_filesystem_credentials($url) ) )
-		{
-			// if we get here, then we don't have credentials yet,
-			// but have just produced a form for the user to fill in, 
-			// so stop processing for now
-			
-			return true; // stop the normal page form from displaying
-		}
-			
-		// now we have some credentials, try to get the wp_filesystem running
-		if ( ! WP_Filesystem($creds) )
-		{
-			// our credentials were no good, ask the user for them again
-			request_filesystem_credentials($url);
-			return true;
-		}
-				
 		// if this fails, check_admin_referer() will automatically print a "failed" page and die.
-		if ( ($_FILES['vimeography-theme']['error'] == 0) && check_admin_referer('vimeography-install-theme','vimeography-theme-verification') )
-		{			
-			$name = substr(wp_filter_nohtml_kses($_FILES['vimeography-theme']['name']), 0, -4);
-			$ext = substr($_FILES['vimeography-theme']['name'], -4);
-			
-			if ($ext == '.zip')
+		if ( check_admin_referer('vimeography-install-theme','vimeography-theme-verification') )
+		{
+			$key = sanitize_key($_POST['vimeography-activation-key']);
+			$updater = new Vimeography_Update;
+			$updater->action = 'activate';
+
+			try
 			{
-				global $wp_filesystem;
-				
-				if (! unzip_file($_FILES['vimeography-theme']['tmp_name'], VIMEOGRAPHY_THEME_PATH))
+				$response = $updater->vimeography_get_remote_info($key);
+
+				// Get existing keys
+				$activation_keys = get_option('vimeography_activation_keys');
+
+				// Merge new key
+				if ($activation_keys)
 				{
-					$this->messages[] = array('type' => 'error', 'heading' => 'Ruh Roh.', 'message' => __('The theme could not be installed.'));
+					$activation_keys[] = $response->body;
 				}
 				else
 				{
-					$this->messages[] = array('type' => 'success', 'heading' => __('Theme installed.'), 'message' => __('You can now use the "') . $name . __('" theme in your galleries.'));
+					$activation_keys = array( $response->body );
 				}
+
+		    $result = update_option('vimeography_activation_keys', $activation_keys );
+		  	$this->messages[] = array('type' => 'success', 'heading' => 'Yee-haw!', 'message' => __($response->message));
+
 			}
-			else
+			catch (Vimeography_Exception $e)
 			{
-				$this->messages[] = array('type' => 'error', 'heading' => 'Ruh Roh.', 'message' => __('Make sure you are uploading the actual .zip file, not a subfolder or file.'));
+				$this->messages[] = array('type' => 'error', 'heading' => 'Uh oh.', 'message' => __($e->getMessage()));
 			}
-			
 		}
 	}
-           
+
 }

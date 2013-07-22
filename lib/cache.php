@@ -5,17 +5,28 @@ class Vimeography_Cache extends Vimeography
   /**
    * The user's cache expiration setting for the current gallery.
    *
-   * @var int
+   * @var int | NULL
    */
   private $_expiration;
+
+  /**
+   * The path to the cache file, built in the constructor based on the
+   * provided gallery id.
+   *
+   * @var string
+   */
+  private $_cache_file;
 
   /**
    * [__construct description]
    * @param [type] $settings [description]
    */
-  public function __construct($settings)
+  public function __construct($gallery_id, $expiration = NULL)
   {
-    $this->_expiration = intval($settings['cache']);
+    $this->_cache_file = VIMEOGRAPHY_CACHE_PATH . 'vimeography-gallery-' . $gallery_id . '.cache';
+
+    if ( isset($expiration) )
+      $this->_expiration = intval($expiration);
   }
 
   /**
@@ -24,9 +35,9 @@ class Vimeography_Cache extends Vimeography
    * @param  string $file Path to the cache file.
    * @return bool         TRUE if exists, FALSE if not.
    */
-  public function exists($file)
+  public function exists()
   {
-    return file_exists($file);
+    return file_exists($this->_cache_file);
   }
 
   /**
@@ -34,12 +45,15 @@ class Vimeography_Cache extends Vimeography
    * @param  [type] $file [description]
    * @return [type]       [description]
    */
-  public function expired($file)
+  public function expired()
   {
-    // Check if the cache is expired
-    $last_modified = filemtime($file);
+    if (! isset($this->_expiration))
+      return FALSE;
 
-    if (substr($file, -6) == '.cache' && ($last_modified + $this->_expiration) < time())
+    // Check if the cache is expired
+    $last_modified = filemtime($this->_cache_file);
+
+    if (substr($this->_cache_file, -6) == '.cache' && ($last_modified + $this->_expiration) < time())
     {
       // The cache is expired, but we don't want to kill it here,
       // We only want to remove it if we do not receive a 304 response or the user forces a cache refresh.
@@ -57,18 +71,18 @@ class Vimeography_Cache extends Vimeography
   }
 
   /**
-   * Get the serialized data stored in the Vimeography cache for the provided gallery token.
+   * Get the serialized data stored in the Vimeography cache
    *
    * @access public
    * @static
-   * @param string $token A cache filename, equal to tokenized shortcode settings.
+   * @param string  A cache filename
    * @return object/bool
    */
-  public function get($file)
+  public function get()
   {
-    if (file_exists($file))
+    if (file_exists($this->_cache_file))
     {
-      return unserialize(file_get_contents($file));
+      return unserialize(file_get_contents($this->_cache_file));
     }
     else
     {
@@ -84,9 +98,9 @@ class Vimeography_Cache extends Vimeography
    * @param string $file      A cache filename, equal to tokenized shortcode settings.
    * @param object $video_set Vimeo collection data
    */
-  public static function set($file, $video_set)
+  public function set($data)
   {
-    return file_put_contents($file, serialize($video_set));
+    return file_put_contents($this->_cache_file, serialize($data));
   }
 
   /**
@@ -96,9 +110,16 @@ class Vimeography_Cache extends Vimeography
    * @param  string $file A cache filename, equal to tokenized shortcode settings.
    * @return bool Whether the file was updated or not.
    */
-  public static function renew($file)
+  public function renew()
   {
-    return touch($file);
+    if ( touch($this->_cache_file) )
+    {
+      return $this;
+    }
+    else
+    {
+      return FALSE;
+    }
   }
 
   /**
@@ -107,12 +128,10 @@ class Vimeography_Cache extends Vimeography
    * @param  string $token A cache filename, equal to tokenized shortcode settings.
    * @return bool          Success or failure deleting file.
    */
-  public static function delete($token)
+  public function delete()
   {
-    $file = VIMEOGRAPHY_CACHE_PATH . $token . '.cache';
-
-    if (substr($file, -6) == '.cache')
-      return unlink(VIMEOGRAPHY_CACHE_PATH . $file);
+    if ( substr($this->_cache_file, -6) == '.cache' )
+      return unlink($this->_cache_file);
   }
 
   /**

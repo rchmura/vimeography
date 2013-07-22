@@ -121,13 +121,20 @@ class Vimeography_Database extends Vimeography
   }
 
   /**
-   * [vimeography_update_db_to_1_0 description]
-   * This is being called twice due to other functions in this class calling vimeography_update_tables() (i think?)
-   * dbdelta makes the modifications before the query below is even run.
+   * Database changes for version 1.0
+   *
+   *  - Adds a resource_uri column, which contains the resource
+   *    being fetched by the new API
+   *
+   *  - Converts the existing source URL to the resource
+   *
+   *  - Drops the video limit
+   *
    * @return [type] [description]
    */
   public function vimeography_update_db_to_1_0()
   {
+
     if (get_option('vimeography_db_version') < 1)
     {
       global $wpdb;
@@ -163,9 +170,14 @@ class Vimeography_Database extends Vimeography
               )
             );
           }
-
         }
-      }
+
+      } // end row manipulation
+
+      // Drop the video limit.
+      $result = $wpdb->query('ALTER TABLE '. VIMEOGRAPHY_GALLERY_META_TABLE .' DROP COLUMN video_limit');
+
+      $this->vimeography_update_tables();
     }
   }
 

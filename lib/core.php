@@ -6,7 +6,16 @@ abstract class Vimeography_Core
 {
   const ENDPOINT  = 'https://api.vimeo.com/';
 
+  /**
+   * [$_vimeo description]
+   * @var [type]
+   */
   protected $_vimeo;
+
+  /**
+   * [$_auth description]
+   * @var [type]
+   */
   protected $_auth;
 
   /**
@@ -31,38 +40,86 @@ abstract class Vimeography_Core
   protected $_featured;
 
   /**
-   * Pagination details from the Vimeo request.
-   *
-   * @var object
-   */
-  protected $_paging;
-
-  /**
    * [__construct description]
    * @param [type] $settings [description]
    */
   public function __construct($settings)
   {
-    $this->_endpoint = $settings['source'] . '/videos';
+    $this->_endpoint = $settings['source'];
 
     if ( isset($settings['featured']) AND ! empty($settings['featured']) )
       $this->_featured = '/videos/' . preg_replace("/[^0-9]/", '', $settings['featured']);
   }
 
   /**
+   * [_verify_vimeo_endpoint description]
+   * @param  [type] $resource [description]
+   * @return [type]           [description]
+   */
+  abstract protected static function _verify_vimeo_endpoint($resource);
+
+  /**
+   * Gets the videos for the gallery.
+   *
+   * @param  [type] $expiration [description]
+   * @param  [type] $gallery_id [description]
+   * @return [type]             [description]
+   */
+  public function get_videos($expiration, $gallery_id)
+  {
+    require_once VIMEOGRAPHY_PATH . 'lib/cache.php';
+    $cache = new Vimeography_Cache($gallery_id, $expiration);
+
+    // If the cache file exists,
+    if ( $cache->exists() )
+    {
+      // and the cache file is expired,
+      if (($last_modified = $cache->expired()) !== FALSE)
+      {
+        // make the request with a last modified header.
+        $result = $this->fetch($last_modified);
+
+        // Here is where we need to check if $video_set exists, or if it
+        // returned a 304, in which case, we can safely update the
+        // cache's last modified
+        // and return it.
+        if ($result == NULL)
+        {
+          $result = $cache->renew()->get();
+        }
+      }
+      else
+      {
+        // If it isn't expired, return it.
+        $result = $cache->get();
+      }
+    }
+    else
+    {
+      // If a cache doesn't exist, go get the videos, dude.
+      $result = $this->fetch();
+    }
+
+    // Cache the results.
+    if ($expiration !== 0)
+      $cache->set($result);
+
+    return $result;
+  }
+
+  /**
    * Fetch the videos to be displayed in the Vimeography Gallery.
    *
-   * @return string  $result_set JSON Object of Vimeo Videos
+   * @param $last_modified
+   * @return string  $response  Modified response from Vimeo.
    */
   public function fetch($last_modified = NULL)
   {
     if (! $this->_verify_vimeo_endpoint($this->_endpoint) )
-        throw new Vimeography_Exception('Endpoint is not valid.');
+        throw new Vimeography_Exception("Endpoint {$this->_endpoint} is not valid.");
 
     $response  = $this->_make_vimeo_request($this->_endpoint, $this->_params, $last_modified);
     $video_set = $this->_get_video_set($response);
-
-    $this->_paging = $response->paging;
 
     if (! empty($this->_featured))
     {
@@ -75,17 +132,13 @@ abstract class Vimeography_Core
       $result_set = $video_set;
     }
 
+    unset($response->data);
+    $response->video_set = $result_set;
+
     // $combined_json = str_replace(']', ',', $videos) . str_replace('[', ' ', $response);
 
-    return $result_set;
+    return $response;
   }
-
-  public function get_paging()
-  {
-    return $this->_paging;
-  }
-
-  abstract protected static function _verify_vimeo_endpoint($resource);
 
   /**
    * Send a cURL Wordpress request to retrieve the requested data from the Vimeo API.
@@ -111,12 +164,17 @@ abstract class Vimeography_Core
         throw new Vimeography_Exception('the plugin could not retrieve data from the Vimeo API! '. $response['body']->error);
         break;
       default:
-        throw new Vimeography_Exception('Unknown response status '. $response['body']->error);
+        throw new Vimeography_Exception("Unknown response status #{$response['status']}, {$response['body']->error}");
         break;
     }
   }
 
-  private function _get_video_set($body)
+  /**
+   * [_get_video_set description]
+   * @param  [type] $body [description]
+   * @return [type]       [description]
+   */
+  private static function _get_video_set($body)
   {
     if (isset($body->data)) :
       return $body->data;

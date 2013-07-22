@@ -5,44 +5,62 @@ class Vimeography_Renderer
   protected $_theme;
 
   /**
-   * The gallery ID to be sent to the Mustache template.
+   * Creates the rendering engine
    *
-   * @var string
-   */
-  private $_gallery_id;
-
-  /**
-   * The gallery width to be sent to the Mustache template.
+   * $settings should contain at least
+   *  - theme = theme name to use
+   * optionals are:
+   *  - partial =  if not full theme would be renderd
    *
-   * @var string
+   * @param unknown $settings
+   * @throws Vimeography_Exception
    */
-  private $_gallery_width;
-
-  public function __construct($settings, $token)
+  public function __construct($settings, $gallery_id)
   {
     if (! isset($settings['theme']))
       throw new Vimeography_Exception('You must specify a theme in either the admin panel or the shortcode.');
 
-    $theme = $settings['theme'];
+    $vimeography = Vimeography::get_instance();
 
-    if (! require_once(VIMEOGRAPHY_THEME_PATH . $theme . '/' . $theme . '.php' ) )
-      throw new Vimeography_Exception('The "' . $theme . '" theme does not exist or is improperly structured.');
+    if (! $vimeography->active_theme)
+      $vimeography->set_active_theme($settings['theme']);
 
-    $class = 'Vimeography_Themes_'.ucfirst( $theme );
+    $theme = $vimeography->active_theme;
+
+    if (! require_once( $theme['file_path'] ) )
+      throw new Vimeography_Exception('The "' . $theme['name'] . '" theme does not exist or is improperly structured.');
+
+    $class = 'Vimeography_Themes_'.ucfirst( $theme['name'] );
 
     if (! class_exists($class))
-      throw new Vimeography_Exception('The "' . $theme . '" theme class does not exist or is improperly structured.');
+      throw new Vimeography_Exception('The "' . $theme['name'] . '" theme class does not exist or is improperly structured.');
 
     $mustache = new Mustache_Engine( array(
-      'loader' => new Mustache_Loader_FilesystemLoader(VIMEOGRAPHY_THEME_PATH . '/' . $theme),
-      'partials_loader' => new Mustache_Loader_FilesystemLoader(VIMEOGRAPHY_THEME_PATH . '/' . $theme . '/partials'),
+      'loader'          => new Mustache_Loader_FilesystemLoader($theme['plugin_path']),
+      'partials_loader' => new Mustache_Loader_FilesystemLoader($theme['partials_path']),
     ) );
 
     $this->_view  = new $class;
-    $this->_theme = $mustache->loadTemplate( $theme );
+    $this->_theme = (isset($settings['partial'])) ? $mustache->loadPartial($settings['partial']) : $mustache->loadTemplate( $theme['name'] );
 
-    $this->_view->gallery_id    = $token;
-    $this->_view->gallery_width = $settings['width'];
+    add_action('wp_enqueue_scripts',    array($class, 'load_scripts'));
+    add_action('admin_enqueue_scripts', array($class, 'load_scripts'));
+
+    // Action has already been run, we're late to the party.
+    if (is_admin())
+    {
+      do_action('admin_enqueue_scripts');
+    }
+    else
+    {
+      do_action('wp_enqueue_scripts');
+    }
+
+    $this->_view->gallery_id = $gallery_id;
+
+    if (isset($settings['width']))
+      $this->_view->gallery_width = $settings['width'];
+
   }
 
   /**
@@ -52,21 +70,12 @@ class Vimeography_Renderer
    * @param  array $data [description]
    * @return string       [description]
    */
-  public function render($data)
+  public function render($result)
   {
-    $this->_view->data     = $data;
+    $this->_view->data     = $result->video_set;
     $this->_view->featured = $this->_view->data[0];
 
     return $this->_theme->render($this->_view);
-  }
-
-  /**
-   * [set_paging description]
-   * @param [type] $paging [description]
-   */
-  public function set_paging($paging)
-  {
-    $this->_view->paging = $paging;
   }
 
   /**

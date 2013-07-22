@@ -4,25 +4,24 @@
   <input id="{{id}}" name="vimeography_theme_settings[{{id}}][value]" type="color" value="{{value}}" />
 
   {{#properties}}
-    <input type="hidden" name="vimeography_theme_settings[{{id}}][targets][]" value="{{target}}" />
+    <input type="hidden" name="vimeography_theme_settings[{{id}}][targets][]" value="{{{target}}}" />
     <input type="hidden" name="vimeography_theme_settings[{{id}}][attributes][]" value="{{attribute}}" />
   {{/properties}}
 
-  <input
-    type="hidden"
-    name="vimeography_theme_settings[{{id}}][namespace]"
-    value="{{namespace}}"
-  />
+  <input type="hidden" name="vimeography_theme_settings[{{id}}][namespace]" value="{{namespace}}" />
+  {{#important}}
+    <input type="hidden" name="vimeography_theme_settings[{{id}}][important]" value="1" />
+  {{/important}}
 </div>
 
-<script charset="utf-8" type="text/javascript">
+<script type="text/javascript">
   (function($){
   	$(document).ready(function(){
 
       function adjustColorPreview(e)
       {
         {{#properties}}
-          $('{{target}}').css('{{attribute}}', e.value);
+          $('{{{target}}}').css('{{attribute}}', e.value);
         {{/properties}}
       }
 
@@ -32,46 +31,20 @@
         $('#{{id}}').val(e.value);
       }
 
-      $("#{{id}}").kendoColorPicker({
+      var colorpicker = $("#{{id}}").kendoColorPicker({
         palette: null,
         buttons: false,
-        opacity: true,
         select: adjustColorPreview,
         change: adjustColorPreviewAndSetValue
+      }).data('kendoColorPicker');
+
+      $(window).load(function(){
+        {{#properties}}
+          var value = $('{{{target}}}').css('{{attribute}}');
+          colorpicker.value(value);
+          $('#{{id}}').val(value);
+        {{/properties}}
       });
-
-      // credit: http://stackoverflow.com/questions/638948/background-color-hex-to-javascript-variable-jquery
-      function rgb_to_hex(rgbString)
-      {
-        var parts = rgbString.match(/^rgb\((\d+),\s*(\d+),\s*(\d+)\)$/);
-        // parts now should be ["rgb(0, 70, 255", "0", "70", "255"]
-
-        console.log(parts);
-
-        if (parts == null) {return rgbString;}
-
-        delete (parts[0]);
-        for (var i = 1; i <= 3; ++i) {
-            parts[i] = parseInt(parts[i]).toString(16);
-            if (parts[i].length == 1) parts[i] = '0' + parts[i];
-        }
-        var hexString ='#'+parts.join('').toUpperCase(); // "#0070FF"
-        return hexString;
-      }
-
-
-      // set the value of the color picker field to the current value of the element
-      // wait a few seconds to make sure everything is loaded before setting the colorpicker values
-      // setTimeout(function() {
-      //   var target_attr = '{{attribute}}';
-      //   // convert the borderColor property to a jQuery-readable css attribute without actually affecting the saved property
-      //   if (target_attr == 'borderColor') {target_attr = 'border-left-color'}
-      //   var current_element_val = rgb_to_hex($('{{target}}').css(target_attr));
-      //   $('#{{id}}').val(current_element_val);
-      //   $('.{{id}}.colorSelector div').css('backgroundColor', $('#{{id}}').val());
-      // }, 2000);
-
-
   	});
-  })(jQuery)
+  }(jQuery))
 </script>

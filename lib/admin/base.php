@@ -3,7 +3,6 @@
 /**
  * Vimeography_Base class.
  *
- * @extends Mustache
  */
 class Vimeography_Base
 {
@@ -44,30 +43,13 @@ class Vimeography_Base
 	}
 
 	/**
-	 * Get the JSON data stored in the Vimeography cache for the provided gallery id.
-	 *
-	 * @access public
-	 * @static
-	 * @param mixed $id
-	 * @return void
+	 * [has_pro description]
+	 * @return boolean [description]
 	 */
-	public static function get_vimeography_cache($id)
+	public static function has_pro()
 	{
-    return FALSE === ( $vimeography_cache_results = get_transient( 'vimeography_cache_'.$id ) ) ? FALSE : $vimeography_cache_results;
-  }
-
-	/**
-	 * Delete the transient cache entry for the given gallery id. This is a common function.
-	 *
-	 * @access public
-	 * @static
-	 * @param mixed $id
-	 * @return void
-	 */
-	public static function delete_vimeography_cache($id)
-  {
-    return delete_transient('vimeography_cache_'.$id);
-  }
+		return is_plugin_active('vimeography-pro/vimeography-pro.php');
+	}
 
 	/**
 	 * Gets the default settings created when Vimeography is installed.
@@ -88,67 +70,30 @@ class Vimeography_Base
 	 */
 	public function themes()
 	{
-		$themes = array();
+		$themes = Vimeography::get_instance()->themes;
+		$activated_themes = get_option('vimeography_activation_keys');
 
-		$theme_data = $this->_get_vimeography_themes();
+		//delete_option('vimeography_activation_keys');
 
-		foreach ($theme_data as $theme_info)
+		$items = array();
+		foreach ($themes as $theme)
 		{
-			$local_path = VIMEOGRAPHY_THEME_PATH . strtolower($theme_info['name']) . '/' . strtolower($theme_info['name']) .'.jpg';
-
-			$theme_info['thumbnail'] = file_exists($local_path) ? VIMEOGRAPHY_THEME_URL . strtolower($theme_info['name']) . '/' . strtolower($theme_info['name']) .'.jpg' : 'http://placekitten.com/g/200/150';
-
 			if (isset($this->_gallery))
-			 $theme_info['active'] = strtolower($theme_info['name']) == $this->_gallery[0]->theme_name ? TRUE : FALSE;
+			 $theme['active'] = strtolower($theme['name']) == strtolower($this->_gallery[0]->theme_name) ? TRUE : FALSE;
 
-			$themes[] = $theme_info;
+			if (is_array($activated_themes))
+			{
+				foreach ($activated_themes as $activation)
+				{
+					if (strtolower($activation->plugin_name) == strtolower($theme['slug']))
+						$theme['activation_key'] = TRUE;
+				}
+			}
+
+			$items[] = $theme;
 		}
 
-		return $themes;
+		return $items;
 	}
-
-	/**
-	 * Finds list of installed Vimeography themes by finding the directories in the theme folder
-	 * and sending the mustache file to wordpress function get_file_data().
-	 *
-	 * @access private
-	 * @return array of themes
-	 */
-	private function _get_vimeography_themes() {
-		$themes = array();
-
-		$directories = glob(VIMEOGRAPHY_THEME_PATH.'*' , GLOB_ONLYDIR);
-
-		foreach ($directories as $dir)
-		{
-			$theme_name = substr($dir, strrpos($dir, '/')+1);
-			$themes[] = $this->_get_theme_data($dir.'/'.$theme_name.'.php');
-		}
-
-		return $themes;
-	}
-
-	/**
-	 * Retrieves the meta data from the headers of a given plugin file.
-	 *
-	 * @access private
-	 * @static
-	 * @param mixed $plugin_file
-	 * @return void
-	 */
-	private static function _get_theme_data($plugin_file)
-	{
-		$default_headers = array(
-			'name'        => 'Theme Name',
-			'theme-uri'   => 'Theme URI',
-			'version'     => 'Version',
-			'description' => 'Description',
-			'author'      => 'Author',
-			'author-uri'  => 'Author URI',
-		);
-
-		return get_file_data( $plugin_file, $default_headers );
-	}
-
 
 }

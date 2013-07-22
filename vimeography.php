@@ -14,10 +14,8 @@ if (!function_exists('json_decode'))
 
 global $wpdb;
 
-$wp_upload_dir = wp_upload_dir();
-
 // Define constants
-define( 'VIMEOGRAPHY_URL', plugin_dir_url(__FILE__) );
+define( 'VIMEOGRAPHY_URL',  plugin_dir_url(__FILE__) );
 define( 'VIMEOGRAPHY_PATH', plugin_dir_path(__FILE__) );
 define( 'VIMEOGRAPHY_THEME_URL',   WP_CONTENT_URL . '/vimeography/themes/' );
 define( 'VIMEOGRAPHY_THEME_PATH',  WP_CONTENT_DIR . '/vimeography/themes/' );
@@ -30,7 +28,7 @@ define( 'VIMEOGRAPHY_VERSION', '0.9.3');
 define( 'VIMEOGRAPHY_GALLERY_TABLE', $wpdb->prefix . "vimeography_gallery");
 define( 'VIMEOGRAPHY_GALLERY_META_TABLE', $wpdb->prefix . "vimeography_gallery_meta");
 define( 'VIMEOGRAPHY_CURRENT_PAGE', basename($_SERVER['PHP_SELF']));
-define( 'VIMEOGRAPHY_CLIENT_ID', 'a2beabbcbfc4cf69ae20acab8003df78');
+define( 'VIMEOGRAPHY_CLIENT_ID', 'fc0927c077cb47345eadf7c513d70f4aa564f30d');
 
 require_once(VIMEOGRAPHY_PATH . 'lib/exception.php');
 
@@ -43,23 +41,69 @@ if (! class_exists('Mustache_Engine'))
 
 class Vimeography
 {
-  public function __construct()
+  /**
+   * [$themes description]
+   * @var array
+   */
+  public $themes = array();
+
+  /**
+   * [$active_theme description]
+   * @var [type]
+   */
+  public $active_theme = NULL;
+
+  /**
+   * [$instance description]
+   * @var [type]
+   */
+  private static $instance = NULL;
+
+  /**
+   * Creates or returns an instance of this class.
+   *
+   * @return  Vimeography A single instance of this class.
+   */
+  public static function get_instance()
   {
-    add_action( 'init', array(&$this, 'vimeography_init') );
-    add_action( 'admin_init', array(&$this, 'vimeography_requires_wordpress_version') );
-    add_action( 'admin_init', array(&$this, 'vimeography_check_if_db_exists') );
-    add_action( 'init', array(&$this, 'vimeography_move_folders') );
-    add_action( 'plugins_loaded', array(&$this, 'vimeography_update_database') );
-    add_action( 'admin_menu', array(&$this, 'vimeography_add_menu') );
-    add_action( 'do_robots', array(&$this, 'vimeography_block_robots') );
+    if ( NULL == self::$instance )
+      self::$instance = new self;
 
-    register_activation_hook( VIMEOGRAPHY_BASENAME, array(&$this, 'vimeography_update_tables') );
+    return self::$instance;
+  }
 
-    add_filter( 'plugin_action_links', array(&$this, 'vimeography_filter_plugin_actions'), 10, 2 );
-    add_shortcode( 'vimeography', array(&$this, 'vimeography_shortcode') );
+  /**
+   * [__construct description]
+   */
+  private function __construct()
+  {
+    add_action( 'init',           array($this, 'vimeography_init') );
+    add_action( 'admin_init',     array($this, 'vimeography_requires_wordpress_version') );
+    add_action( 'admin_init',     array($this, 'vimeography_check_if_db_exists') );
+    add_action( 'admin_init',     array($this, 'vimeography_load_updater'));
+    add_action( 'admin_init',     array($this, 'vimeography_activate_bugsauce'));
+    add_action( 'init',           array($this, 'vimeography_move_folders') );
+    add_action( 'plugins_loaded', array($this, 'vimeography_update_database') );
+    add_action( 'admin_menu',     array($this, 'vimeography_add_menu') );
+    add_action( 'do_robots',      array($this, 'vimeography_block_robots') );
+
+    // Check the URL for any Vimeography-related parameters
+    add_filter( 'query_vars',             array($this, 'vimeography_add_query_vars') );
+    add_action( 'generate_rewrite_rules', array($this, 'vimeography_add_rewrite_rules' ) );
+    add_action( 'parse_request',          array($this, 'vimeography_parse_request') );
+
+    register_activation_hook( VIMEOGRAPHY_BASENAME, array($this, 'vimeography_update_tables') );
+    register_activation_hook( VIMEOGRAPHY_BASENAME, array($this, 'vimeography_flush_rewrite_rules') );
+    register_deactivation_hook( VIMEOGRAPHY_BASENAME, array($this, 'vimeography_deactivate_bugsauce') );
+
+    add_filter( 'plugin_action_links', array($this, 'vimeography_filter_plugin_actions'), 10, 2 );
+    add_shortcode( 'vimeography',      array($this, 'vimeography_shortcode') );
 
     // Add shortcode support for widgets
     add_filter( 'widget_text', 'do_shortcode' );
+
+    // Load the themes that are hooking in to this action.
+    add_action('vimeography/load-theme', array($this, 'vimeography_load_theme'));
   }
 
   /**
@@ -84,6 +128,16 @@ class Vimeography
   }
 
   /**
+   * [vimeography_check_for_updates description]
+   * @return [type] [description]
+   */
+  public function vimeography_load_updater()
+  {
+    require_once(VIMEOGRAPHY_PATH . 'lib/update.php');
+    new Vimeography_Update;
+  }
+
+  /**
    * Runs on every page load.
    *
    * @access public
@@ -102,6 +156,69 @@ class Vimeography
     new Vimeography_Ajax;
   }
 
+  /**
+   * [vimeography_load_theme description]
+   * @param  [type] $theme_path [description]
+   * @return [type]             [description]
+   */
+  public function vimeography_load_theme($theme_path)
+  {
+    $theme = self::_get_theme_data($theme_path);
+
+    $theme['basename']      = plugin_basename($theme_path);
+    $theme['slug']          = strstr($theme['basename'], '/', TRUE);
+    $theme['thumbnail']     = plugins_url(strtolower($theme['name']) .'.jpg', $theme_path);
+    $theme['file_path']     = $theme_path;
+    $theme['plugin_path']   = plugin_dir_path($theme_path);
+    $theme['partials_path'] = plugin_dir_path($theme_path) . 'partials';
+    $theme['settings_file'] = plugin_dir_path($theme_path) . 'settings.php';
+
+    $this->themes[] = $theme;
+  }
+
+  /**
+   * [set_active_theme description]
+   * @param [type] $theme_name [description]
+   */
+  public function set_active_theme($theme_name)
+  {
+    foreach($this->themes as $index => $theme)
+    {
+      if (strtolower($theme['name']) === strtolower($theme_name))
+      {
+        $this->active_theme = $theme;
+      }
+    }
+    return $this;
+  }
+
+  /**
+   * Retrieves the meta data from the headers of a given plugin file.
+   *
+   * @access private
+   * @static
+   * @param mixed $plugin_file
+   * @return void
+   */
+  private static function _get_theme_data($plugin_file)
+  {
+
+    $default_headers = array(
+      'name'        => 'Theme Name',
+      'theme-uri'   => 'Theme URI',
+      'version'     => 'Version',
+      'description' => 'Description',
+      'author'      => 'Author',
+      'author-uri'  => 'Author URI',
+    );
+
+    return get_file_data( $plugin_file, $default_headers );
+  }
+
+  /**
+   * [vimeography_update_database description]
+   * @return [type] [description]
+   */
   public function vimeography_update_database()
   {
     require_once(VIMEOGRAPHY_PATH . 'lib/database.php');
@@ -114,6 +231,10 @@ class Vimeography
     $this->vimeography_update_db_version();
   }
 
+  /**
+   * [vimeography_check_if_db_exists description]
+   * @return [type] [description]
+   */
   public function vimeography_check_if_db_exists()
   {
     if (get_option('vimeography_db_version') == FALSE)
@@ -139,12 +260,13 @@ class Vimeography
    */
   public function vimeography_move_folders()
   {
-    $this->_move_folder(array('source' => VIMEOGRAPHY_PATH . 'bugsauce/', 'destination' => VIMEOGRAPHY_THEME_PATH.'bugsauce/', 'clear_destination' => true, 'clear_working' => true));
-    $this->_move_folder(array('source' => VIMEOGRAPHY_PATH . 'theme-assets/', 'destination' => VIMEOGRAPHY_ASSETS_PATH, 'clear_destination' => true, 'clear_working' => true));
+    $this->_move_folder(array('source' => VIMEOGRAPHY_PATH . 'vimeography-bugsauce/',     'destination' => str_replace('vimeography/', '', VIMEOGRAPHY_PATH) . 'vimeography-bugsauce/', 'clear_destination' => true, 'clear_working' => true));
+    $this->_move_folder(array('source' => VIMEOGRAPHY_PATH . 'components/', 'destination' => VIMEOGRAPHY_ASSETS_PATH, 'clear_destination' => true, 'clear_working' => true));
 
     if (! file_exists(VIMEOGRAPHY_CACHE_PATH) )
     {
-      if (! mkdir(VIMEOGRAPHY_CACHE_PATH) )
+      // creates the dir and it's parent dirs
+      if (! mkdir(VIMEOGRAPHY_CACHE_PATH, 0777, true) )
       {
         if( is_plugin_active( VIMEOGRAPHY_BASENAME ) )
         {
@@ -153,13 +275,6 @@ class Vimeography
         }
       }
     }
-
-    // Now, check if the .htaccess exists in the VIMEOGRAPHY_THEME_PATH
-    if (file_exists(VIMEOGRAPHY_THEME_PATH.'.htaccess'))
-    {
-      unlink(VIMEOGRAPHY_THEME_PATH.'.htaccess');
-    }
-    // file_put_contents(VIMEOGRAPHY_THEME_PATH.'.htaccess', "Options All -Indexes\n<FilesMatch \".(htaccess|mustache)$\">\nOrder Allow,Deny\nDeny from all\n</FilesMatch>");
   }
 
   /**
@@ -195,7 +310,7 @@ class Vimeography
     add_submenu_page( 'vimeography-edit-galleries', 'Edit Galleries', 'Edit Galleries', 'manage_options', 'vimeography-edit-galleries', array(&$this, 'vimeography_render_template' ));
     add_submenu_page( 'vimeography-edit-galleries', 'New Gallery', 'New Gallery', 'manage_options', 'vimeography-new-gallery', array(&$this, 'vimeography_render_template' ));
     add_submenu_page( 'vimeography-edit-galleries', 'My Themes', 'My Themes', 'manage_options', 'vimeography-my-themes', array(&$this, 'vimeography_render_template' ));
-    $submenu['vimeography-edit-galleries'][500] = array( 'Buy Themes', 'manage_options' , 'http://vimeography.com/themes' );
+    $submenu['vimeography-edit-galleries'][500] = array( 'Vimeography Themes', 'manage_options' , 'http://vimeography.com/themes' );
     add_submenu_page( 'vimeography-edit-galleries', 'Vimeography Pro', 'Vimeography Pro', 'manage_options', 'vimeography-pro', array(&$this, 'vimeography_render_template' ));
     add_submenu_page( 'vimeography-edit-galleries', 'Help', 'Help', 'manage_options', 'vimeography-help', array(&$this, 'vimeography_render_template' ));
   }
@@ -211,21 +326,17 @@ class Vimeography
     if ( !current_user_can( 'manage_options' ) )
       wp_die( __( 'You do not have sufficient permissions to access this page.' ) );
 
-    wp_register_style( 'bootstrap', VIMEOGRAPHY_URL.'media/css/bootstrap.min.css');
-    wp_register_style( 'bootstrap-responsive', VIMEOGRAPHY_URL.'media/css/bootstrap-responsive.min.css');
+    wp_register_style( 'vimeography-bootstrap', VIMEOGRAPHY_URL.'media/css/bootstrap.min.css');
     wp_register_style( 'vimeography-admin', VIMEOGRAPHY_URL.'media/css/admin.css');
 
-    wp_register_script( 'bootstrap-transition', VIMEOGRAPHY_URL.'media/js/bootstrap-transition.js');
-    wp_register_script( 'bootstrap-alert', VIMEOGRAPHY_URL.'media/js/bootstrap-alert.js');
-    wp_register_script( 'vimeography-admin.js', VIMEOGRAPHY_URL.'media/js/admin.js', 'jquery');
+    wp_register_script( 'vimeography-bootstrap', VIMEOGRAPHY_URL.'media/js/bootstrap.min.js');
+    wp_register_script( 'vimeography-admin', VIMEOGRAPHY_URL.'media/js/admin.js', 'jquery');
 
-    wp_enqueue_style( 'bootstrap');
-    wp_enqueue_style( 'bootstrap-responsive');
+    wp_enqueue_style( 'vimeography-bootstrap');
     wp_enqueue_style( 'vimeography-admin');
 
-    wp_enqueue_script( 'bootstrap-transition');
-    wp_enqueue_script( 'bootstrap-alert');
-    wp_enqueue_script( 'vimeography-admin.js');
+    wp_enqueue_script( 'vimeography-bootstrap');
+    wp_enqueue_script( 'vimeography-admin');
 
     $mustache = new Mustache_Engine(array('loader' => new Mustache_Loader_FilesystemLoader(VIMEOGRAPHY_PATH . 'lib/admin/templates'),));
     require_once(VIMEOGRAPHY_PATH . 'lib/admin/base.php');
@@ -317,7 +428,6 @@ class Vimeography
     gallery_id mediumint(8) unsigned NOT NULL,
     source_url varchar(100) NOT NULL,
     resource_uri varchar(50) NOT NULL,
-    video_limit mediumint(7) NOT NULL,
     featured_video varchar(100) DEFAULT NULL,
     gallery_width varchar(10) DEFAULT NULL,
     cache_timeout mediumint(7) NOT NULL,
@@ -394,7 +504,7 @@ class Vimeography
   }
 
   /**
-   * Adds the VIMEOGRAPHY_THEME_URL and VIMEOGRAPHY_ASSETS_URL to the virtual robots.txt restricted list.
+   * Adds the VIMEOGRAPHY_ASSETS_URL to the virtual robots.txt restricted list.
    *
    * @access public
    * @static
@@ -402,10 +512,85 @@ class Vimeography
    */
   public static function vimeography_block_robots()
   {
-    $blocked_theme_path = str_ireplace(site_url(), '', VIMEOGRAPHY_THEME_URL);
     $blocked_asset_path = str_ireplace(site_url(), '', VIMEOGRAPHY_ASSETS_URL);
-    echo 'Disallow: '.$blocked_theme_path."\n";
     echo 'Disallow: '.$blocked_asset_path."\n";
+  }
+
+  /**
+   * [vimeography_add_query_vars description]
+   * @param  [type] $vars [description]
+   * @return [type]       [description]
+   */
+  public function vimeography_add_query_vars($vars)
+  {
+    $vars[] = 'vimeography_action';
+    $vars[] = 'vimeography_gallery_id';
+    return $vars;
+  }
+
+  /**
+   * Adds custom rewrite rules.
+   * @param  [type] $wp_rewrite [description]
+   * @return [type]             [description]
+   */
+  function vimeography_add_rewrite_rules($wp_rewrite)
+  {
+    $wp_rewrite->rules = array(
+        'vimeography/([0-9]{1,4})+/refresh\/?' => $wp_rewrite->index . '?vimeography_action=refresh&vimeography_gallery_id=' . $wp_rewrite->preg_index( 1 ),
+        //'vimeography/notify\/?' => $wp_rewrite->index . '?vimeography_action=' . $wp_rewrite->preg_index( 1 ),
+    ) + $wp_rewrite->rules;
+  }
+
+  /**
+   * [vimeography_parse_request description]
+   * @param  [type] $wp [description]
+   * @return [type]     [description]
+   */
+  public function vimeography_parse_request($wp)
+  {
+    if (array_key_exists('vimeography_action', $wp->query_vars) AND $wp->query_vars['vimeography_action'] == 'refresh')
+    {
+      require_once VIMEOGRAPHY_PATH . 'lib/cache.php';
+      $cache = new Vimeography_Cache($wp->query_vars['vimeography_gallery_id']);
+      if ($cache->exists())
+        $cache->delete();
+      die('Thanks, Vimeo. Cache busted.');
+    }
+  }
+
+  /**
+   * [vimeography_flush_rewrite_rules description]
+   * @return [type] [description]
+   */
+  public function vimeography_flush_rewrite_rules()
+  {
+    return flush_rewrite_rules();
+  }
+
+  /**
+   * [vimeography_activate_plugin description]
+   * @param  [type] $basename [description]
+   * @return [type]           [description]
+   */
+  public function vimeography_activate_bugsauce()
+  {
+    if ( is_plugin_inactive('vimeography-bugsauce/vimeography-bugsauce.php') )
+      activate_plugin('vimeography-bugsauce/vimeography-bugsauce.php');
+  }
+
+  /**
+   * [vimeography_activate_plugin description]
+   * @param  [type] $basename [description]
+   * @return [type]           [description]
+   */
+  public function vimeography_deactivate_bugsauce()
+  {
+    $dependent = 'vimeography-bugsauce/vimeography-bugsauce.php';
+    if( is_plugin_active($dependent) ){
+        add_action('update_option_active_plugins', function($dependent){
+            deactivate_plugins('vimeography-bugsauce/vimeography-bugsauce.php');
+        });
+    }
   }
 
   /**
@@ -491,11 +676,6 @@ class Vimeography
       }
     }
 
-    //Create themes folder, if needed
-    if ( !$wp_filesystem->exists(VIMEOGRAPHY_THEME_PATH) )
-      if ( !$wp_filesystem->mkdir(VIMEOGRAPHY_THEME_PATH, FS_CHMOD_DIR) )
-        return new WP_Error('mkdir_failed', 'mkdir failer string', $remote_destination);
-
     //Create destination if needed
     if ( !$wp_filesystem->exists($remote_destination) )
       if ( !$wp_filesystem->mkdir($remote_destination, FS_CHMOD_DIR) )
@@ -527,4 +707,4 @@ class Vimeography
 
 }
 
-new Vimeography;
+Vimeography::get_instance();
