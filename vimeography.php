@@ -574,7 +574,8 @@ class Vimeography
    */
   public function vimeography_activate_bugsauce()
   {
-    if ( is_plugin_inactive('vimeography-bugsauce/vimeography-bugsauce.php') )
+    $bugsauce = str_replace('vimeography/', 'vimeography-bugsauce/', VIMEOGRAPHY_PATH);
+    if ( is_plugin_inactive('vimeography-bugsauce/vimeography-bugsauce.php') AND file_exists($bugsauce) )
       activate_plugin('vimeography-bugsauce/vimeography-bugsauce.php');
   }
 
@@ -585,12 +586,8 @@ class Vimeography
    */
   public function vimeography_deactivate_bugsauce()
   {
-    $dependent = 'vimeography-bugsauce/vimeography-bugsauce.php';
-    if( is_plugin_active($dependent) ){
-        add_action('update_option_active_plugins', function($dependent){
-            deactivate_plugins('vimeography-bugsauce/vimeography-bugsauce.php');
-        });
-    }
+    if (is_plugin_active('vimeography-bugsauce/vimeography-bugsauce.php'))
+      deactivate_plugins('vimeography-bugsauce/vimeography-bugsauce.php');
   }
 
   /**
