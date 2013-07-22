@@ -6,7 +6,16 @@ abstract class Vimeography_Core
 {
   const ENDPOINT  = 'https://api.vimeo.com/';
 
+  /**
+   * [$_vimeo description]
+   * @var [type]
+   */
   protected $_vimeo;
+
+  /**
+   * [$_auth description]
+   * @var [type]
+   */
   protected $_auth;
 
   /**
@@ -42,15 +51,19 @@ abstract class Vimeography_Core
       $this->_featured = '/videos/' . preg_replace("/[^0-9]/", '', $settings['featured']);
   }
 
+  /**
+   * [_verify_vimeo_endpoint description]
+   * @param  [type] $resource [description]
+   * @return [type]           [description]
+   */
   abstract protected static function _verify_vimeo_endpoint($resource);
 
   /**
-   * Gets the videos for gallery
+   * Gets the videos for the gallery.
    *
-   * Code refactorized from Shortcode->output(). The code was used too in the
-   * ajax method. This looks like the right place to place the pagination logic
-   *
-   * @todo Move to a better library or model class.
+   * @param  [type] $expiration [description]
+   * @param  [type] $gallery_id [description]
+   * @return [type]             [description]
    */
   public function get_videos($expiration, $gallery_id)
   {
@@ -135,7 +148,6 @@ abstract class Vimeography_Core
    */
   private function _make_vimeo_request($endpoint, $params, $last_modified)
   {
-    if (isset($params['per_page']) && $params['per_page'] > 100) throw new Exception('Max per page is 100');
     $response = $this->_vimeo->request( $endpoint, $params, $last_modified );
 
     switch ($response['status'])
