@@ -14,12 +14,16 @@ class Vimeography_Init extends Vimeography
   {
     if (! wp_script_is('jquery'))
     {
-      wp_register_script('jquery', "http" . ($_SERVER['SERVER_PORT'] == 443 ? "s" : "") . "://ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js", false, null);
+      wp_register_script('jquery', '//ajax.googleapis.com/ajax/libs/jquery/2.0.2/jquery.min.js', false, null);
       wp_enqueue_script('jquery');
     }
     return TRUE;
   }
 
+  /**
+   * [vimeography_add_gallery_helper description]
+   * @return [type] [description]
+   */
   public function vimeography_add_gallery_helper()
   {
     if (in_array(VIMEOGRAPHY_CURRENT_PAGE, array('post.php', 'page.php', 'page-new.php', 'post-new.php')))
@@ -48,15 +52,8 @@ class Vimeography_Init extends Vimeography
     {
       // See if our rule already exists inside of it.
       $robotstxt = file_get_contents(ABSPATH.'/robots.txt');
-      $blocked_theme_path = str_ireplace(site_url(), '', VIMEOGRAPHY_THEME_URL);
       $blocked_asset_path = str_ireplace(site_url(), '', VIMEOGRAPHY_ASSETS_URL);
 
-      if (strpos($robotstxt, 'Disallow: '.$blocked_theme_path === FALSE))
-      {
-        // Write our rule.
-        $robotstxt .= "\nDisallow: ".$blocked_theme_path."\n";
-        file_put_contents(ABSPATH.'/robots.txt', $robotstxt);
-      }
       if (strpos($robotstxt, 'Disallow: '.$blocked_asset_path === FALSE))
       {
         // Write our rule.
@@ -67,12 +64,22 @@ class Vimeography_Init extends Vimeography
     return TRUE;
   }
 
+  /**
+   * [vimeography_register_editor_button description]
+   * @param  [type] $buttons [description]
+   * @return [type]          [description]
+   */
   public function vimeography_register_editor_button($buttons)
   {
     array_push( $buttons, "|", "vimeography" );
     return $buttons;
   }
 
+  /**
+   * [vimeography_add_editor_plugin description]
+   * @param  [type] $plugin_array [description]
+   * @return [type]               [description]
+   */
   public function vimeography_add_editor_plugin( $plugin_array ) {
     $plugin_array['vimeography'] = VIMEOGRAPHY_URL . 'media/js/mce.js';
     return $plugin_array;
@@ -86,10 +93,11 @@ class Vimeography_Init extends Vimeography
    */
   public function vimeography_add_mce_popup()
   {
+    $mustache = new Mustache_Engine(array('loader' => new Mustache_Loader_FilesystemLoader(VIMEOGRAPHY_PATH . 'lib/admin/templates'),));
     require_once(VIMEOGRAPHY_PATH . 'lib/admin/view/vimeography/mce.php');
-    $mustache = new Vimeography_MCE();
-    $template = $this->_load_template('vimeography/mce');
-    echo $mustache->render($template);
+    $view = new Vimeography_MCE;
+    $template = $mustache->loadTemplate('vimeography/mce');
+    echo $template->render($view);
   }
 
 }

@@ -48,13 +48,13 @@
         });
 
         // Add support for the question popovers
-        $('.icon-question-sign').popover({trigger: 'hover'});
+        $('.icon-question-sign').popover({container: 'body', trigger: 'hover'});
 
         // Create our scrollbar for the theme list menu panel
         $("#aujus").mCustomScrollbar();
 
         // Affix the menu when we scroll
-        $('#vimeography-gallery-menu-container').affix({offset: 124});
+        $('#vimeography-gallery-menu-container').affix({offset: $('#vimeography-gallery-menu-container').position()});
 
         // Fade in the check marks when we hover down the theme list menu panel
         $('.theme-container').mouseover(function(){
@@ -64,7 +64,7 @@
         });
 
       });
-    })(jQuery)
+    }(jQuery))
   </script>
 
   {{#messages}}
@@ -75,10 +75,12 @@
     </div>
   {{/messages}}
 
-  <div class="alert">
-    <strong>Want more?</strong> With Vimeography Pro, you can sort your videos, create playlists, show unlimited videos, add comments and more.
-    <a href="{{admin_url}}pro" title="Learn more about Vimeography Pro">Learn more &rarr;</a>
-  </div>
+  {{^has_pro}}
+    <div class="alert">
+      <strong>Want more?</strong> With Vimeography Pro, you can sort your videos, show unlimited videos and more.
+      <a href="{{admin_url}}pro" title="Learn more about Vimeography Pro">Learn more &rarr;</a>
+    </div>
+  {{/has_pro}}
 
   {{#gallery}}
 
@@ -98,6 +100,7 @@
 
               {{> settings_group}}
               {{> appearance_group}}
+              {{> pro_group}}
 
             </div><!-- End vimeography-gallery-main-menu -->
           </div>

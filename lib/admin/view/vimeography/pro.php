@@ -1,63 +1,154 @@
 <?php
 
-class Vimeography_Pro extends Vimeography_Base 
-{	
+class Vimeography_Pro_About extends Vimeography_Base
+{
+  public $messages;
+
 	public function __construct()
 	{
+		if ($_SERVER['REQUEST_METHOD'] == 'POST')
+			$this->_validate_form();
 	}
-	
+
+	/**
+	 * A common function which returns the home URL.
+	 *
+	 * @access public
+	 * @return string
+	 */
 	public function home_url()
 	{
 		return home_url();
 	}
-	
-	public function secure_form()
+
+	/**
+	 * Creates a nonce for the Vimeography PRO registration form.
+	 *
+	 * @access public
+	 * @static
+	 * @return void
+	 */
+	public static function registration_nonce()
 	{
-		return settings_fields('vimeography_advanced_settings');
+	   return wp_nonce_field('vimeography-pro-registration','vimeography-pro-registration-verification');
 	}
-	
-	// not done. at all.
-	public function vimeography_validate_advanced_settings($input)
+
+	/**
+	 * Creates a nonce for the Vimeography PRO app settings form.
+	 *
+	 * @access public
+	 * @static
+	 * @return void
+	 */
+	public static function settings_nonce()
 	{
-		$output['client_id']			= wp_filter_nohtml_kses($input['client_id']);
-		$output['client_secret']		= wp_filter_nohtml_kses($input['client_secret']);
-		$output['access_token']			= wp_filter_nohtml_kses($input['access_token']);
-		$output['access_token_secret']	= wp_filter_nohtml_kses($input['access_token_secret']);
-		
-		if ($output['client_id'] == '' || $output['client_secret'] == '' || $output['access_token'] == '' || $output['access_token_secret'] == '')
+	   return wp_nonce_field('vimeography-pro-settings','vimeography-pro-settings-verification');
+	}
+
+	/**
+	 * Controls any incoming POST requests.
+	 *
+	 * @access private
+	 * @return void
+	 */
+	private function _validate_form()
+	{
+		if (!empty($_POST['vimeography_pro_registration']))
+			$this->_vimeography_pro_validate_registration($_POST);
+
+		if (!empty($_POST['vimeography_pro_settings']))
+			$this->_vimeography_pro_validate_settings($_POST);
+	}
+
+	/**
+	 * Returns any saved app settings.
+	 *
+	 * @access public
+	 * @return void
+	 */
+	public function access_token()
+	{
+    return get_option('vimeography_pro_access_token');
+	}
+
+  private function _vimeography_pro_validate_registration($input)
+  {
+    // if this fails, check_admin_referer() will automatically print a "failed" page and die.
+    if (check_admin_referer('vimeography-pro-registration','vimeography-pro-registration-verification') )
+    {
+      $data['key'] = wp_filter_nohtml_kses($input['vimeography_pro_registration']['key']);
+
+      //$this->messages[] = array('type' => 'success', 'heading' => __('Congratulations!'), 'message' => __('Vimeography Pro is now installed and ready to rock!'));
+      $this->messages[] = array('type' => 'error', 'heading' => __('Sorry!'), 'message' => __('Vimeography Pro is almost ready, but still needs a little work!'));
+    }
+  }
+
+	/**
+	 * Checks the tokens provided by the user and saves them if they are valid.
+	 *
+	 * @access private
+	 * @param array $input
+	 * @return void
+	 */
+	private function _vimeography_pro_validate_settings($input)
+	{
+		// if this fails, check_admin_referer() will automatically print a "failed" page and die.
+		if (check_admin_referer('vimeography-pro-settings','vimeography-pro-settings-verification') )
 		{
-	        add_settings_error( 'vimeography_advanced_settings', 'required', __('Whoops! Make sure you fill out all of the Vimeo tokens!'));
-	        return FALSE;
-		}
-		
-		require_once(VIMEOGRAPHY_PATH . 'lib/vimeo-advanced-api-library.php');
-		
-		if (class_exists('phpVimeo'))
-			$vimeo = new phpVimeo($output['client_id'], $output['client_secret'], $output['access_token'], $output['access_token_secret']);
-		
-	    // Do an authenticated call
-	    try
-	    {
-	        $data = $vimeo->call('vimeo.oauth.checkAccessToken');
-	        if (! $data)
-	        {
-	        	add_settings_error( 'vimeography_advanced_settings', 'invalid', __('Woah! Looks like the Vimeo API is having some issues right now. Try this again in a little bit.'));
-	        	return FALSE;
-	        }
-	        
-	        $string = __('Success! Your Vimeo tokens for ') . $data->oauth->user->username . __(' have been added and saved.');
-	        
-	        // not actually an error, function name is misleading
-	        add_settings_error( 'vimeography_advanced_settings', 'valid', $string, 'updated');
-	        
-	        $output['active'] = TRUE;
-			return $output;
-	    }
-	    catch (VimeoAPIException $e)
-	    {
-	        //add_settings_error( 'vimeography_advanced_settings', $e->getCode(), "Encountered an API error -- ".$e->getMessage());
-	        add_settings_error( 'vimeography_advanced_settings', $e->getCode(), "Uh oh! Your Vimeo tokens didn't validate. Try again, and double check that all of your tokens are in the correct fields!");
-	        return FALSE;
-	    }
+		  if (isset($input['vimeography_pro_settings']['remove_token']))
+		  {
+  		  $result = delete_option('vimeography_pro_access_token');
+        $this->messages[] = array('type' => 'success', 'heading' => __('Poof!'), 'message' => __('Your Vimeo access token have been removed.'));
+        return TRUE;
+		  }
+
+      $output['access_token'] = wp_filter_nohtml_kses($input['vimeography_pro_settings']['access_token']);
+
+  		if ($output['access_token'] == '')
+  		{
+        $this->messages[] = array('type' => 'error', 'heading' => __('Whoops!'), 'message' => __('Don\'t forget to enter your Vimeo access token!'));
+        return FALSE;
+  		}
+
+  		try
+  		{
+				require_once(VIMEOGRAPHY_PATH . 'vendor/vimeo.php-master/vimeo.php');
+
+				$vimeo = new Vimeo(NULL, NULL, $output['access_token']);
+				$response = $vimeo->request('/me');
+
+        if (! $response)
+        {
+          $this->messages[] = array('type' => 'error', 'heading' => __('Woah!'), 'message' => __('Looks like the Vimeo API is having some issues right now. Try this again in a little bit.'));
+          return FALSE;
+        }
+
+				switch ($response['status'])
+				{
+					case 200:
+						update_option('vimeography_pro_access_token', $output['access_token']);
+						$this->messages[] = array('type' => 'success', 'heading' => __('Yeah!'), 'message' => __('Success! Your Vimeo access token for ') . $response['body']->name . __(' have been added and saved.'));
+						return $output;
+						break;
+					case 401:
+						throw new Vimeography_Exception(__('Your Vimeo access token didn\'t validate. Try again, and double check that you are entering the correct token.'));
+						break;
+					case 404:
+						throw new Vimeography_Exception('how the heck did you score a 404?'. $response['body']->error);
+						break;
+					default:
+						throw new Vimeography_Exception('Unknown response status from the Vimeo API: '. $response['body']->error);
+						break;
+				}
+
+  		}
+  		catch (Vimeography_Exception $e)
+  		{
+        $this->messages[] = array('type' => 'error', 'heading' => __('Dangit.'), 'message' => $e->getMessage());
+        return FALSE;
+  		}
+
+    }
 	}
+
 }
