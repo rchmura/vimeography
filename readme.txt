@@ -2,8 +2,8 @@
 Contributors: iamdavekiss
 Tags: vimeo, video, videos, gallery, vimeography, fancybox, media, player, playlist, showcase, skins, themes, video gallery
 Requires at least: 3.3
-Tested up to: 3.5.1
-Stable tag: 0.9.3
+Tested up to: 3.6
+Stable tag: 1.0
 License: MIT
 
 The easiest way to create beautiful Vimeo galleries on your Wordpress blog.
@@ -59,11 +59,11 @@ This usually means that Vimeo is having some network issues. Follow @Vimeo on tw
 
 = I'm having trouble installing a theme. =
 
-Try uploading the unzipped theme folder manually to `wp-content/uploads/vimeography-themes/[your-theme-name]`
+Vimeography themes are now treated at Wordpress plugins. Make sure you're installing the Vimeography theme on the "Plugins" page.
 
 = How do I get the latest updates for my themes? =
 
-You can visit [http://vimeography.com/themes/update](http://vimeography.com/themes/update "vimeography.com/themes/update") to get the latest versions of any individual theme you've purchased.
+If you purchased your theme at vimeography.com, you should have received an email receipt containing an activation code for your theme. Enter that activation code on the "My Themes" page of the Vimeography plugin. Once done, you will be subscribed to theme updates which will automatically be delivered to your Wordpress installation, just like any other plugin.
 
 = Why don’t you support YouTub/MetaHall/Flacker/PreschoolHumor? =
 
@@ -92,7 +92,7 @@ Heck yeah! Use the appearance editor to change your theme's style so that it mat
 
 = What features do you have planned in future versions of Vimeography? =
 
-- Vimeography Pro, which will include inline galleries, comments, unlimited videos and more!
+- Vimeography Pro, which will include private albums and channels, inline galleries, unlimited videos and more!
 
 == Screenshots ==
 
@@ -102,6 +102,18 @@ Heck yeah! Use the appearance editor to change your theme's style so that it mat
 4. Get new styles by installing gallery themes.
 
 == Changelog ==
+= 1.0 =
+* Now using Vimeo's new API!
+* Themes are now standard Wordpress plugins and are able to be updated.
+* Entire plugin was reworked, should be much quicker and more reliable.
+* Added linkifying to descriptions. URLs in descriptions are now clickable.
+* Added new colorpicker
+* Updated Bugsauce to Theme Plugin
+* Updated theme dependencies
+* Fixed Menu Jumpiness
+* Even better cache control
+* Removed video limiting setting
+
 = 0.9.3 =
 * Added new caching engine.
 * Fixed a caching issue with galleries overridden by shortcode.
@@ -243,6 +255,9 @@ Heck yeah! Use the appearance editor to change your theme's style so that it mat
 * First public release.
 
 == Upgrade Notice ==
+= 1.0 =
+If you've purchased a theme in the past, check your email! Make sure you install the new Vimeography theme plugin before updating! You may also want to back up any HTML or CSS customizations you may have made to your bugsauce theme.
+
 = 0.6.8 =
 This update prevents your purchased themes from being publically accessible.
 
