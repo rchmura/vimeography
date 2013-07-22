@@ -41,7 +41,7 @@ class Vimeography_Renderer
     ) );
 
     $this->_view  = new $class;
-    $this->_theme = (isset($settings['partial'])) ? $mustache->loadPartial($settings['partial']) : $mustache->loadTemplate( $theme['name'] );
+    $this->_theme = (isset($settings['partial'])) ? $mustache->loadPartial(strtolower($settings['partial'])) : $mustache->loadTemplate( strtolower($theme['name']) );
 
     add_action('wp_enqueue_scripts',    array($class, 'load_scripts'));
     add_action('admin_enqueue_scripts', array($class, 'load_scripts'));
