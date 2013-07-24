@@ -2,7 +2,16 @@
 
 class Vimeography_Gallery_List extends Vimeography_Base
 {
+	/**
+	 * [$_galleries description]
+	 * @var [type]
+	 */
 	public $_galleries;
+
+	/**
+	 * [$pagination description]
+	 * @var [type]
+	 */
 	public $pagination;
 
 	public function __construct()
@@ -163,7 +172,9 @@ class Vimeography_Gallery_List extends Vimeography_Base
 				throw new Exception(__('Your gallery could not be deleted.'));
 
 			// Delete the cache separately
-			$this->delete_vimeography_cache($id);
+			require_once VIMEOGRAPHY_PATH . 'lib/cache.php';
+			$cache = new Vimeography_Cache($id);
+			$cache->delete();
 
 			$this->messages[] = array('type' => 'success', 'heading' => __('Gallery deleted.'), 'message' => __('See you later, sucker.'));
 
