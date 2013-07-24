@@ -3,7 +3,7 @@
 Plugin Name: Vimeography
 Plugin URI: http://vimeography.com
 Description: Vimeography is the easiest way to set up a custom Vimeo gallery on your site.
-Version: 1.0.2
+Version: 1.0.3
 Author: Dave Kiss
 Author URI: http://davekiss.com
 License: MIT
@@ -24,7 +24,7 @@ define( 'VIMEOGRAPHY_ASSETS_PATH', WP_CONTENT_DIR . '/vimeography/assets/' );
 define( 'VIMEOGRAPHY_CACHE_URL',   WP_CONTENT_URL . '/vimeography/cache/' );
 define( 'VIMEOGRAPHY_CACHE_PATH',  WP_CONTENT_DIR . '/vimeography/cache/' );
 define( 'VIMEOGRAPHY_BASENAME', plugin_basename( __FILE__ ) );
-define( 'VIMEOGRAPHY_VERSION', '1.0.2');
+define( 'VIMEOGRAPHY_VERSION', '1.0.3');
 define( 'VIMEOGRAPHY_GALLERY_TABLE', $wpdb->prefix . "vimeography_gallery");
 define( 'VIMEOGRAPHY_GALLERY_META_TABLE', $wpdb->prefix . "vimeography_gallery_meta");
 define( 'VIMEOGRAPHY_CURRENT_PAGE', basename($_SERVER['PHP_SELF']));
@@ -456,7 +456,7 @@ class Vimeography
 
     if ((($url = parse_url($source_url)) !== FALSE) && (preg_match('~vimeo(?:pro)?\.com$~', $url['host']) > 0))
     {
-
+      $host = $url['host'];
       $url = array_filter(explode('/', $url['path']), 'strlen');
 
       // If the array doesn't contain one of the following strings, it
@@ -467,7 +467,7 @@ class Vimeography
         {
           array_unshift($url, 'videos');
         }
-        elseif (isset($url[2]))
+        elseif (isset($url[2]) AND $host != 'vimeo.com')
         {
           array_unshift($url, 'portfolios');
         }
