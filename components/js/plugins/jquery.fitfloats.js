@@ -31,13 +31,11 @@
       container.width(new_width);
     }
 
-    $(window).load(function(){
-      change_container_size(container);
-    });
+    change_container_size(container);
 
     $(window).resize(function() {
       change_container_size(container);
     });
   };
 
-}( jQuery ));
+})( jQuery );
