@@ -20,12 +20,28 @@ class Vimeography_Update extends Vimeography
    */
   public $action;
 
+  private $_installed_themes = array();
+
   /**
    * [__construct description]
+   * @param [type] $installed_themes [description]
    */
-  public function __construct()
+  public function __construct($installed_themes)
   {
-    $this->_activation_keys = get_option('vimeography_activation_keys');
+    $this->_activation_keys  = get_option('vimeography_activation_keys');
+
+    global $pagenow;
+
+    if ($pagenow === 'plugins.php' AND ! empty($installed_themes))
+    {
+      foreach ($installed_themes as $theme)
+      {
+        $this->_installed_themes[$theme['slug']] = $theme['name'];
+
+        $hook = 'after_plugin_row_' . $theme['basename'];
+        add_action( $hook, array($this, 'vimeography_theme_update_message') );
+      }
+    }
 
     if (! empty($this->_activation_keys))
     {
@@ -148,6 +164,40 @@ class Vimeography_Update extends Vimeography
     }
 
     return $original;
+  }
+
+  /**
+   * Add a reminder to add the activation key to receives updates for the installed Vimeography theme.
+   * @param  [type] $plugin_file [description]
+   * @return [type]              [description]
+   */
+  public function vimeography_theme_update_message($plugin_file)
+  {
+    $match = FALSE;
+    $plugin_basename = substr($plugin_file, 0, strpos($plugin_file, "/"));
+
+    if (! empty($this->_activation_keys))
+    {
+      foreach ($this->_activation_keys as $key)
+      {
+        if ($key->plugin_name === $plugin_basename)
+          $match = TRUE;
+      }
+    }
+
+    if ( in_array($plugin_basename, array('vimeography-bugsauce', 'vimeography-single', 'vimeography-ballistic')) )
+      $match = TRUE;
+
+    if (! $match)
+    {
+      $name = $this->_installed_themes[$plugin_basename];
+
+      echo '<tr class="plugin-update-tr"><td colspan="3" class="plugin-update"><div class="update-message">';
+      echo '<span style="border-right: 1px solid #DFDFDF; margin-right: 5px;">';
+      echo __('Hey! Don\'t forget to ') . '<a title="Activate my Vimeography Themes" href="' . get_admin_url() . 'admin.php?page=vimeography-my-themes">' . __('enter your activation key') . '</a>' . __(" to receive the latest updates for the Vimeography $name plugin.");
+      echo '</span>';
+      echo '</div></td></tr>';
+    }
   }
 
 }

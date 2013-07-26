@@ -1,0 +1,20 @@
+@font-face {
+  font-family: 'Entypo';
+  src: url('../type/entypo/entypo.eot'); /* IE9 Compat Modes */
+  src: url('../type/entypo/entypo.eot?#iefix') format('embedded-opentype'), /* IE6-IE8 */
+       url('../type/entypo/entypo.woff') format('woff'), /* Modern Browsers */
+       url('../type/entypo/entypo.ttf')  format('truetype'), /* Safari, Android, iOS */
+       url('../type/entypo/entypo.svg#Entypo') format('svg'); /* Legacy iOS */
+  }
+
+.vimeography-group:before,
+.vimeography-group:after {
+  content: "";
+  display: table;
+}
+.vimeography-group:after {
+  clear: both;
+}
+.vimeography-group {
+  *zoom: 1;
+}
