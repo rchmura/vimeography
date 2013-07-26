@@ -26,10 +26,25 @@ class Vimeography_Update extends Vimeography
    * [__construct description]
    * @param [type] $installed_themes [description]
    */
-  public function __construct($installed_themes)
+  public function __construct()
   {
     $this->_activation_keys  = get_option('vimeography_activation_keys');
 
+    if (! empty($this->_activation_keys))
+    {
+      add_filter('pre_set_site_transient_update_plugins', array($this, 'vimeography_check_update'));
+      add_filter('plugins_api', array($this, 'vimeography_view_version_details'), 10, 3);
+    }
+
+  }
+
+  /**
+   * [vimeography_check_installed_theme_activations description]
+   * @param  [type] $installed_themes [description]
+   * @return [type]                   [description]
+   */
+  public function vimeography_check_installed_theme_activations($installed_themes)
+  {
     global $pagenow;
 
     if ($pagenow === 'plugins.php' AND ! empty($installed_themes))
@@ -42,13 +57,6 @@ class Vimeography_Update extends Vimeography
         add_action( $hook, array($this, 'vimeography_theme_update_message') );
       }
     }
-
-    if (! empty($this->_activation_keys))
-    {
-      add_filter('pre_set_site_transient_update_plugins', array($this, 'vimeography_check_update'));
-      add_filter('plugins_api', array($this, 'vimeography_view_version_details'), 10, 3);
-    }
-
   }
 
   /**
