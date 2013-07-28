@@ -8,13 +8,15 @@ abstract class Vimeography_Core
 
   /**
    * [$_vimeo description]
-   * @var [type]
+   *
+   * @var instance
    */
   protected $_vimeo;
 
   /**
    * [$_auth description]
-   * @var [type]
+   *
+   * @var string
    */
   protected $_auth;
 
@@ -27,9 +29,17 @@ abstract class Vimeography_Core
 
   /**
    * [$_endpoint description]
-   * @var [type]
+   *
+   * @var string
    */
   protected $_endpoint;
+
+  /**
+   * Limit a gallery to show only this amount of videos.
+   *
+   * @var int
+   */
+  protected $_limit = 0;
 
   /**
    * An optional resource string pointing to the video that
@@ -41,11 +51,15 @@ abstract class Vimeography_Core
 
   /**
    * [__construct description]
+   *
    * @param [type] $settings [description]
    */
   public function __construct($settings)
   {
     $this->_endpoint = $settings['source'];
+
+    if (isset($settings['limit']))
+      $this->_limit = $settings['limit'];
 
     if ( isset($settings['featured']) AND ! empty($settings['featured']) )
       $this->_featured = '/videos/' . preg_replace("/[^0-9]/", '', $settings['featured']);
@@ -132,6 +146,9 @@ abstract class Vimeography_Core
       $result_set = $video_set;
     }
 
+    if ( isset($this->_limit) )
+      $result_set = $this->_limit_video_set($result_set);
+
     unset($response->data);
     $response->video_set = $result_set;
 
@@ -207,13 +224,29 @@ abstract class Vimeography_Core
 
     // If it does not exist, we need to remove the last video in the
     // video set and place the featured video up front.
-    if ($found == FALSE)
+    if ($found == FALSE AND $this->_limit == count($video_set))
       array_pop($video_set);
 
     // Add the featured video to the front.
     array_unshift($video_set, $featured_video);
 
     return array_values($video_set);
+  }
+
+  /**
+   * Remove videos from the video set if there is an imposing limit.
+   *
+   * @return array of Vimeo videos.
+   */
+  private function _limit_video_set($video_set)
+  {
+    if ($this->_limit < count($video_set) AND $this->_limit != 0)
+    {
+      for ($video_to_delete = (count($video_set) - 1); $video_to_delete >= $this->_limit; $video_to_delete--)
+        unset($video_set[$video_to_delete]);
+    }
+
+    return $video_set;
   }
 
 }

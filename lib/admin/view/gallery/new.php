@@ -11,9 +11,16 @@ class Vimeography_Gallery_New extends Vimeography_Base
 {
   /**
    * Vimeo library instance
+   *
    * @var [type]
    */
   private $_vimeo;
+
+  /**
+   * [$_token description]
+   *
+   * @var [type]
+   */
   private $_token;
 
   public function __construct()
@@ -96,6 +103,7 @@ class Vimeography_Gallery_New extends Vimeography_Base
                               'source_url'     => $input['source_url'],
                               'resource_uri'   => $input['resource_uri'],
                               'featured_video' => NULL,
+                              'video_limit'    => 25,
                               'gallery_width'  => NULL,
                               'cache_timeout'  => 3600,
                               'theme_name'     => 'bugsauce' ) );

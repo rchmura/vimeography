@@ -28,12 +28,11 @@ window.vimeography = window.vimeography || {};
           var promise = $.ajax({
             type: 'POST',
             url: pagination.request._ajax_url,
-            data: pagination.request
+            data: pagination.request,
+            dataType: 'json'
           });
 
           promise.done(function(response){
-            //console.log(response);
-            response = $.parseJSON(response);
             console.log(response);
             if (response.result == 'success')
             {
