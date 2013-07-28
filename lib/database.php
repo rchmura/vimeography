@@ -174,9 +174,21 @@ class Vimeography_Database extends Vimeography
 
       } // end row manipulation
 
-      // Drop the video limit.
-      $result = $wpdb->query('ALTER TABLE '. VIMEOGRAPHY_GALLERY_META_TABLE .' DROP COLUMN video_limit');
+      // Drop the video limit. Edit: 7/28/13 - decided to keep this. The next function will add it if it doesn't exist.
+      // $result = $wpdb->query('ALTER TABLE '. VIMEOGRAPHY_GALLERY_META_TABLE .' DROP COLUMN video_limit');
 
+      $this->vimeography_update_tables();
+    }
+  }
+
+  public function vimeography_update_db_to_1_0_7()
+  {
+    if ( version_compare(get_option('vimeography_db_version'), '1.0.7', '<') )
+    {
+      global $wpdb;
+      $wpdb->hide_errors();
+
+      $result = $wpdb->query('ALTER TABLE '.VIMEOGRAPHY_GALLERY_META_TABLE.' ADD video_limit MEDIUMINT(7) NOT NULL AFTER featured_video;');
       $this->vimeography_update_tables();
     }
   }

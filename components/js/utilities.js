@@ -22,7 +22,7 @@ window.vimeography = window.vimeography || {};
     + '&autoplay=' + utilities.enable_autoplay
     + '&api='      + utilities.enable_api;
 
-    return $.get(url);
+    return $.getJSON(url);
   }
 
 }( window.vimeography.utilities = window.vimeography.utilities || {}, jQuery ));

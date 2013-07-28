@@ -304,6 +304,8 @@ class Vimeography_Gallery_Edit extends Vimeography_Base
       {
         global $wpdb;
 
+        $input['vimeography_basic_settings']['video_limit'] = intval($input['vimeography_basic_settings']['video_limit']) <= 25 ? $input['vimeography_basic_settings']['video_limit'] : 25;
+
         if (!empty($input['vimeography_basic_settings']['gallery_width']))
         {
           preg_match('/(\d*)(px|%?)/', $input['vimeography_basic_settings']['gallery_width'], $matches);
@@ -338,11 +340,13 @@ class Vimeography_Gallery_Edit extends Vimeography_Base
           VIMEOGRAPHY_GALLERY_META_TABLE,
           array(
             'cache_timeout'  => $input['vimeography_basic_settings']['cache_timeout'],
+            'video_limit'    => $input['vimeography_basic_settings']['video_limit'],
             'featured_video' => $input['vimeography_basic_settings']['featured_video'],
             'gallery_width'  => $input['vimeography_basic_settings']['gallery_width']
           ),
           array( 'gallery_id' => $id ),
           array(
+            '%d',
             '%d',
             '%s',
             '%s'

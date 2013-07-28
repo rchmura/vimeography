@@ -3,7 +3,7 @@
 Plugin Name: Vimeography
 Plugin URI: http://vimeography.com
 Description: Vimeography is the easiest way to set up a custom Vimeo gallery on your site.
-Version: 1.0.6
+Version: 1.0.7
 Author: Dave Kiss
 Author URI: http://davekiss.com
 License: MIT
@@ -24,7 +24,7 @@ define( 'VIMEOGRAPHY_ASSETS_PATH', WP_CONTENT_DIR . '/vimeography/assets/' );
 define( 'VIMEOGRAPHY_CACHE_URL',   WP_CONTENT_URL . '/vimeography/cache/' );
 define( 'VIMEOGRAPHY_CACHE_PATH',  WP_CONTENT_DIR . '/vimeography/cache/' );
 define( 'VIMEOGRAPHY_BASENAME', plugin_basename( __FILE__ ) );
-define( 'VIMEOGRAPHY_VERSION', '1.0.6');
+define( 'VIMEOGRAPHY_VERSION', '1.0.7');
 define( 'VIMEOGRAPHY_GALLERY_TABLE', $wpdb->prefix . "vimeography_gallery");
 define( 'VIMEOGRAPHY_GALLERY_META_TABLE', $wpdb->prefix . "vimeography_gallery_meta");
 define( 'VIMEOGRAPHY_CURRENT_PAGE', basename($_SERVER['PHP_SELF']));
@@ -229,6 +229,7 @@ class Vimeography
     $db->vimeography_update_db_to_0_7();
     $db->vimeography_update_db_to_0_8();
     $db->vimeography_update_db_to_1_0();
+    $db->vimeography_update_db_to_1_0_7();
     $this->vimeography_update_db_version();
   }
 
@@ -413,6 +414,7 @@ class Vimeography
       'source_url'     => 'https://vimeo.com/channels/staffpicks/',
       'resource_uri'   => '/channels/staffpicks',
       'featured_video' => '',
+      'video_limit'    => 25,
       'cache_timeout'  => 3600,
       'theme_name'     => 'bugsauce',
     ));
@@ -430,6 +432,7 @@ class Vimeography
     source_url varchar(100) NOT NULL,
     resource_uri varchar(50) NOT NULL,
     featured_video varchar(100) DEFAULT NULL,
+    video_limit mediumint(7) NOT NULL,
     gallery_width varchar(10) DEFAULT NULL,
     cache_timeout mediumint(7) NOT NULL,
     theme_name varchar(50) NOT NULL,

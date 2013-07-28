@@ -75,6 +75,7 @@ class Vimeography_Shortcode extends Vimeography
     $fallback_gallery_settings['theme']    = isset($db_gallery_settings->theme_name)     ? $db_gallery_settings->theme_name     : $default_settings['theme_name'];
     $fallback_gallery_settings['featured'] = isset($db_gallery_settings->featured_video) ? $db_gallery_settings->featured_video : $default_settings['featured_video'];
     $fallback_gallery_settings['endpoint'] = isset($db_gallery_settings->resource_uri)   ? $db_gallery_settings->resource_uri   : $default_settings['resource_uri'];
+    $fallback_gallery_settings['limit']    = isset($db_gallery_settings->video_limit)    ? $db_gallery_settings->video_limit    : $default_settings['video_limit'];
     $fallback_gallery_settings['cache']    = isset($db_gallery_settings->cache_timeout)  ? $db_gallery_settings->cache_timeout  : $default_settings['cache_timeout'];
     $fallback_gallery_settings['width']    = isset($db_gallery_settings->gallery_width)  ? $db_gallery_settings->gallery_width  : '';
 
@@ -83,6 +84,7 @@ class Vimeography_Shortcode extends Vimeography
       'theme'    => $fallback_gallery_settings['theme'],
       'featured' => $fallback_gallery_settings['featured'],
       'source'   => $fallback_gallery_settings['endpoint'],
+      'limit'    => $fallback_gallery_settings['limit'],
       'cache'    => $fallback_gallery_settings['cache'],
       'width'    => $fallback_gallery_settings['width'],
     ), $atts );
@@ -116,7 +118,7 @@ class Vimeography_Shortcode extends Vimeography
     ');
 
     if ( empty($db_gallery_settings) )
-      throw new Vimeography_Exception('Your Vimeography gallery settings could not be found.');
+      throw new Vimeography_Exception('The Vimeography gallery you are trying to load does not exist.');
 
     return $db_gallery_settings[0];
   }
