@@ -2,6 +2,10 @@
 
 class Vimeography_Renderer
 {
+  /**
+   * [$_theme description]
+   * @var [type]
+   */
   protected $_theme;
 
   /**
@@ -18,7 +22,7 @@ class Vimeography_Renderer
   public function __construct($settings, $gallery_id)
   {
     if (! isset($settings['theme']))
-      throw new Vimeography_Exception('You must specify a theme in either the admin panel or the shortcode.');
+      throw new Vimeography_Exception(__('You must specify a theme in either the admin panel or the shortcode.'));
 
     $vimeography = Vimeography::get_instance();
 
@@ -27,8 +31,14 @@ class Vimeography_Renderer
 
     $theme = $vimeography->active_theme;
 
-    if (! require_once( $theme['file_path'] ) )
+    if (file_exists($theme['file_path']))
+    {
+      require_once $theme['file_path'];
+    }
+    else
+    {
       throw new Vimeography_Exception('The "' . $theme['name'] . '" theme does not exist or is improperly structured.');
+    }
 
     $class = 'Vimeography_Themes_'.ucfirst( $theme['name'] );
 

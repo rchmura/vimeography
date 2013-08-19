@@ -3,7 +3,7 @@
 Plugin Name: Vimeography
 Plugin URI: http://vimeography.com
 Description: Vimeography is the easiest way to set up a custom Vimeo gallery on your site.
-Version: 1.0.8
+Version: 1.0.9
 Author: Dave Kiss
 Author URI: http://davekiss.com
 License: MIT
@@ -24,7 +24,7 @@ define( 'VIMEOGRAPHY_ASSETS_PATH', WP_CONTENT_DIR . '/vimeography/assets/' );
 define( 'VIMEOGRAPHY_CACHE_URL',   WP_CONTENT_URL . '/vimeography/cache/' );
 define( 'VIMEOGRAPHY_CACHE_PATH',  WP_CONTENT_DIR . '/vimeography/cache/' );
 define( 'VIMEOGRAPHY_BASENAME', plugin_basename( __FILE__ ) );
-define( 'VIMEOGRAPHY_VERSION', '1.0.8');
+define( 'VIMEOGRAPHY_VERSION', '1.0.9');
 define( 'VIMEOGRAPHY_GALLERY_TABLE', $wpdb->prefix . "vimeography_gallery");
 define( 'VIMEOGRAPHY_GALLERY_META_TABLE', $wpdb->prefix . "vimeography_gallery_meta");
 define( 'VIMEOGRAPHY_CURRENT_PAGE', basename($_SERVER['PHP_SELF']));
@@ -347,14 +347,33 @@ class Vimeography
     {
       case 'vimeography_page_vimeography-new-gallery':
         require_once(VIMEOGRAPHY_PATH . 'lib/admin/view/gallery/new.php');
-        $view = new Vimeography_Gallery_New;
+
+        if (is_plugin_active('vimeography-pro/vimeography-pro.php'))
+        {
+          do_action('vimeography-pro/load-new');
+          $view = new Vimeography_Pro_Gallery_New;
+        }
+        else
+        {
+          $view = new Vimeography_Gallery_New;
+        }
+
         $template = $mustache->loadTemplate('gallery/new');
         break;
       case 'toplevel_page_vimeography-edit-galleries':
         if (isset($_GET['id']))
         {
           require_once(VIMEOGRAPHY_PATH . 'lib/admin/view/gallery/edit.php');
-          $view = new Vimeography_Gallery_Edit;
+
+          if (is_plugin_active('vimeography-pro/vimeography-pro.php'))
+          {
+            do_action('vimeography-pro/load-editor');
+            $view = new Vimeography_Pro_Gallery_Edit;
+          }
+          else
+          {
+            $view = new Vimeography_Gallery_Edit;
+          }
 
           $mustache->setPartialsLoader( new Mustache_Loader_CascadingLoader( array(
               new Mustache_Loader_FilesystemLoader(VIMEOGRAPHY_PATH . 'lib/admin/templates/gallery/edit/partials'),
@@ -371,7 +390,15 @@ class Vimeography
         else
         {
           require_once(VIMEOGRAPHY_PATH . 'lib/admin/view/gallery/list.php');
-          $view = new Vimeography_Gallery_List;
+          if (is_plugin_active('vimeography-pro/vimeography-pro.php'))
+          {
+            do_action('vimeography-pro/load-list');
+            $view = new Vimeography_Pro_Gallery_List;
+          }
+          else
+          {
+            $view = new Vimeography_Gallery_List;
+          }
           $template = $mustache->loadTemplate('gallery/list');
         }
         break;
@@ -487,7 +514,7 @@ class Vimeography
     }
     else
     {
-      throw new Vimeography_Exception('That site doesn\'t look like a valid link to a Vimeo collection.');
+      throw new Vimeography_Exception( __('That site doesn\'t look like a valid link to a Vimeo collection.') );
     }
   }
 

@@ -14,6 +14,9 @@ class Vimeography_Gallery_List extends Vimeography_Base
 	 */
 	public $pagination;
 
+	/**
+	 * [__construct description]
+	 */
 	public function __construct()
 	{
 		if (isset($_POST['vimeography-list']))
@@ -88,8 +91,8 @@ class Vimeography_Gallery_List extends Vimeography_Base
 		if ( check_admin_referer('vimeography-list-action','vimeography-verification') )
 		{
 			global $wpdb;
-			$id = $wpdb->escape(intval($input['id']));
-			$action = $wpdb->escape(wp_filter_nohtml_kses($input['action']));
+			$id = intval($input['id']);
+			$action = wp_filter_nohtml_kses($input['action']);
 
 			if ($action === 'delete')
 				$this->_delete_gallery($id);
@@ -113,7 +116,7 @@ class Vimeography_Gallery_List extends Vimeography_Base
 
 		$number_of_pages = ceil($number_of_galleries[0]->count / $limit);
 
-		$current_page = isset($_GET['p']) ? $wpdb->escape(intval($_GET['p'])) : 1;
+		$current_page = isset($_GET['p']) ? intval($_GET['p']) : 1;
 
 		$offset = ($current_page - 1) * $limit;
 
@@ -140,10 +143,12 @@ class Vimeography_Gallery_List extends Vimeography_Base
 				throw new Exception(__('Your gallery could not be duplicated.'));
 
 			$gallery_id = $wpdb->insert_id;
-			$result = $wpdb->insert( VIMEOGRAPHY_GALLERY_META_TABLE, array( 'gallery_id' => $gallery_id, 'source_url' => $duplicate[0]->source_url, 'video_limit' => $duplicate[0]->video_limit, 'featured_video' => $duplicate[0]->featured_video, 'cache_timeout' => $duplicate[0]->cache_timeout, 'theme_name' => $duplicate[0]->theme_name ) );
+			$result = $wpdb->insert( VIMEOGRAPHY_GALLERY_META_TABLE, array( 'gallery_id' => $gallery_id, 'source_url' => $duplicate[0]->source_url, 'video_limit' => $duplicate[0]->video_limit, 'featured_video' => $duplicate[0]->featured_video, 'cache_timeout' => $duplicate[0]->cache_timeout, 'theme_name' => $duplicate[0]->theme_name, 'resource_uri' => $duplicate[0]->resource_uri ) );
 
 			if ($result === FALSE)
 				throw new Exception(__('Your gallery could not be duplicated.'));
+
+			do_action('vimeography-pro/duplicate-gallery', $id, $gallery_id);
 
 			$this->messages[] = array('type' => 'success', 'heading' => __('Gallery duplicated.'), 'message' => __('You now have a clone of your own.'));
 
@@ -171,10 +176,12 @@ class Vimeography_Gallery_List extends Vimeography_Base
 			if ($result === FALSE)
 				throw new Exception(__('Your gallery could not be deleted.'));
 
-			// Delete the cache separately
-			require_once VIMEOGRAPHY_PATH . 'lib/cache.php';
-			$cache = new Vimeography_Cache($id);
-			$cache->delete();
+			do_action('vimeography-pro/delete-gallery', $id);
+
+	    require_once VIMEOGRAPHY_PATH . 'lib/cache.php';
+	    $cache = new Vimeography_Cache($id);
+	    if ($cache->exists())
+		    $cache->delete();
 
 			$this->messages[] = array('type' => 'success', 'heading' => __('Gallery deleted.'), 'message' => __('See you later, sucker.'));
 

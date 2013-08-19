@@ -80,7 +80,19 @@ class Vimeography_Helpers
 
   public function get_featured_embed($link)
   {
-    $oembed = wp_remote_get( 'http://vimeo.com/api/oembed.json?url=' . $link );
+    $params = array(
+      'url'       => $link,
+      'autoplay'  => 0,
+      'title'     => 0,
+      'portrait'  => 0,
+      'byline'    => 0,
+      'api'       => 1,
+      'player_id' => 'vimeography'. rand('1', '999999')
+    );
+
+    $query = http_build_query($params);
+
+    $oembed = wp_remote_get( 'http://vimeo.com/api/oembed.json?' . $query);
 
     if ( is_wp_error( $oembed ) )
     {
@@ -89,6 +101,8 @@ class Vimeography_Helpers
     else
     {
       $oembed = json_decode($oembed['body']);
+      $oembed->html = str_replace('<iframe', '<iframe id="' . $params['player_id'] . '"', $oembed->html);
+
       return $oembed->html;
     }
   }
