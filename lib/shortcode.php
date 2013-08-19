@@ -87,7 +87,10 @@ class Vimeography_Shortcode extends Vimeography
       'limit'    => $fallback_gallery_settings['limit'],
       'cache'    => $fallback_gallery_settings['cache'],
       'width'    => $fallback_gallery_settings['width'],
-    ), $atts );
+    ), $atts, 'vimeography' );
+
+    // Remove this line once 3.6 is the minimum supported version.
+    $shortcode_gallery_settings = apply_filters('vimeography-pro/do-shortcode', $shortcode_gallery_settings, '', $atts);
 
     $shortcode_gallery_settings['width'] = self::_validate_gallery_width($shortcode_gallery_settings['width']);
 

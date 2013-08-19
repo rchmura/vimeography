@@ -12,17 +12,26 @@ class Vimeography_Gallery_New extends Vimeography_Base
   /**
    * Vimeo library instance
    *
-   * @var [type]
+   * @var singleton
    */
   private $_vimeo;
 
   /**
-   * [$_token description]
+   * The default client ID OR the user's access token.
    *
-   * @var [type]
+   * @var string
    */
   private $_token;
 
+  /**
+   * [$_gallery_id description]
+   * @var [type]
+   */
+  protected $_gallery_id;
+
+  /**
+   * [__construct description]
+   */
   public function __construct()
   {
     if ( ( $this->_token = get_option('vimeography_pro_access_token') ) === FALSE ) :
@@ -31,8 +40,25 @@ class Vimeography_Gallery_New extends Vimeography_Base
       $this->_vimeo = new Vimeo(null, null, $this->_token );
     endif;
 
-    if (isset($_POST['vimeography_basic_settings']))
-      $this->_validate_form($_POST['vimeography_basic_settings']);
+    if ( isset($_POST['vimeography_basic_settings']) )
+    {
+      try
+      {
+        $input             = self::_validate_form($_POST['vimeography_basic_settings']);
+        $this->_gallery_id = self::_create_vimeography_gallery($input);
+
+        do_action('vimeography-pro/create-gallery', $this->_gallery_id);
+
+        //$trigger = $this->_vimeography_subscribe_to_trigger($input['resource_uri'], $gallery_id);
+
+        wp_redirect( get_admin_url().'admin.php?page=vimeography-edit-galleries&id=' . $this->_gallery_id . '&created=1' ); exit;
+      }
+      catch (Vimeography_Exception $e)
+      {
+        require_once(ABSPATH . 'wp-admin/admin-header.php');
+        $this->messages[] = array('type' => 'warn', 'heading' => 'Heads up!', 'message' => $e->getMessage());
+      }
+    }
   }
 
   /**
@@ -49,32 +75,18 @@ class Vimeography_Gallery_New extends Vimeography_Base
   /**
    * Checks the incoming form to make sure it is completed.
    *
-   * @access private
-   * @return void
+   * @access protected
+   * @return array $input
    */
-  private function _validate_form($input)
+  protected static function _validate_form($input)
   {
     if (check_admin_referer('vimeography-gallery-action','vimeography-gallery-verification'))
     {
-      try
-      {
-        if (empty($input['gallery_title']) OR empty($input['source_url']))
-          throw new Vimeography_Exception(__('Make sure you fill out all of the fields below!'));
+      if ( empty($input['gallery_title']) OR empty($input['source_url']) )
+        throw new Vimeography_Exception( __('Make sure you fill out both of the fields below!') );
 
-        $input['resource_uri'] = Vimeography::validate_vimeo_source($input['source_url']);
-
-        if (($gallery_id = $this->_create_vimeography_gallery($input)) == FALSE)
-          throw new Vimeography_Exception(__('We couldn\'t create a new gallery. Try upgrading or reinstalling the Vimeography plugin.'));
-
-        //$trigger = $this->_vimeography_subscribe_to_trigger($input['resource_uri'], $gallery_id);
-
-        wp_redirect( get_admin_url().'admin.php?page=vimeography-edit-galleries&id='.$gallery_id.'&created=1' ); exit;
-      }
-      catch (Vimeography_Exception $e)
-      {
-        require_once(ABSPATH . 'wp-admin/admin-header.php');
-        $this->messages[] = array('type' => 'warn', 'heading' => 'Heads up!', 'message' => $e->getMessage());
-      }
+      $input['resource_uri'] = Vimeography::validate_vimeo_source($input['source_url']);
+      return $input;
     }
   }
 
@@ -83,7 +95,7 @@ class Vimeography_Gallery_New extends Vimeography_Base
    *
    * @access private
    * @static
-   * @return int gallery ID if success, FALSE if failure
+   * @return int gallery ID if success, exception if failure
    */
   private static function _create_vimeography_gallery($input)
   {
@@ -93,7 +105,7 @@ class Vimeography_Gallery_New extends Vimeography_Base
 
     if (! $result)
     {
-      return FALSE;
+      throw new Vimeography_Exception(__('We couldn\'t create a new gallery. Try upgrading or reinstalling the Vimeography plugin.'));
     }
     else
     {
@@ -103,13 +115,13 @@ class Vimeography_Gallery_New extends Vimeography_Base
                               'source_url'     => $input['source_url'],
                               'resource_uri'   => $input['resource_uri'],
                               'featured_video' => NULL,
-                              'video_limit'    => 25,
                               'gallery_width'  => NULL,
+                              'video_limit'    => 25,
                               'cache_timeout'  => 3600,
                               'theme_name'     => 'bugsauce' ) );
 
       if (! $result)
-       return FALSE;
+        throw new Vimeography_Exception(__('We couldn\'t create a new gallery. Try upgrading or reinstalling the Vimeography plugin.'));
     }
 
     return $gallery_id;

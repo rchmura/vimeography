@@ -8,14 +8,18 @@ class Vimeography_Gallery_Edit extends Vimeography_Base
    * Current gallery ID.
    * @var int
    */
-  private $_gallery_id;
+  protected $_gallery_id;
 
   /**
    * Cache class instance.
    * @var singleton
    */
-  private $_cache;
+  protected $_cache;
 
+  /**
+   * [$theme_supports_settings description]
+   * @var boolean
+   */
   public $theme_supports_settings = FALSE;
 
   /**
@@ -24,6 +28,9 @@ class Vimeography_Gallery_Edit extends Vimeography_Base
    */
   protected $_settings_file;
 
+  /**
+   * [__construct description]
+   */
   public function __construct()
   {
     $this->_gallery_id = intval($_GET['id']);
@@ -191,26 +198,46 @@ class Vimeography_Gallery_Edit extends Vimeography_Base
     }
   }
 
+  /**
+   * [basic_nonce description]
+   * @return [type] [description]
+   */
   public static function basic_nonce()
   {
     return wp_nonce_field('vimeography-basic-action','vimeography-basic-verification');
   }
 
+  /**
+   * [theme_nonce description]
+   * @return [type] [description]
+   */
   public static function theme_nonce()
   {
     return wp_nonce_field('vimeography-theme-action','vimeography-theme-verification');
   }
 
+  /**
+   * [theme_settings_nonce description]
+   * @return [type] [description]
+   */
   public static function theme_settings_nonce()
   {
     return wp_nonce_field('vimeography-theme-settings-action','vimeography-theme-settings-verification');
   }
 
+  /**
+   * [get_cached_videos_nonce description]
+   * @return [type] [description]
+   */
   public static function get_cached_videos_nonce()
   {
     return wp_create_nonce('vimeography-get-cached-videos');
   }
 
+  /**
+   * [selected description]
+   * @return [type] [description]
+   */
   public function selected()
   {
     return array(
@@ -218,6 +245,11 @@ class Vimeography_Gallery_Edit extends Vimeography_Base
     );
   }
 
+  /**
+   * Returns all of the gallery parameters to be used in the admin.
+   *
+   * @return [type] [description]
+   */
   public function gallery()
   {
     $this->_gallery[0]->featured_video = $this->_gallery[0]->featured_video === 0 ? '' : $this->_gallery[0]->featured_video;
