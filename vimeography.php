@@ -3,7 +3,7 @@
 Plugin Name: Vimeography
 Plugin URI: http://vimeography.com
 Description: Vimeography is the easiest way to set up a custom Vimeo gallery on your site.
-Version: 1.0.9
+Version: 1.1
 Author: Dave Kiss
 Author URI: http://davekiss.com
 License: MIT
@@ -24,7 +24,7 @@ define( 'VIMEOGRAPHY_ASSETS_PATH', WP_CONTENT_DIR . '/vimeography/assets/' );
 define( 'VIMEOGRAPHY_CACHE_URL',   WP_CONTENT_URL . '/vimeography/cache/' );
 define( 'VIMEOGRAPHY_CACHE_PATH',  WP_CONTENT_DIR . '/vimeography/cache/' );
 define( 'VIMEOGRAPHY_BASENAME', plugin_basename( __FILE__ ) );
-define( 'VIMEOGRAPHY_VERSION', '1.0.9');
+define( 'VIMEOGRAPHY_VERSION', '1.1');
 define( 'VIMEOGRAPHY_GALLERY_TABLE', $wpdb->prefix . "vimeography_gallery");
 define( 'VIMEOGRAPHY_GALLERY_META_TABLE', $wpdb->prefix . "vimeography_gallery_meta");
 define( 'VIMEOGRAPHY_CURRENT_PAGE', basename($_SERVER['PHP_SELF']));
@@ -471,9 +471,9 @@ class Vimeography
     dbDelta($sql);
   }
 
-    /**
-   * Checks if the provided Vimeo URL is valid and if so, returns an array
-   * containing the URL parts
+  /**
+   * Checks if the provided Vimeo URL is valid and if so, returns a
+   * string to be used as the collection endpoint.
    *
    * @param  string $source_url Source collection of Vimeo videos.
    * @return string             Vimeo Resource
@@ -488,28 +488,29 @@ class Vimeography
     if ((($url = parse_url($source_url)) !== FALSE) && (preg_match('~vimeo(?:pro)?\.com$~', $url['host']) > 0))
     {
       $host = $url['host'];
-      $url = array_filter(explode('/', $url['path']), 'strlen');
+      $url = array_values(array_filter(explode('/', $url['path']), 'strlen'));
 
       // If the array doesn't contain one of the following strings, it
       // must be either a user or a video
-      if (in_array($url[1], array('album', 'channels', 'groups', 'categories')) !== TRUE)
+      if (in_array($url[0], array('album', 'channels', 'groups', 'categories')) !== TRUE)
       {
-        if (is_numeric($url[1]))
+        if (is_numeric($url[0]))
         {
           array_unshift($url, 'videos');
-        }
-        elseif (isset($url[2]) AND $host != 'vimeo.com')
-        {
-          array_unshift($url, 'portfolios');
         }
         else
         {
           array_unshift($url, 'users');
+
+          if (isset($url[2]) AND $host != 'vimeo.com')
+            array_splice($url, 2, 0, array('portfolios'));
         }
       }
 
-      // make sure the resource is plural
-      $resource  = '/' . rtrim(array_shift($url), 's') . 's/' . array_shift($url);
+      // Make sure the resource is plural
+      $url[0] = rtrim($url[0], 's') . 's';
+      $resource = '/' . implode('/', $url);
+
       return $resource;
     }
     else

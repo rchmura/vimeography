@@ -20,7 +20,8 @@ window.vimeography = window.vimeography || {};
     + '&title='    + utilities.enable_title
     + '&portrait=' + utilities.enable_portrait
     + '&autoplay=' + utilities.enable_autoplay
-    + '&api='      + utilities.enable_api;
+    + '&api='      + utilities.enable_api
+    + '&callback=?';
 
     return $.getJSON(url);
   }

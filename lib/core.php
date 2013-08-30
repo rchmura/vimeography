@@ -70,7 +70,7 @@ abstract class Vimeography_Core
    * @param  [type] $resource [description]
    * @return [type]           [description]
    */
-  abstract protected static function _verify_vimeo_endpoint($resource);
+  abstract protected function _verify_vimeo_endpoint($resource);
 
   /**
    * Gets the videos for the gallery.

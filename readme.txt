@@ -3,7 +3,7 @@ Contributors: iamdavekiss
 Tags: vimeo, video, videos, gallery, vimeography, fancybox, media, player, playlist, showcase, skins, themes, video gallery
 Requires at least: 3.3
 Tested up to: 3.6
-Stable tag: 1.0.9
+Stable tag: 1.1
 License: MIT
 
 The easiest way to create beautiful Vimeo galleries on your Wordpress blog.
@@ -102,6 +102,13 @@ Heck yeah! Use the appearance editor to change your theme's style so that it mat
 4. Get new styles by installing gallery themes.
 
 == Changelog ==
+
+= 1.1 =
+- Better validation for Vimeo URLs
+- Fixed the wonky scrollbar in the admin panel
+- Improved compatibility with IE9
+- Fixed a rare caching issue
+- Added new error messages
 
 = 1.0.9 =
 * Maintenance release. Better support for Pro. It has been awhile, but it's almost here!
