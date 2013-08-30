@@ -26,8 +26,7 @@ class Vimeography_Renderer
 
     $vimeography = Vimeography::get_instance();
 
-    if (! $vimeography->active_theme)
-      $vimeography->set_active_theme($settings['theme']);
+    $vimeography->set_active_theme($settings['theme']);
 
     $theme = $vimeography->active_theme;
 
