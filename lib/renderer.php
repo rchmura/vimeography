@@ -37,7 +37,14 @@ class Vimeography_Renderer
     }
     else
     {
-      throw new Vimeography_Exception('The "' . $theme['name'] . '" theme does not exist or is improperly structured.');
+      if ( empty($theme['name']) )
+      {
+        throw new Vimeography_Exception('Please contact us at vimeography.com/contact to receive an update for your theme.');
+      }
+      else
+      {
+        throw new Vimeography_Exception('The "' . $theme['name'] . '" theme does not exist or is improperly structured.');
+      }
     }
 
     $class = 'Vimeography_Themes_'.ucfirst( $theme['name'] );

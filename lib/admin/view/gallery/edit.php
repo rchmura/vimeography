@@ -125,10 +125,14 @@ class Vimeography_Gallery_Edit extends Vimeography_Base
       wp_enqueue_script('jquery-ui');
     }
     wp_register_script( 'jquery-mousewheel', VIMEOGRAPHY_URL.'media/js/jquery.mousewheel.min.js', 'jquery');
-    wp_register_script( 'jquery-custom-scrollbar', VIMEOGRAPHY_URL.'media/js/jquery.mCustomScrollbar.js', 'jquery');
+    //wp_register_script( 'jquery-custom-scrollbar', VIMEOGRAPHY_URL.'media/js/jquery.mCustomScrollbar.js', 'jquery');
+    wp_register_script( 'jScrollPane', VIMEOGRAPHY_URL.'media/js/jquery.jscrollpane.min.js', 'jquery');
+    wp_register_style( 'jScrollPane', VIMEOGRAPHY_URL.'media/css/plugins/jScrollPane/jquery.jscrollpane.css', 'jquery');
 
     wp_enqueue_script( 'jquery-mousewheel');
-    wp_enqueue_script( 'jquery-custom-scrollbar');
+    //wp_enqueue_script( 'jquery-custom-scrollbar');
+    wp_enqueue_script( 'jScrollPane');
+    wp_enqueue_style( 'jScrollPane');
   }
 
   /**

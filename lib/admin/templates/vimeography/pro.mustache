@@ -1,56 +1,56 @@
 <div class="wrap wp_bootstrap">
-	<!-- Display Plugin Icon, Header, and Description -->
-	<div class="icon32" id="icon-options-general"><br></div>
-	<h2 class="page-title">Vimeography Pro</h2>
+    <!-- Display Plugin Icon, Header, and Description -->
+    <div class="icon32" id="icon-options-general"><br></div>
+    <h2 class="page-title">Vimeography Pro</h2>
 
-	<div class="alert alert-info fade in">
-		<a class="close" data-dismiss="alert" href="#">&times;</a>
-		<h4 class="alert-heading">Coming soon!</h4>
-		<strong>Get custom! </strong>With Vimeography Pro, you can sort your videos, create playlists, show unlimited videos and more.
-	</div>
+    <div class="alert alert-info fade in">
+        <a class="close" data-dismiss="alert" href="#">&times;</a>
+        <h4 class="alert-heading">Coming soon!</h4>
+        <strong>Get custom! </strong>With Vimeography Pro, you can sort your videos, create playlists, show unlimited videos and more.
+    </div>
 
-	{{#messages}}
-		<div class="alert alert-{{type}} fade in">
-			<a class="close" data-dismiss="alert" href="#">&times;</a>
-			<h3 class="alert-heading">{{heading}}</h3>
-			<p>{{message}}</p>
-		</div>
-	{{/messages}}
+    {{#messages}}
+        <div class="alert alert-{{type}} fade in">
+            <a class="close" data-dismiss="alert" href="#">&times;</a>
+            <h3 class="alert-heading">{{heading}}</h3>
+            <p>{{message}}</p>
+        </div>
+    {{/messages}}
 
-	{{#has_pro}}
+    {{#has_pro}}
         {{^access_token}}
-    	<ol>
-    		<li>Visit <a href="https://developer.vimeo.com/apps/new?oauth2=enabled" title="Create a new Vimeo application" target="_blank">https://developer.vimeo.com/apps/new?oauth2=enabled</a>.</li>
-    		<li>Fill out the form with the following values:</li>
-    		<div class="container pull-left">
-    		    <table class="table table-striped">
-    			    <thead>
-    				    <tr>
-    					    <th>Form Option</th>
-    					    <th>Your Response</th>
-    				    </tr>
-    			    </thead>
-    			    <tbody>
-    				    <tr>
-    					    <td><strong>App Name:</strong></td>
-    					    <td>Vimeography Pro Wordpress plugin</td>
-    				    </tr>
-    				    <tr>
-    					    <td><strong>App Description:</strong></td>
-    					    <td>Displays videos with a custom theme on {{home_url}}</td>
-    				    </tr>
-    				    <tr>
-    					    <td><strong>App URL:</strong></td>
-    					    <td>http://vimeography.com</td>
-    				    </tr>
-    				    <tr>
-    					    <td><strong>App Logo URL:</strong></td>
-    					    <td>[leave this blank]</td>
-    				    </tr>
-    				    <tr>
-    					    <td><strong>App Callback URL:</strong></td>
-    					    <td>[leave this blank]</td>
-    				    </tr>
+        <ol>
+            <li>Visit <a href="https://developer.vimeo.com/apps/new?oauth2=enabled" title="Create a new Vimeo application" target="_blank">https://developer.vimeo.com/apps/new?oauth2=enabled</a>.</li>
+            <li>Fill out the form with the following values:</li>
+            <div class="container pull-left">
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th>Form Option</th>
+                            <th>Your Response</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>App Name:</strong></td>
+                            <td>Vimeography Pro Wordpress plugin</td>
+                        </tr>
+                        <tr>
+                            <td><strong>App Description:</strong></td>
+                            <td>Displays videos with a custom theme on {{home_url}}</td>
+                        </tr>
+                        <tr>
+                            <td><strong>App URL:</strong></td>
+                            <td>http://vimeography.com</td>
+                        </tr>
+                        <tr>
+                            <td><strong>App Logo URL:</strong></td>
+                            <td>[leave this blank]</td>
+                        </tr>
+                        <tr>
+                            <td><strong>App Callback URL:</strong></td>
+                            <td>[leave this blank]</td>
+                        </tr>
                         <tr>
                             <td><strong>Enable OAuth 2</strong></td>
                             <td>[check the box]</td>
@@ -59,148 +59,155 @@
                             <td><strong>Terms of Service:</strong></td>
                             <td>[check the box]</td>
                         </tr>
-    			    </tbody>
-    		    </table>
-    		</div>
-    	</ol>
+                    </tbody>
+                </table>
+            </div>
+        </ol>
     {{/access_token}}
 
     <form method="post" action="">
     <table class="form-table acf-form-table">
-    	<tbody>
-    		<tr>
-    			<th scope="row">
-    				<h3>Register Your App.</h3>
-    				<p>Before you can use Vimeography Pro, you need to register your app with Vimeo.</p>
-    				<p><a href="https://developer.vimeo.com/apps/new?oauth2=enabled" target="_blank">Register now.</a></p>
-    			</th>
-    			<td>
-    				<div class="wp-box">
-    				<table class="acf_activate widefat">
-    					<thead>
-    						<tr>
-    							<th>Access Token</th>
-    							<th>Status</th>
-    							<th>Action</th>
-    						</tr>
-    					</thead>
-    					<tbody>
-    						<tr>
-    							<td>
-    									{{#access_token}}{{access_token}}{{/access_token}}{{^access_token}}<input type="text" value="" name="vimeography_pro_settings[access_token]">{{/access_token}}
-	                    {{{settings_nonce}}}
-    							</td>
-    							<td>{{#access_token}}Active{{/access_token}}{{^access_token}}Inactive{{/access_token}}</td>
-    							<td>
+        <tbody>
+            <tr>
+                <th scope="row">
+                    {{#access_token}}
+                        <h3>You're all set!</h3>
+                        <p>Your access token is hooked up to your Vimeo account. Protect it like a password! Anyone who gets your token may have access to your Vimeo account.</p>
+                        <p><a href="https://developer.vimeo.com/apps" target="_blank">Edit your Vimeo apps.</a></p>
+                    {{/access_token}}
+                    {{^access_token}}
+                        <h3>Register Your App.</h3>
+                        <p>Before you can use Vimeography Pro, you need to register your app with Vimeo.</p>
+                        <p><a href="https://developer.vimeo.com/apps/new?oauth2=enabled" target="_blank">Register now.</a></p>
+                    {{/access_token}}
+                </th>
+                <td>
+                    <div class="wp-box">
+                    <table class="acf_activate widefat">
+                        <thead>
+                            <tr>
+                                <th>Access Token</th>
+                                <th>Status</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>
+                                        {{#access_token}}Ending in {{access_token}}{{/access_token}}{{^access_token}}<input type="text" value="" name="vimeography_pro_settings[access_token]">{{/access_token}}
+                        {{{settings_nonce}}}
+                                </td>
+                                <td>{{#access_token}}Active{{/access_token}}{{^access_token}}Inactive{{/access_token}}</td>
+                                <td>
                     {{#access_token}}<input type="hidden" name="vimeography_pro_settings[remove_token]" value="1" />{{/access_token}}
                     <input class="btn btn-primary" type="submit" value="{{#access_token}}Remove Token{{/access_token}}{{^access_token}}Register my App{{/access_token}}">
-    							</td>
-    						</tr>
-    					</tbody>
-    				</table>
-    				</div>
-    			</td>
-    		</tr>
-    	</tbody>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    </div>
+                </td>
+            </tr>
+        </tbody>
     </table>
     </form>
-	{{/has_pro}}
+    {{/has_pro}}
 
-	{{^has_pro}}
+    {{^has_pro}}
     <form method="post" action="">
       <table class="form-table acf-form-table">
-      	<tbody>
-      		<tr>
-      			<th scope="row">
-      				<h3>Activate Pro.</h3>
-      				<p>(Coming Soon) Vimeography Pro can be unlocked by purchasing an activation key.</p>
-      				<!-- <p><a href="http://www.vimeography.com/pro/" target="_blank">Buy Pro</a></p> -->
-      			</th>
-      			<td>
-      				<div class="wp-box">
-      				<table class="acf_activate widefat">
-      					<thead>
-      						<tr>
-      							<th>Field Type</th>
-      							<th style="width:50%;">Value</th>
-      						</tr>
-      					</thead>
-      					<tbody>
-      						<tr>
-      							<td>Activation Key</td>
-      							<td>
-      									<input type="text" value="" name="vimeography_pro_registration[key]">
-      									{{{registration_nonce}}}
+        <tbody>
+            <tr>
+                <th scope="row">
+                    <h3>Activate Pro.</h3>
+                    <p>(Coming Soon) Vimeography Pro can be unlocked by purchasing an activation key.</p>
+                    <!-- <p><a href="http://www.vimeography.com/pro/" target="_blank">Buy Pro</a></p> -->
+                </th>
+                <td>
+                    <div class="wp-box">
+                    <table class="acf_activate widefat">
+                        <thead>
+                            <tr>
+                                <th>Field Type</th>
+                                <th style="width:50%;">Value</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Activation Key</td>
+                                <td>
+                                        <input type="text" value="" name="vimeography_pro_registration[key]">
+                                        {{{registration_nonce}}}
 
-      									<input class="btn btn-primary" type="submit" value="Activate Vimeography Pro">
-      							</td>
-      						</tr>
-      					</tbody>
-      				</table>
-      				</div>
-      			</td>
-      		</tr>
-      	</tbody>
+                                        <input class="btn btn-primary" type="submit" value="Activate Vimeography Pro">
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    </div>
+                </td>
+            </tr>
+        </tbody>
       </table>
     </form>
-	{{/has_pro}}
+    {{/has_pro}}
 
 </div> <!-- End Advanced Settings -->
 
     <style type="text/css">
     table.acf_activate {
-    	border: 0 none;
-    	border-collapse:separate;
-    	border-spacing:0;
-    	vertical-align:top;
-    	width: 100%;
-    	background: #FEFEFE;
-    	border-radius: 0;
+        border: 0 none;
+        border-collapse:separate;
+        border-spacing:0;
+        vertical-align:top;
+        width: 100%;
+        background: #FEFEFE;
+        border-radius: 0;
     }
 
     table.acf_activate tr:nth-child(even) {
-    	background: #F9F9F9
+        background: #F9F9F9
     }
 
     table.acf_activate tr:nth-child(odd) {
-    	background: transparent;
+        background: transparent;
     }
 
     table.acf_activate tr.field_save {
-    	background: #EAF2FA;
+        background: #EAF2FA;
     }
 
     table.acf_activate tr td,
     table.acf_activate tr th {
-    	padding: 8px;
+        padding: 8px;
     }
 
     table.acf_activate tr:last-child  td {
-    	border-bottom: 0 none;
+        border-bottom: 0 none;
     }
 
     table.acf_activate tr td:last-child {
-    	border-right: 0 none;
+        border-right: 0 none;
     }
 
     table.acf_activate input[type="text"] {
-    	padding: 7px;
-    	width: 200px;
-    	font-size: 12px;
+        padding: 7px;
+        width: 200px;
+        font-size: 12px;
     }
 
     table.acf_activate input[type="submit"] {
-    	margin-left: 5px;
-    	margin-right: 5px;
+        margin-left: 5px;
+        margin-right: 5px;
     }
 
     .acf-form-table {
-    	max-width: 1100px !important;
+        max-width: 1100px !important;
     }
 
     .acf-form-table > tbody > tr > th,
     .acf-form-table > tbody > tr > td {
-    	padding-bottom: 30px;
+        padding-bottom: 30px;
     }
     .wp-box {
         background: none repeat scroll 0 0 #FFFFFF;

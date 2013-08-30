@@ -37,7 +37,7 @@
             $('#vimeography-menu-slider').animate({marginLeft: '-280px'});
           });
 
-          $("#aujus2").mCustomScrollbar();
+          $("#aujus2").jScrollPane({verticalGutter: 10, horizontalGutter: 6});
         {{/theme_supports_settings}}
         {{! End variable Javascript}}
 
@@ -51,7 +51,7 @@
         $('.icon-question-sign').popover({container: 'body', trigger: 'hover'});
 
         // Create our scrollbar for the theme list menu panel
-        $("#aujus").mCustomScrollbar();
+        $("#aujus").jScrollPane();
 
         // Affix the menu when we scroll
         $('#vimeography-gallery-menu-container').affix({offset: $('#vimeography-gallery-menu-container').position()});

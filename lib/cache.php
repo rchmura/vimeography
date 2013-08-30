@@ -51,7 +51,7 @@ class Vimeography_Cache extends Vimeography
       return FALSE;
 
     // Check if the cache is expired
-    $last_modified = filemtime($this->_cache_file);
+    $last_modified = @filemtime($this->_cache_file);
 
     if (substr($this->_cache_file, -6) == '.cache' && ($last_modified + $this->_expiration) < time())
     {
@@ -147,7 +147,7 @@ class Vimeography_Cache extends Vimeography
 
     foreach ($files as $file)
     {
-      $last_modified = filemtime(VIMEOGRAPHY_CACHE_PATH . $file);
+      $last_modified = @filemtime(VIMEOGRAPHY_CACHE_PATH . $file);
 
       if (substr($file, -6) == '.cache' && ($last_modified + $this->_expiration) < time())
         unlink(VIMEOGRAPHY_CACHE_PATH . $file);
