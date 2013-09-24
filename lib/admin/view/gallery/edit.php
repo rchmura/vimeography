@@ -394,7 +394,9 @@ class Vimeography_Gallery_Edit extends Vimeography_Base
           throw new Exception('Your settings could not be updated.');
           //$wpdb->print_error();
 
-        $this->_cache->delete();
+        if ($this->_cache->exists())
+          $this->_cache->delete();
+
         $this->messages[] = array('type' => 'success', 'heading' => __('Settings updated.'), 'message' => __('Nice work. You are pretty good at this.'));
       }
       catch (Exception $e)

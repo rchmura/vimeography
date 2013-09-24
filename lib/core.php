@@ -213,9 +213,15 @@ abstract class Vimeography_Core
     // If so, remove it from the set and place at front.
     $found = FALSE;
 
+    // We have to do this because if the featured video
+    // exists in the collection as a contextual video,
+    // it would not be removed if we only compared resouce urls
+    // since they would not match.
+    $featured_id = str_replace('/', '', strrchr($featured_video->link, '/'));
+
     foreach ($video_set as $key => $video)
     {
-      if ($video->uri === $featured_video->uri)
+      if (strpos($video->uri, $featured_id) !== FALSE)
       {
         unset($video_set[$key]);
         $found = TRUE;
