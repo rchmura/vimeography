@@ -22,18 +22,6 @@ class Vimeography_Pro_About extends Vimeography_Base
   }
 
   /**
-   * Creates a nonce for the Vimeography PRO registration form.
-   *
-   * @access public
-   * @static
-   * @return void
-   */
-  public static function registration_nonce()
-  {
-     return wp_nonce_field('vimeography-pro-registration','vimeography-pro-registration-verification');
-  }
-
-  /**
    * Creates a nonce for the Vimeography PRO app settings form.
    *
    * @access public
@@ -53,9 +41,6 @@ class Vimeography_Pro_About extends Vimeography_Base
    */
   private function _validate_form()
   {
-    if (!empty($_POST['vimeography_pro_registration']))
-      $this->_vimeography_pro_validate_registration($_POST);
-
     if (!empty($_POST['vimeography_pro_settings']))
       $this->_vimeography_pro_validate_settings($_POST);
   }
@@ -69,18 +54,6 @@ class Vimeography_Pro_About extends Vimeography_Base
   public function access_token()
   {
     return substr(get_option('vimeography_pro_access_token'), -6);
-  }
-
-  private function _vimeography_pro_validate_registration($input)
-  {
-    // if this fails, check_admin_referer() will automatically print a "failed" page and die.
-    if (check_admin_referer('vimeography-pro-registration','vimeography-pro-registration-verification') )
-    {
-      $data['key'] = wp_filter_nohtml_kses($input['vimeography_pro_registration']['key']);
-
-      //$this->messages[] = array('type' => 'success', 'heading' => __('Congratulations!'), 'message' => __('Vimeography Pro is now installed and ready to rock!'));
-      $this->messages[] = array('type' => 'error', 'heading' => __('Sorry!'), 'message' => __('Vimeography Pro is almost ready, but still needs a little work!'));
-    }
   }
 
   /**
@@ -98,7 +71,7 @@ class Vimeography_Pro_About extends Vimeography_Base
       if (isset($input['vimeography_pro_settings']['remove_token']))
       {
         $result = delete_option('vimeography_pro_access_token');
-        $this->messages[] = array('type' => 'success', 'heading' => __('Poof!'), 'message' => __('Your Vimeo access token have been removed.'));
+        $this->messages[] = array('type' => 'success', 'heading' => __('Poof!'), 'message' => __('Your Vimeo access token has been removed.'));
         return TRUE;
       }
 
@@ -106,7 +79,7 @@ class Vimeography_Pro_About extends Vimeography_Base
 
       if ($output['access_token'] == '')
       {
-        $this->messages[] = array('type' => 'error', 'heading' => __('Whoops!'), 'message' => __('Don\'t forget to enter your Vimeo access token!'));
+        $this->messages[] = array('type' => 'error', 'heading' => __('Whoops!'), 'message' => __('Don\'t forget to enter your Vimeo OAuth 2 access token!'));
         return FALSE;
       }
 
@@ -127,7 +100,7 @@ class Vimeography_Pro_About extends Vimeography_Base
         {
           case 200:
             update_option('vimeography_pro_access_token', $output['access_token']);
-            $this->messages[] = array('type' => 'success', 'heading' => __('Yeah!'), 'message' => __('Success! Your Vimeo access token for ') . $response['body']->name . __(' have been added and saved.'));
+            $this->messages[] = array('type' => 'success', 'heading' => __('Yeah!'), 'message' => __('Success! Your Vimeo access token for ') . $response['body']->name . __(' has been added and saved.'));
             return $output;
             break;
           case 401:
