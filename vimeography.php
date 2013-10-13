@@ -3,7 +3,7 @@
 Plugin Name: Vimeography
 Plugin URI: http://vimeography.com
 Description: Vimeography is the easiest way to set up a custom Vimeo gallery on your site.
-Version: 1.1.2
+Version: 1.1.3
 Author: Dave Kiss
 Author URI: http://davekiss.com
 License: MIT
@@ -24,7 +24,7 @@ define( 'VIMEOGRAPHY_ASSETS_PATH', WP_CONTENT_DIR . '/vimeography/assets/' );
 define( 'VIMEOGRAPHY_CACHE_URL',   WP_CONTENT_URL . '/vimeography/cache/' );
 define( 'VIMEOGRAPHY_CACHE_PATH',  WP_CONTENT_DIR . '/vimeography/cache/' );
 define( 'VIMEOGRAPHY_BASENAME', plugin_basename( __FILE__ ) );
-define( 'VIMEOGRAPHY_VERSION', '1.1.2');
+define( 'VIMEOGRAPHY_VERSION', '1.1.3');
 define( 'VIMEOGRAPHY_GALLERY_TABLE', $wpdb->prefix . "vimeography_gallery");
 define( 'VIMEOGRAPHY_GALLERY_META_TABLE', $wpdb->prefix . "vimeography_gallery_meta");
 define( 'VIMEOGRAPHY_CURRENT_PAGE', basename($_SERVER['PHP_SELF']));
@@ -311,7 +311,7 @@ class Vimeography
     add_menu_page( 'Vimeography Page Title', 'Vimeography', 'manage_options', 'vimeography-edit-galleries', '', VIMEOGRAPHY_URL.'media/img/vimeography-icon.png' );
     add_submenu_page( 'vimeography-edit-galleries', 'Edit Galleries', 'Edit Galleries', 'manage_options', 'vimeography-edit-galleries', array(&$this, 'vimeography_render_template' ));
     add_submenu_page( 'vimeography-edit-galleries', 'New Gallery', 'New Gallery', 'manage_options', 'vimeography-new-gallery', array(&$this, 'vimeography_render_template' ));
-    add_submenu_page( 'vimeography-edit-galleries', 'My Themes', 'My Themes', 'manage_options', 'vimeography-my-themes', array(&$this, 'vimeography_render_template' ));
+    add_submenu_page( 'vimeography-edit-galleries', 'Manage Activations', 'Manage Activations', 'manage_options', 'vimeography-manage-activations', array(&$this, 'vimeography_render_template' ));
     $submenu['vimeography-edit-galleries'][500] = array( 'Vimeography Themes', 'manage_options' , 'http://vimeography.com/themes' );
     add_submenu_page( 'vimeography-edit-galleries', 'Vimeography Pro', 'Vimeography Pro', 'manage_options', 'vimeography-pro', array(&$this, 'vimeography_render_template' ));
     add_submenu_page( 'vimeography-edit-galleries', 'Help', 'Help', 'manage_options', 'vimeography-help', array(&$this, 'vimeography_render_template' ));
@@ -330,12 +330,14 @@ class Vimeography
 
     wp_register_style( 'vimeography-bootstrap', VIMEOGRAPHY_URL.'media/css/bootstrap.min.css');
     wp_register_style( 'vimeography-admin', VIMEOGRAPHY_URL.'media/css/admin.css');
+    wp_register_style( 'vimeography-type', 'http://fonts.googleapis.com/css?family=Open+Sans:400,300,600,700');
 
     wp_register_script( 'vimeography-bootstrap', VIMEOGRAPHY_URL.'media/js/bootstrap.min.js');
     wp_register_script( 'vimeography-admin', VIMEOGRAPHY_URL.'media/js/admin.js', 'jquery');
 
     wp_enqueue_style( 'vimeography-bootstrap');
     wp_enqueue_style( 'vimeography-admin');
+    wp_enqueue_style( 'vimeography-type');
 
     wp_enqueue_script( 'vimeography-bootstrap');
     wp_enqueue_script( 'vimeography-admin');
@@ -402,7 +404,7 @@ class Vimeography
           $template = $mustache->loadTemplate('gallery/list');
         }
         break;
-      case 'vimeography_page_vimeography-my-themes':
+      case 'vimeography_page_vimeography-manage-activations':
         require_once(VIMEOGRAPHY_PATH . 'lib/admin/view/theme/list.php');
         $view = new Vimeography_Theme_List;
         $template = $mustache->loadTemplate('theme/list');

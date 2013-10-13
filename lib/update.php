@@ -3,23 +3,27 @@
 class Vimeography_Update extends Vimeography
 {
   /**
-   * [$_activation_keys description]
-   * @var [type]
+   * All of the activation keys that the user has stored.
+   * @var array
    */
   private $_activation_keys;
 
   /**
-   * [$_endpoint description]
+   * The endpoint of the Vimeography Updater API.
    * @var string
    */
   private $_endpoint = 'http://vimeography.com/api/';
 
   /**
-   * [$action description]
-   * @var [type] update | activate
+   * Whether we are updating or activating.
+   * @var string update | activate
    */
   public $action;
 
+  /**
+   * [$_installed_themes description]
+   * @var array
+   */
   private $_installed_themes = array();
 
   /**
@@ -60,7 +64,7 @@ class Vimeography_Update extends Vimeography
   }
 
   /**
-   * Check if there is an update available for Vimeography PRO.
+   * Check if there is an update available for each activation key saved.
    *
    * @param  object $transient Contents of the ‘update_plugins‘ site transient.
    * @return object $transient Modified or Original transient.
@@ -75,7 +79,8 @@ class Vimeography_Update extends Vimeography
 
       foreach ($this->_activation_keys as $plugin)
       {
-        try {
+        try
+        {
           $remote_info = self::vimeography_get_remote_info($plugin->activation_key);
 
           // create new object for update
@@ -202,7 +207,7 @@ class Vimeography_Update extends Vimeography
 
       echo '<tr class="plugin-update-tr"><td colspan="3" class="plugin-update"><div class="update-message">';
       echo '<span style="border-right: 1px solid #DFDFDF; margin-right: 5px;">';
-      echo __('Hey! Don\'t forget to ') . '<a title="Activate my Vimeography Themes" href="' . get_admin_url() . 'admin.php?page=vimeography-my-themes">' . __('enter your activation key') . '</a>' . __(" to receive the latest updates for the Vimeography $name plugin.");
+      echo __('Hey! Don\'t forget to ') . '<a title="Activate my Vimeography Product" href="' . get_admin_url() . 'admin.php?page=vimeography-manage-activations">' . __('enter your activation key') . '</a>' . __(" to receive the latest updates for the $name plugin.");
       echo '</span>';
       echo '</div></td></tr>';
     }

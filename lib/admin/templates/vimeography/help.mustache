@@ -1,47 +1,73 @@
-<div class="wrap wp_bootstrap">
+<div class="wrap wp_bootstrap vimeography">
 
 	<!-- Display Plugin Icon, Header, and Description -->
 	<div class="icon32" id="icon-options-general"><br></div>
-	<h2 class="page-title">Help</h2>
+	<h2 class="page-title">Vimeography Help</h2>
 
-	<h3>Help! My theme doesn't look right!</h3>
-	<p>First of all, don't worry! I promise you that we can get it looking right. This can be caused by a multitude of things, so try the following (in the order of appearance):</p>
-	<ul>
-		<li>Try surrounding your Vimeography shortcode in <code>[r<em></em>aw][/r<em></em>aw]</code> tags.</li>
-		<li>Make sure that your Wordpress theme is not including multiple versions of jQuery and is using the latest version.</li>
-		<li>Make sure that your theme is calling the <code>wp_fo<em></em>oter();</code> function so that all of the Vimeography stylesheets are printed.</li>
-		<li>Try disabling other plugins that are used for photo galleries, minifying scripts, widgets, or otherwise alter your blog's appearance, one by one, and really determining if you need it.</li>
-	</ul>
+	<div class="faq">
+		<h3>Help! My theme doesn't look right!</h3>
+		<p>First of all, don't worry! I promise you that we can get it looking right. This can be caused by a multitude of things, so try the following (in the order of appearance):</p>
+		<ul>
+			<li>Try surrounding your Vimeography shortcode in <code>[r<em></em>aw][/r<em></em>aw]</code> tags.</li>
+			<li>Make sure that your Wordpress theme is not including multiple versions of jQuery and is using the latest version.</li>
+			<li>Make sure that your theme is calling the <code>wp_fo<em></em>oter();</code> function so that all of the Vimeography stylesheets are printed.</li>
+			<li>Try disabling other plugins that are used for photo galleries, minifying scripts, widgets, or otherwise alter your blog's appearance, one by one, and really determining if you need it.</li>
+		</ul>
 
-	<h3>I'm getting an error: Vimeography error: the plugin did not retrieve data from the Vimeo API! connect() timed out! </h3>
-	<p>This usually means that Vimeo is having some network issues. Follow @Vimeo on twitter for updates. If Vimeo is not reporting any issues, you'll need to contact your host and ask why you are unable to connect to Vimeo's IP address. It may be that your host has blocked server access via a firewall.</p>
+		<h3>I'm getting an error: Vimeography error: the plugin did not retrieve data from the Vimeo API! connect() timed out! </h3>
+		<p>This usually means that Vimeo is having some network issues. Follow @Vimeo on twitter for updates. If Vimeo is not reporting any issues, you'll need to contact your host and ask why you are unable to connect to Vimeo's IP address. It may be that your host has blocked server access via a firewall.</p>
 
-	<h3>I'm having trouble installing a theme.</h3>
-	<p>Try uploading the unzipped theme folder manually to <strong>wp-content/uploads/vimeography-themes/<span style="color:blue;">[your-theme-<em></em>name]</span></strong></p>
+		<h3>How do I install a theme?</h3>
+		<p>Vimeography theme are installed just like any other Wordpress plugin. Visit the plugins page and click on the <strong>Upload</strong> tab. Then, select the .zip file that you downloaded from your Vimeography receipt and you should be all set.</p>
 
-	<h3>How do I get the latest updates for my themes?</h3>
-	<p>You can visit http://vimeography.com/themes/update/ to get the latest versions of any individual theme you've purchased.</p>
+		<h3>How do I get the latest updates for my themes?</h3>
+		<p>You can visit http://vimeography.com/themes/update/ to get the latest versions of any individual theme you've purchased.</p>
 
-	<h3>How do I add my gallery to a post or page?</h3>
-	<p>Easy! All you have to do is type <code>[vimeography id="<span style="color:blue;">#</span>"]</code>, where <span style="color:blue;">#</span> is replaced by the ID number of your gallery.</p>
+		<h3>How do I add my gallery to a post or page?</h3>
+		<p>Easy! All you have to do is type <code>[vimeography id="<span style="color:blue;">#</span>"]</code>, where <span style="color:blue;">#</span> is replaced by the ID number of your gallery.</p>
 
-	<h3>Where do I find the ID number of my gallery?</h3>
-	<p>Each gallery's ID number is located next to the gallery's title in the first column on the <a href="">edit galleries</a> page.</p>
+		<h3>Where do I find the ID number of my gallery?</h3>
+		<p>Each gallery's ID number is located next to the gallery's title in the first column on the edit galleries page.</p>
 
-	<h3>Can I override my gallery settings in the shortcode?</h3>
-	<p>Sure thing! You can define all of the properties found in the admin panel right in your shortcode as well. Try using one, any, or all of the following parameters:</p>
-	<code>[vimeo<em></em>graphy id="3" theme="thumbs" featured="http://vimeo.com/28380190" source="http://vimeo.com/channels/staffpicks" cache="3600" width="600px"]</code>
+		<h3>Can I override my gallery settings in the shortcode?</h3>
+		<p>Sure thing! You can define all of the properties found in the admin panel right in your shortcode as well. Try using one, any, or all of the following parameters:</p>
+		<code>[vimeo<em></em>graphy id="3" theme="thumbs" featured="http://vimeo.com/28380190" source="http://vimeo.com/channels/staffpicks" cache="3600" width="600px"]</code>
 
-	<h3>Can I add the gallery to my theme's sidebar/footer/header etc.?</h3>
-	<p>Yes, but you'll need some PHP knowledge to do it! Open the file you want to add the gallery to, and type <code>&lt;?php do_shortcode('[vimeography id="<span style="color:blue;">#</span>"]</strong>'); ?&gt;</code>, where <span style="color:blue;">#</span> is replaced by the ID number of your gallery.</p>
+		<h3>Can I add the gallery to my theme's sidebar/footer/header etc.?</h3>
+		<p>Yes, but you'll need some PHP knowledge to do it! Open the file you want to add the gallery to, and type <code>&lt;?php echo do_shortcode('[vimeography id="<span style="color:blue;">#</span>"]</strong>'); ?&gt;</code>, where <span style="color:blue;">#</span> is replaced by the ID number of your gallery.</p>
 
-	<h3>How do I change the order of my videos in my gallery?</h3>
-	<p>While this is a feature planned for Vimeography Pro, you can do this by creating a new channel or album on Vimeo and using their custom sorting option.</p>
+		<h3>Can I change the colors/layout of my theme?</h3>
+		<p>Heck yeah! Use the appearance editor to change your theme's style so that it matches your site perfectly.</p>
 
-	<h3>Can I change the colors/layout of my theme?</h3>
-	<p>Heck yeah! Use the appearance editor to change your theme's style so that it matches your site perfectly.</p>
+		<h3>How do I change the order of my videos in my gallery?</h3>
+		<p>You can do this with Vimeography Pro, an add-on plugin that gives you much more control over your galleries.</p>
 
-	<h3>What features do you have planned in future versions of Vimeography?</h3>
-	<p>Vimeography Pro, which will include inline galleries, comments, unlimited videos and more!</p>
-
+		<h3>What else can Vimeography Pro do?</h3>
+		<p>Vimeography Pro allows you to show unlimited videos, use Vimeo portfolios, display hidden videos, have more advanced theme appearance controls, sort your videos, and soon will allows for inline galleries, playlists and more!</p>
+	</div>
 </div> <!-- End Help -->
+
+<style>
+  .vimeography {
+    margin: 20px auto;
+  }
+
+  .vimeography h1,
+  .vimeography h2,
+  .vimeography h3,
+  .vimeography h4,
+  .vimeography h5,
+  .vimeography h6 {
+    font-family: 'Open Sans', sans-serif;
+    font-weight: 300;
+  }
+
+  .faq {
+  	max-width: 500px;
+  	margin: -20px 0 0 30px;
+  }
+
+  .faq h3 {
+  	padding: 20px 0 0;
+  }
+</style>

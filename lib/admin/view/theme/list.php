@@ -26,6 +26,26 @@ class Vimeography_Theme_List extends Vimeography_Base
 	}
 
 	/**
+	 * [activation_keys description]
+	 * @return [type] [description]
+	 */
+	public static function activation_keys()
+	{
+		return get_option('vimeography_activation_keys');
+	}
+
+	/**
+	 * [_remove_activation_key description]
+	 * @param  [type] $key [description]
+	 * @return [type]      [description]
+	 */
+	private static function _remove_activation_key($key)
+	{
+		delete_option('vimeography_activation_keys');
+		return TRUE;
+	}
+
+	/**
 	 * [_validate_form description]
 	 * @return [type] [description]
 	 */

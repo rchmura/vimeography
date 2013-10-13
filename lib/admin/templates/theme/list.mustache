@@ -1,6 +1,6 @@
-<div class="wrap wp_bootstrap">
+<div class="wrap wp_bootstrap vimeography">
 	<div class="icon32" id="icon-options-general"><br></div>
-	<h2 class="page-title">My Themes</h2>
+	<h2 class="page-title">Manage Activations</h2>
 
 	{{#messages}}
 		<div class="alert alert-{{type}} fade in">
@@ -10,41 +10,89 @@
 		</div>
 	{{/messages}}
 
-	<div style="clear:both;margin: 0 25px;" >
-		<h3 class="alert-heading">Activate Theme Updates</h3>
-		<p>Downloaded a theme from vimeography.com? Enter the activation key to receive free updates to your theme.</p>
+  <section class="vimeography-pro-settings">
+    <aside>
+      <h2>Activate Your Products</h2>
+      <p>Enter your Vimeography product's activation key to receive free updates for your purchase.</p>
 
-		<form id="activation-form" class="form-inline" style="margin: 0; padding: 10px 0;" method="post" action="">
-	    <fieldset>
-				<div class="input-append">
-				  <input class="span3" type="text" name="vimeography-activation-key" style="height: 30px;">
-				  <button class="btn" type="submit" form="activation-form">Activate Theme</button>
-				</div>
-	    </fieldset>
-		{{{nonce}}}
-    </form>
-	</div>
+			<form id="activation-form" class="form-inline" style="margin: 0; padding: 10px 0;" method="post" action="">
+			  <input type="text" name="vimeography-activation-key">
+			  <input type="submit" form="activation-form" value="Activate Product">
+				{{{nonce}}}
+			</form>
 
-	<ul class="vimeography-theme-list">
-		{{#themes}}
-			<li style="display: inline-block;">
-				<div class="theme-container">
-					<div class="theme-image">
-						<img alt="{{name}}" src="{{thumbnail}}" />
-					</div>
+    </aside>
 
-					<div class="theme-details">
-						<a href="#" data-theme="{{name}}">{{name}}</a>
-						<span><span class="label label-success">{{#activation_key}}Activated{{/activation_key}}</span></span>
-						<span><span class="label">v.{{version}}</span></span>
-					</div>
+    <table class="table table-striped wp-box" style="width: 600px; top: 10px;">
+      <thead>
+        <tr>
+          <th>Your Products</th>
+          <th>Status</th>
+        </tr>
+      </thead>
+      <tbody>
+				{{#activation_keys}}
+					<tr>
+						<td>{{product_name}}</td>
+						<td>Activated{{! activation_key}}</td>
+					</tr>
+				{{/activation_keys}}
+      </tbody>
+    </table>
+  </section>
 
-					<a href="#" data-theme="{{name}}" class="theme-info" style="opacity: 0;">
-						<strong>{{name}}</strong>
-						<span>{{description}}</span>
-					</a>
-				</div>
-			</li>
-		{{/themes}}
-	</ul>
 </div>
+
+<style>
+  .vimeography {
+    margin: 20px auto;
+  }
+
+  .vimeography h1,
+  .vimeography h2,
+  .vimeography h3,
+  .vimeography h4,
+  .vimeography h5,
+  .vimeography h6 {
+    font-family: 'Open Sans', sans-serif;
+    font-weight: 300;
+  }
+
+  .vimeography-pro {
+    text-align: center;
+  }
+
+  .vimeography-pro-settings aside {
+    float: left;
+    width: 300px;
+    margin: 0 20px 0;
+  }
+
+  .vimeography-pro-settings input[type="text"] {
+    height: 36px;
+    width: 260px;
+    font-size: 18px;
+    line-height: 1.2em;
+    padding: 5px;
+  }
+
+  .vimeography-pro-settings input[type="submit"] {
+    height: 36px;
+    font-size: 14px;
+    line-height: 1.2em;
+    padding: 5px 20px;
+    margin: 15px 10px 0 0;
+    border: 0;
+    border-radius: 2px;
+    box-shadow: none;
+    background-color: #2ecc71;
+    color: #fafafa;
+  }
+
+  .wp-box {
+    background: none repeat scroll 0 0 #FFFFFF;
+    border: 1px solid #E1E1E1;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    position: relative;
+  }
+</style>

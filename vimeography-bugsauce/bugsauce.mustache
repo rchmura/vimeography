@@ -44,12 +44,14 @@
 			$gallery.on('click', '.vimeography-thumbnails img', function(e){
 				$gallery.find('.vimeography-main').spin('custom');
 
+				var link = $(this).data('link');
+
 				$('.vimeography-bugsauce-active-slide').removeClass('vimeography-bugsauce-active-slide');
 				$(this).parent().addClass('vimeography-bugsauce-active-slide');
 
 				$gallery.find('.vimeography-player').animate({'opacity':0}, 300, 'linear', function(){
 
-					var promise = vimeography.utilities.get_video( $(this).data('link') );
+					var promise = vimeography.utilities.get_video( link );
 
 		      promise.done(function (video) {
 						$gallery.find('.vimeography-player').html(video.html).fitVids().animate({'opacity':1}, 300);
