@@ -506,7 +506,7 @@ class Vimeography
     id mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
     gallery_id mediumint(8) unsigned NOT NULL,
     source_url varchar(100) NOT NULL,
-    resource_uri varchar(50) NOT NULL,
+    resource_uri varchar(100) NOT NULL,
     featured_video varchar(100) DEFAULT NULL,
     video_limit mediumint(7) NOT NULL,
     gallery_width varchar(10) DEFAULT NULL,
