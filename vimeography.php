@@ -3,7 +3,7 @@
 Plugin Name: Vimeography
 Plugin URI: http://vimeography.com
 Description: Vimeography is the easiest way to set up a custom Vimeo gallery on your site.
-Version: 1.1.3
+Version: 1.1.4
 Author: Dave Kiss
 Author URI: http://davekiss.com
 License: MIT
@@ -24,7 +24,7 @@ define( 'VIMEOGRAPHY_ASSETS_PATH', WP_CONTENT_DIR . '/vimeography/assets/' );
 define( 'VIMEOGRAPHY_CACHE_URL',   WP_CONTENT_URL . '/vimeography/cache/' );
 define( 'VIMEOGRAPHY_CACHE_PATH',  WP_CONTENT_DIR . '/vimeography/cache/' );
 define( 'VIMEOGRAPHY_BASENAME', plugin_basename( __FILE__ ) );
-define( 'VIMEOGRAPHY_VERSION', '1.1.3');
+define( 'VIMEOGRAPHY_VERSION', '1.1.4');
 define( 'VIMEOGRAPHY_GALLERY_TABLE', $wpdb->prefix . "vimeography_gallery");
 define( 'VIMEOGRAPHY_GALLERY_META_TABLE', $wpdb->prefix . "vimeography_gallery_meta");
 define( 'VIMEOGRAPHY_CURRENT_PAGE', basename($_SERVER['PHP_SELF']));
@@ -81,6 +81,7 @@ class Vimeography
     add_action( 'admin_init',     array($this, 'vimeography_requires_wordpress_version') );
     add_action( 'admin_init',     array($this, 'vimeography_check_if_db_exists') );
     add_action( 'admin_init',     array($this, 'vimeography_load_updater'));
+    add_action( 'admin_init',     array($this, 'vimeography_check_if_just_updated'));
     add_action( 'admin_init',     array($this, 'vimeography_activate_bugsauce'));
     add_action( 'init',           array($this, 'vimeography_move_folders') );
     add_action( 'plugins_loaded', array($this, 'vimeography_update_database') );
@@ -89,6 +90,7 @@ class Vimeography
 
     // Check the URL for any Vimeography-related parameters
     add_filter( 'query_vars',             array($this, 'vimeography_add_query_vars') );
+    add_filter( 'upgrader_pre_install',   array($this, 'vimeography_pre_upgrade'), 10, 2 );
     add_action( 'generate_rewrite_rules', array($this, 'vimeography_add_rewrite_rules' ) );
     add_action( 'parse_request',          array($this, 'vimeography_parse_request') );
 
@@ -136,6 +138,50 @@ class Vimeography
     require_once(VIMEOGRAPHY_PATH . 'lib/update.php');
     $updater = new Vimeography_Update;
     $updater->vimeography_check_installed_theme_activations($this->themes);
+  }
+
+  /**
+   * Perform any actions just before Vimeography is updated.
+   *
+   * @param  bool   $true       TRUE
+   * @param  array  $hook_extra Slug of the plugin being updated
+   * @return void
+   */
+  public function vimeography_pre_upgrade($true, $hook_extra)
+  {
+    // Vimeography is updating, deactivate all Vimeography plugins until we are back.
+    if ($hook_extra['plugin'] === 'vimeography/vimeography.php')
+    {
+      $plugins = get_option('active_plugins');
+      $vimeography_plugins = array();
+
+      foreach($plugins as $plugin)
+      {
+        if (strpos($plugin, 'vimeography-') !== FALSE)
+        {
+          $vimeography_plugins[] = $plugin;
+        }
+      }
+
+      deactivate_plugins($vimeography_plugins);
+      update_option('vimeography_reactivate_plugins', $vimeography_plugins);
+    }
+  }
+
+  /**
+   * If Vimeography was just updated, make sure all the Vimeography plugins are activated.
+   *
+   * @return void
+   */
+  public function vimeography_check_if_just_updated()
+  {
+    $plugins = get_option('vimeography_reactivate_plugins');
+
+    if ( $plugins )
+    {
+      activate_plugins($plugins);
+      delete_option('vimeography_reactivate_plugins');
+    }
   }
 
   /**
@@ -230,6 +276,7 @@ class Vimeography
     $db->vimeography_update_db_to_0_8();
     $db->vimeography_update_db_to_1_0();
     $db->vimeography_update_db_to_1_0_7();
+    $db->vimeography_update_db_to_1_1_4();
     $this->vimeography_update_db_version();
   }
 
