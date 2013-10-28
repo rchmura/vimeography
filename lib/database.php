@@ -193,4 +193,16 @@ class Vimeography_Database extends Vimeography
     }
   }
 
+  public function vimeography_update_db_to_1_1_4()
+  {
+    if ( version_compare(get_option('vimeography_db_version'), '1.1.4', '<') )
+    {
+      global $wpdb;
+      $wpdb->hide_errors();
+
+      $result = $wpdb->query('ALTER TABLE '.VIMEOGRAPHY_GALLERY_META_TABLE.' MODIFY resource_uri VARCHAR(100) NOT NULL;');
+      $this->vimeography_update_tables();
+    }
+  }
+
 }
