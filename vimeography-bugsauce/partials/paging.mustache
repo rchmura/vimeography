@@ -11,7 +11,9 @@
           _ajax_url   : '{{ajax_url}}',
           theme       : 'bugsauce',
           gallery_id  : {{gallery_id}},
-          per_page    : {{per_page}}
+          per_page    : {{per_page}},
+          limit       : {{limit}},
+          sort        : '{{sort}}'
       };
 
       vimeography.pagination.endpoint     = '{{source}}';
@@ -36,7 +38,6 @@
 
           promise.done(function(response){
             is_fetching = false;
-            var response = $.parseJSON(response);
             if (response.result == 'success')
             {
               var $videos = $($.trim(response.html)).filter('li');

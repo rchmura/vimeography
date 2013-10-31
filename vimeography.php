@@ -3,7 +3,7 @@
 Plugin Name: Vimeography
 Plugin URI: http://vimeography.com
 Description: Vimeography is the easiest way to set up a custom Vimeo gallery on your site.
-Version: 1.1.4
+Version: 1.1.5
 Author: Dave Kiss
 Author URI: http://davekiss.com
 License: MIT
@@ -17,14 +17,14 @@ global $wpdb;
 // Define constants
 define( 'VIMEOGRAPHY_URL',  plugin_dir_url(__FILE__) );
 define( 'VIMEOGRAPHY_PATH', plugin_dir_path(__FILE__) );
-define( 'VIMEOGRAPHY_THEME_URL',   WP_CONTENT_URL . '/vimeography/themes/' );
+define( 'VIMEOGRAPHY_THEME_URL',   content_url() . '/vimeography/themes/' );
 define( 'VIMEOGRAPHY_THEME_PATH',  WP_CONTENT_DIR . '/vimeography/themes/' );
-define( 'VIMEOGRAPHY_ASSETS_URL',  WP_CONTENT_URL . '/vimeography/assets/' );
+define( 'VIMEOGRAPHY_ASSETS_URL',  content_url() . '/vimeography/assets/' );
 define( 'VIMEOGRAPHY_ASSETS_PATH', WP_CONTENT_DIR . '/vimeography/assets/' );
-define( 'VIMEOGRAPHY_CACHE_URL',   WP_CONTENT_URL . '/vimeography/cache/' );
+define( 'VIMEOGRAPHY_CACHE_URL',   content_url() . '/vimeography/cache/' );
 define( 'VIMEOGRAPHY_CACHE_PATH',  WP_CONTENT_DIR . '/vimeography/cache/' );
 define( 'VIMEOGRAPHY_BASENAME', plugin_basename( __FILE__ ) );
-define( 'VIMEOGRAPHY_VERSION', '1.1.4');
+define( 'VIMEOGRAPHY_VERSION', '1.1.5');
 define( 'VIMEOGRAPHY_GALLERY_TABLE', $wpdb->prefix . "vimeography_gallery");
 define( 'VIMEOGRAPHY_GALLERY_META_TABLE', $wpdb->prefix . "vimeography_gallery_meta");
 define( 'VIMEOGRAPHY_CURRENT_PAGE', basename($_SERVER['PHP_SELF']));
