@@ -205,4 +205,37 @@ class Vimeography_Database extends Vimeography
     }
   }
 
+  public function vimeography_update_db_to_1_1_6()
+  {
+    if ( version_compare(get_option('vimeography_db_version'), '1.1.6', '<') )
+    {
+      $activation_keys = get_option('vimeography_activation_keys');
+
+      if ($activation_keys)
+      {
+        foreach ($activation_keys as $entry)
+        {
+          $activation_key_plugin_path = str_replace('vimeography/', trailingslashit($entry->activation_key), VIMEOGRAPHY_PATH);
+          $corrected_plugin_path      = str_replace('vimeography/', trailingslashit($entry->plugin_name), VIMEOGRAPHY_PATH);
+
+          if (file_exists($activation_key_plugin_path))
+          {
+            // Temporarily deactivate plugin
+            $old_basename = trailingslashit($entry->activation_key) . $entry->plugin_name . '.php';
+            $new_basename = trailingslashit($entry->plugin_name) . $entry->plugin_name . '.php';
+
+            if ( is_plugin_active( $old_basename ) )
+              deactivate_plugins($old_basename);
+
+            // Rename folder to the correct plugin name
+            rename($activation_key_plugin_path, $corrected_plugin_path);
+
+            // Reactivate plugin
+            activate_plugins($new_basename);
+          }
+        }
+      }
+    }
+  }
+
 }

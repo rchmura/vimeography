@@ -1,45 +1,67 @@
-<div class="wrap wp_bootstrap">
+<div class="wrap wp_bootstrap vimeography">
+  <h2 class="page-title">New Gallery</h2>
 
-	<!-- Display Plugin Icon, Header, and Description -->
-	<div class="icon32" id="icon-options-general"><br></div>
-	<h2 class="page-title">New Gallery</h2>
-	
-	{{#messages}}
-		<div class="alert alert-{{type}} fade in">
-			<a class="close" data-dismiss="alert" href="#">&times;</a>
-			<h3 class="alert-heading">{{heading}}</h3>
-			<p>{{message}}</p>
-		</div>
-	{{/messages}}
-	
-	<div class="alert alert-info fade in">
-		<a class="close" data-dismiss="alert" href="#">&times;</a>
-    	<strong>Confused?</strong> Visit the Help page to learn how to create your gallery. <a href="{{admin_url}}help" title="">Let's go &rarr;</a>
+  {{#messages}}
+    <div class="alert alert-{{type}} fade in">
+      <a class="close" data-dismiss="alert" href="#">&times;</a>
+      <h3 class="alert-heading">{{heading}}</h3>
+      <p>{{message}}</p>
+    </div>
+  {{/messages}}
+
+  <div class="alert alert-info fade in">
+    <a class="close" data-dismiss="alert" href="#">&times;</a>
+      <strong>Confused?</strong> Visit the Help page to learn how to create your gallery. <a href="{{admin_url}}help" title="">Let's go &rarr;</a>
     </div>
 
-	<form id="vimeography-basic-settings-form" method="post" action="{{admin_url}}new-gallery&noheader=true">
-			
-		<table class="form-table">		
-			<tr>
-				<th scope="row"><h2>gallery title</h2></th>
-				<td>
-					<h2>
-						<input type="text" size="40" name="vimeography_basic_settings[gallery_title]" placeholder="eg. Staff Picks" value="" />
-					</h2>
-				</td>
-			</tr>
-			<tr>
-				<th scope="row"><h2>show the videos from</h2></th>
-				<td>
-					<h2>
-						<input type="text" size="40" name="vimeography_basic_settings[source_url]" placeholder="eg. {{#get_vimeography_defaults}}{{source_url}}{{/get_vimeography_defaults}}" />
-					</h2>
-				</td>
-			</tr>
-		</table>
-		
-		<hr />
-		{{{nonce}}}
-		<input class="btn btn-primary btn-large" type="submit" value="Create Gallery">
-	</form>
+  <form id="vimeography-basic-settings-form" method="post" action="{{admin_url}}new-gallery&noheader=true">
+
+    <table class="form-table">
+      <tr>
+        <th scope="row"><h2>Gallery title</h2></th>
+        <td>
+          <h2>
+            <input type="text" size="40" name="vimeography_basic_settings[gallery_title]" placeholder="eg. Staff Picks" value="" />
+          </h2>
+        </td>
+      </tr>
+      <tr>
+        <th scope="row"><h2>Show the videos from</h2></th>
+        <td>
+          <h2>
+            <input type="text" size="40" name="vimeography_basic_settings[source_url]" placeholder="eg. {{#get_vimeography_defaults}}{{source_url}}{{/get_vimeography_defaults}}" />
+          </h2>
+        </td>
+      </tr>
+    </table>
+
+    <hr />
+    {{{nonce}}}
+    <input class="button button-primary button-large" type="submit" value="Create Gallery">
+  </form>
 </div>
+
+<style>
+  .vimeography {
+    margin: 20px auto;
+  }
+
+  .vimeography h1,
+  .vimeography h2,
+  .vimeography h3,
+  .vimeography h4,
+  .vimeography h5,
+  .vimeography h6 {
+    font-family: 'Open Sans', sans-serif;
+    font-weight: 300;
+  }
+
+  .faq {
+    max-width: 500px;
+    margin: -20px 0 0 30px;
+  }
+
+  .faq h3 {
+    padding: 20px 0 0;
+  }
+</style>

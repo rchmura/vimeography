@@ -18,7 +18,7 @@ window.vimeography = window.vimeography || {};
    */
   utilities.get_video = function(link)
   {
-    var endpoint = 'http://vimeo.com/api/oembed.json';
+    var endpoint = 'https://vimeo.com/api/oembed.json';
 
     // Put together the URL
     var url = endpoint

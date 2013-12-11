@@ -38,7 +38,7 @@ class Vimeography_Renderer
     {
       if ( empty($theme['name']) )
       {
-        throw new Vimeography_Exception('Please contact us at vimeography.com/contact to receive an update for your theme.');
+        throw new Vimeography_Exception('This Vimeography gallery does not have a theme assigned to it.');
       }
       else
       {

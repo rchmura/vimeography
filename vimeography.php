@@ -3,7 +3,7 @@
 Plugin Name: Vimeography
 Plugin URI: http://vimeography.com
 Description: Vimeography is the easiest way to set up a custom Vimeo gallery on your site.
-Version: 1.1.5
+Version: 1.1.6
 Author: Dave Kiss
 Author URI: http://davekiss.com
 License: MIT
@@ -24,7 +24,7 @@ define( 'VIMEOGRAPHY_ASSETS_PATH', WP_CONTENT_DIR . '/vimeography/assets/' );
 define( 'VIMEOGRAPHY_CACHE_URL',   content_url() . '/vimeography/cache/' );
 define( 'VIMEOGRAPHY_CACHE_PATH',  WP_CONTENT_DIR . '/vimeography/cache/' );
 define( 'VIMEOGRAPHY_BASENAME', plugin_basename( __FILE__ ) );
-define( 'VIMEOGRAPHY_VERSION', '1.1.5');
+define( 'VIMEOGRAPHY_VERSION', '1.1.6');
 define( 'VIMEOGRAPHY_GALLERY_TABLE', $wpdb->prefix . "vimeography_gallery");
 define( 'VIMEOGRAPHY_GALLERY_META_TABLE', $wpdb->prefix . "vimeography_gallery_meta");
 define( 'VIMEOGRAPHY_CURRENT_PAGE', basename($_SERVER['PHP_SELF']));
@@ -277,6 +277,7 @@ class Vimeography
     $db->vimeography_update_db_to_1_0();
     $db->vimeography_update_db_to_1_0_7();
     $db->vimeography_update_db_to_1_1_4();
+    $db->vimeography_update_db_to_1_1_6();
     $this->vimeography_update_db_version();
   }
 
@@ -359,7 +360,8 @@ class Vimeography
     add_submenu_page( 'vimeography-edit-galleries', 'Edit Galleries', 'Edit Galleries', 'manage_options', 'vimeography-edit-galleries', array(&$this, 'vimeography_render_template' ));
     add_submenu_page( 'vimeography-edit-galleries', 'New Gallery', 'New Gallery', 'manage_options', 'vimeography-new-gallery', array(&$this, 'vimeography_render_template' ));
     add_submenu_page( 'vimeography-edit-galleries', 'Manage Activations', 'Manage Activations', 'manage_options', 'vimeography-manage-activations', array(&$this, 'vimeography_render_template' ));
-    $submenu['vimeography-edit-galleries'][500] = array( 'Vimeography Themes', 'manage_options' , 'http://vimeography.com/themes' );
+    if ( current_user_can( 'manage_options' ) )
+      $submenu['vimeography-edit-galleries'][500] = array( 'Vimeography Themes', 'manage_options' , 'http://vimeography.com/themes' );
     add_submenu_page( 'vimeography-edit-galleries', 'Vimeography Pro', 'Vimeography Pro', 'manage_options', 'vimeography-pro', array(&$this, 'vimeography_render_template' ));
     add_submenu_page( 'vimeography-edit-galleries', 'Help', 'Help', 'manage_options', 'vimeography-help', array(&$this, 'vimeography_render_template' ));
   }

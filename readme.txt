@@ -2,8 +2,8 @@
 Contributors: iamdavekiss
 Tags: vimeo, video, videos, gallery, vimeography, fancybox, media, player, playlist, showcase, skins, themes, video gallery
 Requires at least: 3.3
-Tested up to: 3.7.1
-Stable tag: 1.1.5
+Tested up to: 3.8
+Stable tag: 1.1.6
 License: MIT
 
 The easiest way to create beautiful Vimeo galleries on your Wordpress blog.
@@ -52,6 +52,10 @@ First of all, don't worry! I promise you that we can get it looking right. This 
 * Make sure that your Wordpress theme is not including multiple versions of jQuery and is using the latest version.
 * Make sure that your theme is calling the `wp_footer()` function so that all of the Vimeography stylesheets are printed.
 * Try disabling other plugins that are used for photo galleries, minifying scripts, widgets, or otherwise alter your blog's appearance, one by one, and really determining if you need it.
+
+= I'm getting an error: This Vimeography gallery does not have a theme assigned to it. =
+
+Make sure that you have the latest version of the Vimeography theme plugin that you are using installed and that it is activated. Then, go to the gallery editor and select that theme under the Appearance tab. If you're still having problems, reach out on the Vimeography contact page.
 
 = I'm getting an error: Vimeography error: the plugin did not retrieve data from the Vimeo API! connect() timed out! =
 
@@ -102,6 +106,21 @@ Heck yeah! Use the appearance editor to change your theme's style so that it mat
 4. Get new styles by installing gallery themes.
 
 == Changelog ==
+= 1.1.6 =
+* Introducing: Vimeography Pro!
+* Check the Vimeography Pro page out for more details.
+* Compatibility with WordPress 3.8
+* You can now remove activation keys from the Manage Activations page.
+* Fixed the sticky menu issue
+* Added local Froogaloop copy for HTTPS installs
+* Updated oEmbed calls to HTTPS
+* Removed duplicate activation keys and prevent them in the future.
+* Fixed an issue that prevented some users from being able to get the latest theme updates.
+* Fixed a weird issue with duration rounding (Hat Tip: Clark Bilorusky)
+* Changed the error when a gallery doesn't have a theme assigned.
+* Fixed an issue where the Vimeography menu was showing to non-admin users
+* Updated documentation and README
+
 = 1.1.5 =
 * Improved Bugsauce compatibility with Vimeography Pro
 * Fixed an issue that prevented gallery working on secure sites.

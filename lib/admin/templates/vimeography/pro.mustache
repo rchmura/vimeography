@@ -1,8 +1,6 @@
 <div class="wrap wp_bootstrap vimeography">
   {{#has_pro}}
     {{#access_token}}
-      <!-- Display Plugin Icon, Header, and Description -->
-      <div class="icon32" id="icon-options-general"><br></div>
       <h2 class="page-title">Vimeography Pro</h2>
     {{/access_token}}
 
@@ -102,15 +100,89 @@
 
   {{^has_pro}}
     <div class="vimeography-pro">
-      <h1>Vimeography Pro</h1>
-      <h2>Supercharge your Vimeography Galleries</h2>
-      <h5>COMING SOON</h5>
+
+      <div class="group">
+        <div class="video">
+          <iframe style="margin: 25px 0 40px;" src="//player.vimeo.com/video/75977512?title=0&amp;byline=0&amp;portrait=0" width="640" height="360" frameborder="0" webkitallowfullscreen="" mozallowfullscreen="" allowfullscreen=""></iframe>
+        </div>
+        <div class="pitch">
+          <object data="{{icons_url}}new_badge.svg" type="image/svg+xml">
+            <img src="{{icons_url}}new_badge.png" />
+          </object>
+          <h1>Vimeography Pro</h1>
+          <h2>Supercharge your Vimeography Galleries</h2>
+          <p>Want more out of Vimeography? Vimeography Pro allows you to sort your videos, create playlists, show unlimited videos and more.</p>
+          <a class="vimeography-button" style="padding: 15px 80px; position: relative; top: 30px;" href="http://vimeography.com/pro" target="_blank">Learn More</a>
+        </div>
+      </div> <!-- end group -->
+
+      <hr />
+
+      <div class="group" style="margin-top: 60px;">
+        <section>
+          <object data="{{icons_url}}infinity.svg" type="image/svg+xml">
+            <img src="{{icons_url}}infinity.png" />
+          </object>
+
+          <h1>Unlimited videos</h1>
+          <p>Limits are for babies. Show every video you've created over the years.</p>
+        </section>
+
+        <section>
+          <a href="http://bit.ly/1cnPEgm" title="Get Vimeo Pro"><img src="{{icons_url}}vimeo-icon.png" width="60" height="60" /></a>
+
+          <h1>Vimeo Pro Support</h1>
+          <p>Show your business' Vimeo portfolios on your own site. <a href="http://bit.ly/1cnPEgm" title="Get Vimeo Pro">Learn More about Vimeo Pro &rarr;</a></p>
+        </section>
+
+        <section>
+          <object data="{{icons_url}}control_panel.svg" type="image/svg+xml">
+            <img src="{{icons_url}}control_panel.png" />
+          </object>
+
+          <h1>Advanced Controls</h1>
+          <p>Take control! Change sizing, visibility, and spacing settings to really fine-tune your gallery.</p>
+        </section>
+
+        <section>
+          <object data="{{icons_url}}grid.svg" type="image/svg+xml">
+            <img src="{{icons_url}}grid.png" />
+          </object>
+
+          <h1>Simple Sorting</h1>
+          <p>Vimeography Pro lets you choose the order that your videos will display.</p>
+        </section>
+
+        <section>
+          <object data="{{icons_url}}binoculars.svg" type="image/svg+xml">
+            <img src="{{icons_url}}binoculars.png" />
+          </object>
+
+          <h1>Hidden Videos</h1>
+          <p>Coming soon! Hide your secret videos on Vimeo, but show them on your own site.</p>
+        </section>
+
+        <section>
+          <object data="{{icons_url}}playlist.svg" type="image/svg+xml">
+            <img src="{{icons_url}}playlist.png" />
+          </object>
+
+          <h1>Gallery Playlists</h1>
+          <p>Coming soon! Auto-play every video in your gallery, from start to finish.</p>
+        </section>
+
+      </div>
+
+      <a class="vimeography-button" style="padding: 15px 80px;" href="http://vimeography.com/pro" target="_blank">Get Vimeography Pro &rarr;</a>
     </div>
   {{/has_pro}}
 
 </div>
 
 <style>
+
+@media screen and (min-width: 320px) {
+
   .vimeography {
     margin: 20px auto;
   }
@@ -129,6 +201,53 @@
     text-align: center;
   }
 
+  .group:before,
+  .group:after {
+    content: "";
+    display: table;
+  }
+  .group:after {
+    clear: both;
+  }
+  .group {
+    *zoom: 1;
+    margin: 0 auto;
+    max-width: 1100px;
+  }
+
+  .vimeography-pro .pitch {
+    position: relative;
+  }
+
+  .vimeography-pro .pitch object,
+  .vimeography-pro .pitch img {
+    display: none;
+  }
+
+  .vimeography-pro iframe {
+    width: 100%;
+  }
+
+  .vimeography-pro section {
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+  }
+
+  .vimeography-pro img {
+    width: 60px;
+  }
+
+  .vimeography-pro section {
+    padding: 0 0px 70px;
+    width: 300px;
+    margin: 0 auto;
+  }
+
+  .vimeography-pro section h1 {
+    font-size: 24px;
+  }
+
   .vimeography-pro-settings aside {
     float: left;
     width: 300px;
@@ -144,7 +263,8 @@
     margin: 25px 10px 0 0;
   }
 
-  .vimeography-pro-settings input[type="submit"] {
+  .vimeography-pro-settings input[type="submit"],
+  .vimeography-pro .vimeography-button {
     height: 36px;
     font-size: 14px;
     line-height: 1.2em;
@@ -163,4 +283,44 @@
     box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
     position: relative;
   }
+}
+
+@media screen and (min-width: 690px) {
+  .vimeography-pro iframe {
+    width: 640px;
+    height: 360px;
+  }
+}
+
+@media screen and (min-width: 1285px) {
+
+  .vimeography-pro section {
+    width: calc(100% / 3);
+    padding: 0 20px 70px;
+    float: left;
+    display: block;
+  }
+
+  .video {
+    float: left;
+  }
+
+  .pitch {
+    float: left;
+    text-align: left;
+    padding: 30px 0 0 40px;
+    max-width: 400px;
+  }
+
+  .vimeography-pro .pitch object,
+  .vimeography-pro .pitch img {
+    display: block;
+    position: absolute;
+    top: -10px;
+    left: -27px;
+    z-index: 99;
+  }
+
+}
+
 </style>
