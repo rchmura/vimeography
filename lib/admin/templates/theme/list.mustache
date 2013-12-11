@@ -1,25 +1,24 @@
 <div class="wrap wp_bootstrap vimeography">
-	<div class="icon32" id="icon-options-general"><br></div>
-	<h2 class="page-title">Manage Activations</h2>
+  <h2 class="page-title">Manage Activations</h2>
 
-	{{#messages}}
-		<div class="alert alert-{{type}} fade in">
-			<a class="close" data-dismiss="alert" href="#">&times;</a>
-			<h3 class="alert-heading">{{heading}}</h3>
-			<p>{{message}}</p>
-		</div>
-	{{/messages}}
+  {{#messages}}
+    <div class="alert alert-{{type}} fade in">
+      <a class="close" data-dismiss="alert" href="#">&times;</a>
+      <h3 class="alert-heading">{{heading}}</h3>
+      <p>{{message}}</p>
+    </div>
+  {{/messages}}
 
   <section class="vimeography-pro-settings">
     <aside>
       <h2>Activate Your Products</h2>
       <p>Enter your Vimeography product's activation key to receive free updates for your purchase.</p>
 
-			<form id="activation-form" class="form-inline" style="margin: 0; padding: 10px 0;" method="post" action="">
-			  <input type="text" name="vimeography-activation-key">
-			  <input type="submit" form="activation-form" value="Activate Product">
-				{{{nonce}}}
-			</form>
+      <form id="activation-form" class="form-inline" style="margin: 0; padding: 10px 0;" method="post" action="">
+        <input type="text" name="vimeography-activation-key">
+        <input type="submit" form="activation-form" value="Activate Product">
+        {{{nonce}}}
+      </form>
 
     </aside>
 
@@ -31,12 +30,13 @@
         </tr>
       </thead>
       <tbody>
-				{{#activation_keys}}
-					<tr>
-						<td>{{product_name}}</td>
-						<td>Activated{{! activation_key}}</td>
-					</tr>
-				{{/activation_keys}}
+        {{#activation_keys}}
+          <tr>
+            <td>{{product_name}}</td>
+            <td>Activated <a href="{{admin_url}}manage-activations&remove-activation-key={{activation_key}}" style="color: red; font-size: 18px; position: relative; top: -2px;">&#215;</a></td>
+
+          </tr>
+        {{/activation_keys}}
       </tbody>
     </table>
   </section>

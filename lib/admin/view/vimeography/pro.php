@@ -21,6 +21,11 @@ class Vimeography_Pro_About extends Vimeography_Base
     return home_url();
   }
 
+  public function icons_url()
+  {
+    return VIMEOGRAPHY_URL . 'media/img/icons/';
+  }
+
   /**
    * Creates a nonce for the Vimeography PRO app settings form.
    *

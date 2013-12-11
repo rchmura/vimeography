@@ -69,7 +69,8 @@ class Vimeography_Helpers
     if($minResult < 10){$minResult = 0 . $minResult;}
 
     /// get sec
-    $secResult = ($seconds/60 - $minResult)*60;
+    // HT: Clark Bilorusky http://clarkbilorusky.com
+    $secResult = floor(($seconds/60 - $minResult)*60);
 
     /// if secondes is between 0-9, add a "0" --> 00-09
     if($secResult < 10){$secResult = 0 . $secResult;}

@@ -1,6 +1,4 @@
 <div class="wrap wp_bootstrap">
-
-  <div class="icon32" id="icon-options-general"><br></div>
   <h2 class="page-title">Gallery Editor {{#gallery}}:: {{title}}{{/gallery}} {{> test}}</h2>
 
   <script type="text/javascript">
@@ -11,7 +9,7 @@
           e.preventDefault();
         });
 
-        // Contorl the color of the icon on the active and inactive menu options
+        // Control the color of the icon on the active and inactive menu options
         $('.vimeography-gallery-menu-content').on('show', function () {
           $('.vimeography-gallery-menu-heading.active').removeClass('active').find('i').removeClass('icon-white');
           $(this).prev().addClass('active').find('i').addClass('icon-white');
@@ -54,7 +52,7 @@
         $("#aujus").jScrollPane();
 
         // Affix the menu when we scroll
-        $('#vimeography-gallery-menu-container').affix({offset: $('#vimeography-gallery-menu-container').position()});
+        $('#vimeography-gallery-menu-container').affix({offset: $('#vimeography-gallery-editor').position()});
 
         // Fade in the check marks when we hover down the theme list menu panel
         $('.theme-container').mouseover(function(){

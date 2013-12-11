@@ -10,6 +10,11 @@ class Vimeography_Theme_List extends Vimeography_Base
 	 */
 	public function __construct()
 	{
+		self::_remove_duplicate_keys();
+
+		if (isset($_GET['remove-activation-key']))
+			$this->_remove_activation_key( strtoupper( sanitize_key( $_GET['remove-activation-key'] ) ) );
+
 		if (isset($_POST['vimeography-activation-key']))
 			$this->_validate_form();
 	}
@@ -34,15 +39,35 @@ class Vimeography_Theme_List extends Vimeography_Base
 		return get_option('vimeography_activation_keys');
 	}
 
+	private static function _remove_duplicate_keys()
+	{
+		if ( get_option('vimeography_activation_keys') )
+		{
+			$activation_keys = array_map("unserialize", array_unique(array_map("serialize", get_option('vimeography_activation_keys'))));
+			update_option('vimeography_activation_keys', $activation_keys);
+		}
+	}
+
 	/**
 	 * [_remove_activation_key description]
 	 * @param  [type] $key [description]
 	 * @return [type]      [description]
 	 */
-	private static function _remove_activation_key($key)
+	private function _remove_activation_key($key)
 	{
-		delete_option('vimeography_activation_keys');
-		return TRUE;
+		$activation_keys = get_option('vimeography_activation_keys');
+
+		if (! empty($activation_keys))
+		{
+			foreach ($activation_keys as $i => $entry)
+			{
+				if ($entry->activation_key === $key)
+					unset($activation_keys[$i]);
+			}
+
+			update_option('vimeography_activation_keys', $activation_keys);
+	  	$this->messages[] = array('type' => 'success', 'heading' => 'Activation Key Removed.', 'message' => 'Your activation key has been removed from this site.');
+		}
 	}
 
 	/**
@@ -68,7 +93,17 @@ class Vimeography_Theme_List extends Vimeography_Base
 				// Merge new key
 				if ($activation_keys)
 				{
-					$activation_keys[] = $response->body;
+					// Check to make sure not already activated.
+					$match = FALSE;
+
+					foreach ($activation_keys as $entry)
+					{
+						if ($entry->activation_key === $response->body->activation_key)
+							$match = TRUE;
+					}
+
+					if ($match === FALSE)
+						$activation_keys[] = $response->body;
 				}
 				else
 				{
