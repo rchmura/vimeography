@@ -224,14 +224,8 @@ class Vimeography_Database extends Vimeography
             $old_basename = trailingslashit($entry->activation_key) . $entry->plugin_name . '.php';
             $new_basename = trailingslashit($entry->plugin_name) . $entry->plugin_name . '.php';
 
-            if ( is_plugin_active( $old_basename ) )
-              deactivate_plugins($old_basename);
-
             // Rename folder to the correct plugin name
             rename($activation_key_plugin_path, $corrected_plugin_path);
-
-            // Reactivate plugin
-            activate_plugins($new_basename);
           }
         }
       }
