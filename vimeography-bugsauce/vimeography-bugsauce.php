@@ -4,7 +4,7 @@ Plugin Name: Vimeography Theme: Bugsauce
 Plugin URI: http://www.vimeography.com/themes
 Theme Name: Bugsauce
 Theme URI: vimeography.com/themes/bugsauce
-Version: 1.0.1
+Version: 1.0.2
 Description: is the base theme that comes prepackaged with Vimeography.
 Author: Dave Kiss
 Author URI: http://www.vimeography.com/
@@ -20,7 +20,7 @@ if (! class_exists('Vimeography_Themes_Bugsauce'))
      *
      * @var string
      */
-    public $version = '1.0.1';
+    public $version = '1.0.2';
 
     /**
      * Include this theme in the Vimeography theme loader.
@@ -51,8 +51,14 @@ if (! class_exists('Vimeography_Themes_Bugsauce'))
 
     public static function load_scripts()
     {
+      wp_dequeue_script('fitvids');
+      wp_dequeue_script('flexslider');
+
+      wp_deregister_script('fitvids');
+      wp_deregister_script('flexslider');
+
       // Register our common scripts
-      wp_register_script('froogaloop', 'http://a.vimeocdn.com/js/froogaloop2.min.js');
+      wp_register_script('froogaloop', VIMEOGRAPHY_ASSETS_URL.'js/plugins/froogaloop2.min.js');
       wp_register_script('flexslider', VIMEOGRAPHY_ASSETS_URL.'js/plugins/jquery.flexslider.js', array('jquery'));
       wp_register_script('fitvids', VIMEOGRAPHY_ASSETS_URL.'js/plugins/jquery.fitvids.js', array('jquery'));
       wp_register_script('spin', VIMEOGRAPHY_ASSETS_URL.'js/plugins/spin.min.js', array('jquery'));
