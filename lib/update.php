@@ -130,7 +130,7 @@ class Vimeography_Update extends Vimeography
 
         case 304:
           // Plugin up to date.
-          throw new Vimeography_Exception(__('304 Not Modified'));
+          throw new Vimeography_Exception(__('304 Not Modified', 'vimeography'));
           break;
         case 401: case 500:
           $response = json_decode($request['body']);
@@ -138,7 +138,7 @@ class Vimeography_Update extends Vimeography
           break;
 
         default:
-          throw new Vimeography_Exception('Unknown HTTP response code: ' . $response_code);
+          throw new Vimeography_Exception(__('Unknown HTTP response code: ', 'vimeography') . $response_code);
           break;
       }
 
@@ -173,7 +173,7 @@ class Vimeography_Update extends Vimeography
         $original = self::vimeography_get_remote_info($plugin->activation_key);
 
       if (! $original)
-        return new WP_Error('plugins_api_failed', __('An Unexpected HTTP Error occurred during the API request.</p> <p><a href="?" onclick="document.location.reload(); return false;">Try again</a>'));
+        return new WP_Error('plugins_api_failed', __('An Unexpected HTTP Error occurred during the API request.</p> <p><a href="?" onclick="document.location.reload(); return false;">Try again</a>', 'vimeography'));
     }
 
     return $original;
@@ -207,7 +207,7 @@ class Vimeography_Update extends Vimeography
 
       echo '<tr class="plugin-update-tr"><td colspan="3" class="plugin-update"><div class="update-message">';
       echo '<span style="border-right: 1px solid #DFDFDF; margin-right: 5px;">';
-      echo __('Hey! Don\'t forget to ') . '<a title="Activate my Vimeography Product" href="' . get_admin_url() . 'admin.php?page=vimeography-manage-activations">' . __('enter your activation key') . '</a>' . __(" to receive the latest updates for the $name plugin.");
+      printf( __('Hey! Don\'t forget to <a title="Activate my Vimeography Product" href="%1$sadmin.php?page=vimeography-manage-activations">enter your activation key</a> to receive the latest updates for the %2$s plugin.', 'vimeography'), get_admin_url(), $name );
       echo '</span>';
       echo '</div></td></tr>';
     }

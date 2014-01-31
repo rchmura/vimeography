@@ -22,7 +22,7 @@ class Vimeography_Renderer
   public function __construct($settings, $gallery_id)
   {
     if (! isset($settings['theme']))
-      throw new Vimeography_Exception(__('You must specify a theme in either the admin panel or the shortcode.'));
+      throw new Vimeography_Exception(__('You must specify a theme in either the admin panel or the shortcode.', 'vimeography'));
 
     $vimeography = Vimeography::get_instance();
 
@@ -38,18 +38,18 @@ class Vimeography_Renderer
     {
       if ( empty($theme['name']) )
       {
-        throw new Vimeography_Exception('This Vimeography gallery does not have a theme assigned to it.');
+        throw new Vimeography_Exception(__('This Vimeography gallery does not have a theme assigned to it.', 'vimeography'));
       }
       else
       {
-        throw new Vimeography_Exception('The "' . $theme['name'] . '" theme does not exist or is improperly structured.');
+        throw new Vimeography_Exception(sprintf(__('The "%s" theme does not exist or is improperly structured.', 'vimeography'), $theme['name'] ) );
       }
     }
 
     $class = 'Vimeography_Themes_'.ucfirst( $theme['name'] );
 
     if (! class_exists($class))
-      throw new Vimeography_Exception('The "' . $theme['name'] . '" theme class does not exist or is improperly structured.');
+      throw new Vimeography_Exception(sprintf(__('The "%s" theme class does not exist or is improperly structured.', 'vimeography'), $theme['name'] ) );
 
     $mustache = new Mustache_Engine( array(
       'loader'          => new Mustache_Loader_FilesystemLoader($theme['plugin_path']),

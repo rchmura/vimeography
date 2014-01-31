@@ -140,22 +140,22 @@ class Vimeography_Gallery_List extends Vimeography_Base
 			$duplicate = $wpdb->get_results('SELECT * from '.VIMEOGRAPHY_GALLERY_META_TABLE.' AS meta JOIN '.VIMEOGRAPHY_GALLERY_TABLE.' AS gallery ON meta.gallery_id = gallery.id WHERE meta.gallery_id = '.$id.' LIMIT 1;');
 			$result = $wpdb->insert( VIMEOGRAPHY_GALLERY_TABLE, array( 'title' => $duplicate[0]->title, 'date_created' => current_time('mysql'),  'is_active' => 1 ) );
 			if ($result === FALSE)
-				throw new Exception(__('Your gallery could not be duplicated.'));
+				throw new Exception(__('Your gallery could not be duplicated.', 'vimeography'));
 
 			$gallery_id = $wpdb->insert_id;
 			$result = $wpdb->insert( VIMEOGRAPHY_GALLERY_META_TABLE, array( 'gallery_id' => $gallery_id, 'source_url' => $duplicate[0]->source_url, 'video_limit' => $duplicate[0]->video_limit, 'featured_video' => $duplicate[0]->featured_video, 'cache_timeout' => $duplicate[0]->cache_timeout, 'theme_name' => $duplicate[0]->theme_name, 'resource_uri' => $duplicate[0]->resource_uri ) );
 
 			if ($result === FALSE)
-				throw new Exception(__('Your gallery could not be duplicated.'));
+				throw new Exception(__('Your gallery could not be duplicated.', 'vimeography'));
 
 			do_action('vimeography-pro/duplicate-gallery', $id, $gallery_id);
 
-			$this->messages[] = array('type' => 'success', 'heading' => __('Gallery duplicated.'), 'message' => __('You now have a clone of your own.'));
+			$this->messages[] = array('type' => 'success', 'heading' => __('Gallery duplicated.', 'vimeography'), 'message' => __('You now have a clone of your own.', 'vimeography'));
 
 		}
 		catch (Exception $e)
 		{
-			$this->messages[] = array('type' => 'error', 'heading' => __('Ruh Roh.'), 'message' => $e->getMessage());
+			$this->messages[] = array('type' => 'error', 'heading' => __('Ruh Roh.', 'vimeography'), 'message' => $e->getMessage());
 		}
 	}
 
@@ -174,7 +174,7 @@ class Vimeography_Gallery_List extends Vimeography_Base
 			$result = $wpdb->query('DELETE gallery, meta FROM '.VIMEOGRAPHY_GALLERY_TABLE.' gallery, '.VIMEOGRAPHY_GALLERY_META_TABLE.' meta WHERE gallery.id = '.$id.' AND meta.gallery_id = '.$id.';');
 
 			if ($result === FALSE)
-				throw new Exception(__('Your gallery could not be deleted.'));
+				throw new Exception(__('Your gallery could not be deleted.', 'vimeography'));
 
 			do_action('vimeography-pro/delete-gallery', $id);
 
@@ -183,12 +183,12 @@ class Vimeography_Gallery_List extends Vimeography_Base
 	    if ($cache->exists())
 		    $cache->delete();
 
-			$this->messages[] = array('type' => 'success', 'heading' => __('Gallery deleted.'), 'message' => __('See you later, sucker.'));
+			$this->messages[] = array('type' => 'success', 'heading' => __('Gallery deleted.', 'vimeography'), 'message' => __('See you later, sucker.', 'vimeography'));
 
 		}
 		catch (Exception $e)
 		{
-			$this->messages[] = array('type' => 'error', 'heading' => __('Ruh Roh.'), 'message' => $e->getMessage());
+			$this->messages[] = array('type' => 'error', 'heading' => __('Ruh Roh.', 'vimeography'), 'message' => $e->getMessage());
 		}
 	}
 

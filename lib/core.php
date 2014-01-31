@@ -130,7 +130,7 @@ abstract class Vimeography_Core
   public function fetch($last_modified = NULL)
   {
     if (! $this->_verify_vimeo_endpoint($this->_endpoint) )
-        throw new Vimeography_Exception("Endpoint {$this->_endpoint} is not valid.");
+        throw new Vimeography_Exception( sprintf( __('Endpoint %s is not valid.', 'vimeography'), $this->_endpoint ) );
 
     $response  = $this->_make_vimeo_request($this->_endpoint, $this->_params, $last_modified);
     $video_set = $this->_get_video_set($response);
