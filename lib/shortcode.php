@@ -53,7 +53,7 @@ class Vimeography_Shortcode extends Vimeography
     }
     catch (Vimeography_Exception $e)
     {
-      die("Error creating Vimeography gallery: ".$e->getMessage());
+      die(__("Error creating Vimeography gallery: ", 'vimeography') . $e->getMessage() );
     }
   }
 
@@ -121,7 +121,7 @@ class Vimeography_Shortcode extends Vimeography
     ');
 
     if ( empty($db_gallery_settings) )
-      throw new Vimeography_Exception('The Vimeography gallery you are trying to load does not exist.');
+      throw new Vimeography_Exception(__('The Vimeography gallery you are trying to load does not exist.', 'vimeography') );
 
     return $db_gallery_settings[0];
   }
@@ -186,7 +186,7 @@ class Vimeography_Shortcode extends Vimeography
     {
       // Make sure the current theme's stylesheet handle is set as a dependency
       $dependency = strtolower($this->_gallery_settings['theme']);
-      wp_register_style($name, $file_url, array($dependency));
+      wp_register_style($name, $file_url, array($dependency), strval( filemtime($filepath) ) );
       wp_enqueue_style($name);
     }
 
@@ -225,7 +225,7 @@ class Vimeography_Shortcode extends Vimeography
     }
     catch (Vimeography_Exception $e)
     {
-      return "Vimeography error: ".$e->getMessage();
+      return __("Vimeography error: ", 'vimeography') . $e->getMessage();
     }
   }
 

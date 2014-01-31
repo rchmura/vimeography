@@ -66,7 +66,7 @@ class Vimeography_Theme_List extends Vimeography_Base
 			}
 
 			update_option('vimeography_activation_keys', $activation_keys);
-	  	$this->messages[] = array('type' => 'success', 'heading' => 'Activation Key Removed.', 'message' => 'Your activation key has been removed from this site.');
+	  	$this->messages[] = array('type' => 'success', 'heading' => __('Activation Key Removed.', 'vimeography'), 'message' => __('Your activation key has been removed from this site.', 'vimeography'));
 		}
 	}
 
@@ -111,12 +111,12 @@ class Vimeography_Theme_List extends Vimeography_Base
 				}
 
 		    $result = update_option('vimeography_activation_keys', $activation_keys );
-		  	$this->messages[] = array('type' => 'success', 'heading' => 'Yee-haw!', 'message' => __($response->message));
+		  	$this->messages[] = array('type' => 'success', 'heading' => __('Yee-haw!', 'vimeography'), 'message' => __($response->message));
 
 			}
 			catch (Vimeography_Exception $e)
 			{
-				$this->messages[] = array('type' => 'error', 'heading' => 'Uh oh.', 'message' => __($e->getMessage()));
+				$this->messages[] = array('type' => 'error', 'heading' => __('Uh oh.', 'vimeography'), 'message' => __($e->getMessage()));
 			}
 		}
 	}

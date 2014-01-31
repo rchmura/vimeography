@@ -2,8 +2,15 @@
 
 class Vimeography_Pro_About extends Vimeography_Base
 {
+  /**
+   * [$messages description]
+   * @var [type]
+   */
   public $messages;
 
+  /**
+   * [__construct description]
+   */
   public function __construct()
   {
     if ($_SERVER['REQUEST_METHOD'] == 'POST')
@@ -21,6 +28,10 @@ class Vimeography_Pro_About extends Vimeography_Base
     return home_url();
   }
 
+  /**
+   * [icons_url description]
+   * @return [type] [description]
+   */
   public function icons_url()
   {
     return VIMEOGRAPHY_URL . 'media/img/icons/';
@@ -76,7 +87,7 @@ class Vimeography_Pro_About extends Vimeography_Base
       if (isset($input['vimeography_pro_settings']['remove_token']))
       {
         $result = delete_option('vimeography_pro_access_token');
-        $this->messages[] = array('type' => 'success', 'heading' => __('Poof!'), 'message' => __('Your Vimeo access token has been removed.'));
+        $this->messages[] = array('type' => 'success', 'heading' => __('Poof!', 'vimeography'), 'message' => __('Your Vimeo access token has been removed.', 'vimeography'));
         return TRUE;
       }
 
@@ -84,7 +95,7 @@ class Vimeography_Pro_About extends Vimeography_Base
 
       if ($output['access_token'] == '')
       {
-        $this->messages[] = array('type' => 'error', 'heading' => __('Whoops!'), 'message' => __('Don\'t forget to enter your Vimeo OAuth 2 access token!'));
+        $this->messages[] = array('type' => 'error', 'heading' => __('Whoops!', 'vimeography'), 'message' => __("Don't forget to enter your Vimeo OAuth 2 access token!", 'vimeography'));
         return FALSE;
       }
 
@@ -97,7 +108,7 @@ class Vimeography_Pro_About extends Vimeography_Base
 
         if (! $response)
         {
-          $this->messages[] = array('type' => 'error', 'heading' => __('Woah!'), 'message' => __('Looks like the Vimeo API is having some issues right now. Try this again in a little bit.'));
+          $this->messages[] = array('type' => 'error', 'heading' => __('Woah!', 'vimeography'), 'message' => __('Looks like the Vimeo API is having some issues right now. Try this again in a little bit.', 'vimeography'));
           return FALSE;
         }
 
@@ -105,24 +116,24 @@ class Vimeography_Pro_About extends Vimeography_Base
         {
           case 200:
             update_option('vimeography_pro_access_token', $output['access_token']);
-            $this->messages[] = array('type' => 'success', 'heading' => __('Yeah!'), 'message' => __('Success! Your Vimeo access token for ') . $response['body']->name . __(' has been added and saved.'));
+            $this->messages[] = array('type' => 'success', 'heading' => __('Yeah!', 'vimeography'), 'message' => sprintf( __('Success! Your Vimeo access token for %s has been added and saved.', 'vimeography'), $response['body']->name ) );
             return $output;
             break;
           case 401:
-            throw new Vimeography_Exception(__('Your Vimeo access token didn\'t validate. Try again, and double check that you are entering the correct token.'));
+            throw new Vimeography_Exception(__("Your Vimeo access token didn't validate. Try again, and double check that you are entering the correct token.", 'vimeography'));
             break;
           case 404:
-            throw new Vimeography_Exception('how the heck did you score a 404?'. $response['body']->error);
+            throw new Vimeography_Exception(__('how the heck did you score a 404?', 'vimeography'). $response['body']->error);
             break;
           default:
-            throw new Vimeography_Exception('Unknown response status from the Vimeo API: '. $response['body']->error);
+            throw new Vimeography_Exception(__('Unknown response status from the Vimeo API: ', 'vimeography'). $response['body']->error);
             break;
         }
 
       }
       catch (Vimeography_Exception $e)
       {
-        $this->messages[] = array('type' => 'error', 'heading' => __('Dangit.'), 'message' => $e->getMessage());
+        $this->messages[] = array('type' => 'error', 'heading' => __('Dangit.', 'vimeography'), 'message' => $e->getMessage());
         return FALSE;
       }
 

@@ -2,6 +2,11 @@
 
 class Vimeography_Helpers
 {
+  /**
+   * [apply_common_formatting description]
+   * @param  [type] $data [description]
+   * @return [type]       [description]
+   */
   public function apply_common_formatting($data)
   {
     $items = array();
@@ -23,6 +28,11 @@ class Vimeography_Helpers
 
   }
 
+  /**
+   * [format_video_thumbnails description]
+   * @param  [type] $item [description]
+   * @return [type]       [description]
+   */
   public function format_video_thumbnails($item)
   {
     // Format the video thumbnails
@@ -79,6 +89,11 @@ class Vimeography_Helpers
     return $minResult . ":" . $secResult;
   }
 
+  /**
+   * [get_featured_embed description]
+   * @param  [type] $link [description]
+   * @return [type]       [description]
+   */
   public function get_featured_embed($link)
   {
     $params = array(
@@ -97,7 +112,7 @@ class Vimeography_Helpers
 
     if ( is_wp_error( $oembed ) )
     {
-      throw new Vimeography_Exception( __('Vimeography could not retrieve the featured video: ') . $oembed->get_error_message() );
+      throw new Vimeography_Exception( __('Vimeography could not retrieve the featured video: ', 'vimeography') . $oembed->get_error_message() );
     }
     else
     {

@@ -130,7 +130,7 @@ abstract class Vimeography_Core
   public function fetch($last_modified = NULL)
   {
     if (! $this->_verify_vimeo_endpoint($this->_endpoint) )
-        throw new Vimeography_Exception("Endpoint {$this->_endpoint} is not valid.");
+        throw new Vimeography_Exception( sprintf( __('Endpoint %s is not valid.', 'vimeography'), $this->_endpoint ) );
 
     $response  = $this->_make_vimeo_request($this->_endpoint, $this->_params, $last_modified);
     $video_set = $this->_get_video_set($response);
@@ -176,12 +176,19 @@ abstract class Vimeography_Core
         return NULL;
         break;
       case 400:
-        throw new Vimeography_Exception(__('a bad request made was made. ' . $response['body']->error));
+        throw new Vimeography_Exception(__('a bad request made was made. ', 'vimeography') . $response['body']->error );
+        break;
+      case 401:
+        throw new Vimeography_Exception(__('an invalid token was used for the API request. Try removing your Vimeo token on the Vimeography Pro page and following the steps again to create a Vimeo app.', 'vimeography') );
+        break;
       case 404:
-        throw new Vimeography_Exception('the plugin could not retrieve data from the Vimeo API! '. $response['body']->error);
+        throw new Vimeography_Exception(__('the plugin could not retrieve data from the Vimeo API! ', 'vimeography') . $response['body']->error );
+        break;
+      case 500:
+        throw new Vimeography_Exception(__('looks like Vimeo is having some API issues. Try reloading, or, check back in a few minutes.', 'vimeography') );
         break;
       default:
-        throw new Vimeography_Exception("Unknown response status #{$response['status']}, {$response['body']->error}");
+        throw new Vimeography_Exception(sprintf(__('Unknown response status %1$d, %2$s', 'vimeography'), $response['status'], $response['body']->error ) );
         break;
     }
   }

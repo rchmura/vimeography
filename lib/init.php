@@ -100,4 +100,14 @@ class Vimeography_Init extends Vimeography
     echo $template->render($view);
   }
 
+  /**
+   * [vimeography_load_text_domain description]
+   * @return [type] [description]
+   */
+  public function vimeography_load_text_domain()
+  {
+    // Localization
+    load_plugin_textdomain('vimeography', false, dirname( VIMEOGRAPHY_BASENAME ) . '/languages/');
+  }
+
 }

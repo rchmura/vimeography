@@ -3,14 +3,15 @@
 Plugin Name: Vimeography
 Plugin URI: http://vimeography.com
 Description: Vimeography is the easiest way to set up a custom Vimeo gallery on your site.
-Version: 1.1.7
+Version: 1.1.8
 Author: Dave Kiss
 Author URI: http://davekiss.com
 License: MIT
+Text Domain: vimeography
 */
 
-if (!function_exists('json_decode'))
-  wp_die('Vimeography requires the JSON PHP extension.');
+if ( ! function_exists('json_decode') )
+  wp_die( __('Vimeography requires the JSON PHP extension.', 'vimeography') );
 
 global $wpdb;
 
@@ -24,7 +25,7 @@ define( 'VIMEOGRAPHY_ASSETS_PATH', WP_CONTENT_DIR . '/vimeography/assets/' );
 define( 'VIMEOGRAPHY_CACHE_URL',   content_url() . '/vimeography/cache/' );
 define( 'VIMEOGRAPHY_CACHE_PATH',  WP_CONTENT_DIR . '/vimeography/cache/' );
 define( 'VIMEOGRAPHY_BASENAME', plugin_basename( __FILE__ ) );
-define( 'VIMEOGRAPHY_VERSION', '1.1.7');
+define( 'VIMEOGRAPHY_VERSION', '1.1.8');
 define( 'VIMEOGRAPHY_GALLERY_TABLE', $wpdb->prefix . "vimeography_gallery");
 define( 'VIMEOGRAPHY_GALLERY_META_TABLE', $wpdb->prefix . "vimeography_gallery_meta");
 define( 'VIMEOGRAPHY_CURRENT_PAGE', basename($_SERVER['PHP_SELF']));
@@ -124,7 +125,7 @@ class Vimeography
       if( is_plugin_active( VIMEOGRAPHY_BASENAME ) )
       {
         deactivate_plugins( VIMEOGRAPHY_BASENAME );
-        wp_die( "'".$plugin_data['Name']."' requires WordPress 3.3 or higher, and has been deactivated! Please upgrade WordPress and try again.<br /><br />Back to <a href='".admin_url()."'>WordPress admin</a>." );
+        wp_die( sprintf( __('Vimeography requires WordPress 3.3 or higher. Please upgrade WordPress and try again. <a href="%s">Back to WordPress admin</a>', 'vimeography'), admin_url() ) );
       }
     }
   }
@@ -149,8 +150,8 @@ class Vimeography
    */
   public function vimeography_pre_upgrade($true, $hook_extra)
   {
-    // Vimeography is updating, deactivate all Vimeography plugins until we are back.
-    if ($hook_extra['plugin'] === 'vimeography/vimeography.php')
+    // Vimeography *might* be updating, deactivate all Vimeography plugins until we are back.
+    if ( isset( $hook_extra['plugin'] ) AND $hook_extra['plugin'] === 'vimeography/vimeography.php')
     {
       $plugins = get_option('active_plugins');
       $vimeography_plugins = array();
@@ -198,6 +199,7 @@ class Vimeography
     $init->vimeography_register_jquery();
     $init->vimeography_add_gallery_helper();
     $init->vimeography_written_block_robots();
+    $init->vimeography_load_text_domain();
 
     require_once(VIMEOGRAPHY_PATH . 'lib/ajax.php');
     new Vimeography_Ajax;
@@ -224,8 +226,9 @@ class Vimeography
   }
 
   /**
-   * [set_active_theme description]
-   * @param [type] $theme_name [description]
+   * Sets the active theme if it is found to be installed
+   * and activated.
+   * @param string $theme_name
    */
   public function set_active_theme($theme_name)
   {
@@ -236,6 +239,10 @@ class Vimeography
         $this->active_theme = $theme;
       }
     }
+
+    if (! $this->active_theme)
+      throw new Vimeography_Exception(__('The Vimeography theme you are trying to use is not installed or activated.', 'vimeography') );
+
     return $this;
   }
 
@@ -321,7 +328,7 @@ class Vimeography
         if( is_plugin_active( VIMEOGRAPHY_BASENAME ) )
         {
           deactivate_plugins( VIMEOGRAPHY_BASENAME );
-          wp_die( "Vimeography could not create the cache directory. Please contact your host and request permissions to write to your Wordpress installation's wp-content directory.<br /><br />Back to <a href='".admin_url()."'>WordPress admin</a>." );
+          wp_die( sprintf( __('Vimeography could not create the cache directory. Please contact your host and request permissions to write to your WordPress installation\'s wp-content directory. <a href="%s">Back to WordPress admin</a>', 'vimeography'), admin_url() ) );
         }
       }
     }
@@ -333,14 +340,14 @@ class Vimeography
    * @access public
    * @param mixed $links
    * @param mixed $file
-   * @return void
+   * @return array $links
    */
   public function vimeography_filter_plugin_actions($links, $file)
   {
     if ( $file == VIMEOGRAPHY_BASENAME )
     {
-      $settings_link = '<a href="admin.php?page=vimeography-edit-galleries">' . __('Settings') . '</a>';
-      if (!in_array($settings_link, $links))
+      $settings_link = '<a href="admin.php?page=vimeography-edit-galleries">' . __('Settings', 'vimeography') . '</a>';
+      if ( ! in_array($settings_link, $links) )
         array_unshift( $links, $settings_link ); // before other links
     }
     return $links;
@@ -357,13 +364,13 @@ class Vimeography
     global $submenu;
 
     add_menu_page( 'Vimeography Page Title', 'Vimeography', 'manage_options', 'vimeography-edit-galleries', '', VIMEOGRAPHY_URL.'media/img/vimeography-icon.png' );
-    add_submenu_page( 'vimeography-edit-galleries', 'Edit Galleries', 'Edit Galleries', 'manage_options', 'vimeography-edit-galleries', array(&$this, 'vimeography_render_template' ));
-    add_submenu_page( 'vimeography-edit-galleries', 'New Gallery', 'New Gallery', 'manage_options', 'vimeography-new-gallery', array(&$this, 'vimeography_render_template' ));
-    add_submenu_page( 'vimeography-edit-galleries', 'Manage Activations', 'Manage Activations', 'manage_options', 'vimeography-manage-activations', array(&$this, 'vimeography_render_template' ));
+    add_submenu_page( 'vimeography-edit-galleries', __('Edit Galleries', 'vimeography'), __('Edit Galleries', 'vimeography'), 'manage_options', 'vimeography-edit-galleries', array(&$this, 'vimeography_render_template' ));
+    add_submenu_page( 'vimeography-edit-galleries', __('New Gallery', 'vimeography'), __('New Gallery', 'vimeography'), 'manage_options', 'vimeography-new-gallery', array(&$this, 'vimeography_render_template' ));
+    add_submenu_page( 'vimeography-edit-galleries', __('Manage Activations', 'vimeography'), __('Manage Activations', 'vimeography'), 'manage_options', 'vimeography-manage-activations', array(&$this, 'vimeography_render_template' ));
     if ( current_user_can( 'manage_options' ) )
-      $submenu['vimeography-edit-galleries'][500] = array( 'Vimeography Themes', 'manage_options' , 'http://vimeography.com/themes' );
+      $submenu['vimeography-edit-galleries'][500] = array( __('Vimeography Themes', 'vimeography'), 'manage_options' , 'http://vimeography.com/themes' );
     add_submenu_page( 'vimeography-edit-galleries', 'Vimeography Pro', 'Vimeography Pro', 'manage_options', 'vimeography-pro', array(&$this, 'vimeography_render_template' ));
-    add_submenu_page( 'vimeography-edit-galleries', 'Help', 'Help', 'manage_options', 'vimeography-help', array(&$this, 'vimeography_render_template' ));
+    add_submenu_page( 'vimeography-edit-galleries', __('Help', 'vimeography'), __('Help', 'vimeography'), 'manage_options', 'vimeography-help', array(&$this, 'vimeography_render_template' ));
   }
 
   /**
@@ -374,8 +381,8 @@ class Vimeography
    */
   public function vimeography_render_template()
   {
-    if ( !current_user_can( 'manage_options' ) )
-      wp_die( __( 'You do not have sufficient permissions to access this page.' ) );
+    if ( ! current_user_can( 'manage_options' ) )
+      wp_die( __( 'You do not have sufficient permissions to access this page.', 'vimeography' ) );
 
     wp_register_style( 'vimeography-bootstrap', VIMEOGRAPHY_URL.'media/css/bootstrap.min.css');
     wp_register_style( 'vimeography-admin', VIMEOGRAPHY_URL.'media/css/admin.css');
@@ -469,7 +476,7 @@ class Vimeography
         $template = $mustache->loadTemplate('vimeography/help');
         break;
       default:
-        wp_die( __('The admin template for "'.current_filter().'" cannot be found.') );
+        wp_die( sprintf( __('The admin template for "%s" cannot be found.', 'vimeography'), current_filter() ) );
       break;
     }
 
@@ -566,7 +573,7 @@ class Vimeography
     }
     else
     {
-      throw new Vimeography_Exception( __('That site doesn\'t look like a valid link to a Vimeo collection.') );
+      throw new Vimeography_Exception( __('That site doesn\'t look like a valid link to a Vimeo collection.', 'vimeography') );
     }
   }
 
@@ -728,7 +735,7 @@ class Vimeography
     if ( 1 == count($source_files) && $wp_filesystem->is_dir( trailingslashit($source) . $source_files[0] . '/') ) //Only one folder? Then we want its contents.
       $source = trailingslashit($source) . trailingslashit($source_files[0]);
     elseif ( count($source_files) == 0 )
-      return new WP_Error( 'incompatible_archive', 'incompatible archive string', __( 'The plugin contains no files.' ) ); //There are no files?
+      return new WP_Error( 'incompatible_archive', 'incompatible archive string', __( 'The plugin contains no files.', 'vimeography' ) ); //There are no files?
     else //Its only a single file, The upgrader will use the foldername of this file as the destination folder. foldername is based on zip filename.
       $source = trailingslashit($source);
 

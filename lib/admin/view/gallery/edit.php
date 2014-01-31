@@ -63,7 +63,7 @@ class Vimeography_Gallery_Edit extends Vimeography_Base
 
     if (! $this->_gallery)
     {
-      $this->messages[] = array('type' => 'error', 'heading' => 'Uh oh.', 'message' => __('That gallery no longer exists. It\'s gone. Kaput!') );
+      $this->messages[] = array('type' => 'error', 'heading' => __('Uh oh.', 'vimeography'), 'message' => __("That gallery no longer exists. It's gone. Kaput!", 'vimeography') );
     }
     else
     {
@@ -82,7 +82,7 @@ class Vimeography_Gallery_Edit extends Vimeography_Base
     }
 
     if (isset($_GET['created']) && $_GET['created'] == 1)
-      $this->messages[] = array('type' => 'success', 'heading' => __('Gallery created.'), 'message' => __('Well, that was easy.') );
+      $this->messages[] = array('type' => 'success', 'heading' => __('Gallery created.', 'vimeography'), 'message' => __('Well, that was easy.', 'vimeography') );
 
   }
 
@@ -95,7 +95,7 @@ class Vimeography_Gallery_Edit extends Vimeography_Base
     if ($this->_cache->exists())
       $this->_cache->delete();
 
-    $this->messages[] = array('type' => 'success', 'heading' => 'So fresh.', 'message' => __('Your videos have been refreshed.') );
+    $this->messages[] = array('type' => 'success', 'heading' => __('So fresh.', 'vimeography'), 'message' => __('Your videos have been refreshed.', 'vimeography') );
   }
 
   /**
@@ -108,7 +108,7 @@ class Vimeography_Gallery_Edit extends Vimeography_Base
     if (file_exists(VIMEOGRAPHY_ASSETS_PATH . 'css/vimeography-gallery-' . $this->_gallery_id . '-custom.css'))
       unlink(VIMEOGRAPHY_ASSETS_PATH . 'css/vimeography-gallery-' . $this->_gallery_id . '-custom.css');
 
-    $this->messages[] = array('type' => 'success', 'heading' => __('Theme settings cleared.'), 'message' => __('Your gallery appearance has been reset.'));
+    $this->messages[] = array('type' => 'success', 'heading' => __('Theme settings cleared.', 'vimeography'), 'message' => __('Your gallery appearance has been reset.', 'vimeography'));
   }
 
   /**
@@ -125,12 +125,10 @@ class Vimeography_Gallery_Edit extends Vimeography_Base
       wp_enqueue_script('jquery-ui');
     }
     wp_register_script( 'jquery-mousewheel', VIMEOGRAPHY_URL.'media/js/jquery.mousewheel.min.js', 'jquery');
-    //wp_register_script( 'jquery-custom-scrollbar', VIMEOGRAPHY_URL.'media/js/jquery.mCustomScrollbar.js', 'jquery');
     wp_register_script( 'jScrollPane', VIMEOGRAPHY_URL.'media/js/jquery.jscrollpane.min.js', 'jquery');
     wp_register_style( 'jScrollPane', VIMEOGRAPHY_URL.'media/css/plugins/jScrollPane/jquery.jscrollpane.css', 'jquery');
 
     wp_enqueue_script( 'jquery-mousewheel');
-    //wp_enqueue_script( 'jquery-custom-scrollbar');
     wp_enqueue_script( 'jScrollPane');
     wp_enqueue_style( 'jScrollPane');
   }
@@ -153,7 +151,7 @@ class Vimeography_Gallery_Edit extends Vimeography_Base
       {
         // If the setting type isn't set, throw an error.
         if (! isset($setting['type']))
-          throw new Vimeography_Exception(__('One of your active theme settings does not specify the type of setting it is.'));
+          throw new Vimeography_Exception(__('One of your active theme settings does not specify the type of setting it is.', 'vimeography'));
 
         if ($setting['pro'] === TRUE AND $this->has_pro() === FALSE)
           continue;
@@ -180,7 +178,7 @@ class Vimeography_Gallery_Edit extends Vimeography_Base
         $class = 'Vimeography_Theme_Settings_'.ucfirst($setting['type']);
 
         if (!class_exists($class))
-          throw new Vimeography_Exception( __('The "') . $setting['type'] . __('" setting type does not exist or is improperly structured.') );
+          throw new Vimeography_Exception( sprintf(__('The "%s" setting type does not exist or is improperly structured.', 'vimeography'), $setting['type'] ) );
 
         // Load the template file for the current theme setting.
         $mustache = new Mustache_Engine(array('loader' => new Mustache_Loader_FilesystemLoader($template_dir . 'lib/admin/templates/theme/settings'),));
@@ -312,16 +310,16 @@ class Vimeography_Gallery_Edit extends Vimeography_Base
         );
 
         if ($result === FALSE)
-          throw new Exception('Your theme could not be updated.');
+          throw new Exception(__('Your theme could not be updated.', 'vimeography') );
 
         if (file_exists(VIMEOGRAPHY_ASSETS_PATH . 'css/vimeography-gallery-'.$id.'-custom.css'))
           unlink(VIMEOGRAPHY_ASSETS_PATH . 'css/vimeography-gallery-'.$id.'-custom.css');
 
-        $this->messages[] = array('type' => 'success', 'heading' => __('Theme updated.'), 'message' => __('You are now using the "') . $theme . __('" theme.'));
+        $this->messages[] = array('type' => 'success', 'heading' => __('Theme updated.', 'vimeography'), 'message' => sprintf( __('You are now using the "%s" theme.', 'vimeography'), $theme ) );
       }
       catch (Exception $e)
       {
-        $this->messages[] = array('type' => 'error', 'heading' => 'Ruh roh.', 'message' => $e->getMessage());
+        $this->messages[] = array('type' => 'error', 'heading' => __('Ruh roh.', 'vimeography'), 'message' => $e->getMessage());
       }
     }
   }
@@ -391,17 +389,17 @@ class Vimeography_Gallery_Edit extends Vimeography_Base
         );
 
         if ($result === FALSE)
-          throw new Exception('Your settings could not be updated.');
+          throw new Exception(__('Your settings could not be updated.', 'vimeography') );
           //$wpdb->print_error();
 
         if ($this->_cache->exists())
           $this->_cache->delete();
 
-        $this->messages[] = array('type' => 'success', 'heading' => __('Settings updated.'), 'message' => __('Nice work. You are pretty good at this.'));
+        $this->messages[] = array('type' => 'success', 'heading' => __('Settings updated.', 'vimeography'), 'message' => __('Nice work. You are pretty good at this.', 'vimeography'));
       }
       catch (Exception $e)
       {
-        $this->messages[] = array('type' => 'error', 'heading' => 'Ruh roh.', 'message' => $e->getMessage());
+        $this->messages[] = array('type' => 'error', 'heading' => __('Ruh roh.', 'vimeography'), 'message' => $e->getMessage());
       }
     }
   }
@@ -489,11 +487,11 @@ class Vimeography_Gallery_Edit extends Vimeography_Base
 
         //done
 
-        $this->messages[] = array('type' => 'success', 'heading' => __('Theme updated.'), 'message' => __('I didn\'t know that you were such a great designer!'));
+        $this->messages[] = array('type' => 'success', 'heading' => __('Theme updated.', 'vimeography'), 'message' => __("I didn't know that you were such a great designer!", 'vimeography'));
       }
       catch (Exception $e)
       {
-        $this->messages[] = array('type' => 'error', 'heading' => __('Oh no!'), 'message' => $e->getMessage());
+        $this->messages[] = array('type' => 'error', 'heading' => __('Oh no!', 'vimeography'), 'message' => $e->getMessage());
       }
     }
   }

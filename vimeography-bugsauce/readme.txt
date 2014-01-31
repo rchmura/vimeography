@@ -3,7 +3,7 @@ Contributors: iamdavekiss
 Tags: vimeo
 Requires at least: 3.3
 Tested up to: 3.7.1
-Stable tag: 1.0.1
+Stable tag: 1.0.2
 License: MIT
 
 The easiest way to create beautiful Vimeo galleries on your Wordpress blog.
@@ -33,6 +33,9 @@ Okay, deep breath. More than likely, it is another plugin causing this issue. Se
 Heck yeah! Use the appearance editor to change your theme's style so that it matches your site perfectly.
 
 == Changelog ==
+= 1.0.2 =
+* Reduced Flexslider and Fitvids collisions
+
 = 1.0.1 =
 * Updated compatibility with Vimeography Pro
 
