@@ -186,7 +186,7 @@ class Vimeography_Shortcode extends Vimeography
     {
       // Make sure the current theme's stylesheet handle is set as a dependency
       $dependency = strtolower($this->_gallery_settings['theme']);
-      wp_register_style($name, $file_url, array($dependency));
+      wp_register_style($name, $file_url, array($dependency), strval( filemtime($filepath) ) );
       wp_enqueue_style($name);
     }
 
