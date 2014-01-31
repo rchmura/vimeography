@@ -63,20 +63,12 @@ class Vimeography_Renderer
     add_action('admin_enqueue_scripts', array($class, 'load_scripts'));
 
     // Action has already been run, we're late to the party.
-    if (is_admin())
-    {
-      do_action('admin_enqueue_scripts');
-    }
-    else
-    {
-      do_action('wp_enqueue_scripts');
-    }
+    is_admin() ? do_action('admin_enqueue_scripts') : do_action('wp_enqueue_scripts');
 
     $this->_view->gallery_id = $gallery_id;
 
     if (isset($settings['width']))
       $this->_view->gallery_width = $settings['width'];
-
   }
 
   /**
