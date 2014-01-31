@@ -16,7 +16,7 @@
 
 <script type="text/javascript">
   (function($){
-  	$(document).ready(function(){
+    $(document).ready(function(){
 
       function adjustColorPreview(e)
       {
@@ -28,7 +28,8 @@
       function adjustColorPreviewAndSetValue(e)
       {
         adjustColorPreview(e);
-        $('#{{id}}').val(e.value);
+        //$('#{{id}}').val(e.value);
+        $('#{{id}}').attr('value', e.value);
       }
 
       var colorpicker = $("#{{id}}").kendoColorPicker({
@@ -42,9 +43,10 @@
         {{#properties}}
           var value = $('{{{target}}}').css('{{attribute}}');
           colorpicker.value(value);
-          $('#{{id}}').val(value);
+          //$('#{{id}}').val(value);
+          $('#{{id}}').attr('value', value);
         {{/properties}}
       });
-  	});
+    });
   }(jQuery))
 </script>
