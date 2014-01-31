@@ -149,8 +149,8 @@ class Vimeography
    */
   public function vimeography_pre_upgrade($true, $hook_extra)
   {
-    // Vimeography is updating, deactivate all Vimeography plugins until we are back.
-    if ($hook_extra['plugin'] === 'vimeography/vimeography.php')
+    // Vimeography *might* be updating, deactivate all Vimeography plugins until we are back.
+    if ( isset( $hook_extra['plugin'] ) AND $hook_extra['plugin'] === 'vimeography/vimeography.php')
     {
       $plugins = get_option('active_plugins');
       $vimeography_plugins = array();
