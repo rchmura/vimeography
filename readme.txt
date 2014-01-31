@@ -6,11 +6,11 @@ Tested up to: 3.8
 Stable tag: 1.1.7
 License: MIT
 
-The easiest way to create beautiful Vimeo galleries on your Wordpress blog.
+The easiest way to create beautiful Vimeo galleries on your WordPress site.
 
 == Description ==
 
-Vimeography is a Wordpress plugin that allows you to create beautiful, custom video galleries in 30 seconds, tops!
+Vimeography is a WordPress plugin that allows you to create beautiful, custom video galleries in 30 seconds, tops!
 
 A quick overview:
 http://vimeo.com/44555634
@@ -28,6 +28,9 @@ Some amazing features:
 * Built-in caching for quick page loads
 * Create unlimited galleries
 
+For even more control over your galleries, including unlimited videos, custom sorting, hidden collections and more, check out [Vimeography Pro!](http://vimeography.com/pro "Vimeography Pro")
+
+
 Make your gallery stand out with our custom themes!
 [http://vimeography.com/themes](http://vimeography.com/themes "vimeography.com/themes")
 
@@ -41,7 +44,7 @@ If you would like to use fancyBox for commercial purposes, you can purchase a li
 == Installation ==
 
 1. Upload `vimeography.zip` to the `/wp-content/plugins/` directory
-1. Activate the plugin through the 'Plugins' menu in WordPress
+2. Activate the plugin through the 'Plugins' menu in WordPress
 
 == Frequently Asked Questions ==
 = Help! My theme doesn't look right! =
@@ -49,9 +52,9 @@ If you would like to use fancyBox for commercial purposes, you can purchase a li
 First of all, don't worry! I promise you that we can get it looking right. This can be caused by a multitude of things, so try the following (in the order of appearance):
 
 * Try surrounding your Vimeography shortcode in `[raw][/raw]` tags.
-* Make sure that your Wordpress theme is not including multiple versions of jQuery and is using the latest version.
+* Make sure that your WordPress theme is not including multiple versions of jQuery and is using the latest version.
 * Make sure that your theme is calling the `wp_footer()` function so that all of the Vimeography stylesheets are printed.
-* Try disabling other plugins that are used for photo galleries, minifying scripts, widgets, or otherwise alter your blog's appearance, one by one, and really determining if you need it.
+* Try disabling other plugins that are used for photo galleries, minifying scripts, widgets, or otherwise alter your site's appearance, one by one, and really determining if you need it.
 
 = I'm getting an error: This Vimeography gallery does not have a theme assigned to it. =
 
@@ -63,11 +66,11 @@ This usually means that Vimeo is having some network issues. Follow @Vimeo on tw
 
 = I'm having trouble installing a theme. =
 
-Vimeography themes are now treated at Wordpress plugins. Make sure you're installing the Vimeography theme on the "Plugins" page.
+Vimeography themes are now treated at WordPress plugins. Make sure you're installing the Vimeography theme on the "Plugins" page.
 
 = How do I get the latest updates for my themes? =
 
-If you purchased your theme at vimeography.com, you should have received an email receipt containing an activation code for your theme. Enter that activation code on the "My Themes" page of the Vimeography plugin. Once done, you will be subscribed to theme updates which will automatically be delivered to your Wordpress installation, just like any other plugin.
+If you purchased your theme at vimeography.com, you should have received an email receipt containing an activation code for your theme. Enter that activation code on the "My Themes" page of the Vimeography plugin. Once done, you will be subscribed to theme updates which will automatically be delivered to your WordPress installation, just like any other plugin.
 
 = Why don’t you support YouTub/MetaHall/Flacker/PreschoolHumor? =
 
@@ -93,10 +96,6 @@ Yes, but you’ll need some PHP knowledge to do it! Open the file you want to ad
 = Can I change the look of my Vimeography theme? =
 
 Heck yeah! Use the appearance editor to change your theme's style so that it matches your site perfectly.
-
-= What features do you have planned in future versions of Vimeography? =
-
-- Vimeography Pro, which will include private albums and channels, inline galleries, unlimited videos and more!
 
 == Screenshots ==
 
@@ -198,7 +197,7 @@ Heck yeah! Use the appearance editor to change your theme's style so that it mat
 
 = 1.0 =
 * Now using Vimeo's new API!
-* Themes are now standard Wordpress plugins and are able to be updated.
+* Themes are now standard WordPress plugins and are able to be updated.
 * Entire plugin was reworked, should be much quicker and more reliable.
 * Added linkifying to descriptions. URLs in descriptions are now clickable.
 * Added new colorpicker
