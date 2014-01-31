@@ -224,8 +224,9 @@ class Vimeography
   }
 
   /**
-   * [set_active_theme description]
-   * @param [type] $theme_name [description]
+   * Sets the active theme if it is found to be installed
+   * and activated.
+   * @param string $theme_name
    */
   public function set_active_theme($theme_name)
   {
@@ -236,6 +237,10 @@ class Vimeography
         $this->active_theme = $theme;
       }
     }
+
+    if (! $this->active_theme)
+      throw new Vimeography_Exception(__('The Vimeography theme you are trying to use is not installed or activated.', 'vimeography') );
+
     return $this;
   }
 
