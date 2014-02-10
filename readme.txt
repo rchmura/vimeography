@@ -1,9 +1,9 @@
 === Vimeography ===
 Contributors: iamdavekiss
-Tags: vimeo, video, videos, gallery, vimeography, fancybox, media, player, playlist, showcase, skins, themes, video gallery
+Tags: vimeo, video, videos, gallery, vimeography, media, player, playlist, showcase, skins, themes, video gallery
 Requires at least: 3.3
 Tested up to: 3.8.1
-Stable tag: 1.1.8
+Stable tag: 1.1.9
 License: MIT
 
 The easiest way to create beautiful Vimeo galleries on your WordPress site.
@@ -36,10 +36,6 @@ Make your gallery stand out with our custom themes!
 
 For the latest updates, follow us!
 [http://twitter.com/vimeography](http://twitter.com/vimeography "twitter.com/vimeography")
-
-This plugin contains "fancyBox" by fancyApps (http://fancyapps.com/fancybox/).
-Please note, that fancyBox is licensed under the therms of the Creative Commons Attribution-NonCommercial 3.0 License (http://creativecommons.org/licenses/by-nc/3.0/).
-If you would like to use fancyBox for commercial purposes, you can purchase a license from http://fancyapps.com/store/
 
 == Installation ==
 
@@ -105,6 +101,10 @@ Heck yeah! Use the appearance editor to change your theme's style so that it mat
 4. Get new styles by installing gallery themes.
 
 == Changelog ==
+
+= 1.1.9 =
+* Fancybox will now be included in themes outside of the WordPress repository. Sorry about that!
+
 = 1.1.8 =
 * Added basic i18n support. Vimeography can now be translated into the language of your choice!
 * Fixed an issue that prevented the appearance editor from saving reliably.
