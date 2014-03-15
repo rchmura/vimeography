@@ -68,10 +68,11 @@ class Vimeography_Gallery_Edit extends Vimeography_Base {
     } else {
       $vimeography = Vimeography::get_instance();
 
-      if (! $vimeography->active_theme)
-        $vimeography->set_active_theme($this->_gallery[0]->theme_name);
+      if ( ! $vimeography->addons->active_theme ) {
+        $vimeography->addons->set_active_theme($this->_gallery[0]->theme_name);
+      }
 
-      $theme = $vimeography->active_theme;
+      $theme = $vimeography->addons->active_theme;
 
       if ( file_exists( $theme['settings_file'] ) ) {
         $this->theme_supports_settings = TRUE;
