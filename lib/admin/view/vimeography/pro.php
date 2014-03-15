@@ -98,10 +98,7 @@ class Vimeography_Pro_About extends Vimeography_Base {
         return FALSE;
       }
 
-      try
-      {
-        require_once(VIMEOGRAPHY_PATH . 'vendor/vimeo.php-master/vimeo.php');
-
+      try {
         $vimeo = new Vimeo(NULL, NULL, $output['access_token']);
         $response = $vimeo->request('/me');
 
