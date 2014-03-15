@@ -26,12 +26,12 @@ class Vimeography_Pro_About extends Vimeography_Base {
   }
 
   /**
-   * [icons_url description]
-   * @return [type] [description]
+   * The path to the Vimeography Pro icon assets
+   *
+   * @return string
    */
-  public function icons_url()
-  {
-    return VIMEOGRAPHY_URL . 'media/img/icons/';
+  public function icons_url() {
+    return VIMEOGRAPHY_URL . 'lib/admin/assets/img/icons/';
   }
 
   /**
