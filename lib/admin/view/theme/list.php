@@ -8,15 +8,14 @@ class Vimeography_Theme_List extends Vimeography_Base
 	 * @access public
 	 * @return void
 	 */
-	public function __construct()
-	{
+	public function __construct() {
 		self::_remove_duplicate_keys();
 
 		if (isset($_GET['remove-activation-key']))
 			$this->_remove_activation_key( strtoupper( sanitize_key( $_GET['remove-activation-key'] ) ) );
 
-		if (isset($_POST['vimeography-activation-key']))
-			$this->_validate_form();
+		// if (isset($_POST['vimeography-activation-key']))
+		// 	$this->_validate_form();
 	}
 
 	/**
