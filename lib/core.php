@@ -1,9 +1,6 @@
 <?php
 
-require_once(VIMEOGRAPHY_PATH . 'vendor/vimeo.php-master/vimeo.php');
-
-abstract class Vimeography_Core
-{
+abstract class Vimeography_Core {
   const ENDPOINT  = 'https://api.vimeo.com/';
 
   /**
