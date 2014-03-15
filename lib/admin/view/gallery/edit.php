@@ -129,16 +129,14 @@ class Vimeography_Gallery_Edit extends Vimeography_Base {
    * @access private
    * @return void
    */
-  private static function _load_scripts()
-  {
-    if (! wp_script_is('jquery-ui'))
-    {
+  private static function _load_scripts() {
+    if (! wp_script_is('jquery-ui')) {
       wp_register_script('jquery-ui', "//ajax.googleapis.com/ajax/libs/jqueryui/1.8/jquery-ui.min.js", false, null);
       wp_enqueue_script('jquery-ui');
     }
-    wp_register_script( 'jquery-mousewheel', VIMEOGRAPHY_URL.'media/js/jquery.mousewheel.min.js', 'jquery');
-    wp_register_script( 'jScrollPane', VIMEOGRAPHY_URL.'media/js/jquery.jscrollpane.min.js', 'jquery');
-    wp_register_style( 'jScrollPane', VIMEOGRAPHY_URL.'media/css/plugins/jScrollPane/jquery.jscrollpane.css', 'jquery');
+    wp_register_script( 'jquery-mousewheel', VIMEOGRAPHY_URL.'lib/admin/assets/js/jquery.mousewheel.min.js', 'jquery');
+    wp_register_script( 'jScrollPane', VIMEOGRAPHY_URL.'lib/admin/assets/js/jquery.jscrollpane.min.js', 'jquery');
+    wp_register_style( 'jScrollPane', VIMEOGRAPHY_URL.'lib/admin/assets/css/plugins/jScrollPane/jquery.jscrollpane.css', 'jquery');
 
     wp_enqueue_script( 'jquery-mousewheel');
     wp_enqueue_script( 'jScrollPane');
