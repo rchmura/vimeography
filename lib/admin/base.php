@@ -63,23 +63,19 @@ class Vimeography_Base {
 	 * @access public
 	 * @return array
 	 */
-	public function themes()
-	{
-		$themes = Vimeography::get_instance()->themes;
+	public function themes() {
+		$themes = Vimeography::get_instance()->addons->themes;
 		$activated_themes = get_option('vimeography_activation_keys');
 
 		//delete_option('vimeography_activation_keys');
 
 		$items = array();
-		foreach ($themes as $theme)
-		{
+		foreach ($themes as $theme) {
 			if (isset($this->_gallery))
 			 $theme['active'] = strtolower($theme['name']) == strtolower($this->_gallery[0]->theme_name) ? TRUE : FALSE;
 
-			if (is_array($activated_themes))
-			{
-				foreach ($activated_themes as $activation)
-				{
+			if (is_array($activated_themes)) {
+				foreach ($activated_themes as $activation) {
 					if (strtolower($activation->plugin_name) == strtolower($theme['slug']))
 						$theme['activation_key'] = TRUE;
 				}
