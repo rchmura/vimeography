@@ -145,7 +145,7 @@ class Vimeography_Update extends Vimeography
     }
     else
     {
-      return FALSE;
+      throw new Vimeography_Exception(__('Unknown Error: ', 'vimeography') . $request->get_error_message() );
     }
 
   }
