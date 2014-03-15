@@ -16,6 +16,7 @@
 
       <form id="activation-form" class="form-inline" style="margin: 0; padding: 10px 0;" method="post" action="">
         <input type="text" name="vimeography-activation-key">
+        <input type="hidden" name="vimeography-activate-key" value="1" />
         <input type="submit" form="activation-form" value="Activate Product">
         {{{nonce}}}
       </form>
@@ -31,11 +32,14 @@
       </thead>
       <tbody>
         {{#activation_keys}}
-          <tr>
-            <td>{{product_name}}</td>
-            <td>Activated <a href="{{admin_url}}manage-activations&remove-activation-key={{activation_key}}" style="color: red; font-size: 18px; position: relative; top: -2px;">&#215;</a></td>
-
-          </tr>
+          <form method="post" action="">
+            <input type="hidden" name="vimeography-deactivate-key" value="1" />
+            <input type="hidden" name="vimeography-activation-key" value="{{activation_key}}" />
+            <tr>
+              <td>{{product_name}}</td>
+              <td>Activated <input type="submit" style="color: red; font-size: 18px; position: relative; top: -2px;" value="&#215; Remove Key" /></td>
+            </tr>
+          </form>
         {{/activation_keys}}
       </tbody>
     </table>

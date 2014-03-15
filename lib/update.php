@@ -1,216 +1,435 @@
 <?php
+if ( ! defined( 'ABSPATH' ) ) exit; // Exit if accessed directly
 
-class Vimeography_Update extends Vimeography
+// Once new plugin update is out, we should return a 401 from
+// 
+// http://vimeography.com/api/activate/[key]
+// 
+// with a JSON response that has a "message" key which will be displayed
+// when a user tries to activate a plugin in an old version of Vimeography.
+// 
+// http_response_code(401);
+// status_header(401);
+// $response['status'] = 'error';
+// $response['message'] = __('Please update to the latest version of Vimeography to activate your Vimeography Addon');
+// $to_send = json_encode($response);
+// echo $to_send;
+// die;
+// 
+// Always return a 304 response code from the old update endpoint API
+// updates will only work if you have the latest version of the Vimeography plugin.
+// This also will take care of the remote info request for the view_version_details screen
+// 
+// http://vimeography.com/api/update/[key]
+// 
+// When upgrading to 1.2, we want to convert the vimeography_activation_keys to site_option.
+// 
+// $keys = get_option('vimeography_activation_keys');
+// delete_option('vimeography_activation_keys');
+// update_site_option('vimeography_activation_keys', $keys);
+// 
+// before doing that, check for any invalid entries that didn't work due to a timeout, but still saved
+// to the user database.
+
+class Vimeography_Update
 {
   /**
-   * All of the activation keys that the user has stored.
+   * All of the Vimeography activation keys that the user has stored.
+   *
+   * Example:
+   *
+   *   array(1) {
+   *     [0]=>
+   *     object(stdClass)#472 (3) {
+   *       ["activation_key"]=>
+   *       string(16) "n0Ae9UP49sNfw5aFGxiyn7mzi09c1Ua7"
+   *       ["plugin_name"]=>
+   *       string(19) "vimeography-journey"
+   *       ["product_name"]=>
+   *       string(7) "Journey"
+   *     }
+   *   }
+   *
    * @var array
    */
   private $_activation_keys;
 
   /**
    * The endpoint of the Vimeography Updater API.
+   * this is the URL our updater / license checker pings.
+   *
+   * This should be the URL of the site with EDD installed
+   *
    * @var string
    */
-  private $_endpoint = 'http://vimeography.com/api/';
-
-  /**
-   * Whether we are updating or activating.
-   * @var string update | activate
-   */
-  public $action;
-
-  /**
-   * [$_installed_themes description]
-   * @var array
-   */
-  private $_installed_themes = array();
+  private $_endpoint = 'http://soundsplausible.com';
 
   /**
    * [__construct description]
-   * @param [type] $installed_themes [description]
    */
-  public function __construct()
-  {
-    $this->_activation_keys  = get_option('vimeography_activation_keys');
+  public function __construct() {
+    //delete_site_option('vimeography_activation_keys');
+    $activation_keys = get_site_option('vimeography_activation_keys');
+    $this->_activation_keys  = $activation_keys ? $activation_keys : array();
 
-    if (! empty($this->_activation_keys))
-    {
-      add_filter('pre_set_site_transient_update_plugins', array($this, 'vimeography_check_update'));
-      add_filter('plugins_api', array($this, 'vimeography_view_version_details'), 10, 3);
-    }
-
+		// Setup hooks
+		$this->_includes();
+		$this->_hooks();
+		$this->_vimeography_auto_updater();
   }
 
+	/**
+	 * Include the EDD updater class
+	 *
+	 * @access  private
+	 * @return  void
+	 */
+	private function _includes() {
+		if ( ! class_exists( 'EDD_SL_Plugin_Updater' ) ) require_once 'EDD_SL_Plugin_Updater.php';
+	}
+
+	/**
+	 * Setup hooks
+	 *
+	 * @access  private
+	 * @return  void
+	 */
+	private function _hooks() {
+
+    // Add activation key message for plugins with missing keys
+    add_action( 'load-plugins.php', array( $this, 'vimeography_check_for_missing_activation_keys' ) );
+
+    // Activate license key on settings save
+    add_action( 'admin_init', array( $this, 'vimeography_activate_license' ) );
+
+    // Deactivate license key
+    add_action( 'admin_init', array( $this, 'vimeography_deactivate_license' ) );
+	}
+
   /**
-   * [vimeography_check_installed_theme_activations description]
-   * @param  [type] $installed_themes [description]
-   * @return [type]                   [description]
+   * Activate the license key
+   *
+   * @access  public
+   * @return  void
    */
-  public function vimeography_check_installed_theme_activations($installed_themes)
-  {
-    global $pagenow;
+  public function vimeography_activate_license() {
 
-    if ($pagenow === 'plugins.php' AND ! empty($installed_themes))
-    {
-      foreach ($installed_themes as $theme)
-      {
-        $this->_installed_themes[$theme['slug']] = $theme['name'];
+    // Ignore if key is not set
+    if ( ! isset( $_POST['vimeography-activation-key'] ) )
+      return;
 
-        $hook = 'after_plugin_row_' . $theme['basename'];
-        add_action( $hook, array($this, 'vimeography_theme_update_message') );
+    if ( isset( $_POST['vimeography-activate-key'] ) ) {
+
+      $key = sanitize_text_field( $_POST['vimeography-activation-key'] );
+
+      // Ignore if this is a duplicate incoming key.
+      if ( $this->vimeography_check_if_activation_key_exists( $key ) ) {
+        return;
+      }
+
+      // Data to send to the API
+      $api_params = array(
+        'edd_action' => 'activate_license',
+        'license'    => $key,
+        //'item_name'  => urlencode( $this->item_name ), // the name of our product in EDD **IMPORTANT need to set EDD_BYPASS_NAME_CHECK on vimeography.com to true if omitting
+        'url'        => urlencode( home_url() ),
+      );
+
+      // Call the API
+      $response = wp_remote_get(
+        add_query_arg( $api_params, $this->_endpoint),
+        array(
+          'timeout'   => 15,
+          'sslverify' => false
+        )
+      );
+
+      // Make sure there are no errors
+      if ( is_wp_error( $response ) )
+        return;
+
+      // Decode license data
+      $license_data = json_decode( wp_remote_retrieve_body( $response ) );
+
+      //object(stdClass)#423 (10) {
+      //  ["success"]=>
+      //  bool(true)
+      //  ["license_limit"]=>
+      //  int(1)
+      //  ["site_count"]=>
+      //  int(1)
+      //  ["expires"]=>
+      //  string(19) "2015-03-07 14:23:00"
+      //  ["activations_left"]=>
+      //  int(0)
+      //  ["license"]=>
+      //  string(5) "valid"
+      //  ["item_name"]=>
+      //  string(0) ""
+      //  ["payment_id"]=>
+      //  string(3) "266"
+      //  ["customer_name"]=>
+      //  string(9) "Dave Kiss"
+      //  ["customer_email"]=>
+      //  string(21) "iamdavekiss@gmail.com"
+      //  ["vimeography_product_name"]=>
+      //  string(7) "Journey"
+      //  ["vimeography_product_slug"]=>
+      //  string(19) "vimeography-journey"
+      //}
+
+      if ( $license_data->success AND $license_data->license == 'valid' ) {
+        $this->_vimeography_add_activation_key( $key, $license_data );
       }
     }
   }
 
   /**
-   * Check if there is an update available for each activation key saved.
+   * Deactivate the license key
    *
-   * @param  object $transient Contents of the ‘update_plugins‘ site transient.
-   * @return object $transient Modified or Original transient.
+   * @access  public
+   * @return  void
    */
-  public function vimeography_check_update( $transient )
-  {
-    // checked (array) – The list of checked plugins and their version
-    if (empty($transient->checked))
-      return $transient;
+  public function vimeography_deactivate_license() {
+    // Ignore if key is not set
+    if ( ! isset( $_POST['vimeography-activation-key'] ) )
+      return;
 
-      $this->action = 'update';
+    // Run on deactivate button press
+    if ( isset( $_POST['vimeography-deactivate-key'] ) ) {
 
-      foreach ($this->_activation_keys as $plugin)
-      {
-        try
-        {
-          $remote_info = self::vimeography_get_remote_info($plugin->activation_key);
+      $key = sanitize_text_field( $_POST['vimeography-activation-key'] );
 
-          // create new object for update
-          $obj = new stdClass();
-          $obj->slug        = $remote_info->slug;
-          $obj->new_version = $remote_info->version;
-          $obj->url         = $remote_info->homepage;
-          $obj->package     = $remote_info->download_link;
+      // Data to send to the API
+      $api_params = array(
+        'edd_action' => 'deactivate_license',
+        'license'    => $key,
+        //'item_name'  => urlencode( $this->item_name ), // the name of our product in EDD
+        'url'        => urlencode( home_url() )
+      );
 
-          // add to transient
-          $transient->response[ $remote_info->basename ] = $obj;
+      // Call the API
+      $response = wp_remote_get(
+        add_query_arg( $api_params, $this->_endpoint ),
+        array(
+          'timeout'   => 15,
+          'sslverify' => false
+        )
+      );
+
+      // Make sure there are no errors
+      if ( is_wp_error( $response ) )
+        return;
+
+      // Decode the license data
+      $license_data = json_decode( wp_remote_retrieve_body( $response ) );
+
+      if ( $license_data->license == 'deactivated' ) {
+        if ( $this->_vimeography_remove_activation_key( $key ) ) {
+          $this->messages[] = array(
+            'type' => 'success',
+            'heading' => __('Activation Key Removed.', 'vimeography'),
+            'message' => __('Your activation key has been removed from this site.', 'vimeography')
+          );
+        } else {
+          $this->messages[] = array(
+            'type' => 'fail',
+            'heading' => __('Hmm.', 'vimeography'),
+            'message' => __('Your activation key was not removed from this site.', 'vimeography')
+          );
         }
-        catch (Vimeography_Exception $e)
-        {
-          // Log $e->getMessage(); to see why updates aren't occuring.
-          continue;
+      }
+    }
+  }
+
+  /**
+   * Add a plugins page message to any Vimeography add-ons that are installed,
+   * but that do not have an activation key associated with the installation.
+   *
+   * @return void
+   */
+  public function vimeography_check_for_missing_activation_keys() {
+
+    $addons = Vimeography::get_instance()->addons->installed_addons;
+
+    if ( ! empty( $addons ) ) {
+      // If the activation key is not found for the installed plugin,
+      // add the plugin message hook
+      $addons_with_missing_keys = array_filter($addons, array($this, 'vimeography_is_addon_missing_activation_key') );
+
+      if ( ! empty( $addons_with_missing_keys ) ) {
+        foreach ( $addons_with_missing_keys as $plugin ) {
+          $hook = 'after_plugin_row_' . $plugin['basename'];
+          add_action( $hook, array($this, 'vimeography_addon_update_message'), 10, 2 );
+        }
+      }
+    }
+  }
+
+  /**
+   * Loop through the activations keys to check if one exists for the
+   * given Vimeography addon plugin headers.
+   *
+   * @var    $plugin  Meta headers for a Vimeography addon plugin.
+   * @return bool     TRUE if missing, FALSE if found
+   */
+  public function vimeography_is_addon_missing_activation_key($plugin) {
+    $plugins_with_keys = array();
+
+    if ( ! empty($this->_activation_keys) ) {
+      foreach ($this->_activation_keys as $key) {
+        $plugins_with_keys[] = $key->plugin_name;
+      }
+    }
+
+    return !in_array( $plugin['slug'], $plugins_with_keys );
+  }
+
+  /**
+   * Loop through the activations keys to check if one exists for the
+   * given Vimeography activation key.
+   *
+   * @var    $key  string  Activation key.
+   * @return bool          TRUE if exists, FALSE if not found
+   */
+  public function vimeography_check_if_activation_key_exists($key) {
+    $result = FALSE;
+
+    if ( ! empty($this->_activation_keys) ) {
+      foreach ( $this->_activation_keys as $entry ) {
+        if ( $entry->activation_key == $key ) {
+          $result = TRUE;
+        }
+      }
+    }
+
+    return $result;
+  }
+
+  /**
+   * Add the activation key to the database.
+   *
+   * @var    $key          string  Activation key.
+   * @var    $license_data array
+   * @return bool          TRUE if successful, FALSE if failed
+   */
+  protected function _vimeography_add_activation_key( $key, $license_data ) {
+    $entry = new stdClass();
+    $entry->activation_key = $key;
+    $entry->plugin_name    = $license_data->vimeography_plugin_slug;
+    $entry->product_name   = $license_data->vimeography_product_name;
+
+    $this->_activation_keys[] = $entry;
+    return update_site_option('vimeography_activation_keys', $this->_activation_keys );
+  }
+
+  /**
+   * Remove the activation key to the database.
+   *
+   * @var    $key  string  Activation key.
+   * @return bool          TRUE if successful, FALSE if failed
+   */
+  protected function _vimeography_remove_activation_key( $key ) {
+    if ( ! empty( $this->_activation_keys ) ) {
+      foreach ( $this->_activation_keys as $i => $entry ) {
+        if ( $entry->activation_key === $key ) {
+          unset( $this->_activation_keys[$i] );
         }
       }
 
-    return $transient;
+      return update_site_option( 'vimeography_activation_keys', $this->_activation_keys );
+    }
+
+    return FALSE;
   }
 
   /**
-   * Retrieves the current release info from the remote server.
+   * Add a reminder to add the activation key to receives updates
+   * for the installed Vimeography theme.
    *
-   * @return string|bool JSON String or FALSE
-   */
-  public function vimeography_get_remote_info($key)
-  {
-    $request = wp_remote_post( $this->_endpoint . $this->action . '/' . $key );
-
-    if( !is_wp_error($request) )
-    {
-      $response_code = wp_remote_retrieve_response_code( $request );
-
-      switch($response_code)
-      {
-        case 200:
-
-          $response = json_decode($request['body']);
-
-          if ($this->action == 'update')
-            $response->sections = (array) $response->sections;
-
-          return $response;
-          break;
-
-        case 304:
-          // Plugin up to date.
-          throw new Vimeography_Exception(__('304 Not Modified', 'vimeography'));
-          break;
-        case 401: case 500:
-          $response = json_decode($request['body']);
-          throw new Vimeography_Exception(__($response->message));
-          break;
-
-        default:
-          throw new Vimeography_Exception(__('Unknown HTTP response code: ', 'vimeography') . $response_code);
-          break;
-      }
-
-    }
-    else
-    {
-      throw new Vimeography_Exception(__('Unknown Error: ', 'vimeography') . $request->get_error_message() );
-    }
-
-  }
-
-  /**
-   * Add a custom, self-hosted description to the plugin info/version details screen.
-   *
-   * @link http://wp.tutsplus.com/tutorials/plugins/a-guide-to-the-wordpress-http-api-automatic-plugin-updates/
-   * @param  bool $original
-   * @param  string $action [description]
-   * @param  object $args    [description]
-   * @return bool|object    [description]
-   */
-  public function vimeography_view_version_details( $original, $action, $args )
-  {
-    foreach ($this->_activation_keys as $plugin)
-    {
-      // Is the current plugin API calling our plugin?
-      if ($args->slug != $plugin->plugin_name)
-        continue;
-
-      $this->action = 'update';
-
-      if ($action == 'plugin_information')
-        $original = self::vimeography_get_remote_info($plugin->activation_key);
-
-      if (! $original)
-        return new WP_Error('plugins_api_failed', __('An Unexpected HTTP Error occurred during the API request.</p> <p><a href="?" onclick="document.location.reload(); return false;">Try again</a>', 'vimeography'));
-    }
-
-    return $original;
-  }
-
-  /**
-   * Add a reminder to add the activation key to receives updates for the installed Vimeography theme.
-   * @param  [type] $plugin_file [description]
+   * @param  string $plugin_basename  Folder and filename, eg:
    * @return [type]              [description]
    */
-  public function vimeography_theme_update_message($plugin_file)
-  {
-    $match = FALSE;
-    $plugin_basename = substr($plugin_file, 0, strpos($plugin_file, "/"));
+  public function vimeography_addon_update_message($plugin_basename, $plugin_data) {
+    $ineligible = array(
+      'Vimeography Theme: Bugsauce',
+      'Vimeography Theme: Ballistic',
+      'Vimeography Theme: Single'
+    );
 
-    if (! empty($this->_activation_keys))
-    {
-      foreach ($this->_activation_keys as $key)
-      {
-        if ($key->plugin_name === $plugin_basename)
-          $match = TRUE;
+    if ( in_array( $plugin_data['Name'], $ineligible ) ) {
+      return;
+    }
+
+    echo '<tr class="plugin-update-tr"><td colspan="3" class="plugin-update"><div class="update-message">';
+    echo '<span style="border-right: 1px solid #DFDFDF; margin-right: 5px;">';
+    printf( __('Hey! Don\'t forget to <a title="Activate my Vimeography Addon" href="%1$sadmin.php?page=vimeography-manage-activations">enter your activation key</a> to receive the latest updates for the %2$s plugin.', 'vimeography'), get_admin_url(), $plugin_data['Name'] );
+    echo '</span>';
+    echo '</div></td></tr>';
+  }
+
+  /**
+   * Auto updater
+   *
+   * @access  protected
+   * @return  void
+   */
+  protected function _vimeography_auto_updater() {
+    // We only need to check for updates if an activation key exists
+    // in the options table.
+    if ( ! empty( $this->_activation_keys ) ) {
+      foreach ( $this->_activation_keys as $plugin ) {
+
+        $plugin_path = self::_vimeography_get_plugin_path( $plugin->plugin_name );
+
+        if ( $plugin_path ) {
+          // Get the plugin headers
+          $headers = get_file_data( $plugin_path, array('version' => 'Version') );
+
+          // setup the updater
+          $edd_updater = new EDD_SL_Plugin_Updater(
+            $this->_endpoint,
+            $plugin_path,
+            array(
+              'version'   => $headers['version'],
+              'license'   => trim($plugin->activation_key),
+              'item_name' => $plugin->product_name,
+              'author'    => 'Dave Kiss',
+            )
+          );
+        }
+      }
+    }
+  }
+
+  /**
+   * Get the absolute path to the provided plugin name.
+   *
+   * @access  protected
+   * @return  string
+   */
+  protected function _vimeography_get_plugin_path( $plugin_name ) {
+    //return str_replace('vimeography/', trailingslashit($plugin_name), VIMEOGRAPHY_PATH);
+    $basename = '/' . trailingslashit( $plugin_name ) . $plugin_name . '.php';
+
+    if ( ! is_file( $dir = WPMU_PLUGIN_DIR . $basename ) ) {
+      if ( ! is_file( $dir = WP_PLUGIN_DIR . $basename ) ) {
+        return FALSE;
       }
     }
 
-    if ( in_array($plugin_basename, array('vimeography-bugsauce', 'vimeography-single', 'vimeography-ballistic')) )
-      $match = TRUE;
+    return $dir;
+  }
 
-    if (! $match)
-    {
-      $name = $this->_installed_themes[$plugin_basename];
-
-      echo '<tr class="plugin-update-tr"><td colspan="3" class="plugin-update"><div class="update-message">';
-      echo '<span style="border-right: 1px solid #DFDFDF; margin-right: 5px;">';
-      printf( __('Hey! Don\'t forget to <a title="Activate my Vimeography Product" href="%1$sadmin.php?page=vimeography-manage-activations">enter your activation key</a> to receive the latest updates for the %2$s plugin.', 'vimeography'), get_admin_url(), $name );
-      echo '</span>';
-      echo '</div></td></tr>';
-    }
+  /**
+   * Sets the activation keys in the class
+   * 
+   * @param  array  $keys [description]
+   * @return [type]       [description]
+   */
+  public function vimeography_set_activation_keys($keys = array()) {
+    $this->_activation_keys = $keys;
+    return $this;
   }
 
 }
