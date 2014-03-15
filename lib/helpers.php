@@ -1,14 +1,15 @@
 <?php
 
-class Vimeography_Helpers
-{
+// Exit if accessed directly
+if ( ! defined( 'ABSPATH' ) ) exit;
+
+class Vimeography_Helpers {
   /**
    * [apply_common_formatting description]
    * @param  [type] $data [description]
    * @return [type]       [description]
    */
-  public function apply_common_formatting($data)
-  {
+  public function apply_common_formatting($data) {
     $items = array();
 
     foreach($data as $item)
@@ -33,8 +34,7 @@ class Vimeography_Helpers
    * @param  [type] $item [description]
    * @return [type]       [description]
    */
-  public function format_video_thumbnails($item)
-  {
+  public function format_video_thumbnails($item) {
     // Format the video thumbnails
     for ($i = 0; $i < count($item->pictures); $i++)
     {

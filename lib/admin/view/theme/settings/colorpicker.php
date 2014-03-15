@@ -4,8 +4,7 @@ class Vimeography_Theme_Settings_Colorpicker
 {
 	public $settings = array();
 
-  public function __construct($setting)
-  {
+  public function __construct($setting) {
     // Without the @, this generates warnings?
     // Notice: Undefined offset: 0 in /Users/davekiss/Sites/vimeography.com/wp-includes/plugin.php on line 762/780
     @add_action('wp_enqueue_scripts', $this->_load_scripts());
@@ -14,9 +13,7 @@ class Vimeography_Theme_Settings_Colorpicker
       $this->{$member} = $value;
   }
 
-	public function _load_scripts()
-	{
-
+	public function _load_scripts() {
     wp_register_script('kendo-web', VIMEOGRAPHY_ASSETS_URL.'js/plugins/kendo.web.min.js', array('jquery'));
     wp_enqueue_script( 'kendo-web' );
 

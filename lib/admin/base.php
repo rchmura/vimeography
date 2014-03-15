@@ -4,8 +4,7 @@
  * Vimeography_Base class.
  *
  */
-class Vimeography_Base
-{
+class Vimeography_Base {
   public function __construct() { }
 
 	/**
@@ -24,8 +23,7 @@ class Vimeography_Base
 	 * @access public
 	 * @return html
 	 */
-	public function vimeography()
-	{
+	public function vimeography() {
 		if (function_exists('do_shortcode'))
 			return do_shortcode( "[vimeography id='".$this->_gallery[0]->id."']" );
 	}
@@ -37,8 +35,7 @@ class Vimeography_Base
 	 * @static
 	 * @return string
 	 */
-	public static function admin_url()
-	{
+	public static function admin_url() {
 		return get_admin_url().'admin.php?page=vimeography-';
 	}
 
@@ -46,8 +43,7 @@ class Vimeography_Base
 	 * [has_pro description]
 	 * @return boolean [description]
 	 */
-	public static function has_pro()
-	{
+	public static function has_pro() {
 		return is_plugin_active('vimeography-pro/vimeography-pro.php');
 	}
 
@@ -57,8 +53,7 @@ class Vimeography_Base
 	 * @access public
 	 * @return array
 	 */
-	public function get_vimeography_defaults()
-	{
+	public function get_vimeography_defaults() {
 		return get_option('vimeography_default_settings');
 	}
 
