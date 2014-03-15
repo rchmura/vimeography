@@ -1,7 +1,9 @@
 <?php
 
-class Vimeography_Cache extends Vimeography
-{
+// Exit if accessed directly
+if ( ! defined( 'ABSPATH' ) ) exit;
+
+class Vimeography_Cache extends Vimeography {
   /**
    * The user's cache expiration setting for the current gallery.
    *
@@ -60,7 +62,8 @@ class Vimeography_Cache extends Vimeography
       // $date->setTimestamp($last_modified);
       // $date->setTimezone($est);
       // return $date->format(DateTime::ISO8601);
-      return date(DATE_ISO8601, strtotime($last_modified));
+
+      return date(DATE_ISO8601, $last_modified);
     }
 
     return FALSE;
