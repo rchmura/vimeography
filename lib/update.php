@@ -1,5 +1,6 @@
 <?php
-if ( ! defined( 'ABSPATH' ) ) exit; // Exit if accessed directly
+// Exit if accessed directly
+if ( ! defined( 'ABSPATH' ) ) exit;
 
 // Once new plugin update is out, we should return a 401 from
 // 
@@ -21,18 +22,8 @@ if ( ! defined( 'ABSPATH' ) ) exit; // Exit if accessed directly
 // This also will take care of the remote info request for the view_version_details screen
 // 
 // http://vimeography.com/api/update/[key]
-// 
-// When upgrading to 1.2, we want to convert the vimeography_activation_keys to site_option.
-// 
-// $keys = get_option('vimeography_activation_keys');
-// delete_option('vimeography_activation_keys');
-// update_site_option('vimeography_activation_keys', $keys);
-// 
-// before doing that, check for any invalid entries that didn't work due to a timeout, but still saved
-// to the user database.
 
-class Vimeography_Update
-{
+class Vimeography_Update {
   /**
    * All of the Vimeography activation keys that the user has stored.
    *
@@ -85,7 +76,9 @@ class Vimeography_Update
 	 * @return  void
 	 */
 	private function _includes() {
-		if ( ! class_exists( 'EDD_SL_Plugin_Updater' ) ) require_once 'EDD_SL_Plugin_Updater.php';
+		if ( ! class_exists( 'EDD_SL_Plugin_Updater' ) ) {
+      require_once 'EDD_SL_Plugin_Updater.php';
+    }
 	}
 
 	/**
@@ -150,33 +143,6 @@ class Vimeography_Update
 
       // Decode license data
       $license_data = json_decode( wp_remote_retrieve_body( $response ) );
-
-      //object(stdClass)#423 (10) {
-      //  ["success"]=>
-      //  bool(true)
-      //  ["license_limit"]=>
-      //  int(1)
-      //  ["site_count"]=>
-      //  int(1)
-      //  ["expires"]=>
-      //  string(19) "2015-03-07 14:23:00"
-      //  ["activations_left"]=>
-      //  int(0)
-      //  ["license"]=>
-      //  string(5) "valid"
-      //  ["item_name"]=>
-      //  string(0) ""
-      //  ["payment_id"]=>
-      //  string(3) "266"
-      //  ["customer_name"]=>
-      //  string(9) "Dave Kiss"
-      //  ["customer_email"]=>
-      //  string(21) "iamdavekiss@gmail.com"
-      //  ["vimeography_product_name"]=>
-      //  string(7) "Journey"
-      //  ["vimeography_product_slug"]=>
-      //  string(19) "vimeography-journey"
-      //}
 
       if ( $license_data->success AND $license_data->license == 'valid' ) {
         $this->_vimeography_add_activation_key( $key, $license_data );
