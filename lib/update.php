@@ -53,7 +53,7 @@ class Vimeography_Update {
    *
    * @var string
    */
-  private $_endpoint = 'http://soundsplausible.com';
+  private $_endpoint = 'http://162.243.225.98';
 
   /**
    * [__construct description]
