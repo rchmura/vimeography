@@ -73,8 +73,7 @@ class Vimeography_Database extends Vimeography {
    * @since 1.2
    * @return bool
    */
-  public static function vimeography_get_db_version()
-  {
+  public static function vimeography_get_db_version() {
     return get_site_option('vimeography_db_version');
   }
 
@@ -85,13 +84,15 @@ class Vimeography_Database extends Vimeography {
    * @static
    * @return bool
    */
-  public static function vimeography_update_db_version()
-  {
+  public static function vimeography_update_db_version() {
     return update_site_option('vimeography_db_version', VIMEOGRAPHY_VERSION);
   }
 
-  public static function vimeography_update_db_version_if_not_exists()
-  {
+  /**
+   * [vimeography_update_db_version_if_not_exists description]
+   * @return [type] [description]
+   */
+  public static function vimeography_update_db_version_if_not_exists() {
     if (self::vimeography_get_db_version() === FALSE) {
       self::vimeography_update_db_version();
       self::$_version = self::vimeography_get_db_version();
@@ -102,8 +103,7 @@ class Vimeography_Database extends Vimeography {
    * [vimeography_update_database description]
    * @return [type] [description]
    */
-  public function vimeography_update_database()
-  {
+  public function vimeography_update_database() {
     self::$_version = self::vimeography_get_db_version();
 
     self::vimeography_update_db_to_0_6();
@@ -123,15 +123,13 @@ class Vimeography_Database extends Vimeography {
    * @access public
    * @return void
    */
-  public static function vimeography_update_db_to_0_6()
-  {
-    if ( version_compare(self::$_version, '0.6', '<') )
-    {
+  public static function vimeography_update_db_to_0_6() {
+    if ( version_compare(self::$_version, '0.6', '<') ) {
       global $wpdb;
       $old_galleries = $wpdb->get_results('SELECT * FROM '.VIMEOGRAPHY_GALLERY_META_TABLE.' AS meta JOIN '.VIMEOGRAPHY_GALLERY_TABLE.' AS gallery ON meta.gallery_id = gallery.id;');
       $new_galleries = array();
 
-      if (is_array($old_galleries))
+      if ( is_array($old_galleries) )
       {
         foreach ($old_galleries as $old_gallery)
         {
