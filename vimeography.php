@@ -99,7 +99,7 @@ class Vimeography {
    * @return [type]
    */
   private function _include_files() {
-    require_once( VIMEOGRAPHY_PATH . 'lib/exception.php' );
+    require_once VIMEOGRAPHY_PATH . 'lib/exception.php';
 
     // Require Mustache.php
     if ( ! class_exists('Mustache_Engine') ) {
@@ -118,6 +118,7 @@ class Vimeography {
     require_once VIMEOGRAPHY_PATH . 'lib/init.php';
     require_once VIMEOGRAPHY_PATH . 'lib/robots.php';
     require_once VIMEOGRAPHY_PATH . 'lib/shortcode.php';
+    require_once VIMEOGRAPHY_PATH . 'vimeography-bugsauce/vimeography-bugsauce.php';
 
     if ( is_admin() ) {
       require_once VIMEOGRAPHY_PATH . 'lib/admin/actions.php';
