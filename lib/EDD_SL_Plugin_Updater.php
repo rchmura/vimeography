@@ -38,7 +38,7 @@ class EDD_SL_Plugin_Updater {
 	}
 
 	/**
-	 * Set up WordPress filters to hook into WP's update process.
+	 * Set up Wordpress filters to hook into WP's update process.
 	 *
 	 * @uses add_filter()
 	 *
@@ -53,14 +53,14 @@ class EDD_SL_Plugin_Updater {
 	/**
 	 * Check for Updates at the defined API endpoint and modify the update array.
 	 *
-	 * This function dives into the update API just when WordPress creates its update array,
+	 * This function dives into the update api just when Wordpress creates its update array,
 	 * then adds a custom API call and injects the custom plugin data retrieved from the API.
-	 * It is reassembled from parts of the native WordPress plugin update code.
+	 * It is reassembled from parts of the native Wordpress plugin update code.
 	 * See wp-includes/update.php line 121 for the original wp_update_plugins() function.
 	 *
 	 * @uses api_request()
 	 *
-	 * @param array $_transient_data Update array build by WordPress.
+	 * @param array $_transient_data Update array build by Wordpress.
 	 * @return array Modified update array with custom plugin data.
 	 */
 	function pre_set_site_transient_update_plugins_filter( $_transient_data ) {
@@ -141,12 +141,12 @@ class EDD_SL_Plugin_Updater {
 			return;
 
 		$api_params = array(
-			'edd_action' => 'get_version',
-			'license'    => $data['license'],
-			'name'       => $data['item_name'],
-			'slug'       => $this->slug,
-			'author'     => $data['author'],
-			'url'        => home_url()
+			'edd_action' 	=> 'get_version',
+			'license' 		=> $data['license'],
+			'name' 			=> $data['item_name'],
+			'slug' 			=> $this->slug,
+			'author'		=> $data['author'],
+			'url'           => home_url()
 		);
 		$request = wp_remote_post( $this->api_url, array( 'timeout' => 15, 'sslverify' => false, 'body' => $api_params ) );
 
