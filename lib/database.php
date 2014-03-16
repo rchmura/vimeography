@@ -113,6 +113,7 @@ class Vimeography_Database extends Vimeography {
     self::vimeography_update_db_to_1_0_7();
     self::vimeography_update_db_to_1_1_4();
     self::vimeography_update_db_to_1_1_6();
+    self::vimeography_update_db_to_1_2();
     self::vimeography_update_db_version();
   }
 
@@ -337,6 +338,33 @@ class Vimeography_Database extends Vimeography {
 
             // Rename folder to the correct plugin name
             rename($activation_key_plugin_path, $corrected_plugin_path);
+          }
+        }
+      }
+    }
+  }
+
+  /**
+   * Loop through all of the keys and remove the lot if there are
+   * false positives that have been saved. We're also moving
+   * to site_option instead of just option in this release.
+   * 
+   * @return void
+   */
+  public static function vimeography_update_db_to_1_2() {
+    if ( version_compare(self::$_version, '1.2', '<') ) {
+
+      $keys = get_option('vimeography_activation_keys');
+
+      if ($keys) {
+        delete_option('vimeography_activation_keys');
+        update_site_option('vimeography_activation_keys', $keys);
+
+        foreach ($keys as $key) {
+          if ($key === FALSE) {
+            delete_site_option('vimeography_activation_keys');
+            update_site_option('vimeography_corrupt_keys_found', TRUE);
+            break;
           }
         }
       }
