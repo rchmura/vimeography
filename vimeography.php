@@ -62,7 +62,6 @@ class Vimeography {
       new Vimeography_Init;
       new Vimeography_Ajax;
       self::$instance->addons = new Vimeography_Addons;
-      new Vimeography_Deactivate;
       new Vimeography_Robots;
       new Vimeography_Shortcode;
     }
@@ -116,7 +115,6 @@ class Vimeography {
     require_once VIMEOGRAPHY_PATH . 'lib/addons.php';
     require_once VIMEOGRAPHY_PATH . 'lib/ajax.php';
     require_once VIMEOGRAPHY_PATH . 'lib/rewrite.php';
-    require_once VIMEOGRAPHY_PATH . 'lib/deactivate.php';
     require_once VIMEOGRAPHY_PATH . 'lib/init.php';
     require_once VIMEOGRAPHY_PATH . 'lib/robots.php';
     require_once VIMEOGRAPHY_PATH . 'lib/shortcode.php';
