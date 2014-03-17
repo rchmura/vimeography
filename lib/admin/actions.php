@@ -54,7 +54,9 @@ class Vimeography_Admin_Actions {
         return;
       }
 
-      add_action('admin_notices', array($this, 'vimeography_corrupt_keys_notice') );
+      if ( ! isset( $_POST['vimeography-activate-key'] ) ) {
+        add_action('admin_notices', array($this, 'vimeography_corrupt_keys_notice') );
+      }
     }
   }
 
