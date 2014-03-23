@@ -48,14 +48,14 @@
     },
     {
         "name": "davekiss/vimeo-php",
-        "version": "1.0.0",
-        "version_normalized": "1.0.0.0",
+        "version": "1.0.1",
+        "version_normalized": "1.0.1.0",
         "source": {
             "type": "git",
             "url": "https://github.com/davekiss/vimeo-php.git",
-            "reference": "734b9fa8db7f4217bcc7216a7393fb9dfdf5c80b"
+            "reference": "d1fc1f76381cdf317979365d6f3fbcea7f8b84a6"
         },
-        "time": "2014-03-02 21:53:56",
+        "time": "2014-03-22 16:22:01",
         "type": "library",
         "installation-source": "source",
         "license": [

@@ -3,15 +3,15 @@
         "This file locks the dependencies of your project to a known state",
         "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file"
     ],
-    "hash": "0c572be222129e91099ca9d2886f3f7d",
+    "hash": "df79e69c5862803ae033998968040633",
     "packages": [
         {
             "name": "davekiss/vimeo-php",
-            "version": "1.0.0",
+            "version": "1.0.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/davekiss/vimeo-php.git",
-                "reference": "734b9fa8db7f4217bcc7216a7393fb9dfdf5c80b"
+                "reference": "d1fc1f76381cdf317979365d6f3fbcea7f8b84a6"
             },
             "type": "library",
             "license": [
@@ -24,7 +24,7 @@
                 }
             ],
             "description": "PHP Library for the Vimeo API 3.0",
-            "time": "2014-03-02 21:53:56"
+            "time": "2014-03-22 16:22:01"
         },
         {
             "name": "mustache/mustache",
