@@ -37,7 +37,7 @@
             <input type="hidden" name="vimeography-activation-key" value="{{activation_key}}" />
             <tr>
               <td>{{product_name}}</td>
-              <td>Activated <input type="submit" style="color: red; font-size: 18px; position: relative; top: -2px;" value="&#215; Remove Key" /></td>
+              <td>Activated <input class="vimeography-remove-activation-key" type="submit" value="&#215; Remove Key" /></td>
             </tr>
           </form>
         {{/activation_keys}}
@@ -62,17 +62,13 @@
     font-weight: 300;
   }
 
-  .vimeography-pro {
-    text-align: center;
-  }
-
   .vimeography-pro-settings aside {
     float: left;
     width: 300px;
     margin: 0 20px 0;
   }
 
-  .vimeography-pro-settings input[type="text"] {
+  .vimeography aside input[type="text"] {
     height: 36px;
     width: 260px;
     font-size: 18px;
@@ -80,7 +76,7 @@
     padding: 5px;
   }
 
-  .vimeography-pro-settings input[type="submit"] {
+  .vimeography aside input[type="submit"] {
     height: 36px;
     font-size: 14px;
     line-height: 1.2em;
@@ -91,6 +87,18 @@
     box-shadow: none;
     background-color: #2ecc71;
     color: #fafafa;
+  }
+
+  .vimeography table input[type="submit"] {
+    color: #fafafa; 
+    font-size: 13px; 
+    position: relative;
+    box-shadow: 0px 2px 0px #C23022;
+    top: -2px;
+    left: 10px;
+    border: 0;
+    border-radius: 2px;
+    background: #e74c3c;
   }
 
   .wp-box {
