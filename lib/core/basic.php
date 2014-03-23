@@ -7,6 +7,7 @@ class Vimeography_Core_Basic extends Vimeography_Core
 
     $this->_auth  = VIMEOGRAPHY_CLIENT_ID;
     $this->_vimeo = new Vimeo( $this->_auth );
+    $this->_vimeo->set_user_agent('Vimeography loves you (http://www.vimeography.com)');
   }
 
   /**
