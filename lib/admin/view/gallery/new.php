@@ -53,7 +53,7 @@ class Vimeography_Gallery_New extends Vimeography_Base {
       } catch (Vimeography_Exception $e) {
         require_once(ABSPATH . 'wp-admin/admin-header.php');
         $this->messages[] = array(
-          'type' => 'warn',
+          'type' => 'error',
           'heading' => __('Heads up!', 'vimeography'),
           'message' => $e->getMessage()
         );

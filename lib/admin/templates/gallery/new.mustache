@@ -2,10 +2,8 @@
   <h2 class="page-title">New Gallery</h2>
 
   {{#messages}}
-    <div class="alert alert-{{type}} fade in">
-      <a class="close" data-dismiss="alert" href="#">&times;</a>
-      <h3 class="alert-heading">{{heading}}</h3>
-      <p>{{message}}</p>
+    <div class="{{type}}">
+      <p><strong>{{heading}}</strong> {{message}}</p>
     </div>
   {{/messages}}
 
@@ -39,28 +37,3 @@
     <input class="button button-primary button-large" type="submit" value="Create Gallery">
   </form>
 </div>
-
-<style>
-  .vimeography {
-    margin: 20px auto;
-  }
-
-  .vimeography h1,
-  .vimeography h2,
-  .vimeography h3,
-  .vimeography h4,
-  .vimeography h5,
-  .vimeography h6 {
-    font-family: 'Open Sans', sans-serif;
-    font-weight: 300;
-  }
-
-  .faq {
-    max-width: 500px;
-    margin: -20px 0 0 30px;
-  }
-
-  .faq h3 {
-    padding: 20px 0 0;
-  }
-</style>
