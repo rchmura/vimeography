@@ -19,10 +19,9 @@ class Vimeography_Admin_Actions {
    */
   public function vimeography_requires_wordpress_version() {
     global $wp_version;
-    $plugin_data = get_plugin_data( __FILE__, false );
 
     if ( version_compare($wp_version, "3.3", "<" ) ) {
-      if( is_plugin_active( VIMEOGRAPHY_BASENAME ) ) {
+      if ( is_plugin_active( VIMEOGRAPHY_BASENAME ) ) {
         deactivate_plugins( VIMEOGRAPHY_BASENAME );
         wp_die( sprintf( __('Vimeography requires WordPress 3.3 or higher. Please upgrade WordPress and try again. <a href="%s">Back to WordPress admin</a>', 'vimeography'), admin_url() ) );
       }
@@ -71,6 +70,5 @@ class Vimeography_Admin_Actions {
       __( 'Dismiss', 'vimeography' )
     );
   }
-
 
 }
