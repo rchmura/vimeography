@@ -6,7 +6,7 @@ if ( ! defined( 'ABSPATH' ) ) exit;
 class Vimeography_Admin_Menu {
 
   public function __construct() {
-    add_action( 'admin_menu',     array($this, 'vimeography_add_menu') );
+    add_action( 'admin_menu', array($this, 'vimeography_add_menu') );
   }
 
   /**
@@ -17,15 +17,17 @@ class Vimeography_Admin_Menu {
    */
   public function vimeography_add_menu() {
     global $submenu;
+    $hooks = array();
 
     add_menu_page( 'Vimeography Page Title', 'Vimeography', 'manage_options', 'vimeography-edit-galleries', '', VIMEOGRAPHY_URL.'lib/admin/assets/img/vimeography-icon.png' );
-    add_submenu_page( 'vimeography-edit-galleries', __('Edit Galleries', 'vimeography'), __('Edit Galleries', 'vimeography'), 'manage_options', 'vimeography-edit-galleries', array(&$this, 'vimeography_render_template' ));
-    add_submenu_page( 'vimeography-edit-galleries', __('New Gallery', 'vimeography'), __('New Gallery', 'vimeography'), 'manage_options', 'vimeography-new-gallery', array(&$this, 'vimeography_render_template' ));
-    add_submenu_page( 'vimeography-edit-galleries', __('Manage Activations', 'vimeography'), __('Manage Activations', 'vimeography'), 'manage_options', 'vimeography-manage-activations', array(&$this, 'vimeography_render_template' ));
+    $hooks[] = add_submenu_page( 'vimeography-edit-galleries', __('Edit Galleries', 'vimeography'), __('Edit Galleries', 'vimeography'), 'manage_options', 'vimeography-edit-galleries', array(&$this, 'vimeography_render_template' ));
+    $hooks[] = add_submenu_page( 'vimeography-edit-galleries', __('New Gallery', 'vimeography'), __('New Gallery', 'vimeography'), 'manage_options', 'vimeography-new-gallery', array(&$this, 'vimeography_render_template' ));
+    $hooks[] = add_submenu_page( 'vimeography-edit-galleries', __('Manage Activations', 'vimeography'), __('Manage Activations', 'vimeography'), 'manage_options', 'vimeography-manage-activations', array(&$this, 'vimeography_render_template' ));
     if ( current_user_can( 'manage_options' ) )
       $submenu['vimeography-edit-galleries'][500] = array( __('Vimeography Themes', 'vimeography'), 'manage_options' , 'http://vimeography.com/themes' );
-    add_submenu_page( 'vimeography-edit-galleries', 'Vimeography Pro', 'Vimeography Pro', 'manage_options', 'vimeography-pro', array(&$this, 'vimeography_render_template' ));
-    add_submenu_page( 'vimeography-edit-galleries', __('Help', 'vimeography'), __('Help', 'vimeography'), 'manage_options', 'vimeography-help', array(&$this, 'vimeography_render_template' ));
+    $hooks[] = add_submenu_page( 'vimeography-edit-galleries', 'Vimeography Pro', 'Vimeography Pro', 'manage_options', 'vimeography-pro', array(&$this, 'vimeography_render_template' ));
+    $hooks[] = add_submenu_page( 'vimeography-edit-galleries', __('Help', 'vimeography'), __('Help', 'vimeography'), 'manage_options', 'vimeography-help', array(&$this, 'vimeography_render_template' ));
+    // add_action('load-$hook', array($this, 'on_pageload') );
   }
 
   /**
@@ -35,8 +37,9 @@ class Vimeography_Admin_Menu {
    * @return void
    */
   public function vimeography_render_template() {
-    if ( ! current_user_can( 'manage_options' ) )
+    if ( ! current_user_can( 'manage_options' ) ) {
       wp_die( __( 'You do not have sufficient permissions to access this page.', 'vimeography' ) );
+    }
 
     wp_register_style( 'vimeography-bootstrap', VIMEOGRAPHY_URL.'lib/admin/assets/css/bootstrap.min.css');
     wp_register_style( 'vimeography-admin',     VIMEOGRAPHY_URL.'lib/admin/assets/css/admin.css');
@@ -61,15 +64,12 @@ class Vimeography_Admin_Menu {
 
     switch( current_filter() ) {
       case 'vimeography_page_vimeography-new-gallery':
-        require_once(VIMEOGRAPHY_PATH . 'lib/admin/view/gallery/new.php');
+        require_once VIMEOGRAPHY_PATH . 'lib/admin/view/gallery/new.php';
 
-        if (is_plugin_active('vimeography-pro/vimeography-pro.php'))
-        {
+        if ( is_plugin_active('vimeography-pro/vimeography-pro.php') ) {
           do_action('vimeography-pro/load-new');
           $view = new Vimeography_Pro_Gallery_New;
-        }
-        else
-        {
+        } else {
           $view = new Vimeography_Gallery_New;
         }
 
