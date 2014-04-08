@@ -185,8 +185,8 @@ class Vimeography_Shortcode extends Vimeography {
   private function _vimeography_enqueue_custom_stylesheets() {
     $name = 'vimeography-gallery-' . $this->_gallery_id . '-custom';
     $filename = $name . '.css';
-    $filepath = VIMEOGRAPHY_ASSETS_PATH . 'css/' . $filename;
-    $file_url = VIMEOGRAPHY_ASSETS_URL . 'css/' . $filename;
+    $filepath = VIMEOGRAPHY_CUSTOMIZATIONS_PATH . $filename;
+    $file_url = VIMEOGRAPHY_CUSTOMIZATIONS_URL  . $filename;
 
     if ( file_exists($filepath) ) {
       // Make sure the current theme's stylesheet handle is set as a dependency
