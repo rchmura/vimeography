@@ -86,6 +86,8 @@ class Vimeography {
     define( 'VIMEOGRAPHY_ASSETS_URL',  VIMEOGRAPHY_URL . 'lib/shared/assets/' );
     define( 'VIMEOGRAPHY_ASSETS_PATH', VIMEOGRAPHY_PATH. 'lib/shared/assets/' );
     define( 'VIMEOGRAPHY_CACHE_PATH',  WP_CONTENT_DIR . '/vimeography/cache/' );
+    define( 'VIMEOGRAPHY_CUSTOMIZATIONS_PATH',  WP_CONTENT_DIR . '/vimeography/assets/css/' );
+    define( 'VIMEOGRAPHY_CUSTOMIZATIONS_URL',   content_url() . '/vimeography/assets/css/' );
     define( 'VIMEOGRAPHY_BASENAME', plugin_basename( __FILE__ ) );
     define( 'VIMEOGRAPHY_VERSION', '1.1.9');
     define( 'VIMEOGRAPHY_GALLERY_TABLE', $wpdb->prefix . "vimeography_gallery");
