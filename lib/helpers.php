@@ -30,7 +30,19 @@ class Vimeography_Helpers {
   }
 
   /**
-   * [format_video_thumbnails description]
+   * Sort the Vimeo thumbnails into different keys based on their index
+   * in the returned pictures array from Vimeo
+   *
+   * This is temporarily setting all medium-sized thumbnails to the
+   * "thumbnail_large" key - Vimeo has a bug where auto generated thumbnails
+   * for 1080p videos fail, so the large_thumbnail url gives a 404. Until
+   * Vimeo can successfully auto-generate large thumbnails, we'll use the medium
+   * size thumb, assigned to thumbnail_large for backwards-compatibility with all
+   * Vimeography themes.
+   *
+   * To revert, simply delete "case 1:" from line 58 and
+   * uncomment "case 1:" block on lines 61-63
+   *
    * @param  [type] $item [description]
    * @return [type]       [description]
    */
@@ -43,11 +55,12 @@ class Vimeography_Helpers {
         switch ($i)
         {
           case 0:
+          case 1:
             $item->thumbnail_large = $item->pictures[$i]->link;
             break;
-          case 1:
-            $item->thumbnail_medium = $item->pictures[$i]->link;
-            break;
+          // case 1:
+          //   $item->thumbnail_medium = $item->pictures[$i]->link;
+          //   break;
           case 2:
             $item->thumbnail_small = $item->pictures[$i]->link;
             break;
