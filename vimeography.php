@@ -117,6 +117,7 @@ class Vimeography {
     require_once VIMEOGRAPHY_PATH . 'lib/addons.php';
     require_once VIMEOGRAPHY_PATH . 'lib/ajax.php';
     require_once VIMEOGRAPHY_PATH . 'lib/rewrite.php';
+    require_once VIMEOGRAPHY_PATH . 'lib/filesystem.php';
     require_once VIMEOGRAPHY_PATH . 'lib/init.php';
     require_once VIMEOGRAPHY_PATH . 'lib/robots.php';
     require_once VIMEOGRAPHY_PATH . 'lib/shortcode.php';
