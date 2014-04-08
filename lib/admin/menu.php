@@ -78,15 +78,24 @@ class Vimeography_Admin_Menu {
       case 'toplevel_page_vimeography-edit-galleries':
         if (isset($_GET['id']))
         {
+          if (! wp_script_is('jquery-ui')) {
+            wp_register_script('jquery-ui', "//ajax.googleapis.com/ajax/libs/jqueryui/1.8/jquery-ui.min.js", false, null);
+            wp_enqueue_script('jquery-ui');
+          }
+          wp_register_script( 'jquery-mousewheel', VIMEOGRAPHY_URL.'lib/admin/assets/js/jquery.mousewheel.min.js', 'jquery');
+          wp_register_script( 'jScrollPane', VIMEOGRAPHY_URL.'lib/admin/assets/js/jquery.jscrollpane.min.js', 'jquery');
+          wp_register_style( 'jScrollPane', VIMEOGRAPHY_URL.'lib/admin/assets/css/plugins/jScrollPane/jquery.jscrollpane.css', 'jquery');
+
+          wp_enqueue_script( 'jquery-mousewheel');
+          wp_enqueue_script( 'jScrollPane');
+          wp_enqueue_style( 'jScrollPane');
+
           require_once(VIMEOGRAPHY_PATH . 'lib/admin/view/gallery/edit.php');
 
-          if (is_plugin_active('vimeography-pro/vimeography-pro.php'))
-          {
+          if (is_plugin_active('vimeography-pro/vimeography-pro.php')) {
             do_action('vimeography-pro/load-editor');
             $view = new Vimeography_Pro_Gallery_Edit;
-          }
-          else
-          {
+          } else {
             $view = new Vimeography_Gallery_Edit;
           }
 
