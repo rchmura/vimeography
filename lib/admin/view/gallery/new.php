@@ -1,11 +1,15 @@
 <?php
 
+// Exit if accessed directly
+if ( ! defined( 'ABSPATH' ) ) exit;
+
 /**
  * Controller for the New Gallery admin page.
  *
  * @extends Vimeography_Base
  */
 class Vimeography_Gallery_New extends Vimeography_Base {
+
   /**
    * Vimeo library instance
    *
