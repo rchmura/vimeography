@@ -20,7 +20,7 @@ class Vimeography_Admin_Plugins {
   public function vimeography_filter_plugin_actions($links, $file) {
     if ( $file == VIMEOGRAPHY_BASENAME ) {
       $settings_link = '<a href="admin.php?page=vimeography-edit-galleries">' . __('Settings', 'vimeography') . '</a>';
-      if ( ! in_array($settings_link, $links) ) {
+      if ( ! in_array( $settings_link, $links ) ) {
         array_unshift( $links, $settings_link ); // before other links
       }
     }
