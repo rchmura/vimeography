@@ -139,13 +139,19 @@ class Vimeography {
    * @return string             Vimeo Resource
    */
   public static function validate_vimeo_source($source_url) {
-    $scheme = parse_url($source_url);
+    // Add scheme if it wasn't provided in source url
+    $scheme = parse_url( $source_url );
 
-    if (empty($scheme['scheme']))
+    if ( empty( $scheme['scheme'] ) ) {
       $source_url = 'https://' . $source_url;
+    }
 
-    if ((($url = parse_url($source_url)) !== FALSE) && (preg_match('~vimeo(?:pro)?\.com$~', $url['host']) > 0)) {
+    // Only continue if the parse_url function didn't fail
+    // and the host is one of vimeo.com or vimeopro.com
+    if ( ( ($url = parse_url($source_url) ) !== FALSE ) && (preg_match('~vimeo(?:pro)?\.com$~', $url['host']) > 0)) {
       $host = $url['host'];
+
+      // Create an array with the resource parts
       $url = array_values(array_filter(explode('/', $url['path']), 'strlen'));
 
       // If the array doesn't contain one of the following strings, it
@@ -155,9 +161,15 @@ class Vimeography {
           array_unshift($url, 'videos');
         } else {
           array_unshift($url, 'users');
-
-          if (isset($url[2]) AND $host != 'vimeo.com')
-            array_splice($url, 2, 0, array('portfolios'));
+          if ( isset($url[2]) ) {
+            if ($host != 'vimeo.com') {
+              // Convert /users/username/portfolio_name to /users/username/portfolios/portfolio_name
+              array_splice($url, 2, 0, array('portfolios'));
+            } elseif ($url[2] === 'videos') {
+              // Remove 'videos' from '/users/username/videos'
+              unset($url[2]);
+            }
+          }
         }
       }
 
