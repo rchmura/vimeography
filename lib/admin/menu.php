@@ -146,7 +146,25 @@ class Vimeography_Admin_Menu {
       break;
     }
 
+    self::vimeography_process_actions();
     echo $template->render($view);
   }
+
+  /**
+   * Processes all Vimeography actions sent via POST and GET by looking for the 'vimeography-action'
+   * request and running do_action() to call the function
+   *
+   * @return void
+   */
+  public static function vimeography_process_actions() {
+    if ( isset( $_POST['vimeography-action'] ) ) {
+      do_action( 'vimeography_action_' . $_POST['vimeography-action'], $_POST );
+    }
+
+    if ( isset( $_GET['vimeography-action'] ) ) {
+      do_action( 'vimeography_action_' . $_GET['vimeography-action'], $_GET );
+    }
+  }
+
 
 }
