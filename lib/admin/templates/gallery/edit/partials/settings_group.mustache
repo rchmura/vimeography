@@ -17,7 +17,7 @@
                         <option value='604800' {{#selected}}{{#604800}}selected="selected"{{/604800}}{{/selected}}>week</option>
                         <option value='2419200' {{#selected}}{{#2419200}}selected="selected"{{/2419200}}{{/selected}}>month</option>
                       </select>
-                      <a href="{{admin_url}}edit-galleries&id={{id}}&refresh=1" class="btn btn-mini" title="Refresh Now"><em class="icon-refresh"></em></a>
+                      <a href="{{admin_url}}edit-galleries&id={{id}}&vimeography-action=refresh_gallery_cache" class="btn btn-mini" title="Refresh Now"><em class="icon-refresh"></em></a>
                     </div>
 
                     <div class="vimeography-gallery-menu-setting">
@@ -37,6 +37,7 @@
 
                     <div class="vimeography-gallery-menu-setting last">
                       {{{basic_nonce}}}
+                      <input type="hidden" name="vimeography-action" value="validate_basic_gallery_settings" />
                       <input class="btn btn-primary" type="submit" value="Save Changes">
                     </div>
 
