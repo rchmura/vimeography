@@ -15,7 +15,7 @@ class Tests_Addons extends Vimeography_UnitTestCase {
     parent::setUp();
     $this->_class = new \Vimeography_Addons;
 
-    $this->_bugsauce_path = realpath( dirname( __FILE__ ) . '/../../../vimeography-bugsauce/vimeography-bugsauce.php' );
+    $this->_bugsauce_path = realpath( dirname( __FILE__ ) . '/../../vimeography-bugsauce/vimeography-bugsauce.php' );
   }
 
   /**
