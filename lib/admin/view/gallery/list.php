@@ -1,5 +1,8 @@
 <?php
 
+// Exit if accessed directly
+if ( ! defined( 'ABSPATH' ) ) exit;
+
 class Vimeography_Gallery_List extends Vimeography_Base {
 	/**
 	 * [$_galleries description]
@@ -50,7 +53,7 @@ class Vimeography_Gallery_List extends Vimeography_Base {
 	 * @return bool
 	 */
 	public function galleries_to_show() {
-		return (empty($this->_galleries)) ? FALSE : TRUE;
+		return empty($this->_galleries) ? FALSE : TRUE;
 	}
 
 	/**
@@ -63,8 +66,9 @@ class Vimeography_Gallery_List extends Vimeography_Base {
 		$galleries = array();
 
 		foreach ($this->_galleries as $gallery) {
-			$gallery->edit_url = get_admin_url().'admin.php?page=vimeography-edit-galleries&id='.$gallery->id;
-			$gallery->theme_name = ucfirst($gallery->theme_name);
+			$gallery->edit_url     = get_admin_url().'admin.php?page=vimeography-edit-galleries&id='.$gallery->id;
+			$gallery->theme_name   = ucfirst($gallery->theme_name);
+			$gallery->date_created = date('F jS, Y', strtotime($gallery->date_created));
 
 			$galleries[] = $gallery;
 		}
@@ -82,14 +86,16 @@ class Vimeography_Gallery_List extends Vimeography_Base {
 		// if this fails, check_admin_referer() will automatically print a "failed" page and die.
 		if ( check_admin_referer('vimeography-list-action','vimeography-verification') ) {
 			global $wpdb;
-			$id = intval($input['id']);
-			$action = wp_filter_nohtml_kses($input['action']);
+			$id = intval( $input['id'] );
+			$action = wp_filter_nohtml_kses( $input['action'] );
 
-			if ($action === 'delete')
+			if ($action === 'delete') {
 				$this->_delete_gallery($id);
+			}
 
-			if ($action === 'duplicate')
+			if ($action === 'duplicate') {
 				$this->_duplicate_gallery($id);
+			}
 		}
 	}
 
