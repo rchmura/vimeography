@@ -19,7 +19,6 @@ define( 'WP_ADMIN', true );
 
 function _manually_load_plugins() {
   require dirname( __FILE__ ) . '/../vimeography.php';
-  require dirname( __FILE__ ) . '/../../vimeography-bugsauce/vimeography-bugsauce.php';
 }
 tests_add_filter( 'muplugins_loaded', '_manually_load_plugins' );
 
