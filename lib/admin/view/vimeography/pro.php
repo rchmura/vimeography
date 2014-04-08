@@ -1,5 +1,8 @@
 <?php
 
+// Exit if accessed directly
+if ( ! defined( 'ABSPATH' ) ) exit;
+
 class Vimeography_Pro_About extends Vimeography_Base {
   /**
    * [$messages description]
@@ -11,8 +14,9 @@ class Vimeography_Pro_About extends Vimeography_Base {
    * [__construct description]
    */
   public function __construct() {
-    if ($_SERVER['REQUEST_METHOD'] == 'POST')
+    if ($_SERVER['REQUEST_METHOD'] == 'POST') {
       $this->_validate_form();
+    }
   }
 
   /**
