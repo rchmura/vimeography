@@ -24,6 +24,7 @@ class Vimeography_Cache extends Vimeography {
    * @param [type] $settings [description]
    */
   public function __construct($gallery_id, $expiration = NULL) {
+    wp_mkdir_p( VIMEOGRAPHY_CACHE_PATH );
     $this->_cache_file = VIMEOGRAPHY_CACHE_PATH . 'vimeography-gallery-' . $gallery_id . '.cache';
 
     if ( isset($expiration) )
