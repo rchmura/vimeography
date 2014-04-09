@@ -55,6 +55,7 @@ class Vimeography_Renderer {
   public function __construct($settings, $gallery_id) {
     $this->_settings   = $settings;
     $this->_gallery_id = $gallery_id;
+    $this->_view = new stdClass();
   }
 
   /**
