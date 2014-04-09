@@ -361,7 +361,7 @@ class Vimeography_Database extends Vimeography {
         update_site_option('vimeography_activation_keys', $keys);
 
         foreach ($keys as $key) {
-          if ($key === FALSE) {
+          if ($key === FALSE OR $key === NULL) {
             delete_site_option('vimeography_activation_keys');
             update_site_option('vimeography_corrupt_keys_found', TRUE);
             break;
