@@ -227,7 +227,7 @@ class Vimeography_Gallery_Edit extends Vimeography_Base {
     }
 
     $this->_gallery[0]->featured_video = $this->_gallery[0]->featured_video === 0 ? '' : $this->_gallery[0]->featured_video;
-    return $this->_gallery;
+    return apply_filters('vimeography/gallery-settings', $this->_gallery);
   }
 
   /**
