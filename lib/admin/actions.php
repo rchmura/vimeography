@@ -65,7 +65,7 @@ class Vimeography_Admin_Actions {
    */
   public function vimeography_corrupt_keys_notice() {
     printf( '<div class="update-nag"> <p> %1$s  | <a href="%2$s"> %3$s </a> </p> </div>',
-      __( "Vimeography detected a problem with your Vimeography Activation Keys. Please visit the Vimeography Manage Activations page and re-enter your activation keys that you received via email while purchasing your Vimeography products.", 'vimeography' ),
+      sprintf( __( "<strong>Notice:</strong> Vimeography found a problem with the way your Vimeography Activation Keys were saved. To resolve this error, please visit the <a href=\"%s\" title=\"Vimeography Manage Activations Page\">Vimeography Manage Activations page</a> and re-enter your activation keys that you received via email while purchasing your Vimeography products.", 'vimeography' ), admin_url('admin.php?page=vimeography-manage-activations') ),
       esc_url( add_query_arg( 'vimeography-cancel-activation-message', wp_create_nonce( 'wptus_nag' ) ) ),
       __( 'Dismiss', 'vimeography' )
     );
