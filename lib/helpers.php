@@ -12,8 +12,13 @@ class Vimeography_Helpers {
   public function apply_common_formatting($data) {
     $items = array();
 
-    foreach($data as $item)
-    {
+    foreach($data as $item) {
+      // status can be one of the following:
+      // 'available';'uploading''transcoding';'uploading_error';'transcoding_error';
+      if ($item->status !== 'available') {
+        continue;
+      }
+
       if ($item->duration AND ! strpos($item->duration, ':'))
         $item->duration = $this->seconds_to_minutes($item->duration);
 
@@ -26,7 +31,6 @@ class Vimeography_Helpers {
     }
 
     return $items;
-
   }
 
   /**
