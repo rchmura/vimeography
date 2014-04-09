@@ -95,7 +95,7 @@ class Vimeography_Cache extends Vimeography {
    * @param object $video_set Vimeo collection data
    */
   public function set($data) {
-    return file_put_contents($this->_cache_file, serialize($data));
+    return @file_put_contents($this->_cache_file, serialize($data));
   }
 
   /**
