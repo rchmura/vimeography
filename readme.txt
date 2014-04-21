@@ -2,9 +2,9 @@
 Contributors: iamdavekiss
 Tags: vimeo, video, videos, gallery, vimeography, media, player, playlist, showcase, skins, themes, video gallery
 Requires at least: 3.3
-Tested up to: 3.8.1
-Stable tag: 1.1.9
-License: MIT
+Tested up to: 3.9
+Stable tag: 1.2
+License: GPL2
 
 The easiest way to create beautiful Vimeo galleries on your WordPress site.
 
@@ -66,7 +66,7 @@ Vimeography themes are now treated at WordPress plugins. Make sure you're instal
 
 = How do I get the latest updates for my themes? =
 
-If you purchased your theme at vimeography.com, you should have received an email receipt containing an activation code for your theme. Enter that activation code on the "My Themes" page of the Vimeography plugin. Once done, you will be subscribed to theme updates which will automatically be delivered to your WordPress installation, just like any other plugin.
+If you purchased your theme at vimeography.com, you should have received an email receipt containing an activation code for your theme. Enter that activation code on the "Manage Activations" page of the Vimeography plugin. Once done, you will be subscribed to theme updates which will automatically be delivered to your WordPress installation, just like any other plugin.
 
 = Why don’t you support YouTub/MetaHall/Flacker/PreschoolHumor? =
 
@@ -101,6 +101,19 @@ Heck yeah! Use the appearance editor to change your theme's style so that it mat
 4. Get new styles by installing gallery themes.
 
 == Changelog ==
+
+= 1.2 =
+* Updated Vimeography's filesystem methods to be compatible with WP Filesystem.
+* Fixed an issue where custom CSS changes could be overwritten on plugin updates.
+* Fixed an issue where Vimeography Activation Keys may not be saved properly.
+* Fixed an issue that prevented some Vimeo thumbnails from displaying in the gallery.
+* Fixed an issue that may have prevented some cache files from being loaded properly.
+* Updated Vimeo errors to be handled more gracefully.
+* Bugsauce no longer needs to be installed as a separate plugin.
+* You can safely remove the Vimeography Bugsauce plugin if you have it installed.
+* Galleries now ignore videos that are still transcoding, processing or uploading.
+* Fixed the gallery creation date formatting in the gallery quickview.
+* Updated gallery message styling to match the new WordPress admin styling.
 
 = 1.1.9 =
 * Fancybox will now be included in themes outside of the WordPress repository. Sorry about that!
@@ -355,6 +368,9 @@ Heck yeah! Use the appearance editor to change your theme's style so that it mat
 * First public release.
 
 == Upgrade Notice ==
+= 1.2 =
+There is also an update available for Vimeography Pro. If you have Vimeography Pro installed, make sure to update it as well. The available version is marked as 0.7
+
 = 1.1.7 =
 Make sure to verify that your Vimeography themes are activated after updating.
 
