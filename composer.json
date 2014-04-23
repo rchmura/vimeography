@@ -9,9 +9,9 @@
     ],
     "require": {
         "mustache/mustache": "2.5.1",
-        "davekiss/vimeo-php": "1.0.1"
+        "davekiss/vimeo-php": "dev-vimeography"
     },
-    "license": "GPL2",
+    "license": "GPL3",
     "authors": [
         {
             "name": "Dave Kiss",
