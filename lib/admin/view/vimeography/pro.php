@@ -103,7 +103,7 @@ class Vimeography_Pro_About extends Vimeography_Base {
       }
 
       try {
-        $vimeo = new Vimeo(NULL, NULL, $output['access_token']);
+        $vimeo = new Vimeography\Vimeo(NULL, NULL, $output['access_token']);
         $response = $vimeo->request('/me');
 
         if (! $response) {
