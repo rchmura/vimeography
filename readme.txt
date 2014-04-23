@@ -104,6 +104,7 @@ Heck yeah! Use the appearance editor to change your theme's style so that it mat
 
 = 1.2 =
 * Updated Vimeography's filesystem methods to be compatible with WP Filesystem.
+* Introduced a vimeography/edit-video/[video_id] filter to allow for video data adjustments.
 * Fixed an issue where custom CSS changes could be overwritten on plugin updates.
 * Fixed an issue where Vimeography Activation Keys may not be saved properly.
 * Fixed an issue that may have prevented some cache files from being loaded properly.
