@@ -1,0 +1,14 @@
+{
+    "name": "davekiss/vimeo-php",
+    "description": "PHP Library for the Vimeo API 3.0",
+    "license": "Apache",
+    "authors": [
+        {
+            "name": "Dave Kiss",
+            "email": "hello@davekiss.com"
+        }
+    ],
+    "require": {
+
+    }
+}
