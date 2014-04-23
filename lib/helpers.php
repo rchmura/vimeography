@@ -19,6 +19,8 @@ class Vimeography_Helpers {
         continue;
       }
 
+      $item->video_id = str_replace('/', '', strrchr($item->link, '/'));
+
       if ($item->duration AND ! strpos($item->duration, ':'))
         $item->duration = $this->seconds_to_minutes($item->duration);
 
@@ -27,7 +29,7 @@ class Vimeography_Helpers {
       // Linkify any URLs in the description
       $item->description = $this->link_urls( nl2br($item->description) );
 
-      $items[] = $item;
+      $items[] = apply_filters('vimeography/edit-video/' . $item->video_id, $item);
     }
 
     return $items;
