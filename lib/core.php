@@ -96,7 +96,7 @@ abstract class Vimeography_Core {
         // returned a 304, in which case, we can safely update the
         // cache's last modified
         // and return it.
-        if ($result == NULL)
+        if ($result == NULL OR $result->video_set == NULL)
         {
           $result = $cache->renew()->get();
         }
