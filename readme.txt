@@ -106,7 +106,6 @@ Heck yeah! Use the appearance editor to change your theme's style so that it mat
 * Updated Vimeography's filesystem methods to be compatible with WP Filesystem.
 * Fixed an issue where custom CSS changes could be overwritten on plugin updates.
 * Fixed an issue where Vimeography Activation Keys may not be saved properly.
-* Fixed an issue that prevented some Vimeo thumbnails from displaying in the gallery.
 * Fixed an issue that may have prevented some cache files from being loaded properly.
 * Updated Vimeo errors to be handled more gracefully.
 * Bugsauce no longer needs to be installed as a separate plugin.
