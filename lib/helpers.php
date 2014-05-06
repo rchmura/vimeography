@@ -32,7 +32,7 @@ class Vimeography_Helpers {
       $items[] = apply_filters('vimeography/edit-video/' . $item->video_id, $item);
     }
 
-    return $items;
+    return apply_filters('vimeography/edit-videos', $items);
   }
 
   /**
