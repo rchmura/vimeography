@@ -86,18 +86,17 @@ abstract class Vimeography_Core {
 
     // If the cache file exists,
     if ( $cache->exists() ) {
+
       // and the cache file is expired,
-      if ( ($last_modified = $cache->expired() ) !== FALSE)
-      {
+      if ( ($last_modified = $cache->expired() ) !== FALSE) {
+
         // make the request with a last modified header.
         $result = $this->fetch($last_modified);
 
         // Here is where we need to check if $video_set exists, or if it
         // returned a 304, in which case, we can safely update the
-        // cache's last modified
-        // and return it.
-        if ($result == NULL OR $result->video_set == NULL)
-        {
+        // cache's last modified and return it.
+        if ( $result == NULL ) {
           $result = $cache->renew()->get();
         }
       } else {
@@ -128,6 +127,12 @@ abstract class Vimeography_Core {
       throw new Vimeography_Exception( sprintf( __('Endpoint %s is not valid.', 'vimeography'), $this->_endpoint ) );
 
     $response  = $this->_make_vimeo_request($this->_endpoint, $this->_params, $last_modified);
+
+    // If 304 not modified, return
+    if ($response == NULL) {
+      return $response;
+    }
+
     $video_set = $this->_get_video_set($response);
 
     if (! empty($this->_featured)) {
