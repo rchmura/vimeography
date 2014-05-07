@@ -4,7 +4,7 @@ Tags: vimeo, video, videos, gallery, vimeography, media, player, playlist, showc
 Requires at least: 3.3
 Tested up to: 3.9
 Stable tag: 1.2
-License: GPL2
+License: GPL3
 
 The easiest way to create beautiful Vimeo galleries on your WordPress site.
 

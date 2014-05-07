@@ -6,7 +6,7 @@ Description: Vimeography is the easiest way to set up a custom Vimeo gallery on 
 Version: 1.2
 Author: Dave Kiss
 Author URI: http://davekiss.com
-License: GPL2
+License: GPL3
 Text Domain: vimeography
 */
 
