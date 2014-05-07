@@ -82,7 +82,7 @@ class Vimeography_Admin_Actions {
     $pro_version = get_option('vimeography_pro_db_version');
 
     if ($pro_version) {
-      if ( version_compare($pro_version, '0.7', '<') {
+      if ( version_compare($pro_version, '0.7', '<') ) {
         add_action('admin_notices', array($this, 'vimeography_pro_upgrade_notice') );
       }
     }
