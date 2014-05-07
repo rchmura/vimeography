@@ -9,6 +9,7 @@ class Vimeography_Admin_Actions {
     add_action( 'admin_init', array( $this, 'vimeography_requires_wordpress_version') );
     add_action( 'admin_init', array( $this, 'vimeography_check_if_just_updated') );
     add_action( 'admin_init', array( $this, 'vimeography_maybe_add_activation_key_reset_nag') );
+    add_action( 'admin_init', array( $this, 'vimeography_maybe_add_pro_update_nag') );
   }
 
   /**
@@ -68,6 +69,33 @@ class Vimeography_Admin_Actions {
       sprintf( __( "<strong>Notice:</strong> Vimeography found a problem with the way your Vimeography Activation Keys were saved. To resolve this error, please visit the <a href=\"%s\" title=\"Vimeography Manage Activations Page\">Vimeography Manage Activations page</a> and re-enter your activation keys that you received via email while purchasing your Vimeography products.", 'vimeography' ), admin_url('admin.php?page=vimeography-manage-activations') ),
       esc_url( add_query_arg( 'vimeography-cancel-activation-message', wp_create_nonce( 'wptus_nag' ) ) ),
       __( 'Dismiss', 'vimeography' )
+    );
+  }
+
+  /**
+   * Yells at the user to upgrade their broken
+   * Pro plugin if it is installed and out of date.
+   *
+   * @return void
+   */
+  public function vimeography_maybe_add_pro_update_nag() {
+    $pro_version = get_option('vimeography_pro_db_version');
+
+    if ($pro_version) {
+      if ( version_compare($pro_version, '0.7', '<') {
+        add_action('admin_notices', array($this, 'vimeography_pro_upgrade_notice') );
+      }
+    }
+  }
+
+  /**
+   * Adds the update message for outdated Pro versions.
+   *
+   * @return string | html
+   */
+  public function vimeography_pro_upgrade_notice() {
+    printf( '<div class="update-nag"><p>%1$s</p></div>',
+      sprintf( __( "<strong>Hey!</strong> It looks like there is an update ready for Vimeography Pro. Head on over to the <a href=\"%s\" title=\"Plugins Page\">Plugins page</a> to get the latest compatible version.", 'vimeography' ), admin_url('plugins.php') )
     );
   }
 
