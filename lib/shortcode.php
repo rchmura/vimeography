@@ -1,7 +1,9 @@
 <?php
 
-class Vimeography_Shortcode extends Vimeography
-{
+// Exit if accessed directly
+if ( ! defined( 'ABSPATH' ) ) exit;
+
+class Vimeography_Shortcode extends Vimeography {
   /**
    * The shortcode tag attributes applied by the user on a page or post.
    *
@@ -34,26 +36,33 @@ class Vimeography_Shortcode extends Vimeography
   private $_gallery_settings;
 
   /**
+   * Hook into the Vimeography Shortcode and
+   * add shortcode support for widgets.
+   */
+  public function __construct() {
+    add_filter( 'widget_text', 'do_shortcode' );
+    add_shortcode( 'vimeography', array($this, 'vimeography_shortcode') );
+  }
+
+  /**
    * Loads the gallery settings, generates any custom CSS, and creates the gallery token.
    *
    * @param array  $atts    The shortcode tag attributes applied by the user on a page or post.
    * @param string $content The content located inside of the shortcode tag.
    */
-  public function __construct($atts, $content)
-  {
+  public function vimeography_shortcode($atts, $content = NULL) {
     $this->_atts       = $atts;
     $this->_content    = $content;
 
-    try
-    {
-      $this->_gallery_settings = self::_apply_shortcode_gallery_settings($this->_atts);
-      $this->_gallery_id       = isset($atts['id']) ? intval($atts['id']) : self::_get_inline_gallery_id($this->_gallery_settings);
+    try {
+      $this->_gallery_settings = self::_apply_shortcode_gallery_settings( $this->_atts );
+      $this->_gallery_id       = isset( $atts['id'] ) ? intval( $atts['id'] ) : self::_get_inline_gallery_id( $this->_gallery_settings );
 
-      $this->_vimeography_register_customizations();
+      $this->_vimeography_enqueue_custom_stylesheets();
+      return $this->output();
     }
-    catch (Vimeography_Exception $e)
-    {
-      die(__("Error creating Vimeography gallery: ", 'vimeography') . $e->getMessage() );
+    catch (Vimeography_Exception $e) {
+      return __("Vimeography Error: ", 'vimeography') . $e->getMessage();
     }
   }
 
@@ -64,10 +73,10 @@ class Vimeography_Shortcode extends Vimeography
    *
    * @return array  The gallery settings to be used to render the current gallery.
    */
-  private static function _apply_shortcode_gallery_settings($atts)
-  {
-    if (! empty($atts['id']) )
-      $db_gallery_settings = self::_get_db_gallery_settings(intval($atts['id']));
+  private static function _apply_shortcode_gallery_settings($atts) {
+    if (! empty( $atts['id'] ) ) {
+      $db_gallery_settings = self::_get_db_gallery_settings( intval( $atts['id'] ) );
+    }
 
     // Get admin panel options
     $default_settings = get_option('vimeography_default_settings');
@@ -92,10 +101,11 @@ class Vimeography_Shortcode extends Vimeography
     // Remove this line once 3.6 is the minimum supported version.
     $shortcode_gallery_settings = apply_filters('vimeography-pro/do-shortcode', $shortcode_gallery_settings, '', $atts);
 
-    $shortcode_gallery_settings['width'] = self::_validate_gallery_width($shortcode_gallery_settings['width']);
+    $shortcode_gallery_settings['width'] = self::_validate_gallery_width( $shortcode_gallery_settings['width'] );
 
-    if ($shortcode_gallery_settings['source'] != $fallback_gallery_settings['endpoint'])
-      $shortcode_gallery_settings['source'] = Vimeography::validate_vimeo_source($shortcode_gallery_settings['source']);
+    if ( $shortcode_gallery_settings['source'] != $fallback_gallery_settings['endpoint'] ) {
+      $shortcode_gallery_settings['source'] = Vimeography::validate_vimeo_source( $shortcode_gallery_settings['source'] );
+    }
 
     $shortcode_gallery_settings['source'] = $shortcode_gallery_settings['source'] . '/videos';
 
@@ -107,8 +117,7 @@ class Vimeography_Shortcode extends Vimeography
    *
    * @return object  The settings associated with the gallery in the database.
    */
-  private static function _get_db_gallery_settings($id)
-  {
+  private static function _get_db_gallery_settings($id) {
     global $wpdb;
 
     $db_gallery_settings = $wpdb->get_results('
@@ -120,8 +129,9 @@ class Vimeography_Shortcode extends Vimeography
       LIMIT 1;
     ');
 
-    if ( empty($db_gallery_settings) )
-      throw new Vimeography_Exception(__('The Vimeography gallery you are trying to load does not exist.', 'vimeography') );
+    if ( empty($db_gallery_settings) ) {
+      throw new Vimeography_Exception( sprintf( __('a Vimeography gallery with an ID of "%1$s" was not found.', 'vimeography'), intval($id) ) );
+    }
 
     return $db_gallery_settings[0];
   }
@@ -132,10 +142,8 @@ class Vimeography_Shortcode extends Vimeography
    * @param  string $width
    * @return string        A percentage, pixel-based, or empty width value.
    */
-  private static function _validate_gallery_width($width)
-  {
-    if (!empty($width))
-    {
+  private static function _validate_gallery_width($width) {
+    if ( ! empty($width) ) {
       preg_match('/(\d*)(px|%?)/', $width, $matches);
       // If a number value is set...
       if (!empty($matches[1]))
@@ -151,9 +159,7 @@ class Vimeography_Shortcode extends Vimeography
           // Append a 'px' value to the matching number
           $width = $matches[1] . 'px';
         }
-      }
-      else
-      {
+      } else {
         // Not a valid width
         $width = '';
       }
@@ -166,67 +172,61 @@ class Vimeography_Shortcode extends Vimeography
    *
    * @return string  A unique token representing the current gallery
    */
-  private static function _get_inline_gallery_id($shortcode)
-  {
+  private static function _get_inline_gallery_id($shortcode) {
     return substr( md5( serialize($shortcode) ), 0, -24 );
   }
 
   /**
-   * [_vimeography_register_customizations description]
-   * @return [type] [description]
+   * Load any custom CSS files that have been generated by the
+   * Vimegraphy theme customization tools.
+   *
+   * @return void
    */
-  private function _vimeography_register_customizations()
-  {
+  private function _vimeography_enqueue_custom_stylesheets() {
     $name = 'vimeography-gallery-' . $this->_gallery_id . '-custom';
     $filename = $name . '.css';
-    $filepath = VIMEOGRAPHY_ASSETS_PATH . 'css/' . $filename;
-    $file_url = VIMEOGRAPHY_ASSETS_URL . 'css/' . $filename;
+    $filepath = VIMEOGRAPHY_CUSTOMIZATIONS_PATH . $filename;
+    $file_url = VIMEOGRAPHY_CUSTOMIZATIONS_URL  . $filename;
 
-    if (file_exists($filepath))
-    {
+    if ( file_exists($filepath) ) {
       // Make sure the current theme's stylesheet handle is set as a dependency
-      $dependency = strtolower($this->_gallery_settings['theme']);
+      $dependency = strtolower( $this->_gallery_settings['theme'] );
       wp_register_style($name, $file_url, array($dependency), strval( filemtime($filepath) ) );
       wp_enqueue_style($name);
     }
-
   }
 
   /**
    * Loads the Vimeography engine and renderer and returns the rendered HTML for output.
    *
-   * @return array [description]
+   * @return html | string
    */
-  public function output()
-  {
-    try
-    {
-      require_once(VIMEOGRAPHY_PATH . 'lib/core.php');
-      require_once(VIMEOGRAPHY_PATH . 'lib/renderer.php');
+  public function output() {
+    try {
+      require_once VIMEOGRAPHY_PATH . 'lib/core.php';
+      require_once VIMEOGRAPHY_PATH . 'lib/renderer.php';
 
-      if ( class_exists( 'Vimeography_Pro' ) )
-      {
+      if ( class_exists( 'Vimeography_Pro' ) ) {
         do_action('vimeography/load_pro');
-        $vimeography = new Vimeography_Core_Pro($this->_gallery_settings);
-        $renderer    = new Vimeography_Pro_Renderer($this->_gallery_settings, $this->_gallery_id);
-      }
-      else
-      {
-        require_once(VIMEOGRAPHY_PATH . 'lib/core/basic.php');
+        $vimeography = new Vimeography_Core_Pro( $this->_gallery_settings );
+        $renderer    = new Vimeography_Pro_Renderer( $this->_gallery_settings, $this->_gallery_id );
+      } else {
+        require_once VIMEOGRAPHY_PATH . 'lib/core/basic.php';
 
-        $vimeography = new Vimeography_Core_Basic($this->_gallery_settings);
-        $renderer    = new Vimeography_Renderer($this->_gallery_settings, $this->_gallery_id);
+        $vimeography = new Vimeography_Core_Basic( $this->_gallery_settings );
+        $renderer    = new Vimeography_Renderer( $this->_gallery_settings, $this->_gallery_id );
       }
 
-      $result = $vimeography->get_videos($this->_gallery_settings['cache'], $this->_gallery_id);
+      $result = $vimeography->get_videos( $this->_gallery_settings['cache'], $this->_gallery_id );
 
       // Render that ish.
-      return $renderer->render($result);
+      $renderer->load_theme();
+
+      $renderer = apply_filters('vimeography/deprecated/reload-pro-renderer', $renderer, $this->_gallery_settings, $this->_gallery_id );
+      return $renderer->render( $result );
     }
-    catch (Vimeography_Exception $e)
-    {
+    catch (Vimeography_Exception $e) {
       return __("Vimeography error: ", 'vimeography') . $e->getMessage();
     }
   }
-
 }

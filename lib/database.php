@@ -1,8 +1,122 @@
 <?php
 
-class Vimeography_Database extends Vimeography
-{
-  public function __construct() { }
+// Exit if accessed directly
+if ( ! defined( 'ABSPATH' ) ) exit;
+
+class Vimeography_Database extends Vimeography {
+  /**
+   * Vimeography DB Version
+   *
+   * @var [type]
+   */
+  protected static $_version;
+
+  /**
+   * [__construct description]
+   */
+  public function __construct() {
+    add_action( 'plugins_loaded', array($this, 'vimeography_update_db_version_if_not_exists'), 1 );
+    add_action( 'plugins_loaded', array($this, 'vimeography_update_database'), 11 );
+
+    register_activation_hook( VIMEOGRAPHY_BASENAME, array($this, 'vimeography_update_tables') );
+    register_activation_hook( VIMEOGRAPHY_BASENAME, array($this, 'vimeography_update_db_version') );
+  }
+
+  /**
+   * Create tables and define defaults when plugin is activated.
+   *
+   * @access public
+   * @return void
+   */
+  public static function vimeography_update_tables() {
+    global $wpdb;
+
+    delete_option('vimeography_default_settings');
+
+    add_option('vimeography_default_settings', array(
+      'source_url'     => 'https://vimeo.com/channels/staffpicks/',
+      'resource_uri'   => '/channels/staffpicks',
+      'featured_video' => '',
+      'video_limit'    => 25,
+      'cache_timeout'  => 3600,
+      'theme_name'     => 'bugsauce',
+    ));
+
+    $sql = 'CREATE TABLE '.VIMEOGRAPHY_GALLERY_TABLE.' (
+    id mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
+    title varchar(150) NOT NULL,
+    date_created datetime NOT NULL,
+    is_active tinyint(1) NOT NULL,
+    PRIMARY KEY  (id)
+    );
+    CREATE TABLE '.VIMEOGRAPHY_GALLERY_META_TABLE.' (
+    id mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
+    gallery_id mediumint(8) unsigned NOT NULL,
+    source_url varchar(100) NOT NULL,
+    resource_uri varchar(100) NOT NULL,
+    featured_video varchar(100) DEFAULT NULL,
+    video_limit mediumint(7) NOT NULL,
+    gallery_width varchar(10) DEFAULT NULL,
+    cache_timeout mediumint(7) NOT NULL,
+    theme_name varchar(50) NOT NULL,
+    PRIMARY KEY  (id)
+    );
+    ';
+
+    require_once(ABSPATH . 'wp-admin/includes/upgrade.php');
+    dbDelta($sql);
+  }
+
+  /**
+   * Gets Vimeography version number if it exists in the database.
+   *
+   * @since 1.2
+   * @return bool
+   */
+  public static function vimeography_get_db_version() {
+    return get_site_option('vimeography_db_version');
+  }
+
+  /**
+   * Updates the Vimeography version number stored in the database.
+   *
+   * @access public
+   * @static
+   * @return bool
+   */
+  public static function vimeography_update_db_version() {
+    return update_site_option('vimeography_db_version', VIMEOGRAPHY_VERSION);
+  }
+
+  /**
+   * [vimeography_update_db_version_if_not_exists description]
+   * @return [type] [description]
+   */
+  public static function vimeography_update_db_version_if_not_exists() {
+    if (self::vimeography_get_db_version() === FALSE) {
+      self::vimeography_update_db_version();
+      self::$_version = self::vimeography_get_db_version();
+    }
+  }
+
+  /**
+   * [vimeography_update_database description]
+   * @return [type] [description]
+   */
+  public function vimeography_update_database() {
+    self::$_version = self::vimeography_get_db_version();
+
+    self::vimeography_update_db_to_0_6();
+    self::vimeography_update_db_to_0_7();
+    self::vimeography_update_db_to_0_8();
+    $this->vimeography_update_db_to_1_0();
+    self::vimeography_update_db_to_1_0_7();
+    self::vimeography_update_db_to_1_1_4();
+    self::vimeography_update_db_to_1_1_6();
+    self::vimeography_update_db_to_1_2();
+    self::vimeography_update_db_version();
+  }
+
 
   /**
    * Check if the Vimeography database structure needs updated to version 0.6 based on the stored db version.
@@ -10,15 +124,13 @@ class Vimeography_Database extends Vimeography
    * @access public
    * @return void
    */
-  public function vimeography_update_db_to_0_6()
-  {
-    if (get_option('vimeography_db_version') < 0.6)
-    {
+  public static function vimeography_update_db_to_0_6() {
+    if ( version_compare(self::$_version, '0.6', '<') ) {
       global $wpdb;
       $old_galleries = $wpdb->get_results('SELECT * FROM '.VIMEOGRAPHY_GALLERY_META_TABLE.' AS meta JOIN '.VIMEOGRAPHY_GALLERY_TABLE.' AS gallery ON meta.gallery_id = gallery.id;');
       $new_galleries = array();
 
-      if (is_array($old_galleries))
+      if ( is_array($old_galleries) )
       {
         foreach ($old_galleries as $old_gallery)
         {
@@ -49,7 +161,7 @@ class Vimeography_Database extends Vimeography
       }
       $wpdb->query('DROP TABLE '.VIMEOGRAPHY_GALLERY_META_TABLE.';');
 
-      $this->vimeography_update_tables();
+      self::vimeography_update_tables();
 
       foreach ($new_galleries as $new_gallery)
       {
@@ -67,11 +179,11 @@ class Vimeography_Database extends Vimeography
    * @access public
    * @return void
    */
-  public function vimeography_update_db_to_0_7()
+  public static function vimeography_update_db_to_0_7()
   {
-    if (get_option('vimeography_db_version') < 0.7)
+    if ( version_compare(self::$_version, '0.7', '<') )
     {
-      $this->vimeography_update_tables();
+      self::vimeography_update_tables();
     }
   }
 
@@ -82,9 +194,9 @@ class Vimeography_Database extends Vimeography
    * @access public
    * @return void
    */
-  public function vimeography_update_db_to_0_8()
+  public static function vimeography_update_db_to_0_8()
   {
-    if (get_option('vimeography_db_version') < 0.8)
+    if ( version_compare(self::$_version, '0.8', '<') )
     {
       global $wpdb;
       $old_galleries = $wpdb->get_results('SELECT * FROM '.VIMEOGRAPHY_GALLERY_META_TABLE.' AS meta JOIN '.VIMEOGRAPHY_GALLERY_TABLE.' AS gallery ON meta.gallery_id = gallery.id;');
@@ -108,7 +220,7 @@ class Vimeography_Database extends Vimeography
       }
       $wpdb->query('DROP TABLE '.VIMEOGRAPHY_GALLERY_META_TABLE.';');
 
-      $this->vimeography_update_tables();
+      self::vimeography_update_tables();
 
       foreach ($new_galleries as $new_gallery)
       {
@@ -135,7 +247,7 @@ class Vimeography_Database extends Vimeography
   public function vimeography_update_db_to_1_0()
   {
 
-    if (get_option('vimeography_db_version') < 1)
+    if ( version_compare(self::$_version, '1.0', '<') )
     {
       global $wpdb;
       $wpdb->hide_errors();
@@ -177,37 +289,37 @@ class Vimeography_Database extends Vimeography
       // Drop the video limit. Edit: 7/28/13 - decided to keep this. The next function will add it if it doesn't exist.
       // $result = $wpdb->query('ALTER TABLE '. VIMEOGRAPHY_GALLERY_META_TABLE .' DROP COLUMN video_limit');
 
-      $this->vimeography_update_tables();
+      self::vimeography_update_tables();
     }
   }
 
-  public function vimeography_update_db_to_1_0_7()
+  public static function vimeography_update_db_to_1_0_7()
   {
-    if ( version_compare(get_option('vimeography_db_version'), '1.0.7', '<') )
+    if ( version_compare(self::$_version, '1.0.7', '<') )
     {
       global $wpdb;
       $wpdb->hide_errors();
 
       $result = $wpdb->query('ALTER TABLE '.VIMEOGRAPHY_GALLERY_META_TABLE.' ADD video_limit MEDIUMINT(7) NOT NULL AFTER featured_video;');
-      $this->vimeography_update_tables();
+      self::vimeography_update_tables();
     }
   }
 
-  public function vimeography_update_db_to_1_1_4()
+  public static function vimeography_update_db_to_1_1_4()
   {
-    if ( version_compare(get_option('vimeography_db_version'), '1.1.4', '<') )
+    if ( version_compare(self::$_version, '1.1.4', '<') )
     {
       global $wpdb;
       $wpdb->hide_errors();
 
       $result = $wpdb->query('ALTER TABLE '.VIMEOGRAPHY_GALLERY_META_TABLE.' MODIFY resource_uri VARCHAR(100) NOT NULL;');
-      $this->vimeography_update_tables();
+      self::vimeography_update_tables();
     }
   }
 
-  public function vimeography_update_db_to_1_1_6()
+  public static function vimeography_update_db_to_1_1_6()
   {
-    if ( version_compare(get_option('vimeography_db_version'), '1.1.6', '<') )
+    if ( version_compare(self::$_version, '1.1.6', '<') )
     {
       $activation_keys = get_option('vimeography_activation_keys');
 
@@ -226,6 +338,33 @@ class Vimeography_Database extends Vimeography
 
             // Rename folder to the correct plugin name
             rename($activation_key_plugin_path, $corrected_plugin_path);
+          }
+        }
+      }
+    }
+  }
+
+  /**
+   * Loop through all of the keys and remove the lot if there are
+   * false positives that have been saved. We're also moving
+   * to site_option instead of just option in this release.
+   * 
+   * @return void
+   */
+  public static function vimeography_update_db_to_1_2() {
+    if ( version_compare(self::$_version, '1.2', '<') ) {
+
+      $keys = get_option('vimeography_activation_keys');
+
+      if ($keys) {
+        delete_option('vimeography_activation_keys');
+        update_site_option('vimeography_activation_keys', $keys);
+
+        foreach ($keys as $key) {
+          if ($key === FALSE OR $key === NULL) {
+            delete_site_option('vimeography_activation_keys');
+            update_site_option('vimeography_corrupt_keys_found', TRUE);
+            break;
           }
         }
       }

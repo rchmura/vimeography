@@ -16,6 +16,7 @@
 
       <form id="activation-form" class="form-inline" style="margin: 0; padding: 10px 0;" method="post" action="">
         <input type="text" name="vimeography-activation-key">
+        <input type="hidden" name="vimeography-activate-key" value="1" />
         <input type="submit" form="activation-form" value="Activate Product">
         {{{nonce}}}
       </form>
@@ -31,11 +32,14 @@
       </thead>
       <tbody>
         {{#activation_keys}}
-          <tr>
-            <td>{{product_name}}</td>
-            <td>Activated <a href="{{admin_url}}manage-activations&remove-activation-key={{activation_key}}" style="color: red; font-size: 18px; position: relative; top: -2px;">&#215;</a></td>
-
-          </tr>
+          <form method="post" action="">
+            <input type="hidden" name="vimeography-deactivate-key" value="1" />
+            <input type="hidden" name="vimeography-activation-key" value="{{activation_key}}" />
+            <tr>
+              <td>{{product_name}}</td>
+              <td>Activated <input class="vimeography-remove-activation-key" type="submit" value="&#215; Remove Key" /></td>
+            </tr>
+          </form>
         {{/activation_keys}}
       </tbody>
     </table>
@@ -58,17 +62,13 @@
     font-weight: 300;
   }
 
-  .vimeography-pro {
-    text-align: center;
-  }
-
   .vimeography-pro-settings aside {
     float: left;
     width: 300px;
     margin: 0 20px 0;
   }
 
-  .vimeography-pro-settings input[type="text"] {
+  .vimeography aside input[type="text"] {
     height: 36px;
     width: 260px;
     font-size: 18px;
@@ -76,7 +76,7 @@
     padding: 5px;
   }
 
-  .vimeography-pro-settings input[type="submit"] {
+  .vimeography aside input[type="submit"] {
     height: 36px;
     font-size: 14px;
     line-height: 1.2em;
@@ -87,6 +87,18 @@
     box-shadow: none;
     background-color: #2ecc71;
     color: #fafafa;
+  }
+
+  .vimeography table input[type="submit"] {
+    color: #fafafa;
+    font-size: 13px;
+    position: relative;
+    box-shadow: 0px 2px 0px #C23022;
+    top: -2px;
+    left: 10px;
+    border: 0;
+    border-radius: 2px;
+    background: #e74c3c;
   }
 
   .wp-box {

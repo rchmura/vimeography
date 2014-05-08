@@ -21,7 +21,8 @@
                     </div>
                   </div>
                 {{/themes}}
-                <input id="selected-vimeography-theme" type="hidden" name="vimeography_appearance_settings[theme_name]" value="{{theme}}" />
+                <input id="selected-vimeography-theme" type="hidden" name="theme_name" value="{{theme}}" />
+                <input type="hidden" name="vimeography-action" value="set_gallery_theme" />
                 {{{theme_nonce}}}
               </form>
 

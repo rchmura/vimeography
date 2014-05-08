@@ -1,7 +1,9 @@
 <?php
 
-class Vimeography_Gallery_List extends Vimeography_Base
-{
+// Exit if accessed directly
+if ( ! defined( 'ABSPATH' ) ) exit;
+
+class Vimeography_Gallery_List extends Vimeography_Base {
 	/**
 	 * [$_galleries description]
 	 * @var [type]
@@ -17,8 +19,7 @@ class Vimeography_Gallery_List extends Vimeography_Base
 	/**
 	 * [__construct description]
 	 */
-	public function __construct()
-	{
+	public function __construct() {
 		if (isset($_POST['vimeography-list']))
 			$this->_validate_form($_POST['vimeography-list']);
 
@@ -31,8 +32,7 @@ class Vimeography_Gallery_List extends Vimeography_Base
 	 * @access public
 	 * @return string
 	 */
-	public function new_gallery_url()
-	{
+	public function new_gallery_url() {
 		return get_admin_url().'admin.php?page=vimeography-new-gallery';
 	}
 
@@ -42,9 +42,8 @@ class Vimeography_Gallery_List extends Vimeography_Base
 	 * @access public
 	 * @return mixed
 	 */
-	public function nonce()
-	{
-	   return wp_nonce_field('vimeography-list-action','vimeography-verification');
+	public function nonce() {
+   return wp_nonce_field('vimeography-list-action','vimeography-verification');
 	}
 
 	/**
@@ -53,9 +52,8 @@ class Vimeography_Gallery_List extends Vimeography_Base
 	 * @access public
 	 * @return bool
 	 */
-	public function galleries_to_show()
-	{
-		return (empty($this->_galleries)) ? FALSE : TRUE;
+	public function galleries_to_show() {
+		return empty($this->_galleries) ? FALSE : TRUE;
 	}
 
 	/**
@@ -64,14 +62,13 @@ class Vimeography_Gallery_List extends Vimeography_Base
 	 * @access public
 	 * @return array
 	 */
-	public function galleries()
-	{
+	public function galleries() {
 		$galleries = array();
 
-		foreach ($this->_galleries as $gallery)
-		{
-			$gallery->edit_url = get_admin_url().'admin.php?page=vimeography-edit-galleries&id='.$gallery->id;
-			$gallery->theme_name = ucfirst($gallery->theme_name);
+		foreach ($this->_galleries as $gallery) {
+			$gallery->edit_url     = get_admin_url().'admin.php?page=vimeography-edit-galleries&id='.$gallery->id;
+			$gallery->theme_name   = ucfirst($gallery->theme_name);
+			$gallery->date_created = date('F jS, Y', strtotime($gallery->date_created));
 
 			$galleries[] = $gallery;
 		}
@@ -85,20 +82,20 @@ class Vimeography_Gallery_List extends Vimeography_Base
 	 * @access private
 	 * @return void
 	 */
-	private function _validate_form($input)
-	{
+	private function _validate_form($input) {
 		// if this fails, check_admin_referer() will automatically print a "failed" page and die.
-		if ( check_admin_referer('vimeography-list-action','vimeography-verification') )
-		{
+		if ( check_admin_referer('vimeography-list-action','vimeography-verification') ) {
 			global $wpdb;
-			$id = intval($input['id']);
-			$action = wp_filter_nohtml_kses($input['action']);
+			$id = intval( $input['id'] );
+			$action = wp_filter_nohtml_kses( $input['action'] );
 
-			if ($action === 'delete')
+			if ($action === 'delete') {
 				$this->_delete_gallery($id);
+			}
 
-			if ($action === 'duplicate')
+			if ($action === 'duplicate') {
 				$this->_duplicate_gallery($id);
+			}
 		}
 	}
 
@@ -108,8 +105,7 @@ class Vimeography_Gallery_List extends Vimeography_Base
 	 * @access private
 	 * @return array
 	 */
-	private function _get_galleries_to_display()
-	{
+	private function _get_galleries_to_display() {
 		global $wpdb;
 		$number_of_galleries = $wpdb->get_results('SELECT COUNT(*) as count from '. VIMEOGRAPHY_GALLERY_TABLE);
 		$limit = 10;
@@ -132,10 +128,8 @@ class Vimeography_Gallery_List extends Vimeography_Base
 	 * @param mixed $id
 	 * @return void
 	 */
-	private function _duplicate_gallery($id)
-	{
-		try
-		{
+	private function _duplicate_gallery($id) {
+		try {
 			global $wpdb;
 			$duplicate = $wpdb->get_results('SELECT * from '.VIMEOGRAPHY_GALLERY_META_TABLE.' AS meta JOIN '.VIMEOGRAPHY_GALLERY_TABLE.' AS gallery ON meta.gallery_id = gallery.id WHERE meta.gallery_id = '.$id.' LIMIT 1;');
 			$result = $wpdb->insert( VIMEOGRAPHY_GALLERY_TABLE, array( 'title' => $duplicate[0]->title, 'date_created' => current_time('mysql'),  'is_active' => 1 ) );
@@ -152,9 +146,7 @@ class Vimeography_Gallery_List extends Vimeography_Base
 
 			$this->messages[] = array('type' => 'success', 'heading' => __('Gallery duplicated.', 'vimeography'), 'message' => __('You now have a clone of your own.', 'vimeography'));
 
-		}
-		catch (Exception $e)
-		{
+		} catch (Exception $e) {
 			$this->messages[] = array('type' => 'error', 'heading' => __('Ruh Roh.', 'vimeography'), 'message' => $e->getMessage());
 		}
 	}
@@ -166,10 +158,8 @@ class Vimeography_Gallery_List extends Vimeography_Base
 	 * @param mixed $id
 	 * @return void
 	 */
-	private function _delete_gallery($id)
-	{
-		try
-		{
+	private function _delete_gallery($id) {
+		try {
 			global $wpdb;
 			$result = $wpdb->query('DELETE gallery, meta FROM '.VIMEOGRAPHY_GALLERY_TABLE.' gallery, '.VIMEOGRAPHY_GALLERY_META_TABLE.' meta WHERE gallery.id = '.$id.' AND meta.gallery_id = '.$id.';');
 
@@ -183,12 +173,18 @@ class Vimeography_Gallery_List extends Vimeography_Base
 	    if ($cache->exists())
 		    $cache->delete();
 
-			$this->messages[] = array('type' => 'success', 'heading' => __('Gallery deleted.', 'vimeography'), 'message' => __('See you later, sucker.', 'vimeography'));
+			$this->messages[] = array(
+				'type' => 'success',
+				'heading' => __('Gallery deleted.', 'vimeography'),
+				'message' => __('See you later, sucker.', 'vimeography')
+			);
 
-		}
-		catch (Exception $e)
-		{
-			$this->messages[] = array('type' => 'error', 'heading' => __('Ruh Roh.', 'vimeography'), 'message' => $e->getMessage());
+		} catch (Exception $e) {
+			$this->messages[] = array(
+				'type' => 'error',
+				'heading' => __('Ruh Roh.', 'vimeography'),
+				'message' => $e->getMessage()
+			);
 		}
 	}
 
@@ -202,8 +198,7 @@ class Vimeography_Gallery_List extends Vimeography_Base
 	 * @param mixed $number_of_pages
 	 * @return void
 	 */
-	private static function _do_pagination($current_page, $number_of_pages)
-	{
+	private static function _do_pagination($current_page, $number_of_pages) {
 		if ($number_of_pages <= 1) return FALSE;
 
 		$pagination = array();
@@ -211,8 +206,7 @@ class Vimeography_Gallery_List extends Vimeography_Base
 		$pagination['previous-page'] = $current_page - 1 > 0 ? $current_page - 1 : FALSE;
 		$pagination['next-page'] = $current_page == $number_of_pages ? FALSE : $current_page + 1;
 
-		for ($i = 1; $i <= $number_of_pages; $i++)
-		{
+		for ($i = 1; $i <= $number_of_pages; $i++) {
 			$page = array();
 			$page['number'] = $i;
 			if ($i == $current_page) $page['active'] = TRUE;

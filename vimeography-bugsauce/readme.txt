@@ -2,7 +2,7 @@
 Contributors: iamdavekiss
 Tags: vimeo
 Requires at least: 3.3
-Tested up to: 3.7.1
+Tested up to: 3.9.1
 Stable tag: 1.0.2
 License: MIT
 

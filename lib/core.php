@@ -1,9 +1,9 @@
 <?php
 
-require_once(VIMEOGRAPHY_PATH . 'vendor/vimeo.php-master/vimeo.php');
+// Exit if accessed directly
+if ( ! defined( 'ABSPATH' ) ) exit;
 
-abstract class Vimeography_Core
-{
+abstract class Vimeography_Core {
   const ENDPOINT  = 'https://api.vimeo.com/';
 
   /**
@@ -50,19 +50,20 @@ abstract class Vimeography_Core
   protected $_featured;
 
   /**
-   * [__construct description]
+   * Set the class properties from the provided
+   * shortcode settings array.
    *
-   * @param [type] $settings [description]
+   * @param array $settings
    */
-  public function __construct($settings)
-  {
+  public function __construct($settings) {
     $this->_endpoint = $settings['source'];
 
-    if (isset($settings['limit']))
+    if ( isset( $settings['limit'] ) )
       $this->_limit = $settings['limit'];
 
-    if ( isset($settings['featured']) AND ! empty($settings['featured']) )
+    if ( isset($settings['featured']) AND ! empty($settings['featured']) ) {
       $this->_featured = '/videos/' . preg_replace("/[^0-9]/", '', $settings['featured']);
+    }
   }
 
   /**
@@ -75,48 +76,42 @@ abstract class Vimeography_Core
   /**
    * Gets the videos for the gallery.
    *
-   * @param  [type] $expiration [description]
-   * @param  [type] $gallery_id [description]
+   * @param  int $expiration Length that the cache is valid, in seconds
+   * @param  int $gallery_id
    * @return [type]             [description]
    */
-  public function get_videos($expiration, $gallery_id)
-  {
+  public function get_videos($expiration, $gallery_id) {
     require_once VIMEOGRAPHY_PATH . 'lib/cache.php';
     $cache = new Vimeography_Cache($gallery_id, $expiration);
 
     // If the cache file exists,
-    if ( $cache->exists() )
-    {
+    if ( $cache->exists() ) {
+
       // and the cache file is expired,
-      if (($last_modified = $cache->expired()) !== FALSE)
-      {
+      if ( ($last_modified = $cache->expired() ) !== FALSE) {
+
         // make the request with a last modified header.
         $result = $this->fetch($last_modified);
 
         // Here is where we need to check if $video_set exists, or if it
         // returned a 304, in which case, we can safely update the
-        // cache's last modified
-        // and return it.
-        if ($result == NULL)
-        {
+        // cache's last modified and return it.
+        if ( $result == NULL ) {
           $result = $cache->renew()->get();
         }
-      }
-      else
-      {
+      } else {
         // If it isn't expired, return it.
         $result = $cache->get();
       }
-    }
-    else
-    {
+    } else {
       // If a cache doesn't exist, go get the videos, dude.
       $result = $this->fetch();
     }
 
     // Cache the results.
-    if ($expiration !== 0)
+    if ($expiration !== 0) {
       $cache->set($result);
+    }
 
     return $result;
   }
@@ -127,22 +122,24 @@ abstract class Vimeography_Core
    * @param $last_modified
    * @return string  $response  Modified response from Vimeo.
    */
-  public function fetch($last_modified = NULL)
-  {
+  public function fetch($last_modified = NULL) {
     if (! $this->_verify_vimeo_endpoint($this->_endpoint) )
-        throw new Vimeography_Exception( sprintf( __('Endpoint %s is not valid.', 'vimeography'), $this->_endpoint ) );
+      throw new Vimeography_Exception( sprintf( __('Endpoint %s is not valid.', 'vimeography'), $this->_endpoint ) );
 
     $response  = $this->_make_vimeo_request($this->_endpoint, $this->_params, $last_modified);
+
+    // If 304 not modified, return
+    if ($response == NULL) {
+      return $response;
+    }
+
     $video_set = $this->_get_video_set($response);
 
-    if (! empty($this->_featured))
-    {
+    if (! empty($this->_featured)) {
       $featured_response = $this->_make_vimeo_request($this->_featured, array(), NULL);
       $featured_video    = $this->_get_video_set($featured_response);
       $result_set        = $this->_arrange_featured_video($video_set, $featured_video);
-    }
-    else
-    {
+    } else {
       $result_set = $video_set;
     }
 
@@ -163,33 +160,45 @@ abstract class Vimeography_Core
    * @param  string $endpoint Vimeo API endpoint
    * @return array  Response Body
    */
-  private function _make_vimeo_request($endpoint, $params, $last_modified)
-  {
-    $response = $this->_vimeo->request( $endpoint, $params, $last_modified );
+  private function _make_vimeo_request($endpoint, $params, $last_modified) {
+    try {
+      $response = $this->_vimeo->request( $endpoint, $params, 'GET', $last_modified );
 
-    switch ($response['status'])
-    {
-      case 200:
-        return $response['body'];
-        break;
-      case 304:
-        return NULL;
-        break;
-      case 400:
-        throw new Vimeography_Exception(__('a bad request made was made. ', 'vimeography') . $response['body']->error );
-        break;
-      case 401:
-        throw new Vimeography_Exception(__('an invalid token was used for the API request. Try removing your Vimeo token on the Vimeography Pro page and following the steps again to create a Vimeo app.', 'vimeography') );
-        break;
-      case 404:
-        throw new Vimeography_Exception(__('the plugin could not retrieve data from the Vimeo API! ', 'vimeography') . $response['body']->error );
-        break;
-      case 500:
-        throw new Vimeography_Exception(__('looks like Vimeo is having some API issues. Try reloading, or, check back in a few minutes.', 'vimeography') );
-        break;
-      default:
-        throw new Vimeography_Exception(sprintf(__('Unknown response status %1$d, %2$s', 'vimeography'), $response['status'], $response['body']->error ) );
-        break;
+      switch ($response['status']) {
+        case 200:
+          return $response['body'];
+          break;
+        case 304:
+          return NULL;
+          break;
+        case 400:
+          throw new Vimeography_Exception(
+            __('a bad request made was made. ', 'vimeography') . $response['body']->error
+          );
+          break;
+        case 401:
+          throw new Vimeography_Exception(
+            __('an invalid token was used for the API request. Try removing your Vimeo token on the Vimeography Pro page and following the steps again to create a Vimeo app.', 'vimeography')
+          );
+          break;
+        case 404:
+          throw new Vimeography_Exception(
+            __('the plugin could not retrieve data from the Vimeo API! ', 'vimeography') . $response['body']->error
+          );
+          break;
+        case 500:
+          throw new Vimeography_Exception(
+            __('looks like Vimeo is having some API issues. Try reloading, or, check back in a few minutes.', 'vimeography')
+          );
+          break;
+        default:
+          throw new Vimeography_Exception(sprintf(__('Unknown response status %1$d, %2$s', 'vimeography'), $response['status'], $response['body']->error ) );
+          break;
+      }
+    } catch (Exception $e) {
+      throw new Vimeography_Exception(
+        __('the request to Vimeo failed. ', 'vimeography') . $e->getMessage()
+      );
     }
   }
 
@@ -198,8 +207,7 @@ abstract class Vimeography_Core
    * @param  [type] $body [description]
    * @return [type]       [description]
    */
-  private static function _get_video_set($body)
-  {
+  private static function _get_video_set($body) {
     if (isset($body->data)) :
       return $body->data;
     else :
@@ -214,8 +222,7 @@ abstract class Vimeography_Core
    * @param  array $featured_video a Vimeo Video
    * @return string $video_set      Arranged array of Vimeo Videos
    */
-  private function _arrange_featured_video($video_set, $featured_video)
-  {
+  private function _arrange_featured_video($video_set, $featured_video) {
     // Does the featured video exist in the set?
     // If so, remove it from the set and place at front.
     $found = FALSE;
@@ -226,10 +233,8 @@ abstract class Vimeography_Core
     // since they would not match.
     $featured_id = str_replace('/', '', strrchr($featured_video->link, '/'));
 
-    foreach ($video_set as $key => $video)
-    {
-      if (strpos($video->uri, $featured_id) !== FALSE)
-      {
+    foreach ($video_set as $key => $video) {
+      if (strpos($video->uri, $featured_id) !== FALSE) {
         unset($video_set[$key]);
         $found = TRUE;
       }
@@ -251,15 +256,12 @@ abstract class Vimeography_Core
    *
    * @return array of Vimeo videos.
    */
-  private function _limit_video_set($video_set)
-  {
-    if ($this->_limit < count($video_set) AND $this->_limit != 0)
-    {
+  private function _limit_video_set($video_set) {
+    if ($this->_limit < count($video_set) AND $this->_limit != 0) {
       for ($video_to_delete = (count($video_set) - 1); $video_to_delete >= $this->_limit; $video_to_delete--)
         unset($video_set[$video_to_delete]);
     }
 
     return $video_set;
   }
-
 }

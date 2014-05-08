@@ -1,18 +1,26 @@
 <?php
 
-class Vimeography_Helpers
-{
+// Exit if accessed directly
+if ( ! defined( 'ABSPATH' ) ) exit;
+
+class Vimeography_Helpers {
   /**
    * [apply_common_formatting description]
    * @param  [type] $data [description]
    * @return [type]       [description]
    */
-  public function apply_common_formatting($data)
-  {
+  public function apply_common_formatting($data) {
     $items = array();
 
-    foreach($data as $item)
-    {
+    foreach($data as $item) {
+      // status can be one of the following:
+      // 'available';'uploading''transcoding';'uploading_error';'transcoding_error';
+      if ($item->status !== 'available') {
+        continue;
+      }
+
+      $item->video_id = str_replace('/', '', strrchr($item->link, '/'));
+
       if ($item->duration AND ! strpos($item->duration, ':'))
         $item->duration = $this->seconds_to_minutes($item->duration);
 
@@ -21,20 +29,20 @@ class Vimeography_Helpers
       // Linkify any URLs in the description
       $item->description = $this->link_urls( nl2br($item->description) );
 
-      $items[] = $item;
+      $items[] = apply_filters('vimeography/edit-video/' . $item->video_id, $item);
     }
 
-    return $items;
-
+    return apply_filters('vimeography/edit-videos', $items);
   }
 
   /**
-   * [format_video_thumbnails description]
+   * Sort the Vimeo thumbnails into different keys based on their index
+   * in the returned pictures array from Vimeo
+   *
    * @param  [type] $item [description]
    * @return [type]       [description]
    */
-  public function format_video_thumbnails($item)
-  {
+  public function format_video_thumbnails($item) {
     // Format the video thumbnails
     for ($i = 0; $i < count($item->pictures); $i++)
     {

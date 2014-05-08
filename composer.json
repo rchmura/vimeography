@@ -1,0 +1,21 @@
+{
+    "name": "davekiss/vimeography",
+    "description": "Super simple galleries for your WordPress site.",
+    "repositories": [
+        {
+            "url": "https://github.com/davekiss/vimeo-php.git",
+            "type": "git"
+        }
+    ],
+    "require": {
+        "mustache/mustache": "2.5.1",
+        "davekiss/vimeo-php": "dev-vimeography"
+    },
+    "license": "GPL3",
+    "authors": [
+        {
+            "name": "Dave Kiss",
+            "email": "hello@davekiss.com"
+        }
+    ]
+}

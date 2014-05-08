@@ -23,7 +23,7 @@
       <section class="vimeography-pro-settings">
         <aside>
           <h2>Create Your App</h2>
-          <p>Go to the <a href="https://developer.vimeo.com/apps/new?oauth2=enabled" title="Create a new Vimeo application" target="_blank">Vimeo Apps page</a> and fill out the form with the following values:</p>
+          <p>Go to the <a href="https://developer.vimeo.com/apps/new" title="Create a new Vimeo application" target="_blank">Vimeo Apps page</a> and fill out the form with the following values:</p>
         </aside>
 
         <table class="table table-striped wp-box" style="width: 600px;">
@@ -52,11 +52,7 @@
             </tr>
             <tr>
               <td><strong>App Callback URL:</strong></td>
-              <td>[leave this blank]</td>
-            </tr>
-            <tr>
-              <td><strong>Enable OAuth 2</strong></td>
-              <td>[check the box]</td>
+              <td>https://vimeography.com/auth</td>
             </tr>
             <tr>
               <td><strong>Terms of Service:</strong></td>
@@ -84,7 +80,7 @@
         {{/access_token}}
         {{^access_token}}
           <h2>Register Your App</h2>
-          <p>Copy your app's <strong>OAuth 2 access token</strong> and paste it here to register your app.</p>
+          <p>Click the <strong>oAuth2 tab</strong>, copy your <strong>access token</strong>, and paste it here to register your app.</p>
         {{/access_token}}
       </aside>
 
