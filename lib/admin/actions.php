@@ -73,7 +73,7 @@ class Vimeography_Admin_Actions {
   }
 
   /**
-   * Yells at the user to upgrade their broken
+   * Yells at the user to upgrade their
    * Pro plugin if it is installed and out of date.
    *
    * @return void
@@ -94,8 +94,8 @@ class Vimeography_Admin_Actions {
    * @return string | html
    */
   public function vimeography_pro_upgrade_notice() {
-    printf( '<div class="update-nag"><p>%1$s</p></div>',
-      sprintf( __( "<strong>Hey!</strong> It looks like there is an update ready for Vimeography Pro. Head on over to the <a href=\"%s\" title=\"Plugins Page\">Plugins page</a> to get the latest compatible version.", 'vimeography' ), admin_url('plugins.php') )
+    printf( '<div class="update-nag">%1$s</div>',
+      sprintf( __( "<strong>Hey!</strong> It looks like there is an update ready for Vimeography Pro. Make sure you've entered your <a href=\"%s\" title=\"Vimeography Manage Activations Page\">activation key</a>, then head on over to the <a href=\"%s\" title=\"Plugins Page\">Plugins page</a> to get the latest compatible version.", 'vimeography' ), admin_url('admin.php?page=vimeography-manage-activations'), admin_url('plugins.php') )
     );
   }
 
