@@ -220,6 +220,9 @@ class Vimeography_Shortcode extends Vimeography {
       $result = $vimeography->get_videos( $this->_gallery_settings['cache'], $this->_gallery_id );
 
       // Render that ish.
+      $renderer->load_theme();
+
+      $renderer = apply_filters('vimeography/deprecated/reload-pro-renderer', $renderer, $this->_gallery_settings, $this->_gallery_id );
       return $renderer->render( $result );
     }
     catch (Vimeography_Exception $e) {

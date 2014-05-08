@@ -7,28 +7,28 @@ class Vimeography_Gallery_Edit extends Vimeography_Base {
 
   /**
    * Current loaded gallery
-   * 
+   *
    * @var array
    */
-  protected $_gallery;
+  protected $_gallery = array();
 
   /**
    * Current gallery ID set by GET param
-   * 
+   *
    * @var int
    */
   protected $_gallery_id;
 
   /**
    * Cache class instance.
-   * 
+   *
    * @var object
    */
   protected $_cache;
 
   /**
    * [$theme_supports_settings description]
-   * 
+   *
    * @var boolean
    */
   public $theme_supports_settings = FALSE;
@@ -40,6 +40,11 @@ class Vimeography_Gallery_Edit extends Vimeography_Base {
   protected $_settings_file;
 
   public function __construct() {
+
+    // Backwards compatibility
+    if ( ! isset($this->_gallery[0]) ) {
+      $this->_gallery[0] = new StdClass();
+    }
 
     $this->_gallery_id = intval( $_GET['id'] );
 
@@ -80,9 +85,9 @@ class Vimeography_Gallery_Edit extends Vimeography_Base {
   }
 
   /**
-   * Removes the custom CSS file associated with 
+   * Removes the custom CSS file associated with
    * the current gallery, if it exists.
-   * 
+   *
    * @return void
    */
   public function vimeography_refresh_gallery_appearance() {
@@ -163,7 +168,7 @@ class Vimeography_Gallery_Edit extends Vimeography_Base {
 
   /**
    * Generates a nonce field for the Vimeography basic gallery settings.
-   * 
+   *
    * @return string  html
    */
   public static function basic_nonce() {
@@ -172,7 +177,7 @@ class Vimeography_Gallery_Edit extends Vimeography_Base {
 
   /**
    * Generates a nonce field for the Vimeography theme gallery settings.
-   * 
+   *
    * @return string  html
    */
   public static function theme_nonce() {
@@ -181,7 +186,7 @@ class Vimeography_Gallery_Edit extends Vimeography_Base {
 
   /**
    * Generates a nonce field for the Vimeography theme settings.
-   * 
+   *
    * @return string  html
    */
   public static function theme_settings_nonce() {
@@ -227,6 +232,10 @@ class Vimeography_Gallery_Edit extends Vimeography_Base {
     }
 
     $this->_gallery[0]->featured_video = $this->_gallery[0]->featured_video === 0 ? '' : $this->_gallery[0]->featured_video;
+
+    // Backwards compatibility
+    $this->_gallery = apply_filters('vimeography/deprecated/reload-pro-gallery-settings', $this, $this->_gallery);
+
     return apply_filters('vimeography/gallery-settings', $this->_gallery);
   }
 
@@ -287,7 +296,7 @@ class Vimeography_Gallery_Edit extends Vimeography_Base {
 
   /**
    * [_vimeography_validate_basic_settings description]
-   * 
+   *
    * @param  array  $input unsanitized POST data
    * @return [type]        [description]
    */
@@ -441,12 +450,12 @@ class Vimeography_Gallery_Edit extends Vimeography_Base {
         // Do filesystem stuffs here… a simple file_put_contents would be nice.
         $_POST['vimeography_theme_settings_serialized'] = serialize($input);
 
-        $url = wp_nonce_url( 
-                network_admin_url( 
-                  add_query_arg( 
-                    array( 'page' => 'vimeography-edit-galleries', 'id' => $this->_gallery_id ), 
+        $url = wp_nonce_url(
+                network_admin_url(
+                  add_query_arg(
+                    array( 'page' => 'vimeography-edit-galleries', 'id' => $this->_gallery_id ),
                     'admin.php'
-                  ) 
+                  )
                 ),
                 'vimeography-theme-settings-action',
                 'vimeography-theme-settings-verification'
@@ -459,7 +468,7 @@ class Vimeography_Gallery_Edit extends Vimeography_Base {
 
           if ( ! $wp_filesystem->exists( VIMEOGRAPHY_CUSTOMIZATIONS_PATH ) ) {
             if ( ! wp_mkdir_p( VIMEOGRAPHY_CUSTOMIZATIONS_PATH ) ) {
-              throw new Exception( 
+              throw new Exception(
                 __('Vimeography could not create the customizations directory.', 'vimeography')
               );
             }
@@ -488,7 +497,7 @@ class Vimeography_Gallery_Edit extends Vimeography_Base {
 
   /**
    * Convert the jQuery attribute selector to an actual css property
-   * 
+   *
    * @param  [type] $attribute [description]
    * @return [type]            [description]
    */

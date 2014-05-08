@@ -40,6 +40,14 @@ class Vimeography_Renderer {
   protected $_template;
 
   /**
+   * Backwards compatibility variable for Vimeography Pro < 0.6.3
+   * This is an instanceof $_template
+   *
+   * @var [type]
+   */
+  protected $_theme;
+
+  /**
    * Creates the rendering engine, called from the Vimeography Shortcode.
    *
    * $settings should contain at least
@@ -55,7 +63,10 @@ class Vimeography_Renderer {
   public function __construct($settings, $gallery_id) {
     $this->_settings   = $settings;
     $this->_gallery_id = $gallery_id;
-    $this->_view = new stdClass();
+
+    if (! $this->_view) {
+      $this->_view = new stdClass();
+    }
   }
 
   /**
@@ -134,6 +145,9 @@ class Vimeography_Renderer {
     $this->_template = ( isset( $settings['partial'] ) ) ?
       $mustache->loadPartial( strtolower( $settings['partial'] ) ) :
       $mustache->loadTemplate( strtolower( $theme['name'] ) );
+
+    // Backwards-Compatibility for Vimeography Pro < 0.7
+    $this->_theme = $this->_template;
   }
 
   /**
@@ -154,22 +168,26 @@ class Vimeography_Renderer {
   }
 
   /**
+   * [load_theme description]
+   * @return [type] [description]
+   */
+  public function load_theme() {
+    self::_set_active_theme( $this->_settings );
+    self::_load_theme_class( $this->_active_theme );
+    self::_load_theme_template( $this->_active_theme, $this->_settings );
+    self::_load_theme_dependencies( $this->_view );
+    $this->_view->gallery_id = $this->_gallery_id;
+  }
+
+  /**
    * Renders the data inside of the theme's Mustache template.
    * We did it!
    *
    * @param  array $data Video set data from Vimeo
    * @return string | html
    */
-  public function render($result)
-  {
-    self::_set_active_theme( $this->_settings );
-    self::_load_theme_class( $this->_active_theme );
-    self::_load_theme_template( $this->_active_theme, $this->_settings );
-    self::_load_theme_dependencies( $this->_view );
-
+  public function render($result) {
     // Set remaining view variables and render away
-    $this->_view->gallery_id = $this->_gallery_id;
-
     if ( isset( $this->_settings['width'] ) ) {
       $this->_view->gallery_width = $this->_settings['width'];
     }

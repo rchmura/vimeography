@@ -59,6 +59,7 @@ class Vimeography {
       // Can save these in public vars if need to access
       new Vimeography_Database;
       new Vimeography_Upgrade;
+      new Vimeography_Deprecated;
       new Vimeography_Init;
       new Vimeography_Ajax;
       self::$instance->addons = new Vimeography_Addons;
@@ -112,6 +113,7 @@ class Vimeography {
 
     require_once VIMEOGRAPHY_PATH . 'lib/database.php';
     require_once VIMEOGRAPHY_PATH . 'lib/upgrade.php';
+    require_once VIMEOGRAPHY_PATH . 'lib/deprecated.php';
     require_once VIMEOGRAPHY_PATH . 'lib/addons.php';
     require_once VIMEOGRAPHY_PATH . 'lib/ajax.php';
     require_once VIMEOGRAPHY_PATH . 'lib/rewrite.php';
