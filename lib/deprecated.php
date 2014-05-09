@@ -33,8 +33,9 @@ class Vimeography_Deprecated {
    * Adds a class alias for the un-namespaced Vimeo library class name
    */
   public function add_vimeo_library_class_alias() {
-    if ( $this->_vimeography_pro_version && version_compare($this->_vimeography_pro_version, '0.7', '<' ) ) {
-      @class_alias('Vimeography\Vimeo', 'Vimeo');
+    if ( $this->_vimeography_pro_version && version_compare($this->_vimeography_pro_version, '0.7.1', '<' ) ) {
+      @class_alias('Vimeography_Vimeo', 'Vimeo');
+      @class_alias('Vimeography_Vimeo', 'Vimeography\Vimeo');
     }
   }
 

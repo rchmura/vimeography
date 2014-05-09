@@ -16,12 +16,10 @@
  *   limitations under the License.
  */
 
-namespace Vimeography;
-
 /**
  *
  */
-class Vimeo
+class Vimeography_Vimeo
 {
     const ROOT_ENDPOINT = 'https://api.vimeo.com';
     const AUTH_ENDPOINT = 'https://api.vimeo.com/oauth/authorize';
@@ -141,7 +139,7 @@ class Vimeo
         $curl_info = curl_getinfo($curl);
 
         if ( curl_errno($curl) ) {
-          throw new \Exception('CURL Error:' . curl_error($curl) );
+          throw new Exception('CURL Error:' . curl_error($curl) );
         }
 
         curl_close($curl);
@@ -254,7 +252,7 @@ class Vimeo
     public function upload ($file_path, $machine_id = null) {
         //  Validate that our file is real.
         if (!is_file($file_path)) {
-            throw new Vimeography\VimeoUploadException('Unable to locate file to upload.');
+            throw new VimeoUploadException('Unable to locate file to upload.');
         }
 
         //  Begin the upload request by getting a ticket
@@ -264,7 +262,7 @@ class Vimeo
         }
         $ticket = $this->request('/me/videos', $ticket_args, 'POST');
         if ($ticket['status'] != 200) {
-            throw new Vimeography\VimeoUploadException('Unable to get an upload ticket.');
+            throw new VimeoUploadException('Unable to get an upload ticket.');
         }
 
         //  We are going to always target the secure upload URL.
@@ -311,7 +309,7 @@ class Vimeo
         //  Validate that we got back 201 Created
         $status = (int) $completion['status'];
         if ($status != 201) {
-            throw new Vimeography\VimeoUploadException('Error completing the upload.');
+            throw new VimeoUploadException('Error completing the upload.');
         }
 
         //  Furnish the location for the new clip in the API via the Location header.
@@ -322,4 +320,4 @@ class Vimeo
 /**
  * VimeoUploadException class for failure to upload to the server.
  */
-class VimeoUploadException extends \Exception {}
+class VimeoUploadException extends Exception {}
