@@ -3,7 +3,7 @@ Contributors: iamdavekiss
 Tags: vimeo, video, videos, gallery, vimeography, media, player, playlist, showcase, skins, themes, video gallery
 Requires at least: 3.3
 Tested up to: 3.9.1
-Stable tag: 1.2.0.2
+Stable tag: 1.2.0.3
 License: GPL3
 
 The easiest way to create beautiful Vimeo galleries on your WordPress site.
@@ -101,6 +101,11 @@ Heck yeah! Use the appearance editor to change your theme's style so that it mat
 4. Get new styles by installing gallery themes.
 
 == Changelog ==
+= 1.2.0.3 =
+* Added jQuery Slick [MIT] to shared assets library
+* Fixed an issue where activation keys with dashes wouldn't save
+* Fixed an issue where gallery appearance changes wouldn't save in some cases
+
 = 1.2.0.2 =
 * Added a fix for users running PHP <= 5.2, which doesn't support namespaces
 

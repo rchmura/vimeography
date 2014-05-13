@@ -113,7 +113,7 @@ class Vimeography_Update {
 
     if ( isset( $_POST['vimeography-activate-key'] ) ) {
 
-      $key = sanitize_text_field( $_POST['vimeography-activation-key'] );
+      $key = str_replace('-', '', strtoupper( sanitize_text_field( $_POST['vimeography-activation-key'] ) ) );
 
       // Ignore if this is a duplicate incoming key.
       if ( $this->vimeography_check_if_activation_key_exists( $key ) ) {
@@ -164,7 +164,7 @@ class Vimeography_Update {
     // Run on deactivate button press
     if ( isset( $_POST['vimeography-deactivate-key'] ) ) {
 
-      $key = sanitize_text_field( $_POST['vimeography-activation-key'] );
+      $key = str_replace('-', '', strtoupper( sanitize_text_field( $_POST['vimeography-activation-key'] ) ) );
 
       // Data to send to the API
       $api_params = array(
