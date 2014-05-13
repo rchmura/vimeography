@@ -461,7 +461,7 @@ class Vimeography_Gallery_Edit extends Vimeography_Base {
                 'vimeography-theme-settings-verification'
               );
 
-        $filesystem = new Vimeography_Filesystem( $url, array('vimeography_theme_settings_serialized') );
+        $filesystem = new Vimeography_Filesystem( $url, array('vimeography_theme_settings_serialized', 'vimeography-action') );
 
         if ( $filesystem->connect() ) {
           global $wp_filesystem;
