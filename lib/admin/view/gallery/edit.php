@@ -478,6 +478,8 @@ class Vimeography_Gallery_Edit extends Vimeography_Base {
           if ( ! $wp_filesystem->put_contents( $filepath, $css, FS_CHMOD_FILE ) ) {
             throw new Exception( __('There was an error writing your file. Please try again!', 'vimeography') );
           }
+        } else {
+          exit;
         }
 
         $this->messages[] = array(
