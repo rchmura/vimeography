@@ -109,7 +109,9 @@ class Vimeography {
       require_once VIMEOGRAPHY_PATH . '/vendor/mustache/mustache/src/Mustache/Autoloader.php';
     }
 
-    require_once VIMEOGRAPHY_PATH . 'vendor/davekiss/vimeo-php/vimeo.php';
+    if ( ! class_exists('Vimeography_Vimeo') ) {
+      require_once VIMEOGRAPHY_PATH . 'vendor/davekiss/vimeo-php/vimeo.php';
+    }
 
     require_once VIMEOGRAPHY_PATH . 'lib/database.php';
     require_once VIMEOGRAPHY_PATH . 'lib/upgrade.php';
