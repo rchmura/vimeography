@@ -286,7 +286,7 @@ class Vimeography_Update {
     $entry->product_name   = $license_data->vimeography_product_name;
 
     $this->_activation_keys[] = $entry;
-    return update_site_option('vimeography_activation_keys', $this->_activation_keys );
+    return update_site_option('vimeography_activation_keys', array_values( $this->_activation_keys ) );
   }
 
   /**
@@ -303,7 +303,7 @@ class Vimeography_Update {
         }
       }
 
-      return update_site_option( 'vimeography_activation_keys', $this->_activation_keys );
+      return update_site_option( 'vimeography_activation_keys', array_values( $this->_activation_keys ) );
     }
 
     return FALSE;
