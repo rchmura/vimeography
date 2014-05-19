@@ -3,7 +3,7 @@
 Plugin Name: Vimeography
 Plugin URI: http://vimeography.com
 Description: Vimeography is the easiest way to set up a custom Vimeo gallery on your site.
-Version: 1.2.0.3
+Version: 1.2.0.4
 Author: Dave Kiss
 Author URI: http://davekiss.com
 License: GPL3
@@ -90,7 +90,7 @@ class Vimeography {
     define( 'VIMEOGRAPHY_CUSTOMIZATIONS_PATH',  WP_CONTENT_DIR . '/vimeography/assets/css/' );
     define( 'VIMEOGRAPHY_CUSTOMIZATIONS_URL',   content_url() . '/vimeography/assets/css/' );
     define( 'VIMEOGRAPHY_BASENAME', plugin_basename( __FILE__ ) );
-    define( 'VIMEOGRAPHY_VERSION', '1.2.0.3');
+    define( 'VIMEOGRAPHY_VERSION', '1.2.0.4');
     define( 'VIMEOGRAPHY_GALLERY_TABLE', $wpdb->prefix . "vimeography_gallery");
     define( 'VIMEOGRAPHY_GALLERY_META_TABLE', $wpdb->prefix . "vimeography_gallery_meta");
     define( 'VIMEOGRAPHY_CURRENT_PAGE', basename($_SERVER['PHP_SELF']));
@@ -109,7 +109,9 @@ class Vimeography {
       require_once VIMEOGRAPHY_PATH . '/vendor/mustache/mustache/src/Mustache/Autoloader.php';
     }
 
-    require_once VIMEOGRAPHY_PATH . 'vendor/davekiss/vimeo-php/vimeo.php';
+    if ( ! class_exists('Vimeography_Vimeo') ) {
+      require_once VIMEOGRAPHY_PATH . 'vendor/davekiss/vimeo-php/vimeo.php';
+    }
 
     require_once VIMEOGRAPHY_PATH . 'lib/database.php';
     require_once VIMEOGRAPHY_PATH . 'lib/upgrade.php';

@@ -98,19 +98,25 @@ abstract class Vimeography_Core {
         // cache's last modified and return it.
         if ( $result == NULL ) {
           $result = $cache->renew()->get();
+        } else {
+          // Cache the updated results.
+          if ( intval($expiration) !== 0) {
+            $cache->set($result);
+          }
         }
       } else {
+
         // If it isn't expired, return it.
         $result = $cache->get();
       }
     } else {
       // If a cache doesn't exist, go get the videos, dude.
       $result = $this->fetch();
-    }
 
-    // Cache the results.
-    if ($expiration !== 0) {
-      $cache->set($result);
+      // Cache the results.
+      if ( intval($expiration) !== 0) {
+        $cache->set($result);
+      }
     }
 
     return $result;
