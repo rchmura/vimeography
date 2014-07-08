@@ -103,9 +103,10 @@ class Vimeography_Admin_Menu {
 
           $template = $mustache->loadTemplate('gallery/edit/layout');
 
-        }
-        else
-        {
+        } else {
+          wp_enqueue_script('jquery-ui-dialog');
+          wp_enqueue_style ('wp-jquery-ui-dialog');
+
           require_once VIMEOGRAPHY_PATH . 'lib/admin/view/gallery/list.php';
           if ( is_plugin_active('vimeography-pro/vimeography-pro.php') ) {
             do_action('vimeography-pro/load-list');

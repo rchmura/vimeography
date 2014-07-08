@@ -3,36 +3,44 @@
   $(document).ready(function(){
     $('.vimeography-question').tooltip();
 
-    $('.vimeography-gallery-settings').popover({
-      placement: 'bottom',
-      trigger: 'hover',
-      html: true,
-      content: function(){
-        return '<ul style="margin: -10px 5px 5px;">' +
-              '<li><strong>Active Theme: </strong>'+$(this).attr('data-active-theme')+'</li>'+
-              '<li><strong>Video Limit: </strong>'+$(this).attr('data-video-limit')+'</li>'+
-              '<li><strong>Featured Video: </strong>'+$(this).attr('data-featured-video')+'</li>'+
-              '<li><strong>Cache Timeout: </strong>'+$(this).attr('data-cache-timeout')+'</li>'+
-              '<li><strong>Created On: </strong>'+$(this).attr('data-created-on')+'</li>'+
-            '</ul>';
-      }
+    var $info = $("#modal-content");
+    $info.dialog({
+      'dialogClass'   : 'wp-dialog',
+      'modal'         : true,
+      'autoOpen'      : false,
+      'closeOnEscape' : true,
+      'minWidth'      : 400,
+      'buttons'       : [
+        {
+          text: "Duplicate Gallery",
+          click: function(){
+            $('#vimeography-duplicate-gallery-form').submit();
+          }
+        },
+        {
+          text: "Cancel",
+          click: function() {
+            $(this).dialog('close');
+          }
+        }
+      ]
     });
 
-    $('.vimeography-duplicate-gallery').click(function(e){
-      var id = $(this).attr('data-id');
-      $('#vimeography-list-action').val('duplicate');
-      $('#vimeography-list-id').val(id);
-      $('#vimeography-list-form').submit();
+    $(".vimeography-duplicate-gallery").click(function(event) {
+        event.preventDefault();
+        var title  = $(this).attr('data-title') + ' copy';
+        var source = $(this).attr('data-source');
+        var gallery_id = $(this).attr('data-gallery-id');
+
+        $('#vimeography-duplicate-gallery-title').attr({value: title, placeholder: title });
+        $('#vimeography-duplicate-gallery-source').attr({value: source, placeholder: source });
+        $('#vimeography-duplicate-gallery-id').val(gallery_id);
+        $info.dialog('open');
     });
 
-    $('.vimeography-delete-gallery').click(function(e){
-      e.preventDefault();
-      var id = $(this).attr('data-id');
-      if(confirm('WARNING: You are about to delete this gallery. \'Cancel\' to stop, \'OK\' to delete.'))
-      {
-        $('#vimeography-list-action').val('delete');
-        $('#vimeography-list-id').val(id);
-        $('#vimeography-list-form').submit();
+    $('.row-actions .delete a').click(function(e){
+      if ( ! confirm('WARNING: You are about to delete this gallery. \'Cancel\' to stop, \'OK\' to delete.') ) {
+        e.preventDefault();
       }
     });
   });
@@ -41,91 +49,57 @@
 
 <style type="text/css">
 .vimeography-question {display: inline-block; width: 18px; height: 20px;}
+td.column-source_url,
+td.column-shortcode {
+  font-weight: 700;
+}
+
+.column-id {width: 50px;}
+.column-title {width: 200px;}
+.column-title > a {font-weight: 700;}
+.column-source_url {width: 330px;}
+.column-shortcode {width: 200px;}
+
+input.current-page { width: 48px; }
+
+#vimeography-duplicate-gallery-form input[type="text"] {
+  width: 330px;
+  height: 30px;
+  margin: 0 0 20px;
+}
 </style>
 
 <div class="wrap">
-  <div class="wp_bootstrap">
-    <h2 class="page-title">Edit Galleries <a href="{{new_gallery_url}}" class="add-new-h2">Add New</a></h2>
+  <h2 class="page-title">Edit Galleries <a href="{{new_gallery_url}}" class="add-new-h2">Add New</a></h2>
 
-    {{#messages}}
-      <div class="alert alert-{{type}} fade in">
-        <a class="close" data-dismiss="alert" href="#">&times;</a>
-        <h3 class="alert-heading">{{heading}}</h3>
-        <p>{{message}}</p>
-      </div>
-    {{/messages}}
-  </div>
+  {{#messages}}
+    <div class="{{type}}">
+      <p><strong>{{heading}}</strong> {{message}}</p>
+    </div>
+  {{/messages}}
 
   {{#galleries_to_show}}
-    <table cellspacing="0" class="wp-list-table widefat fixed">
-      <thead>
-        <tr>
-          <th style="" class="manage-column column-cb check-column" id="cb" scope="col"><input type="checkbox" onclick="jQuery('.vimeography_list_checkbox').attr('checked', this.checked);" name="form_bulk_check_all"></th>
-            <th class="manage-column column-cb check-column" id="active" scope="col"></th>
-            <th style="width:50px;" class="manage-column" id="id" scope="col">Id</th>
-            <th style="width:300px" class="manage-column column-title" id="title" scope="col">Title</th>
-            <th style="width:300px;" class="manage-column column-author" id="author" scope="col">Video Source  <div class="wp_bootstrap" style="display:inline-block;"><a class="vimeography-question" href="#" data-toggle="tooltip" title="The location of the videos that your gallery is using."><i class="icon-question-sign"></i></a></div></th>
-            <th style="width: 200px;" class="manage-column" scope="col">Shortcode  <div class="wp_bootstrap" style="display:inline-block;"><a class="vimeography-question" href="#" rel="tooltip" title="Copy and paste this on to your post or page to show the gallery!"><i class="icon-question-sign"></i></a></div></th>
-            <th style="" class="manage-column" id="theme-name" scope="col">Quickview  <div class="wp_bootstrap" style="display:inline-block;"><a class="vimeography-question" href="#" rel="tooltip" title="A glance at the settings that are currently applied to your gallery."><i class="icon-question-sign"></i></a></div></th>
-            </tr>
-        </thead>
 
-        <tfoot>
-          <tr>
-            <th style="" class="manage-column column-cb check-column" id="cb" scope="col"><input type="checkbox" onclick="jQuery('.vimeography_list_checkbox').attr('checked', this.checked);" name="form_bulk_check_all"></th>
-              <th class="manage-column column-cb check-column" id="active" scope="col"></th>
-              <th class="manage-column" id="id" scope="col">Id</th>
-              <th style="width: 300px;" class="manage-column column-title" id="title" scope="col">Title</th>
-              <th style="width:300px;" class="manage-column column-author" id="source" scope="col">Video Source</th>
-              <th style="width: 200px;" class="manage-column" id="shortcode" scope="col">Shortcode</th>
-              <th style="" class="manage-column column-author" id="theme" scope="col">Quickview</th>
-          </tr>
-        </tfoot>
+    {{{gallery_table}}}
 
-        <tbody class="list:user user-list">
+    <div id="modal-content" title="Duplicate Gallery">
+      <form id="vimeography-duplicate-gallery-form" class="form-wrap" method="get" action="">
+        <input type="hidden" name="vimeography-action" value="duplicate_gallery" />
+        <input type="hidden" name="page" value="vimeography-edit-galleries" />
+        <input type="hidden" id="vimeography-duplicate-gallery-id" name="gallery_id" value="" />
 
-          {{#galleries}}
-          <tr valign="top" class="author-self status-inherit">
-            <th class="check-column" scope="row"><input type="checkbox" class="vimeography_list_checkbox" value="{{id}}" name="form[]"></th>
+        <label for="vimeography-duplicate-gallery-title"><strong>New Gallery Title</strong></label>
+        <input type="text" id="vimeography-duplicate-gallery-title" name="gallery_title" />
 
-                  <td><div class="wp_bootstrap"><i class="icon-ok" style="cursor:pointer;"></i></div></td>
-                  <td class="column-id">{{id}}</td>
-                  <td class="column-title">
-                    <strong><a title="Edit" href="{{edit_url}}" class="row-title">{{title}}</a></strong>
+        <label for="vimeography-duplicate-gallery-source"><strong>Show the videos from</strong></label>
+        <input type="text" id="vimeography-duplicate-gallery-source" name="gallery_source" />
 
-                    <div class="row-actions">
-                        <span class="edit"><a href="{{edit_url}}" title="Edit this gallery">Edit</a> |</span>
-                        <span class="edit"><a target="_blank" href="{{edit_url}}" title="Preview this gallery">Preview</a> |</span>
-                <span class="edit"><a class="vimeography-duplicate-gallery" data-id="{{id}}" href="#" title="Duplicate this gallery">Duplicate</a> |</span>
-                <span class="edit"><a class="vimeography-delete-gallery" data-id="{{id}}" href="#" title="Delete">Delete</a></span>
-              </div>
-                </td>
-                <td><strong><a href="{{source_url}}" target="_blank" title="{{source_url}}">{{source_url}}</a></strong></td>
-                <td><strong>[vimeography id="{{id}}"]</strong></td>
-                <td><span class="wp_bootstrap"><button class="vimeography-gallery-settings btn btn-mini btn-info dropdown-toggle" style="cursor: default;" title="Quickview for {{title}}" data-active-theme="{{theme_name}}" data-video-limit="{{video_limit}}" data-featured-video="{{featured_video}}" data-cache-timeout="{{cache_timeout}}" data-created-on="{{date_created}}">Gallery Quickview <span class="caret"></span></button></span></td>
-            </tr>
-          {{/galleries}}
+        <p>
+          <label for="vimeography-duplicate-gallery-appearance"><input id="vimeography-duplicate-gallery-appearance" name="duplicate_appearance" type="checkbox" checked="checked" /> Also copy gallery appearance settings</label>
+        </p>
+      </form>
+    </div>
 
-      </tbody>
-    </table>
-    <form id="vimeography-list-form" method="post" action="{{admin_url}}edit-galleries">
-      <input id="vimeography-list-action" type="hidden" name="vimeography-list[action]" value="" />
-      <input id="vimeography-list-id" type="hidden" name="vimeography-list[id]" value="" />
-      {{{nonce}}}
-    </form>
-    {{#pagination}}
-      <div class="wp_bootstrap">
-          <div class="pagination">
-            <ul>
-              <li{{^previous-page}} class="disabled{{/previous-page}}"><a href="{{#previous-page}}{{admin_url}}edit-galleries&p={{previous-page}}{{/previous-page}}{{^previous-page}}#{{/previous-page}}">&larr;</a></li>
-              {{#pages}}
-                <li{{#active}} class="active"{{/active}}><a href="{{admin_url}}edit-galleries&p={{number}}">{{number}}</a></li>
-              {{/pages}}
-              <li{{^next-page}} class="disabled{{/next-page}}"><a href="{{#next-page}}{{admin_url}}edit-galleries&p={{next-page}}{{/next-page}}{{^next-page}}#{{/next-page}}">&rarr;</a></li>
-            </ul>
-          </div>
-      </div>
-    {{/pagination}}
   {{/galleries_to_show}}
 
   {{^galleries_to_show}}
