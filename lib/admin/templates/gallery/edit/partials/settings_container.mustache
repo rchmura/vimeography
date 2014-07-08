@@ -6,23 +6,18 @@
                 <h2>Edit Theme Settings</h2>
               </div>
               <div id="vimeography-theme-settings-container">
-                <div id="aujus2" style="position: absolute; overflow: hidden; top: 0; bottom: 0;">
+                <form id="vimeography-theme-settings-form" method="post" action="{{admin_url}}edit-galleries&id={{id}}" style="margin: 0; width: 240px; padding: 0 20px; background-color: #e3e3e3; overflow-y: auto; overflow-x: hidden;">
+                {{#vimeography_theme_settings}}
+                    {{{setting}}}
+                {{/vimeography_theme_settings}}
 
-                  <form id="vimeography-theme-settings-form" method="post" action="{{admin_url}}edit-galleries&id={{id}}" style="margin: 0; width: 240px; padding: 0 20px; background-color: #e3e3e3; overflow-y: auto; overflow-x: hidden;">
-                  {{#vimeography_theme_settings}}
-                      {{{setting}}}
-                  {{/vimeography_theme_settings}}
-
-                    <div class="vimeography-gallery-menu-setting last">
-                        {{{theme_settings_nonce}}}
-                        <input type="hidden" name="vimeography-action" value="validate_theme_settings" />
-                        <input class="btn btn-primary" type="submit" value="Save Changes">
-                        <a href="{{admin_url}}edit-galleries&id={{id}}&vimeography-action=refresh_gallery_appearance" class="btn btn-error" title="Reset Theme Settings">Reset</a>
-                    </div>
-
-                  </form>
-
-                </div>
+                  <div class="vimeography-gallery-menu-setting last">
+                      {{{theme_settings_nonce}}}
+                      <input type="hidden" name="vimeography-action" value="validate_theme_settings" />
+                      <input class="btn btn-primary" type="submit" value="Save Changes">
+                      <a href="{{admin_url}}edit-galleries&id={{id}}&vimeography-action=refresh_gallery_appearance" class="btn btn-error" title="Reset Theme Settings">Reset</a>
+                  </div>
+                </form>
               </div>
 
             </div> <!-- end gallery theme settings container -->

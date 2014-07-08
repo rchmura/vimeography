@@ -76,23 +76,16 @@ class Vimeography_Admin_Menu {
         $template = $mustache->loadTemplate('gallery/new');
         break;
       case 'toplevel_page_vimeography-edit-galleries':
-        if (isset($_GET['id']))
+        if ( isset( $_GET['id'] ) )
         {
           if (! wp_script_is('jquery-ui')) {
             wp_register_script('jquery-ui', "//ajax.googleapis.com/ajax/libs/jqueryui/1.8/jquery-ui.min.js", false, null);
             wp_enqueue_script('jquery-ui');
           }
-          wp_register_script( 'jquery-mousewheel', VIMEOGRAPHY_URL.'lib/admin/assets/js/jquery.mousewheel.min.js', 'jquery');
-          wp_register_script( 'jScrollPane', VIMEOGRAPHY_URL.'lib/admin/assets/js/jquery.jscrollpane.min.js', 'jquery');
-          wp_register_style( 'jScrollPane', VIMEOGRAPHY_URL.'lib/admin/assets/css/plugins/jScrollPane/jquery.jscrollpane.css', 'jquery');
 
-          wp_enqueue_script( 'jquery-mousewheel');
-          wp_enqueue_script( 'jScrollPane');
-          wp_enqueue_style( 'jScrollPane');
+          require_once VIMEOGRAPHY_PATH . 'lib/admin/view/gallery/edit.php';
 
-          require_once(VIMEOGRAPHY_PATH . 'lib/admin/view/gallery/edit.php');
-
-          if (is_plugin_active('vimeography-pro/vimeography-pro.php')) {
+          if ( is_plugin_active('vimeography-pro/vimeography-pro.php') ) {
             do_action('vimeography-pro/load-editor');
             $view = new Vimeography_Pro_Gallery_Edit;
           } else {
@@ -110,34 +103,32 @@ class Vimeography_Admin_Menu {
 
           $template = $mustache->loadTemplate('gallery/edit/layout');
 
-        }
-        else
-        {
-          require_once(VIMEOGRAPHY_PATH . 'lib/admin/view/gallery/list.php');
-          if (is_plugin_active('vimeography-pro/vimeography-pro.php'))
-          {
+        } else {
+          wp_enqueue_script('jquery-ui-dialog');
+          wp_enqueue_style ('wp-jquery-ui-dialog');
+
+          require_once VIMEOGRAPHY_PATH . 'lib/admin/view/gallery/list.php';
+          if ( is_plugin_active('vimeography-pro/vimeography-pro.php') ) {
             do_action('vimeography-pro/load-list');
             $view = new Vimeography_Pro_Gallery_List;
-          }
-          else
-          {
+          } else {
             $view = new Vimeography_Gallery_List;
           }
           $template = $mustache->loadTemplate('gallery/list');
         }
         break;
       case 'vimeography_page_vimeography-manage-activations':
-        require_once(VIMEOGRAPHY_PATH . 'lib/admin/view/theme/list.php');
+        require_once VIMEOGRAPHY_PATH . 'lib/admin/view/theme/list.php';
         $view = new Vimeography_Theme_List;
         $template = $mustache->loadTemplate('theme/list');
         break;
       case 'vimeography_page_vimeography-pro':
-        require_once(VIMEOGRAPHY_PATH . 'lib/admin/view/vimeography/pro.php');
+        require_once VIMEOGRAPHY_PATH . 'lib/admin/view/vimeography/pro.php';
         $view = new Vimeography_Pro_About;
         $template = $mustache->loadTemplate('vimeography/pro');
         break;
       case 'vimeography_page_vimeography-help':
-        require_once(VIMEOGRAPHY_PATH . 'lib/admin/view/vimeography/help.php');
+        require_once VIMEOGRAPHY_PATH . 'lib/admin/view/vimeography/help.php';
         $view = new Vimeography_Help;
         $template = $mustache->loadTemplate('vimeography/help');
         break;
@@ -165,6 +156,4 @@ class Vimeography_Admin_Menu {
       do_action( 'vimeography_action_' . $_GET['vimeography-action'], $_GET );
     }
   }
-
-
 }

@@ -79,7 +79,6 @@
         $('#vimeography-switch-themes').click(function(e){
           e.preventDefault();
           $('#vimeography-menu-slider').animate({marginLeft: '-280px'});
-          //$("#aujus").mCustomScrollbar("update");
         });
 
         {{! Javascript below only appears if the theme supports custom settings}}
@@ -87,7 +86,6 @@
           $('#vimeography-edit-appearance, .theme-container.selected a').click(function(e){
             e.preventDefault();
             $('#vimeography-menu-slider').animate({marginLeft: '-560px'});
-            //$("#aujus2").mCustomScrollbar("update");
           });
 
           $('#vimeography-back-to-themes').click(function(e){
@@ -95,7 +93,6 @@
             $('#vimeography-menu-slider').animate({marginLeft: '-280px'});
           });
 
-          $("#aujus2").jScrollPane({verticalGutter: 10, horizontalGutter: 6});
         {{/theme_supports_settings}}
         {{! End variable Javascript}}
 
@@ -107,9 +104,6 @@
 
         // Add support for the question popovers
         $('.icon-question-sign').popover({container: 'body', trigger: 'hover'});
-
-        // Create our scrollbar for the theme list menu panel
-        $("#aujus").jScrollPane();
 
         // Affix the menu when we scroll
         $('#vimeography-gallery-menu-container').affix({offset: $('#vimeography-gallery-editor').position()});
