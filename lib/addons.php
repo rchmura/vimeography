@@ -63,8 +63,10 @@ class Vimeography_Addons {
                                 'extension';
 
     if ( $plugin['type'] === 'theme' ) {
-      $plugin['partials_path'] = plugin_dir_path( $plugin_path ) . 'partials';
-      $plugin['settings_file'] = plugin_dir_path( $plugin_path ) . 'settings.php';
+      $plugin['partials_path']          = plugin_dir_path( $plugin_path ) . 'partials';
+      $plugin['plugin_override_path']   = get_stylesheet_directory() . '/vimeography/' . trailingslashit( strtolower( $plugin['name'] ) );
+      $plugin['partials_override_path'] = get_stylesheet_directory() . '/vimeography/' . trailingslashit( strtolower( $plugin['name'] ) ) . 'partials';
+      $plugin['settings_file']          = plugin_dir_path( $plugin_path ) . 'settings.php';
 
       $this->themes[] = $plugin;
     }
