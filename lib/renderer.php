@@ -187,8 +187,10 @@ class Vimeography_Renderer {
     add_action('wp_enqueue_scripts',    array( get_class( $view ), 'load_scripts' ) );
     add_action('admin_enqueue_scripts', array( get_class( $view ), 'load_scripts' ) );
 
-    // Action has already been run, we're late to the party.
-    is_admin() ? do_action('admin_enqueue_scripts') : do_action('wp_enqueue_scripts');
+    if ( ! defined( 'DOING_AJAX' ) || ! DOING_AJAX ) {
+      // Action has already been run, we're late to the party.
+      is_admin() ? do_action('admin_enqueue_scripts') : do_action('wp_enqueue_scripts');
+    }
   }
 
   /**
