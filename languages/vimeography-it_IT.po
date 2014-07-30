@@ -1,0 +1,420 @@
+#
+# Translators:
+# Giuseppe Pignataro <anubisteam01@gmail.com>, 2014
+# Giuseppe Pignataro <anubisteam01@gmail.com>, 2014
+msgid ""
+msgstr ""
+"Project-Id-Version: Vimeography\n"
+"POT-Creation-Date: 2014-07-29 20:21-0600\n"
+"PO-Revision-Date: 2014-07-29 20:26-0600\n"
+"Last-Translator: Giuseppe Pignataro <anubisteam01@gmail.com>\n"
+"Language-Team: Italian (http://www.transifex.com/projects/p/vimeography/"
+"language/it/)\n"
+"Language: it\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.6.7\n"
+"X-Poedit-Basepath: ../\n"
+"X-Poedit-KeywordsList: __;_e\n"
+"X-Poedit-SearchPath-0: .\n"
+
+#: lib/addons.php:118
+msgid ""
+"The Vimeography theme you are trying to use is not installed or activated."
+msgstr ""
+
+#: lib/admin/actions.php:27
+#, php-format
+msgid ""
+"Vimeography requires WordPress 3.3 or higher. Please upgrade WordPress and "
+"try again. <a href=\"%s\">Back to WordPress admin</a>"
+msgstr ""
+
+#: lib/admin/actions.php:69
+#, php-format
+msgid ""
+"<strong>Notice:</strong> Vimeography found a problem with the way your "
+"Vimeography Activation Keys were saved. To resolve this error, please visit "
+"the <a href=\"%s\" title=\"Vimeography Manage Activations Page\">Vimeography "
+"Manage Activations page</a> and re-enter your activation keys that you "
+"received via email while purchasing your Vimeography products."
+msgstr ""
+
+#: lib/admin/actions.php:71
+msgid "Dismiss"
+msgstr ""
+
+#: lib/admin/actions.php:98
+#, php-format
+msgid ""
+"<strong>Hey!</strong> It looks like there is an update ready for Vimeography "
+"Pro. Make sure you've entered your <a href=\"%s\" title=\"Vimeography Manage "
+"Activations Page\">activation key</a>, then head on over to the <a href=\"%s"
+"\" title=\"Plugins Page\">Plugins page</a> to get the latest compatible "
+"version."
+msgstr ""
+
+#: lib/admin/menu.php:23
+msgid "Edit Galleries"
+msgstr "Modifica gallerie"
+
+#: lib/admin/menu.php:24
+msgid "New Gallery"
+msgstr "Nuova galleria"
+
+#: lib/admin/menu.php:25
+msgid "Manage Activations"
+msgstr "Gestisci attivazioni"
+
+#: lib/admin/menu.php:27
+msgid "Vimeography Themes"
+msgstr "Temi Vimeography"
+
+#: lib/admin/menu.php:29
+msgid "Help"
+msgstr "Aiuto"
+
+#: lib/admin/menu.php:41
+msgid "You do not have sufficient permissions to access this page."
+msgstr "Non hai permessi sufficienti  per accedere a questa pagina."
+
+#: lib/admin/menu.php:136
+#, php-format
+msgid "The admin template for \"%s\" cannot be found."
+msgstr ""
+
+#: lib/admin/plugins.php:22
+msgid "Settings"
+msgstr "Impostazioni"
+
+#: lib/admin/view/gallery/edit.php:63
+msgid "Gallery created."
+msgstr "Galleria creata."
+
+#: lib/admin/view/gallery/edit.php:64
+msgid "Well, that was easy."
+msgstr "Bene, è stato facile."
+
+#: lib/admin/view/gallery/edit.php:82
+msgid "So fresh."
+msgstr "Così fresco."
+
+#: lib/admin/view/gallery/edit.php:83
+msgid "Your videos have been refreshed."
+msgstr "I tuoi video sono stati aggiornati."
+
+#: lib/admin/view/gallery/edit.php:100
+msgid "Theme settings cleared."
+msgstr "Impostazioni tema puliti."
+
+#: lib/admin/view/gallery/edit.php:101
+msgid "Your gallery appearance has been reset."
+msgstr ""
+
+#: lib/admin/view/gallery/edit.php:120
+msgid ""
+"One of your active theme settings does not specify the type of setting it is."
+msgstr ""
+
+#: lib/admin/view/gallery/edit.php:147
+#, php-format
+msgid "The \"%s\" setting type does not exist or is improperly structured."
+msgstr ""
+
+#: lib/admin/view/gallery/edit.php:216
+msgid "Uh oh."
+msgstr "Uh oh."
+
+#: lib/admin/view/gallery/edit.php:217
+msgid "That gallery no longer exists. It's gone. Kaput!"
+msgstr ""
+
+#: lib/admin/view/gallery/edit.php:275
+msgid "Your theme could not be updated."
+msgstr ""
+
+#: lib/admin/view/gallery/edit.php:284 lib/admin/view/gallery/edit.php:487
+msgid "Theme updated."
+msgstr "Tema aggiornato."
+
+#: lib/admin/view/gallery/edit.php:285
+#, php-format
+msgid "You are now using the \"%s\" theme."
+msgstr ""
+
+#: lib/admin/view/gallery/edit.php:290 lib/admin/view/gallery/edit.php:366
+msgid "Ruh roh."
+msgstr "Ruh roh."
+
+#: lib/admin/view/gallery/edit.php:350
+msgid "Your settings could not be updated."
+msgstr ""
+
+#: lib/admin/view/gallery/edit.php:360
+msgid "Settings updated."
+msgstr "Impostazioni aggiornate."
+
+#: lib/admin/view/gallery/edit.php:361
+msgid "Nice work. You are pretty good at this."
+msgstr ""
+
+#: lib/admin/view/gallery/edit.php:472
+msgid "Vimeography could not create the customizations directory."
+msgstr ""
+
+#: lib/admin/view/gallery/edit.php:479 lib/admin/view/gallery/list.php:189
+msgid "There was an error writing your file. Please try again!"
+msgstr ""
+
+#: lib/admin/view/gallery/edit.php:488
+msgid "I didn't know that you were such a great designer!"
+msgstr ""
+
+#: lib/admin/view/gallery/edit.php:493
+msgid "Oh no!"
+msgstr "Oh no!"
+
+#: lib/admin/view/gallery/list.php:134
+msgid "Make sure to give your new gallery a name!"
+msgstr ""
+
+#: lib/admin/view/gallery/list.php:150 lib/admin/view/gallery/list.php:168
+msgid "Your gallery could not be duplicated."
+msgstr "La galleria non può essere duplicata."
+
+#: lib/admin/view/gallery/list.php:200
+msgid "Gallery duplicated."
+msgstr "Galleria duplicata."
+
+#: lib/admin/view/gallery/list.php:201
+msgid "You now have a clone of your own."
+msgstr ""
+
+#: lib/admin/view/gallery/list.php:206 lib/admin/view/gallery/list.php:247
+msgid "Ruh Roh."
+msgstr "Ruh Roh."
+
+#: lib/admin/view/gallery/list.php:227
+msgid "Your gallery could not be deleted."
+msgstr ""
+
+#: lib/admin/view/gallery/list.php:240
+msgid "Gallery deleted."
+msgstr "Galleria eliminata."
+
+#: lib/admin/view/gallery/list.php:241
+msgid "See you later, sucker."
+msgstr ""
+
+#: lib/admin/view/gallery/new.php:57
+msgid "Heads up!"
+msgstr ""
+
+#: lib/admin/view/gallery/new.php:83
+msgid "Make sure you fill out both of the fields below!"
+msgstr ""
+
+#: lib/admin/view/gallery/new.php:105 lib/admin/view/gallery/new.php:121
+msgid ""
+"We couldn't create a new gallery. Try upgrading or reinstalling the "
+"Vimeography plugin."
+msgstr ""
+
+#: lib/admin/view/gallery/new.php:166
+msgid ""
+"Looks like you don't have the permission to subscribe to this collection."
+msgstr ""
+
+#: lib/admin/view/gallery/new.php:171
+msgid "The resource that was entered is currently unsupported."
+msgstr ""
+
+#: lib/admin/view/vimeography/pro.php:88
+msgid "Poof!"
+msgstr "Poof!"
+
+#: lib/admin/view/vimeography/pro.php:89
+msgid "Your Vimeo access token has been removed."
+msgstr ""
+
+#: lib/admin/view/vimeography/pro.php:99
+msgid "Whoops!"
+msgstr "Whoops!"
+
+#: lib/admin/view/vimeography/pro.php:100
+msgid "Don't forget to enter your Vimeo OAuth 2 access token!"
+msgstr ""
+
+#: lib/admin/view/vimeography/pro.php:112
+msgid "Woah!"
+msgstr "Woah!"
+
+#: lib/admin/view/vimeography/pro.php:113
+msgid ""
+"Looks like the Vimeo API is having some issues right now. Try this again in "
+"a little bit."
+msgstr ""
+
+#: lib/admin/view/vimeography/pro.php:123
+msgid "Yeah!"
+msgstr "Yeah!"
+
+#: lib/admin/view/vimeography/pro.php:125
+#, php-format
+msgid "Success! Your Vimeo access token for %s has been added and saved."
+msgstr ""
+
+#: lib/admin/view/vimeography/pro.php:133
+msgid ""
+"Your Vimeo access token didn't validate. Try again, and double check that "
+"you are entering the correct token."
+msgstr ""
+
+#: lib/admin/view/vimeography/pro.php:138
+msgid "how the heck did you score a 404?"
+msgstr ""
+
+#: lib/admin/view/vimeography/pro.php:143
+msgid "Unknown response status from the Vimeo API: "
+msgstr ""
+
+#: lib/admin/view/vimeography/pro.php:151
+msgid "Dangit."
+msgstr ""
+
+#: lib/core.php:133
+#, php-format
+msgid "Endpoint %s is not valid."
+msgstr ""
+
+#: lib/core.php:182
+msgid "a bad request made was made. "
+msgstr ""
+
+#: lib/core.php:187
+msgid ""
+"an invalid token was used for the API request. Try removing your Vimeo token "
+"on the Vimeography Pro page and following the steps again to create a Vimeo "
+"app."
+msgstr ""
+
+#: lib/core.php:192
+msgid "the plugin could not retrieve data from the Vimeo API! "
+msgstr ""
+
+#: lib/core.php:197
+msgid ""
+"looks like Vimeo is having some API issues. Try reloading, or, check back in "
+"a few minutes."
+msgstr ""
+
+#: lib/core.php:201
+#, php-format
+msgid "Unknown response status %1$d, %2$s"
+msgstr ""
+
+#: lib/core.php:206
+msgid "the request to Vimeo failed. "
+msgstr ""
+
+#: lib/helpers.php:123
+msgid "Vimeography could not retrieve the featured video: "
+msgstr ""
+
+#: lib/renderer.php:80
+msgid "You must specify a theme in either the admin panel or the shortcode."
+msgstr ""
+
+#: lib/renderer.php:105
+msgid "This Vimeography gallery does not have a theme assigned to it."
+msgstr ""
+
+#: lib/renderer.php:110
+#, php-format
+msgid "The \"%s\" theme does not exist or is improperly structured."
+msgstr ""
+
+#: lib/renderer.php:123
+#, php-format
+msgid "The \"%s\" theme class does not exist or is improperly named."
+msgstr ""
+
+#: lib/shortcode.php:65
+msgid "Vimeography Error: "
+msgstr "Errore Vimeography:"
+
+#: lib/shortcode.php:133
+#, php-format
+msgid "a Vimeography gallery with an ID of \"%1$s\" was not found."
+msgstr ""
+
+#: lib/shortcode.php:229
+msgid "Vimeography error: "
+msgstr "Errore Vimeography:"
+
+#: lib/update.php:197
+msgid "Activation Key Removed."
+msgstr "Chiave di attivazione rimossa."
+
+#: lib/update.php:198
+msgid "Your activation key has been removed from this site."
+msgstr ""
+
+#: lib/update.php:203
+msgid "Hmm."
+msgstr ""
+
+#: lib/update.php:204
+msgid "Your activation key was not removed from this site."
+msgstr ""
+
+#: lib/update.php:332
+#, php-format
+msgid ""
+"Hey! Don't forget to <a title=\"Activate my Vimeography Addon\" href="
+"\"%1$sadmin.php?page=vimeography-manage-activations\">enter your activation "
+"key</a> to receive the latest updates for the %2$s plugin."
+msgstr ""
+
+#: uninstall.php:4
+msgid "Plugin uninstallation can not be executed in this fashion."
+msgstr ""
+
+#: vimeography-bugsauce/settings.php:6
+msgid "Active Thumbnail Border Color"
+msgstr ""
+
+#: vimeography-bugsauce/settings.php:18
+msgid "Inactive Thumbnail Border Color"
+msgstr ""
+
+#: vimeography-bugsauce/settings.php:30
+msgid "Pager Arrow Color"
+msgstr ""
+
+#: vimeography-bugsauce/settings.php:43
+msgid "Loader Color"
+msgstr ""
+
+#: vimeography-bugsauce/settings.php:56
+msgid "Pager Arrow Size"
+msgstr ""
+
+#: vimeography.php:14
+msgid "Vimeography requires the JSON PHP extension."
+msgstr "Vimeography richiede l'estensione JSON PHP."
+
+#: vimeography.php:185
+msgid "That site doesn't look like a valid link to a Vimeo collection."
+msgstr ""
+
+#~ msgid "The plugin contains no files."
+#~ msgstr "Il plugin non contiene file."
+
+#~ msgid "304 Not Modified"
+#~ msgstr "304 non modificato"
+
+#~ msgid "Yee-haw!"
+#~ msgstr "Yee-haw!"
