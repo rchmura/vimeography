@@ -137,9 +137,19 @@ class Vimeography_Renderer {
    * @return void
    */
   protected function _load_theme_template($theme, $settings) {
+    $loaders = array_merge(
+      self::_load_theme_template_override( $theme['plugin_override_path'] ),
+      array( new Mustache_Loader_FilesystemLoader( $theme['plugin_path'] ) )
+    );
+
+    $partial_loaders = array_merge(
+      self::_load_theme_template_override( $theme['partials_override_path'] ),
+      array( new Mustache_Loader_FilesystemLoader( $theme['partials_path'] ) )
+    );
+
     $mustache = new Mustache_Engine( array(
-      'loader'          => new Mustache_Loader_FilesystemLoader( $theme['plugin_path'] ),
-      'partials_loader' => new Mustache_Loader_FilesystemLoader( $theme['partials_path'] ),
+      'loader'          => new Mustache_Loader_CascadingLoader( $loaders ),
+      'partials_loader' => new Mustache_Loader_CascadingLoader( $partial_loaders ),
     ) );
 
     $this->_template = ( isset( $settings['partial'] ) ) ?
@@ -148,6 +158,20 @@ class Vimeography_Renderer {
 
     // Backwards-Compatibility for Vimeography Pro < 0.7
     $this->_theme = $this->_template;
+  }
+
+  /**
+   * Attempts to load a theme template override, if it exists.
+   *
+   * @param  string $path  path to the theme template override, eg. 'wp-content/themes/bones/vimeography/bugsauce/'
+   * @return array
+   */
+  protected static function _load_theme_template_override($override_path) {
+    try {
+      return array( new Mustache_Loader_FilesystemLoader( $override_path ) );
+    } catch (Mustache_Exception_RuntimeException $e) {
+      return array();
+    }
   }
 
   /**
@@ -163,8 +187,10 @@ class Vimeography_Renderer {
     add_action('wp_enqueue_scripts',    array( get_class( $view ), 'load_scripts' ) );
     add_action('admin_enqueue_scripts', array( get_class( $view ), 'load_scripts' ) );
 
-    // Action has already been run, we're late to the party.
-    is_admin() ? do_action('admin_enqueue_scripts') : do_action('wp_enqueue_scripts');
+    if ( ! defined( 'DOING_AJAX' ) || ! DOING_AJAX ) {
+      // Action has already been run, we're late to the party.
+      is_admin() ? do_action('admin_enqueue_scripts') : do_action('wp_enqueue_scripts');
+    }
   }
 
   /**

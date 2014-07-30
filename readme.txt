@@ -2,8 +2,8 @@
 Contributors: iamdavekiss
 Tags: vimeo, video, videos, gallery, vimeography, media, player, playlist, showcase, skins, themes, video gallery
 Requires at least: 3.3
-Tested up to: 3.9.1
-Stable tag: 1.2.1
+Tested up to: 4.0
+Stable tag: 1.2.2
 License: GPL3
 
 The easiest way to create beautiful Vimeo galleries on your WordPress site.
@@ -93,6 +93,10 @@ Yes, but you’ll need some PHP knowledge to do it! Open the file you want to ad
 
 Heck yeah! Use the appearance editor to change your theme's style so that it matches your site perfectly.
 
+= Can I override my Vimeography theme template with some custom code? =
+
+Sure, why not. Simply copy your theme's .mustache file(s) into a new folder located at `wp-content/themes/[my_wordpress_theme]/vimeography/[my_vimeography_theme]` or `wp-content/themes/[my_wordpress_theme]/vimeography/[my_vimeography_theme]/partials` and hack away. Vimeography will load that template instead of the default one for your theme.
+
 == Screenshots ==
 
 1. Create a gallery in 30 seconds, tops!
@@ -101,6 +105,13 @@ Heck yeah! Use the appearance editor to change your theme's style so that it mat
 4. Get new styles by installing gallery themes.
 
 == Changelog ==
+= 1.2.2 =
+* [New] Added support for gallery template overrides
+* [New] Added German translation (thanks to Suentke Remmers)
+* [New] Added Spanish translation (thanks to Andrew Kurtis - http://www.webhostinghub.com/)
+* [New] Added partial Italian translation (thanks to Giuseppe Pignataro)
+* [Fix] Make sure assets aren't loading again during Vimeography Pro paging requests
+
 = 1.2.1 =
 * [New] The gallery list page has been totally reworked
 * [New] You can now sort galleries by date created, theme applied, and gallery name
