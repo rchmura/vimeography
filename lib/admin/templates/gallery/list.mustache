@@ -84,6 +84,7 @@ input.current-page { width: 48px; }
 
     <div id="modal-content" title="Duplicate Gallery">
       <form id="vimeography-duplicate-gallery-form" class="form-wrap" method="get" action="">
+        {{{duplicate_gallery_nonce}}}
         <input type="hidden" name="vimeography-action" value="duplicate_gallery" />
         <input type="hidden" name="page" value="vimeography-edit-galleries" />
         <input type="hidden" id="vimeography-duplicate-gallery-id" name="gallery_id" value="" />
