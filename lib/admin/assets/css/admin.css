@@ -231,7 +231,8 @@ ul.vimeography-theme-list a.theme-info span {
   bottom: 0;
   top: 65px;
   width: 280px;
-  overflow-y: scroll;
+  overflow-y: auto;
+  overflow-x: hidden;
 }
 
 .vimeography-gallery-menu-group {

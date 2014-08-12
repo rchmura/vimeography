@@ -93,7 +93,7 @@ class Vimeography_Gallery_List extends Vimeography_Base {
    */
   public function duplicate_gallery($params) {
 
-    if ( ! empty( $_POST ) && check_admin_referer( 'vimeography-duplicate-gallery-action', 'vimeography-duplicate-gallery-verification' ) ) {
+    if ( check_admin_referer( 'vimeography-duplicate-gallery-action', 'vimeography-duplicate-gallery-verification' ) ) {
 
       if ( isset( $params['vimeography_duplicate_gallery_serialized'] )
           AND ! empty( $params['vimeography_duplicate_gallery_serialized'] ) ) {
