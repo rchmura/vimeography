@@ -54,7 +54,7 @@
               if (bg.search("rgb") == -1)
                   return bg;
               else {
-                  bg = bg.match(/^rgb\((\d+),\s*(\d+),\s*(\d+)\)$/);
+                  bg = bg.match(/^rgba?\((\d+),\s*(\d+),\s*(\d+)/);
                   function hex(x) {
                       return ("0" + parseInt(x).toString(16)).slice(-2);
                   }

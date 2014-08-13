@@ -25,6 +25,12 @@
 
 			$gallery.fitVids();
 
+			{{#playlist}}
+				vimeography.utilities.enable_autoplay = 1;
+				vimeography.utilities.player_id = $gallery.find('iframe').attr('id');
+				{{playlist}}
+			{{/playlist}}
+
 			var slider = $gallery.find('.vimeography-thumbnails').flexslider({
 				animation: "slide",
         namespace: 'vimeography-bugsauce-',
@@ -41,28 +47,47 @@
 
 			$gallery.find('.vimeography-thumbnails li').first().addClass('vimeography-bugsauce-active-slide');
 
-			$gallery.on('click', '.vimeography-thumbnails img', function(e){
+			$gallery.on('click', '.vimeography-slides li', function(e){
 				$gallery.find('.vimeography-main').spin('custom');
 
 				var link = $(this).data('link');
 
 				$('.vimeography-bugsauce-active-slide').removeClass('vimeography-bugsauce-active-slide');
-				$(this).parent().addClass('vimeography-bugsauce-active-slide');
+				$(this).addClass('vimeography-bugsauce-active-slide');
 
 				$gallery.find('.vimeography-player').animate({'opacity':0}, 300, 'linear', function(){
 
 					var promise = vimeography.utilities.get_video( link );
 
 		      promise.done(function (video) {
+			      // This needs to be done so that the Vimeo API can interact with the player
+			      video.html = vimeography.utilities.set_video_id(video.html);
+
 						$gallery.find('.vimeography-player').html(video.html).fitVids().animate({'opacity':1}, 300);
 						$gallery.find('.vimeography-main').spin(false);
-
+						$gallery.trigger('vimeography/video/ready');
 		      });
 
 				});
 
     		e.preventDefault();
 			});
+
+			$gallery.on('vimeography/playlist/next', function(){
+				var $next_video = $('.vimeography-bugsauce-active-slide').next();
+
+				$next_video.trigger('click');
+
+        var videos_spanning_two_pages = slider.visible - slider.move;
+        var paging_factor = slider.visible - videos_spanning_two_pages;
+
+        if ( $next_video.index() >= paging_factor * (slider.currentSlide + 1) ) {
+          slider.flexslider('next');
+        }
+
+			});
+
+			$gallery.trigger('vimeography/video/ready');
 
 		});
 	})(jQuery)
