@@ -118,16 +118,22 @@ class Vimeography_Helpers {
 
     $oembed = wp_remote_get( 'http://vimeo.com/api/oembed.json?' . $query);
 
-    if ( is_wp_error( $oembed ) )
-    {
+    if ( is_wp_error( $oembed ) ) {
       throw new Vimeography_Exception( __('Vimeography could not retrieve the featured video: ', 'vimeography') . $oembed->get_error_message() );
     }
     else
     {
-      $oembed = json_decode($oembed['body']);
-      $oembed->html = str_replace('<iframe', '<iframe id="' . $params['player_id'] . '"', $oembed->html);
-
-      return $oembed->html;
+      switch( $oembed['response']['code'] ) {
+        case 200:
+          $oembed = json_decode($oembed['body']);
+          $oembed->html = str_replace('<iframe', '<iframe id="' . $params['player_id'] . '"', $oembed->html);
+          return $oembed->html;
+        case 403:
+          throw new Vimeography_Exception( __('Your video privacy settings for must be adjusted to allow displaying this video on your site.', 'vimeography') );
+          break;
+        default:
+          break;
+      }
     }
   }
 
