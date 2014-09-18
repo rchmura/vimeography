@@ -219,6 +219,10 @@ class Vimeography_Shortcode extends Vimeography {
 
       $result = $vimeography->get_videos( $this->_gallery_settings['cache'], $this->_gallery_id );
 
+      if ( empty( $result->video_set ) ) {
+        throw new Vimeography_Exception( __('the Vimeo source for this gallery does not have any videos.', 'vimeography') );
+      }
+
       // Render that ish.
       $renderer->load_theme();
 
