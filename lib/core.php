@@ -114,7 +114,7 @@ abstract class Vimeography_Core {
       $result = $this->fetch();
 
       // Cache the results.
-      if ( intval($expiration) !== 0) {
+      if ( intval($expiration) !== 0 && ( ! empty( $result->video_set ) ) ) {
         $cache->set($result);
       }
     }

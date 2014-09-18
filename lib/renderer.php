@@ -219,7 +219,10 @@ class Vimeography_Renderer {
     }
 
     $this->_view->data     = $result->video_set;
-    $this->_view->featured = clone $this->_view->data[0];
+
+    if (! empty( $this->_view->data[0] ) ) {
+      $this->_view->featured = clone $this->_view->data[0];
+    }
 
     return $this->_template->render($this->_view);
   }
