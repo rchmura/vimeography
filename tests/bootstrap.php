@@ -3,14 +3,12 @@
 ini_set('display_errors','on');
 error_reporting(E_ALL);
 
-echo "======================================" . PHP_EOL;
-echo "Welcome to the Vimeography Test Suite" . PHP_EOL;
-echo "Version: 1.0" . PHP_EOL;
-echo "Author: Dave Kiss" . PHP_EOL;
-echo "======================================" . PHP_EOL;
+$_SERVER['SERVER_PROTOCOL'] = 'HTTP/1.1';
+$_SERVER['SERVER_NAME'] = '';
+$PHP_SELF = $GLOBALS['PHP_SELF'] = $_SERVER['PHP_SELF'] = '/index.php';
 
 $_tests_dir = getenv('WP_TESTS_DIR');
-if ( !$_tests_dir ) $_tests_dir = dirname( __FILE__ ) . '/../../../../../wordpress-tests-lib';
+if ( !$_tests_dir ) $_tests_dir = '/tmp/wordpress-tests-lib';
 
 require_once $_tests_dir . '/includes/functions.php';
 
@@ -26,14 +24,7 @@ require $_tests_dir . '/includes/bootstrap.php';
 
 require dirname( __FILE__ ) . '/framework/testcase.php';
 
-$_SERVER['SERVER_PROTOCOL'] = 'HTTP/1.1';
-$_SERVER['HTTP_HOST'] = WP_TESTS_DOMAIN;
-$PHP_SELF = $GLOBALS['PHP_SELF'] = $_SERVER['PHP_SELF'] = '/index.php';
-
-echo "Installing Vimeography...\n";
-
-// Install Easy Digital Downloads
-//edd_install();
+echo "Running Vimeography Tests...\n";
 
 global $current_user;
 $current_user = new WP_User(1);
