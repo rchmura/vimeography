@@ -151,7 +151,6 @@ class Tests_Vimeography extends Vimeography_UnitTestCase {
     $this->assertFileExists( VIMEOGRAPHY_PATH . 'lib/admin/assets/js/admin.js' );
     $this->assertFileExists( VIMEOGRAPHY_PATH . 'lib/admin/assets/js/bootstrap.min.js' );
     $this->assertFileExists( VIMEOGRAPHY_PATH . 'lib/admin/assets/js/jquery.jscrollpane.min.js' );
-    $this->assertFileExists( VIMEOGRAPHY_PATH . 'lib/admin/assets/js/jquery.mCustomScrollbar.js' );
     $this->assertFileExists( VIMEOGRAPHY_PATH . 'lib/admin/assets/js/jquery.mousewheel.min.js' );
     $this->assertFileExists( VIMEOGRAPHY_PATH . 'lib/admin/assets/js/mce-button.png' );
     $this->assertFileExists( VIMEOGRAPHY_PATH . 'lib/admin/assets/js/mce.js' );
@@ -173,6 +172,8 @@ class Tests_Vimeography extends Vimeography_UnitTestCase {
 
   public function test_vimeography_cache_path_created()
   {
+    require_once VIMEOGRAPHY_PATH . 'lib/cache.php';
+    new \Vimeography_Cache( 1 );
     $this->assertFileExists( VIMEOGRAPHY_CACHE_PATH );
   }
 
