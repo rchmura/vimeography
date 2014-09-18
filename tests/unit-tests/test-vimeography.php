@@ -173,7 +173,7 @@ class Tests_Vimeography extends Vimeography_UnitTestCase {
   public function test_vimeography_cache_path_created()
   {
     require_once VIMEOGRAPHY_PATH . 'lib/cache.php';
-    new Vimeography_Cache( 1 );
+    new \Vimeography_Cache( 1 );
     $this->assertFileExists( VIMEOGRAPHY_CACHE_PATH );
   }
 
