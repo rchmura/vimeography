@@ -84,14 +84,13 @@ class Vimeography_Pro_About extends Vimeography_Base {
       if ( isset( $input['vimeography_pro_settings']['remove_token'] ) ) {
         $result = delete_option('vimeography_pro_access_token');
         $this->messages[] = array(
-          'type' => 'success',
+          'type' => 'updated',
           'heading' => __('Poof!', 'vimeography'),
           'message' => __('Your Vimeo access token has been removed.', 'vimeography')
         );
         return TRUE;
       }
 
-      $output = array();
       $output['access_token'] = wp_filter_nohtml_kses($input['vimeography_pro_settings']['access_token']);
 
       if ($output['access_token'] == '') {
@@ -120,10 +119,10 @@ class Vimeography_Pro_About extends Vimeography_Base {
           case 200:
             update_option('vimeography_pro_access_token', $output['access_token']);
             $this->messages[] = array(
-              'type' => 'success',
-              'heading' => __('Yeah!', 'vimeography'),
+              'type' => 'updated',
+              'heading' => __('Success!', 'vimeography'),
               'message' => sprintf(
-                __('Success! Your Vimeo access token for %s has been added and saved.', 'vimeography'),
+                __('Your Vimeo access token for %s has been added and saved.', 'vimeography'),
                 $response['body']->name
               )
             );

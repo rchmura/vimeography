@@ -123,6 +123,11 @@ class Vimeography_Admin_Menu {
         $template = $mustache->loadTemplate('theme/list');
         break;
       case 'vimeography_page_vimeography-pro':
+        wp_register_script('jquery-slick', '//cdn.jsdelivr.net/jquery.slick/1.3.8/slick.min.js', array('jquery') );
+        wp_enqueue_script('jquery-slick');
+        wp_register_style('jquery-slick', '//cdn.jsdelivr.net/jquery.slick/1.3.8/slick.css');
+        wp_enqueue_style('jquery-slick');
+
         require_once VIMEOGRAPHY_PATH . 'lib/admin/view/vimeography/pro.php';
         $view = new Vimeography_Pro_About;
         $template = $mustache->loadTemplate('vimeography/pro');
