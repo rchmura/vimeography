@@ -82,15 +82,16 @@ class Vimeography_Pro_About extends Vimeography_Base {
     // if this fails, check_admin_referer() will automatically print a "failed" page and die.
     if (check_admin_referer('vimeography-pro-settings','vimeography-pro-settings-verification') ) {
       if ( isset( $input['vimeography_pro_settings']['remove_token'] ) ) {
-        $result = delete_option('vimeography_pro_access_token');
+        delete_option('vimeography_pro_access_token');
         $this->messages[] = array(
-          'type' => 'success',
+          'type' => 'updated',
           'heading' => __('Poof!', 'vimeography'),
           'message' => __('Your Vimeo access token has been removed.', 'vimeography')
         );
         return TRUE;
       }
 
+      $output = array();
       $output['access_token'] = wp_filter_nohtml_kses($input['vimeography_pro_settings']['access_token']);
 
       if ($output['access_token'] == '') {
@@ -119,30 +120,26 @@ class Vimeography_Pro_About extends Vimeography_Base {
           case 200:
             update_option('vimeography_pro_access_token', $output['access_token']);
             $this->messages[] = array(
-              'type' => 'success',
-              'heading' => __('Yeah!', 'vimeography'),
+              'type' => 'updated',
+              'heading' => __('Success!', 'vimeography'),
               'message' => sprintf(
-                __('Success! Your Vimeo access token for %s has been added and saved.', 'vimeography'),
+                __('Your Vimeo access token for %s has been added and saved.', 'vimeography'),
                 $response['body']->name
               )
             );
             return $output;
-            break;
           case 401:
             throw new Vimeography_Exception(
               __("Your Vimeo access token didn't validate. Try again, and double check that you are entering the correct token.", 'vimeography')
             );
-            break;
           case 404:
             throw new Vimeography_Exception(
               __('how the heck did you score a 404?', 'vimeography'). $response['body']->error
             );
-            break;
           default:
             throw new Vimeography_Exception(
               __('Unknown response status from the Vimeo API: ', 'vimeography'). $response['body']->error
             );
-            break;
         }
 
       } catch (Vimeography_Exception $e) {

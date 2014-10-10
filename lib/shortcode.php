@@ -81,6 +81,7 @@ class Vimeography_Shortcode extends Vimeography {
     // Get admin panel options
     $default_settings = get_option('vimeography_default_settings');
 
+    $fallback_gallery_settings             = array();
     $fallback_gallery_settings['theme']    = isset($db_gallery_settings->theme_name)     ? $db_gallery_settings->theme_name     : $default_settings['theme_name'];
     $fallback_gallery_settings['featured'] = isset($db_gallery_settings->featured_video) ? $db_gallery_settings->featured_video : $default_settings['featured_video'];
     $fallback_gallery_settings['endpoint'] = isset($db_gallery_settings->resource_uri)   ? $db_gallery_settings->resource_uri   : $default_settings['resource_uri'];

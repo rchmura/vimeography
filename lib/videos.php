@@ -1,7 +1,6 @@
 <?php
 
-class Vimeography_Videos extends Vimeography_Core
-{
+class Vimeography_Videos extends Vimeography_Core {
 	public function __construct($settings) {
 		parent::__construct($settings);
 	}
@@ -21,8 +20,7 @@ class Vimeography_Videos extends Vimeography_Core
 				$this->_type = $type;
 				break;
 			default:
-            	throw new Vimeography_Exception('"'.$type.'" is not a valid content type.');
-            	break;
+      	throw new Vimeography_Exception('"'.$type.'" is not a valid content type.');
 		}
 
 		if (! isset($this->_type))

@@ -300,7 +300,7 @@ class Vimeography_Database extends Vimeography {
       global $wpdb;
       $wpdb->hide_errors();
 
-      $result = $wpdb->query('ALTER TABLE '.VIMEOGRAPHY_GALLERY_META_TABLE.' ADD video_limit MEDIUMINT(7) NOT NULL AFTER featured_video;');
+      $wpdb->query('ALTER TABLE '.VIMEOGRAPHY_GALLERY_META_TABLE.' ADD video_limit MEDIUMINT(7) NOT NULL AFTER featured_video;');
       self::vimeography_update_tables();
     }
   }
@@ -312,7 +312,7 @@ class Vimeography_Database extends Vimeography {
       global $wpdb;
       $wpdb->hide_errors();
 
-      $result = $wpdb->query('ALTER TABLE '.VIMEOGRAPHY_GALLERY_META_TABLE.' MODIFY resource_uri VARCHAR(100) NOT NULL;');
+      $wpdb->query('ALTER TABLE '.VIMEOGRAPHY_GALLERY_META_TABLE.' MODIFY resource_uri VARCHAR(100) NOT NULL;');
       self::vimeography_update_tables();
     }
   }
@@ -348,7 +348,7 @@ class Vimeography_Database extends Vimeography {
    * Loop through all of the keys and remove the lot if there are
    * false positives that have been saved. We're also moving
    * to site_option instead of just option in this release.
-   * 
+   *
    * @return void
    */
   public static function vimeography_update_db_to_1_2() {
