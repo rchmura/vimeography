@@ -353,7 +353,7 @@ class Vimeography_Update {
           $headers = get_file_data( $plugin_path, array('version' => 'Version') );
 
           // setup the updater
-          $edd_updater = new EDD_SL_Plugin_Updater(
+          new EDD_SL_Plugin_Updater(
             $this->_endpoint,
             $plugin_path,
             array(

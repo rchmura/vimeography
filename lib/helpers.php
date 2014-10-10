@@ -130,7 +130,6 @@ class Vimeography_Helpers {
           return $oembed->html;
         case 403:
           throw new Vimeography_Exception( __('Your video privacy settings for must be adjusted to allow displaying this video on your site.', 'vimeography') );
-          break;
         default:
           break;
       }

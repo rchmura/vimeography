@@ -127,10 +127,8 @@ class Vimeography_Gallery_List_Table extends WP_List_Table {
     switch( $column_name ) {
       case 'id':
         return $item[ $column_name ];
-        break;
       default:
         return print_r( $item, true ) ; //Show the whole array for troubleshooting purposes
-        break;
     }
   }
 
@@ -208,8 +206,6 @@ class Vimeography_Gallery_List_Table extends WP_List_Table {
     var_dump('1111');
     echo '</pre>';
     die;
-
-
 
     $entry_id = ( is_array( $_REQUEST['entry'] ) ) ? $_REQUEST['entry'] : array( $_REQUEST['entry'] );
 

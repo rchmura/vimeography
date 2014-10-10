@@ -82,7 +82,7 @@ class Vimeography_Pro_About extends Vimeography_Base {
     // if this fails, check_admin_referer() will automatically print a "failed" page and die.
     if (check_admin_referer('vimeography-pro-settings','vimeography-pro-settings-verification') ) {
       if ( isset( $input['vimeography_pro_settings']['remove_token'] ) ) {
-        $result = delete_option('vimeography_pro_access_token');
+        delete_option('vimeography_pro_access_token');
         $this->messages[] = array(
           'type' => 'updated',
           'heading' => __('Poof!', 'vimeography'),
@@ -91,6 +91,7 @@ class Vimeography_Pro_About extends Vimeography_Base {
         return TRUE;
       }
 
+      $output = array();
       $output['access_token'] = wp_filter_nohtml_kses($input['vimeography_pro_settings']['access_token']);
 
       if ($output['access_token'] == '') {
