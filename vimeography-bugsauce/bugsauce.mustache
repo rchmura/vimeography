@@ -1,8 +1,8 @@
-<div id="vimeography-gallery-{{gallery_id}}" class="vimeography-bugsauce" data-version="{{version}}"{{#gallery_width}} style="max-width: {{gallery_width}};"{{/gallery_width}}>
+<div id="vimeography-gallery-{{gallery_id}}" class="vimeography-bugsauce" data-version="{{version}}"{{#gallery_width}} style="max-width: {{gallery_width}};"{{/gallery_width}} itemscope itemtype="http://schema.org/VideoGallery">
 
 	<div class="vimeography-main">
     {{#featured}}
-	    <div class="vimeography-player">
+	    <div class="vimeography-player" itemprop="video">
 	      {{{oembed}}}
 	    </div>
     {{/featured}}
