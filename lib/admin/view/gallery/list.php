@@ -47,6 +47,7 @@ class Vimeography_Gallery_List extends Vimeography_Base {
       echo '<form id="vimeography-gallery-list" method="get">';
       echo '<input type="hidden" name="vimeography-action" value="bulk_process_galleries">';
       echo '<input type="hidden" name="page" value="vimeography-edit-galleries" />';
+      $this->_table->search_box( 'search', 'search_id' );
       $this->_table->display();
       echo '</form>';
     $result = ob_get_contents();
@@ -126,9 +127,9 @@ class Vimeography_Gallery_List extends Vimeography_Base {
 
       try {
         $id           = intval( $params['gallery_id'] );
-        $title        = sanitize_text_field( $params['gallery_title'] );
-        $source_url   = sanitize_text_field( $params['gallery_source'] );
-        $resource_uri = Vimeography::validate_vimeo_source( sanitize_text_field( $params['gallery_source'] ) );
+        $title        = $params['gallery_title'];
+        $source_url   = $params['gallery_source'];
+        $resource_uri = Vimeography::validate_vimeo_source( $params['gallery_source'] );
 
         if ( empty( $title ) ) {
           throw new Vimeography_Exception( __('Make sure to give your new gallery a name!', 'vimeography') );

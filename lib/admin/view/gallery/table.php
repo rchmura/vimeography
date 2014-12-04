@@ -40,12 +40,14 @@ class Vimeography_Gallery_List_Table extends WP_List_Table {
     global $wpdb;
     $offset = ($this->get_pagenum() - 1) * $this->_per_page;
 
-    $orderby = ( ! empty( $_GET['orderby'] ) ) ? $_GET['orderby'] : 'id';
-    $order = ( ! empty($_GET['order'] ) ) ? $_GET['order'] : 'asc';
+    if ( isset( $_GET['s'] ) && ! empty( $_GET['s'] ) ) {
+      $filter = 'WHERE gallery.title LIKE "%' . sanitize_text_field( $_GET['s'] ) . '%" ';
+    } else {
+      $filter = '';
+    }
 
     $sort = $this->_get_sort();
-
-    $result = $wpdb->get_results('SELECT * from '.VIMEOGRAPHY_GALLERY_META_TABLE.' AS meta JOIN '.VIMEOGRAPHY_GALLERY_TABLE.' AS gallery ON meta.gallery_id = gallery.id ' . $sort . ' LIMIT '.$this->_per_page.' OFFSET '.$offset.';', ARRAY_A);
+    $result = $wpdb->get_results('SELECT * from '.VIMEOGRAPHY_GALLERY_META_TABLE.' AS meta JOIN '.VIMEOGRAPHY_GALLERY_TABLE.' AS gallery ON meta.gallery_id = gallery.id ' . $filter . $sort . ' LIMIT '.$this->_per_page.' OFFSET '.$offset.';', ARRAY_A);
     // echo '<pre>';
     // var_dump($result);
     // echo '</pre>';
