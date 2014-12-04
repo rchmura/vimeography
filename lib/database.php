@@ -114,6 +114,7 @@ class Vimeography_Database extends Vimeography {
     self::vimeography_update_db_to_1_1_4();
     self::vimeography_update_db_to_1_1_6();
     self::vimeography_update_db_to_1_2();
+    self::vimeography_update_db_to_1_2_8();
     self::vimeography_update_db_version();
   }
 
@@ -367,6 +368,31 @@ class Vimeography_Database extends Vimeography {
             break;
           }
         }
+      }
+    }
+  }
+
+  /**
+   * Retrieve and store more information about any saved license keys.
+   *
+   * @return void
+   */
+  public static function vimeography_update_db_to_1_2_8() {
+    if ( version_compare( self::$_version, '1.2.8', '<' ) ) {
+      $licenses = get_site_option('vimeography_activation_keys');
+      if ($licenses) {
+        foreach ($licenses as $index => $license) {
+
+          // Retrieve more information about the license
+          $result = Vimeography::get_instance()->updater->check_license( $license );
+          $license->status  = $result->license;
+          $license->expires = $result->expires;
+          $license->limit   = $result->license_limit;
+          $license->activations_left = $result->activations_left;
+
+          $licenses[$index] = $license;
+        }
+        update_site_option('vimeography_activation_keys', $licenses);
       }
     }
   }
