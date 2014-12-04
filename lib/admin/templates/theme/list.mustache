@@ -1,50 +1,61 @@
 <div class="wrap wp_bootstrap vimeography">
-  <h2 class="page-title">Manage Activations</h2>
+  <h2 class="page-title">Manage Licenses</h2>
 
   {{#messages}}
-    <div class="alert alert-{{type}} fade in">
-      <a class="close" data-dismiss="alert" href="#">&times;</a>
-      <h3 class="alert-heading">{{heading}}</h3>
-      <p>{{message}}</p>
+    <div class="{{type}}">
+      <p><strong>{{heading}}</strong> {{message}}</p>
     </div>
   {{/messages}}
 
-  <section class="vimeography-pro-settings">
+  <section class="vimeography-licenses">
     <aside>
       <h2>Activate Your Products</h2>
-      <p>Enter your Vimeography product's activation key to receive free updates for your purchase.</p>
+      <p>Enter your Vimeography product's license key to receive free updates for your purchase.</p>
 
       <form id="activation-form" class="form-inline" style="margin: 0; padding: 10px 0;" method="post" action="">
         <input type="text" name="vimeography-activation-key">
-        <input type="hidden" name="vimeography-activate-key" value="1" />
+        <input type="hidden" name="vimeography-action" value="activate_license" />
         <input type="submit" form="activation-form" value="Activate Product">
         {{{nonce}}}
       </form>
-
     </aside>
 
-    <table class="table table-striped wp-box" style="width: 600px; top: 10px;">
+    <table class="widefat">
       <thead>
         <tr>
           <th>Your Products</th>
+          <th>License Key</th>
           <th>Status</th>
+          <th>Expires</th>
+          <th>Action</th>
         </tr>
       </thead>
+      <tfoot>
+        <tr>
+          <th>Your Products</th>
+          <th>License Key</th>
+          <th>Status</th>
+          <th>Expires</th>
+          <th>Action</th>
+        </tr>
+      </tfoot>
       <tbody>
         {{#activation_keys}}
           <form method="post" action="">
-            <input type="hidden" name="vimeography-deactivate-key" value="1" />
+            <input type="hidden" name="vimeography-action" value="deactivate_license" />
             <input type="hidden" name="vimeography-activation-key" value="{{activation_key}}" />
             <tr>
               <td>{{product_name}}</td>
-              <td>Activated <input class="vimeography-remove-activation-key" type="submit" value="&#215; Remove Key" /></td>
+              <td>{{activation_key}}</td>
+              <td>{{status}}</td>
+              <td>{{expires}}</td>
+              <td><input class="vimeography-remove-activation-key" type="submit" value="&#215; Remove Key" /></td>
             </tr>
           </form>
         {{/activation_keys}}
       </tbody>
     </table>
   </section>
-
 </div>
 
 <style>
@@ -62,13 +73,11 @@
     font-weight: 300;
   }
 
-  .vimeography-pro-settings aside {
-    float: left;
-    width: 300px;
-    margin: 0 20px 0;
+  .vimeography-licenses aside {
+    width: 100%;
   }
 
-  .vimeography aside input[type="text"] {
+  .vimeography-licenses aside input[type="text"] {
     height: 36px;
     width: 260px;
     font-size: 18px;
@@ -76,12 +85,12 @@
     padding: 5px;
   }
 
-  .vimeography aside input[type="submit"] {
+  .vimeography-licenses aside input[type="submit"] {
     height: 36px;
     font-size: 14px;
     line-height: 1.2em;
     padding: 5px 20px;
-    margin: 15px 10px 0 0;
+    margin: 0;
     border: 0;
     border-radius: 2px;
     box-shadow: none;
@@ -89,22 +98,46 @@
     color: #fafafa;
   }
 
-  .vimeography table input[type="submit"] {
+  .vimeography-licenses table input[type="submit"] {
     color: #fafafa;
     font-size: 13px;
     position: relative;
     box-shadow: 0px 2px 0px #C23022;
     top: -2px;
-    left: 10px;
     border: 0;
     border-radius: 2px;
     background: #e74c3c;
+    display: block;
   }
 
-  .wp-box {
-    background: none repeat scroll 0 0 #FFFFFF;
-    border: 1px solid #E1E1E1;
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-    position: relative;
+  .vimeography-licenses table input[type="submit"]:hover {
+    background-color: #e94c3c;
   }
+
+  @media screen and (min-width: 1100px) {
+
+    .vimeography-licenses aside {
+      float: left;
+      width: 30%;
+      padding: 0 35px 0 20px;
+      box-sizing: border-box;
+    }
+
+    .vimeography-licenses aside input[type="text"] {
+      width: 100%;
+    }
+
+    .vimeography-licenses aside input[type="submit"] {
+      margin: 15px 0 0 0;
+    }
+
+    .vimeography-licenses table {
+      width: 68%;
+      margin: 0 1%;
+      float: left;
+      clear: none;
+    }
+
+  }
+
 </style>

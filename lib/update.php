@@ -92,11 +92,6 @@ class Vimeography_Update {
     // Add activation key message for plugins with missing keys
     add_action( 'load-plugins.php', array( $this, 'vimeography_check_for_missing_activation_keys' ) );
 
-    // Activate license key on settings save
-    add_action( 'admin_init', array( $this, 'vimeography_activate_license' ) );
-
-    // Deactivate license key
-    add_action( 'admin_init', array( $this, 'vimeography_deactivate_license' ) );
 	}
 
   /**
@@ -105,47 +100,55 @@ class Vimeography_Update {
    * @access  public
    * @return  void
    */
-  public function vimeography_activate_license() {
+  public function activate_license($license) {
 
-    // Ignore if key is not set
-    if ( ! isset( $_POST['vimeography-activation-key'] ) )
+    $key = str_replace('-', '', strtoupper( sanitize_text_field( $license ) ) );
+
+    // Ignore if this is a duplicate incoming key.
+    if ( $this->vimeography_check_if_activation_key_exists( $key ) ) {
+      return;
+    }
+
+    // Data to send to the API
+    $api_params = array(
+      'edd_action' => 'activate_license',
+      'license'    => $key,
+      //'item_name'  => urlencode( $this->item_name ), // the name of our product in EDD **IMPORTANT need to set EDD_BYPASS_NAME_CHECK on vimeography.com to true if omitting
+      'url'        => urlencode( home_url() ),
+    );
+
+    // Call the API
+    $response = wp_remote_get(
+      add_query_arg( $api_params, $this->_endpoint),
+      array(
+        'timeout'   => 15,
+        'sslverify' => false
+      )
+    );
+
+    // Make sure there are no errors
+    if ( is_wp_error( $response ) )
       return;
 
-    if ( isset( $_POST['vimeography-activate-key'] ) ) {
+    // Decode license data
+    $license_data = json_decode( wp_remote_retrieve_body( $response ) );
 
-      $key = str_replace('-', '', strtoupper( sanitize_text_field( $_POST['vimeography-activation-key'] ) ) );
-
-      // Ignore if this is a duplicate incoming key.
-      if ( $this->vimeography_check_if_activation_key_exists( $key ) ) {
-        return;
-      }
-
-      // Data to send to the API
-      $api_params = array(
-        'edd_action' => 'activate_license',
-        'license'    => $key,
-        //'item_name'  => urlencode( $this->item_name ), // the name of our product in EDD **IMPORTANT need to set EDD_BYPASS_NAME_CHECK on vimeography.com to true if omitting
-        'url'        => urlencode( home_url() ),
-      );
-
-      // Call the API
-      $response = wp_remote_get(
-        add_query_arg( $api_params, $this->_endpoint),
-        array(
-          'timeout'   => 15,
-          'sslverify' => false
-        )
-      );
-
-      // Make sure there are no errors
-      if ( is_wp_error( $response ) )
-        return;
-
-      // Decode license data
-      $license_data = json_decode( wp_remote_retrieve_body( $response ) );
-
-      if ( $license_data->success AND $license_data->license == 'valid' ) {
-        $this->_vimeography_add_activation_key( $key, $license_data );
+    if ( $license_data->success AND $license_data->license == 'valid' ) {
+      $this->_vimeography_add_activation_key( $key, $license_data );
+      return TRUE;
+    } else {
+      // Add failed message
+      switch ($license_data->error) {
+        case 'missing': case 'revoked':
+          throw new Exception( __('That license key could not be found in our system.', 'vimeography') );
+        case 'no_activations_left':
+          throw new Exception( __('You have reached the max number of sites that this license can be used on.', 'vimeography') );
+        case 'expired':
+          throw new Exception( __('The license key you entered has expired. Please visit http://vimeography.com to renew it.', 'vimeography') );
+        case 'key_mismatch':
+          throw new Exception( __('The license key you entered does not match the one we have on file.', 'vimeography') );
+        default:
+          throw new Exception( __('Unknown error: ' . $license_data->error, 'vimeography') );
       }
     }
   }
@@ -156,56 +159,72 @@ class Vimeography_Update {
    * @access  public
    * @return  void
    */
-  public function vimeography_deactivate_license() {
-    // Ignore if key is not set
-    if ( ! isset( $_POST['vimeography-activation-key'] ) )
+  public function deactivate_license( $license ) {
+    $key = str_replace('-', '', strtoupper( sanitize_text_field( $license ) ) );
+
+    // Data to send to the API
+    $api_params = array(
+      'edd_action' => 'deactivate_license',
+      'license'    => $key,
+      //'item_name'  => urlencode( $this->item_name ), // the name of our product in EDD
+      'url'        => urlencode( home_url() )
+    );
+
+    // Call the API
+    $response = wp_remote_get(
+      add_query_arg( $api_params, $this->_endpoint ),
+      array(
+        'timeout'   => 15,
+        'sslverify' => false
+      )
+    );
+
+    // Make sure there are no errors
+    if ( is_wp_error( $response ) )
       return;
 
-    // Run on deactivate button press
-    if ( isset( $_POST['vimeography-deactivate-key'] ) ) {
+    // Decode the license data
+    $license_data = json_decode( wp_remote_retrieve_body( $response ) );
 
-      $key = str_replace('-', '', strtoupper( sanitize_text_field( $_POST['vimeography-activation-key'] ) ) );
-
-      // Data to send to the API
-      $api_params = array(
-        'edd_action' => 'deactivate_license',
-        'license'    => $key,
-        //'item_name'  => urlencode( $this->item_name ), // the name of our product in EDD
-        'url'        => urlencode( home_url() )
-      );
-
-      // Call the API
-      $response = wp_remote_get(
-        add_query_arg( $api_params, $this->_endpoint ),
-        array(
-          'timeout'   => 15,
-          'sslverify' => false
-        )
-      );
-
-      // Make sure there are no errors
-      if ( is_wp_error( $response ) )
-        return;
-
-      // Decode the license data
-      $license_data = json_decode( wp_remote_retrieve_body( $response ) );
-
-      if ( $license_data->license == 'deactivated' ) {
-        if ( $this->_vimeography_remove_activation_key( $key ) ) {
-          $this->messages[] = array(
-            'type' => 'success',
-            'heading' => __('Activation Key Removed.', 'vimeography'),
-            'message' => __('Your activation key has been removed from this site.', 'vimeography')
-          );
-        } else {
-          $this->messages[] = array(
-            'type' => 'fail',
-            'heading' => __('Hmm.', 'vimeography'),
-            'message' => __('Your activation key was not removed from this site.', 'vimeography')
-          );
-        }
+    if ( $license_data->license == 'deactivated' ) {
+      if ( $this->_vimeography_remove_activation_key( $key ) ) {
+        return TRUE;
+      } else {
+        throw new Exception( __('That license key could not be deactivated.', 'vimeography') );
       }
     }
+  }
+
+  /**
+   * [check_license description]
+   * @return [type] [description]
+   */
+  public function check_license( $license ) {
+
+    // Data to send to the API
+    $api_params = array(
+      'edd_action' => 'check_license',
+      'license'    => $license->activation_key,
+      //'item_name'  => urlencode( $this->item_name ), // the name of our product in EDD
+      'url'        => urlencode( home_url() )
+    );
+
+    // Call the API
+    $response = wp_remote_get(
+      add_query_arg( $api_params, $this->_endpoint ),
+      array(
+        'timeout'   => 15,
+        'sslverify' => false
+      )
+    );
+
+    // Make sure there are no errors
+    if ( is_wp_error( $response ) ) {
+      return FALSE;
+    }
+
+    // Decode the license data
+    return json_decode( wp_remote_retrieve_body( $response ) );
   }
 
   /**
@@ -284,6 +303,10 @@ class Vimeography_Update {
     $entry->activation_key = $key;
     $entry->plugin_name    = $license_data->vimeography_plugin_slug;
     $entry->product_name   = $license_data->vimeography_product_name;
+    $entry->expires        = $license_data->expires;
+    $entry->status         = $license_data->license;
+    $entry->limit          = $license_data->license_limit;
+    $entry->activations_left = $license_data->activations_left;
 
     $this->_activation_keys[] = $entry;
     return update_site_option('vimeography_activation_keys', array_values( $this->_activation_keys ) );
