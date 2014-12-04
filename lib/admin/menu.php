@@ -22,7 +22,7 @@ class Vimeography_Admin_Menu {
     add_menu_page( 'Vimeography Page Title', 'Vimeography', 'manage_options', 'vimeography-edit-galleries', '', VIMEOGRAPHY_URL.'lib/admin/assets/img/vimeography-icon.png' );
     $hooks[] = add_submenu_page( 'vimeography-edit-galleries', __('Edit Galleries', 'vimeography'), __('Edit Galleries', 'vimeography'), 'manage_options', 'vimeography-edit-galleries', array(&$this, 'vimeography_render_template' ));
     $hooks[] = add_submenu_page( 'vimeography-edit-galleries', __('New Gallery', 'vimeography'), __('New Gallery', 'vimeography'), 'manage_options', 'vimeography-new-gallery', array(&$this, 'vimeography_render_template' ));
-    $hooks[] = add_submenu_page( 'vimeography-edit-galleries', __('Manage Activations', 'vimeography'), __('Manage Activations', 'vimeography'), 'manage_options', 'vimeography-manage-activations', array(&$this, 'vimeography_render_template' ));
+    $hooks[] = add_submenu_page( 'vimeography-edit-galleries', __('Manage Licenses', 'vimeography'), __('Manage Licenses', 'vimeography'), 'manage_options', 'vimeography-manage-activations', array(&$this, 'vimeography_render_template' ));
     if ( current_user_can( 'manage_options' ) )
       $submenu['vimeography-edit-galleries'][500] = array( __('Vimeography Themes', 'vimeography'), 'manage_options' , 'http://vimeography.com/themes' );
     $hooks[] = add_submenu_page( 'vimeography-edit-galleries', 'Vimeography Pro', 'Vimeography Pro', 'manage_options', 'vimeography-pro', array(&$this, 'vimeography_render_template' ));
