@@ -95,20 +95,6 @@ class Tests_Update extends Vimeography_UnitTestCase {
   }
 
   /**
-   * @covers Vimeography_Update::_hooks()
-   */
-  public function test_activate_license_hook_was_added() {
-    $this->assertGreaterThan(0, has_action('admin_init', array($this->_class, 'vimeography_activate_license') ) );
-  }
-
-  /**
-   * @covers Vimeography_Update::_hooks()
-   */
-  public function test_deactivate_license_hook_was_added() {
-    $this->assertGreaterThan(0, has_action('admin_init', array($this->_class, 'vimeography_deactivate_license') ) );
-  }
-
-  /**
    * @covers Vimeography_Update::vimeography_is_addon_missing_activation_key()
    */
   public function test_if_missing_plugin_activation_key_returns_true() {
