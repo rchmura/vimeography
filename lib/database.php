@@ -380,11 +380,19 @@ class Vimeography_Database extends Vimeography {
   public static function vimeography_update_db_to_1_2_8() {
     if ( version_compare( self::$_version, '1.2.8', '<' ) ) {
       $licenses = get_site_option('vimeography_activation_keys');
+
+      if ( ! class_exists('Vimeography_Update') ) {
+        require_once VIMEOGRAPHY_PATH . 'lib/update.php';
+        $updater = new Vimeography_Update;
+      } else {
+        $updater = Vimeography::get_instance()->updater;
+      }
+
       if ($licenses) {
         foreach ($licenses as $index => $license) {
 
           // Retrieve more information about the license
-          $result = Vimeography::get_instance()->updater->check_license( $license );
+          $result = $updater->check_license( $license );
           $license->status  = $result->license;
           $license->expires = $result->expires;
           $license->limit   = $result->license_limit;
