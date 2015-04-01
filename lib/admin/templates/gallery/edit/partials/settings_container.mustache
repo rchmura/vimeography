@@ -7,9 +7,9 @@
               </div>
               <div id="vimeography-theme-settings-container">
                 <form id="vimeography-theme-settings-form" method="post" action="{{admin_url}}edit-galleries&id={{id}}" style="margin: 0; width: 240px; padding: 0 20px; background-color: #e3e3e3; overflow-y: auto; overflow-x: hidden;">
-                {{#vimeography_theme_settings}}
+                {{#theme_settings_controls}}
                     {{{setting}}}
-                {{/vimeography_theme_settings}}
+                {{/theme_settings_controls}}
 
                   <div class="vimeography-gallery-menu-setting last">
                       {{{theme_settings_nonce}}}
