@@ -15,7 +15,7 @@ class Tests_Admin_Gallery_Edit extends Vimeography_UnitTestCase {
     parent::setUp();
 
     require_once VIMEOGRAPHY_PATH . 'lib/admin/base.php';
-    require_once VIMEOGRAPHY_PATH . 'lib/admin/view/gallery/edit.php';
+    require_once VIMEOGRAPHY_PATH . 'lib/admin/controllers/gallery/edit.php';
     //$this->_class = new \Vimeography_Gallery_Edit;
   }
 
