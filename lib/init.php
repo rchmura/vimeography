@@ -68,7 +68,7 @@ class Vimeography_Init extends Vimeography {
         'loader' => new Mustache_Loader_FilesystemLoader(VIMEOGRAPHY_PATH . 'lib/admin/templates'),
       )
     );
-    require_once VIMEOGRAPHY_PATH . 'lib/admin/view/vimeography/mce.php';
+    require_once VIMEOGRAPHY_PATH . 'lib/admin/controllers/vimeography/mce.php';
     $view = new Vimeography_MCE;
     $template = $mustache->loadTemplate('vimeography/mce');
     echo $template->render($view);
