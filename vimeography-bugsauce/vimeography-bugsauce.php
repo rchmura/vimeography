@@ -4,7 +4,7 @@ Plugin Name: Vimeography Theme: Bugsauce
 Plugin URI: http://www.vimeography.com/themes
 Theme Name: Bugsauce
 Theme URI: vimeography.com/themes/bugsauce
-Version: 1.1
+Version: 1.2
 Description: is the base theme that comes prepackaged with Vimeography.
 Author: Dave Kiss
 Author URI: http://www.vimeography.com/
@@ -18,7 +18,7 @@ if ( ! class_exists('Vimeography_Themes_Bugsauce') ) {
      *
      * @var string
      */
-    public $version = '1.1';
+    public $version = '1.2';
 
     /**
      * Include this theme in the Vimeography theme loader.
