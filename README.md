@@ -15,6 +15,12 @@ For detailed setup instructions, visit the official [Documentation](http://vimeo
 
 This will download the latest developer copy of Vimeography.
 
+## Tests ##
+
+1. Install PHPUnit
+2. Install WP tests and database: `sh bin/install-wp-tests.sh wordpress_test root '' localhost latest`
+3. `cd vimeography && phpunit`
+
 ## Bugs ##
 If you find an issue, let us know [here](https://github.com/davekiss/vimeography/issues?state=open)!
 
