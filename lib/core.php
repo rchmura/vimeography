@@ -115,6 +115,7 @@ abstract class Vimeography_Core {
 
       // Cache the results.
       if ( intval($expiration) !== 0 && ( ! empty( $result->video_set ) ) ) {
+        $result = apply_filters('vimeography/cache-videos', $result, $gallery_id);
         $cache->set($result);
       }
     }
