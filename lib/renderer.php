@@ -224,7 +224,38 @@ class Vimeography_Renderer {
       $this->_view->featured = clone $this->_view->data[0];
     }
 
+    // Set theme javascript variables
+    $this->set_theme_vars();
+
     return $this->_template->render($this->_view);
+  }
+
+
+  /**
+   * [set_theme_vars description]
+   */
+  public function set_theme_vars() {
+
+    $theme_name = strtolower( $this->_active_theme['name'] );
+
+    $data = array(
+      'gallery_id' => $this->_view->gallery_id
+    );
+
+    $reshuffled_data = array(
+      'l10n_print_after' => sprintf('vimeography.galleries.%1$s["%2$s"] = %3$s',
+        $theme_name,
+        $this->_view->gallery_id,
+        json_encode( $data )
+      )
+    );
+
+    wp_localize_script("vimeography-{$theme_name}",
+      "vimeography = window.vimeography || {};
+      window.vimeography.galleries = window.vimeography.galleries || {};
+      window.vimeography.galleries.{$theme_name} = window.vimeography.galleries.{$theme_name} || {};
+      vimeography.unused",
+    $reshuffled_data);
   }
 
   /**
