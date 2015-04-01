@@ -20,11 +20,21 @@ class Vimeography_Gallery_List extends Vimeography_Base {
     add_action('vimeography_action_delete_gallery', array($this, 'delete_gallery') );
     add_action('vimeography_action_bulk_process_galleries', array($this, 'bulk_process') );
     add_action('vimeography/reload-galleries', array($this, 'load_galleries') );
+    add_action('admin_enqueue_scripts', array( $this, 'load_scripts' ) );
 
     // wp-list-table
     require_once 'table.php';
     $this->_table = new Vimeography_Gallery_List_Table;
     $this->load_galleries();
+  }
+
+  /**
+   * [load_scripts description]
+   * @return [type] [description]
+   */
+  public function load_scripts() {
+    wp_enqueue_script('jquery-ui-dialog');
+    wp_enqueue_style ('wp-jquery-ui-dialog');
   }
 
   /**

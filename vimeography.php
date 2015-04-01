@@ -52,7 +52,9 @@ if ( ! class_exists( 'Vimeography' ) ) {
         Mustache_Autoloader::register();
 
         if ( is_admin() ) {
+          new Vimeography_Admin_Scripts;
           new Vimeography_Admin_Actions;
+          new Vimeography_Base;
           new Vimeography_Admin_Menu;
           new Vimeography_Admin_Plugins;
           self::$instance->updater = new Vimeography_Update;
@@ -128,7 +130,9 @@ if ( ! class_exists( 'Vimeography' ) ) {
       require_once VIMEOGRAPHY_PATH . 'vimeography-bugsauce/vimeography-bugsauce.php';
 
       if ( is_admin() ) {
+        require_once VIMEOGRAPHY_PATH . 'lib/admin/scripts.php';
         require_once VIMEOGRAPHY_PATH . 'lib/admin/actions.php';
+        require_once VIMEOGRAPHY_PATH . 'lib/admin/base.php';
         require_once VIMEOGRAPHY_PATH . 'lib/admin/menu.php';
         require_once VIMEOGRAPHY_PATH . 'lib/admin/plugins.php';
         require_once VIMEOGRAPHY_PATH . 'lib/update.php';

@@ -51,6 +51,7 @@ class Vimeography_Gallery_Edit extends Vimeography_Base {
     require_once VIMEOGRAPHY_PATH . 'lib/cache.php';
     $this->_cache = new Vimeography_Cache( $this->_gallery_id );
 
+    add_action('admin_enqueue_scripts', array( $this, 'load_scripts' ) );
     add_action('vimeography_action_refresh_gallery_cache', array($this, 'vimeography_refresh_gallery_cache') );
     add_action('vimeography_action_refresh_gallery_appearance', array($this, 'vimeography_refresh_gallery_appearance') );
     add_action('vimeography_action_set_gallery_theme', array($this, 'vimeography_set_gallery_theme') );
