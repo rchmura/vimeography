@@ -29,8 +29,8 @@ class Vimeography_Gallery_List extends Vimeography_Base {
   }
 
   /**
-   * [load_scripts description]
-   * @return [type] [description]
+   * Enqueues the scripts for the Vimeography gallery list page
+   * @return void
    */
   public function load_scripts() {
     wp_enqueue_script('jquery-ui-dialog');
@@ -38,8 +38,8 @@ class Vimeography_Gallery_List extends Vimeography_Base {
   }
 
   /**
-   * [load_galleries description]
-   * @return [type] [description]
+   * Sets the data to display in the gallery table.
+   * @return void
    */
   public function load_galleries() {
     $this->_table->set_pagination();

@@ -44,8 +44,8 @@ class Vimeography_Admin_Actions {
   }
 
   /**
-   * [vimeography_maybe_add_activation_key_reset_nag description]
-   * @return [type] [description]
+   * Adds a notice if the user needs to remove and reenter their license keys
+   * @return void
    */
   public function vimeography_maybe_add_activation_key_reset_nag() {
     if ( get_site_option('vimeography_corrupt_keys_found') ) {
@@ -61,8 +61,8 @@ class Vimeography_Admin_Actions {
   }
 
   /**
-   * [vimeography_corrupt_keys_notice description]
-   * @return [type] [description]
+   * Outputs a notice if the user needs to remove and reenter their license keys
+   * @return void
    */
   public function vimeography_corrupt_keys_notice() {
     printf( '<div class="update-nag"> <p> %1$s  | <a href="%2$s"> %3$s </a> </p> </div>',

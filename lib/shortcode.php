@@ -200,7 +200,7 @@ class Vimeography_Shortcode extends Vimeography {
   /**
    * Loads the Vimeography engine and renderer and returns the rendered HTML for output.
    *
-   * @return html | string
+   * @return string
    */
   public function output() {
     try {

@@ -84,8 +84,8 @@ class Vimeography_Gallery_Edit extends Vimeography_Base {
   }
 
   /**
-   * [load_scripts description]
-   * @return [type] [description]
+   * Enqueues the scripts needed for the gallery editor
+   * @return void
    */
   public function load_scripts() {
     if (! wp_script_is('jquery-ui')) {
@@ -101,8 +101,11 @@ class Vimeography_Gallery_Edit extends Vimeography_Base {
   }
 
   /**
-   * [_localize_settings description]
-   * @return [type] [description]
+   * Enqueues the required appearance control scripts based on the controlable
+   * settings of the current theme and adds the theme settings as global
+   * JS variables.
+   * 
+   * @return void
    */
   private function _localize_settings() {
     $control_index = array();
@@ -143,7 +146,7 @@ class Vimeography_Gallery_Edit extends Vimeography_Base {
    * the `vimeography/reload-gallery` action.
    *
    * @since  1.3
-   * @return [type] [description]
+   * @return void
    */
   public function load_gallery() {
 
@@ -177,10 +180,12 @@ class Vimeography_Gallery_Edit extends Vimeography_Base {
   }
 
   /**
-   * [_load_theme_settings description]
+   * Loads the theme settings array from the theme settings file and
+   * sets it as a property on self.
+   * 
    * @since  1.3
-   * @param  string $path [description]
-   * @return bool         [description]
+   * @param  string $path Path to the theme's settings.php file
+   * @return bool         True if loaded, False otherwise
    */
   private function _load_theme_settings($path) {
 
@@ -188,6 +193,7 @@ class Vimeography_Gallery_Edit extends Vimeography_Base {
       $this->theme_supports_settings = TRUE;
       include $path;
 
+      /* $settings is defined in the theme settings file */
       $this->_theme_settings = $settings;
       return TRUE;
     }
@@ -249,11 +255,11 @@ class Vimeography_Gallery_Edit extends Vimeography_Base {
    * current theme
    *
    * @since  1.3
-   * @return [type] [description]
+   * @return mixed
    */
   private function _render_theme_settings_controls() {
 
-    if ($this->theme_supports_settings == TRUE) {
+    if ($this->theme_supports_settings === TRUE) {
 
       // Make sure the theme_settings_controls array is empty
       $this->theme_settings_controls = array();
@@ -357,9 +363,10 @@ class Vimeography_Gallery_Edit extends Vimeography_Base {
 
 
   /**
-   *
+   * Returns the gallery settings to the gallery editor template
+   * 
    * @since  1.3
-   * @return [type] [description]
+   * @return array
    */
   public function gallery() {
     return apply_filters('vimeography/gallery-settings', $this->_gallery);
@@ -367,8 +374,9 @@ class Vimeography_Gallery_Edit extends Vimeography_Base {
 
 
   /**
-   * [selected description]
-   * @return [type] [description]
+   * Returns an array containing the selected cache timeout value
+   * 
+   * @return array
    */
   public function selected() {
     return array(
@@ -377,10 +385,10 @@ class Vimeography_Gallery_Edit extends Vimeography_Base {
   }
 
   /**
-   * [_vimeography_validate_appearance_settings description]
-   * @param  [type] $id    [description]
-   * @param  [type] $theme [description]
-   * @return [type]        [description]
+   * Switches to the selected gallery theme
+   * 
+   * @param  array $input posted values
+   * @return void
    */
   public function vimeography_set_gallery_theme($input) {
     // if this fails, check_admin_referer() will automatically print a "failed" page and die.
@@ -424,10 +432,10 @@ class Vimeography_Gallery_Edit extends Vimeography_Base {
   }
 
   /**
-   * [_vimeography_validate_basic_settings description]
+   * Validates and stores the basic gallery settings
    *
    * @param  array  $input unsanitized POST data
-   * @return [type]        [description]
+   * @return void
    */
   public function vimeography_validate_basic_gallery_settings($input) {
     if (check_admin_referer('vimeography-basic-action','vimeography-basic-verification') ) {
@@ -564,8 +572,9 @@ class Vimeography_Gallery_Edit extends Vimeography_Base {
         foreach ($settings as $setting) {
           $namespace = $setting['namespace'] == TRUE  ? '#vimeography-gallery-'.$this->_gallery_id : '';
           $important = isset( $setting['important'] ) ? ' !important' : '';
+          $target_count = count( $setting['targets'] );
 
-          for ($i = 0; $i < count($setting['targets']); $i++) {
+          for ($i = 0; $i < $target_count; $i++) {
             // If this is an expression, change the value to the expression value calculated by the appearance widget.
             if (isset($setting['expressions']) AND array_key_exists($setting['targets'][$i], $setting['expressions']))
             {
@@ -632,8 +641,8 @@ class Vimeography_Gallery_Edit extends Vimeography_Base {
   /**
    * Convert the jQuery attribute selector to an actual css property
    *
-   * @param  [type] $attribute [description]
-   * @return [type]            [description]
+   * @param  string $attribute camelCased CSS attribute
+   * @return string            dashed-CSS-attribute
    */
   private static function _convert_jquery_css_attribute($attribute) {
     $number_of_matches = preg_match_all('/[A-Z]/', esc_attr($attribute), $capitals, PREG_OFFSET_CAPTURE);
