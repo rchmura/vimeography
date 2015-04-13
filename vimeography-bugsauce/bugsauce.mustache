@@ -25,8 +25,6 @@
 
       var $gallery = $('#vimeography-gallery-{{gallery_id}}');
 
-      $gallery.fitVids();
-
       {{#playlist}}
         vimeography.utilities.enable_autoplay = 1;
         vimeography.utilities.player_id = $gallery.find('iframe').attr('id');
