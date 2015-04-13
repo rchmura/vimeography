@@ -90,6 +90,7 @@ class Vimeography_Vimeo
 
             case 'POST' :
             case 'PATCH' :
+            case 'PUT' :
             case 'DELETE' :
                 $curl_url = self::ROOT_ENDPOINT . $url;
                 $curl_opts = array(
