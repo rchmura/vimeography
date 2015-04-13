@@ -1,15 +1,15 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Vimeography\n"
-"POT-Creation-Date: 2014-07-29 20:21-0600\n"
-"PO-Revision-Date: 2014-07-29 20:21-0600\n"
+"POT-Creation-Date: 2015-04-13 16:50-0500\n"
+"PO-Revision-Date: 2015-04-13 16:50-0500\n"
 "Last-Translator: Dave Kiss <dave@davekiss.com>\n"
 "Language-Team:  <support@vimeography.com>\n"
 "Language: en_US\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Poedit 1.6.7\n"
+"X-Generator: Poedit 1.6.10\n"
 "X-Poedit-Basepath: ../\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Poedit-KeywordsList: __;_e\n"
@@ -51,271 +51,300 @@ msgid ""
 "version."
 msgstr ""
 
-#: lib/admin/menu.php:23
+#: lib/admin/controllers/gallery/edit.php:79
+msgid "Gallery created."
+msgstr ""
+
+#: lib/admin/controllers/gallery/edit.php:80
+msgid "Well, that was easy."
+msgstr ""
+
+#: lib/admin/controllers/gallery/edit.php:166
+msgid "Uh oh."
+msgstr ""
+
+#: lib/admin/controllers/gallery/edit.php:167
+msgid "That gallery no longer exists. It's gone. Kaput!"
+msgstr ""
+
+#: lib/admin/controllers/gallery/edit.php:229
+msgid "So fresh."
+msgstr ""
+
+#: lib/admin/controllers/gallery/edit.php:230
+msgid "Your videos have been refreshed."
+msgstr ""
+
+#: lib/admin/controllers/gallery/edit.php:247
+msgid "Theme settings cleared."
+msgstr ""
+
+#: lib/admin/controllers/gallery/edit.php:248
+msgid "Your gallery appearance has been reset."
+msgstr ""
+
+#: lib/admin/controllers/gallery/edit.php:273
+msgid ""
+"One of your active theme settings does not specify the type of setting it is."
+msgstr ""
+
+#: lib/admin/controllers/gallery/edit.php:311
+#, php-format
+msgid "The \"%s\" setting type does not exist or is improperly structured."
+msgstr ""
+
+#: lib/admin/controllers/gallery/edit.php:328
+msgid "Theme settings file error: "
+msgstr ""
+
+#: lib/admin/controllers/gallery/edit.php:410
+msgid "Your theme could not be updated."
+msgstr ""
+
+#: lib/admin/controllers/gallery/edit.php:421
+#: lib/admin/controllers/gallery/edit.php:628
+msgid "Theme updated."
+msgstr ""
+
+#: lib/admin/controllers/gallery/edit.php:422
+#, php-format
+msgid "You are now using the \"%s\" theme."
+msgstr ""
+
+#: lib/admin/controllers/gallery/edit.php:427
+#: lib/admin/controllers/gallery/edit.php:505
+msgid "Ruh roh."
+msgstr ""
+
+#: lib/admin/controllers/gallery/edit.php:487
+msgid "Your settings could not be updated."
+msgstr ""
+
+#: lib/admin/controllers/gallery/edit.php:499
+msgid "Settings updated."
+msgstr ""
+
+#: lib/admin/controllers/gallery/edit.php:500
+msgid "Nice work. You are pretty good at this."
+msgstr ""
+
+#: lib/admin/controllers/gallery/edit.php:613
+msgid "Vimeography could not create the customizations directory."
+msgstr ""
+
+#: lib/admin/controllers/gallery/edit.php:620
+#: lib/admin/controllers/gallery/list.php:200
+msgid "There was an error writing your file. Please try again!"
+msgstr ""
+
+#: lib/admin/controllers/gallery/edit.php:629
+msgid "I didn't know that you were such a great designer!"
+msgstr ""
+
+#: lib/admin/controllers/gallery/edit.php:634
+msgid "Oh no!"
+msgstr ""
+
+#: lib/admin/controllers/gallery/list.php:145
+msgid "Make sure to give your new gallery a name!"
+msgstr ""
+
+#: lib/admin/controllers/gallery/list.php:161
+#: lib/admin/controllers/gallery/list.php:179
+msgid "Your gallery could not be duplicated."
+msgstr ""
+
+#: lib/admin/controllers/gallery/list.php:211
+msgid "Gallery duplicated."
+msgstr ""
+
+#: lib/admin/controllers/gallery/list.php:212
+msgid "You now have a clone of your own."
+msgstr ""
+
+#: lib/admin/controllers/gallery/list.php:217
+#: lib/admin/controllers/gallery/list.php:258
+msgid "Ruh Roh."
+msgstr ""
+
+#: lib/admin/controllers/gallery/list.php:238
+msgid "Your gallery could not be deleted."
+msgstr ""
+
+#: lib/admin/controllers/gallery/list.php:251
+msgid "Gallery deleted."
+msgstr ""
+
+#: lib/admin/controllers/gallery/list.php:252
+msgid "See you later, sucker."
+msgstr ""
+
+#: lib/admin/controllers/gallery/new.php:57
+msgid "Heads up!"
+msgstr ""
+
+#: lib/admin/controllers/gallery/new.php:83
+msgid "Make sure you fill out both of the fields below!"
+msgstr ""
+
+#: lib/admin/controllers/gallery/new.php:105
+#: lib/admin/controllers/gallery/new.php:121
+msgid ""
+"We couldn't create a new gallery. Try upgrading or reinstalling the "
+"Vimeography plugin."
+msgstr ""
+
+#: lib/admin/controllers/gallery/new.php:166
+msgid ""
+"Looks like you don't have the permission to subscribe to this collection."
+msgstr ""
+
+#: lib/admin/controllers/gallery/new.php:171
+msgid "The resource that was entered is currently unsupported."
+msgstr ""
+
+#: lib/admin/controllers/theme/list.php:45
+msgid "License Key added."
+msgstr ""
+
+#: lib/admin/controllers/theme/list.php:46
+msgid "Your license key has been added to this site."
+msgstr ""
+
+#: lib/admin/controllers/theme/list.php:51
+#: lib/admin/controllers/theme/list.php:78
+#: lib/admin/controllers/vimeography/pro.php:157
+msgid "Dangit."
+msgstr ""
+
+#: lib/admin/controllers/theme/list.php:72
+msgid "License Key deactivated."
+msgstr ""
+
+#: lib/admin/controllers/theme/list.php:73
+msgid "Your license key has been removed from this site."
+msgstr ""
+
+#: lib/admin/controllers/vimeography/pro.php:97
+msgid "Poof!"
+msgstr ""
+
+#: lib/admin/controllers/vimeography/pro.php:98
+msgid "Your Vimeo access token has been removed."
+msgstr ""
+
+#: lib/admin/controllers/vimeography/pro.php:109
+msgid "Whoops!"
+msgstr ""
+
+#: lib/admin/controllers/vimeography/pro.php:110
+msgid "Don't forget to enter your Vimeo OAuth 2 access token!"
+msgstr ""
+
+#: lib/admin/controllers/vimeography/pro.php:122
+msgid "Woah!"
+msgstr ""
+
+#: lib/admin/controllers/vimeography/pro.php:123
+msgid ""
+"Looks like the Vimeo API is having some issues right now. Try this again in "
+"a little bit."
+msgstr ""
+
+#: lib/admin/controllers/vimeography/pro.php:133
+msgid "Success!"
+msgstr ""
+
+#: lib/admin/controllers/vimeography/pro.php:135
+#, php-format
+msgid "Your Vimeo access token for %s has been added and saved."
+msgstr ""
+
+#: lib/admin/controllers/vimeography/pro.php:142
+msgid ""
+"Your Vimeo access token didn't validate. Try again, and double check that "
+"you are entering the correct token."
+msgstr ""
+
+#: lib/admin/controllers/vimeography/pro.php:146
+msgid "how the heck did you score a 404?"
+msgstr ""
+
+#: lib/admin/controllers/vimeography/pro.php:150
+msgid "Unknown response status from the Vimeo API: "
+msgstr ""
+
+#: lib/admin/menu.php:31
 msgid "Edit Galleries"
 msgstr ""
 
-#: lib/admin/menu.php:24
+#: lib/admin/menu.php:32
 msgid "New Gallery"
 msgstr ""
 
-#: lib/admin/menu.php:25
-msgid "Manage Activations"
+#: lib/admin/menu.php:33
+msgid "Manage Licenses"
 msgstr ""
 
-#: lib/admin/menu.php:27
+#: lib/admin/menu.php:35
 msgid "Vimeography Themes"
 msgstr ""
 
-#: lib/admin/menu.php:29
+#: lib/admin/menu.php:37
 msgid "Help"
 msgstr ""
 
-#: lib/admin/menu.php:41
+#: lib/admin/menu.php:152
 msgid "You do not have sufficient permissions to access this page."
-msgstr ""
-
-#: lib/admin/menu.php:136
-#, php-format
-msgid "The admin template for \"%s\" cannot be found."
 msgstr ""
 
 #: lib/admin/plugins.php:22
 msgid "Settings"
 msgstr ""
 
-#: lib/admin/view/gallery/edit.php:63
-msgid "Gallery created."
-msgstr ""
-
-#: lib/admin/view/gallery/edit.php:64
-msgid "Well, that was easy."
-msgstr ""
-
-#: lib/admin/view/gallery/edit.php:82
-msgid "So fresh."
-msgstr ""
-
-#: lib/admin/view/gallery/edit.php:83
-msgid "Your videos have been refreshed."
-msgstr ""
-
-#: lib/admin/view/gallery/edit.php:100
-msgid "Theme settings cleared."
-msgstr ""
-
-#: lib/admin/view/gallery/edit.php:101
-msgid "Your gallery appearance has been reset."
-msgstr ""
-
-#: lib/admin/view/gallery/edit.php:120
-msgid ""
-"One of your active theme settings does not specify the type of setting it is."
-msgstr ""
-
-#: lib/admin/view/gallery/edit.php:147
-#, php-format
-msgid "The \"%s\" setting type does not exist or is improperly structured."
-msgstr ""
-
-#: lib/admin/view/gallery/edit.php:216
-msgid "Uh oh."
-msgstr ""
-
-#: lib/admin/view/gallery/edit.php:217
-msgid "That gallery no longer exists. It's gone. Kaput!"
-msgstr ""
-
-#: lib/admin/view/gallery/edit.php:275
-msgid "Your theme could not be updated."
-msgstr ""
-
-#: lib/admin/view/gallery/edit.php:284 lib/admin/view/gallery/edit.php:487
-msgid "Theme updated."
-msgstr ""
-
-#: lib/admin/view/gallery/edit.php:285
-#, php-format
-msgid "You are now using the \"%s\" theme."
-msgstr ""
-
-#: lib/admin/view/gallery/edit.php:290 lib/admin/view/gallery/edit.php:366
-msgid "Ruh roh."
-msgstr ""
-
-#: lib/admin/view/gallery/edit.php:350
-msgid "Your settings could not be updated."
-msgstr ""
-
-#: lib/admin/view/gallery/edit.php:360
-msgid "Settings updated."
-msgstr ""
-
-#: lib/admin/view/gallery/edit.php:361
-msgid "Nice work. You are pretty good at this."
-msgstr ""
-
-#: lib/admin/view/gallery/edit.php:472
-msgid "Vimeography could not create the customizations directory."
-msgstr ""
-
-#: lib/admin/view/gallery/edit.php:479 lib/admin/view/gallery/list.php:189
-msgid "There was an error writing your file. Please try again!"
-msgstr ""
-
-#: lib/admin/view/gallery/edit.php:488
-msgid "I didn't know that you were such a great designer!"
-msgstr ""
-
-#: lib/admin/view/gallery/edit.php:493
-msgid "Oh no!"
-msgstr ""
-
-#: lib/admin/view/gallery/list.php:134
-msgid "Make sure to give your new gallery a name!"
-msgstr ""
-
-#: lib/admin/view/gallery/list.php:150 lib/admin/view/gallery/list.php:168
-msgid "Your gallery could not be duplicated."
-msgstr ""
-
-#: lib/admin/view/gallery/list.php:200
-msgid "Gallery duplicated."
-msgstr ""
-
-#: lib/admin/view/gallery/list.php:201
-msgid "You now have a clone of your own."
-msgstr ""
-
-#: lib/admin/view/gallery/list.php:206 lib/admin/view/gallery/list.php:247
-msgid "Ruh Roh."
-msgstr ""
-
-#: lib/admin/view/gallery/list.php:227
-msgid "Your gallery could not be deleted."
-msgstr ""
-
-#: lib/admin/view/gallery/list.php:240
-msgid "Gallery deleted."
-msgstr ""
-
-#: lib/admin/view/gallery/list.php:241
-msgid "See you later, sucker."
-msgstr ""
-
-#: lib/admin/view/gallery/new.php:57
-msgid "Heads up!"
-msgstr ""
-
-#: lib/admin/view/gallery/new.php:83
-msgid "Make sure you fill out both of the fields below!"
-msgstr ""
-
-#: lib/admin/view/gallery/new.php:105 lib/admin/view/gallery/new.php:121
-msgid ""
-"We couldn't create a new gallery. Try upgrading or reinstalling the "
-"Vimeography plugin."
-msgstr ""
-
-#: lib/admin/view/gallery/new.php:166
-msgid ""
-"Looks like you don't have the permission to subscribe to this collection."
-msgstr ""
-
-#: lib/admin/view/gallery/new.php:171
-msgid "The resource that was entered is currently unsupported."
-msgstr ""
-
-#: lib/admin/view/vimeography/pro.php:88
-msgid "Poof!"
-msgstr ""
-
-#: lib/admin/view/vimeography/pro.php:89
-msgid "Your Vimeo access token has been removed."
-msgstr ""
-
-#: lib/admin/view/vimeography/pro.php:99
-msgid "Whoops!"
-msgstr ""
-
-#: lib/admin/view/vimeography/pro.php:100
-msgid "Don't forget to enter your Vimeo OAuth 2 access token!"
-msgstr ""
-
-#: lib/admin/view/vimeography/pro.php:112
-msgid "Woah!"
-msgstr ""
-
-#: lib/admin/view/vimeography/pro.php:113
-msgid ""
-"Looks like the Vimeo API is having some issues right now. Try this again in "
-"a little bit."
-msgstr ""
-
-#: lib/admin/view/vimeography/pro.php:123
-msgid "Yeah!"
-msgstr ""
-
-#: lib/admin/view/vimeography/pro.php:125
-#, php-format
-msgid "Success! Your Vimeo access token for %s has been added and saved."
-msgstr ""
-
-#: lib/admin/view/vimeography/pro.php:133
-msgid ""
-"Your Vimeo access token didn't validate. Try again, and double check that "
-"you are entering the correct token."
-msgstr ""
-
-#: lib/admin/view/vimeography/pro.php:138
-msgid "how the heck did you score a 404?"
-msgstr ""
-
-#: lib/admin/view/vimeography/pro.php:143
-msgid "Unknown response status from the Vimeo API: "
-msgstr ""
-
-#: lib/admin/view/vimeography/pro.php:151
-msgid "Dangit."
-msgstr ""
-
-#: lib/core.php:133
+#: lib/core.php:134
 #, php-format
 msgid "Endpoint %s is not valid."
 msgstr ""
 
-#: lib/core.php:182
+#: lib/core.php:181
 msgid "a bad request made was made. "
 msgstr ""
 
-#: lib/core.php:187
+#: lib/core.php:185
 msgid ""
 "an invalid token was used for the API request. Try removing your Vimeo token "
 "on the Vimeography Pro page and following the steps again to create a Vimeo "
 "app."
 msgstr ""
 
-#: lib/core.php:192
+#: lib/core.php:189
 msgid "the plugin could not retrieve data from the Vimeo API! "
 msgstr ""
 
-#: lib/core.php:197
+#: lib/core.php:193
 msgid ""
 "looks like Vimeo is having some API issues. Try reloading, or, check back in "
 "a few minutes."
 msgstr ""
 
-#: lib/core.php:201
+#: lib/core.php:196
 #, php-format
 msgid "Unknown response status %1$d, %2$s"
 msgstr ""
 
-#: lib/core.php:206
+#: lib/core.php:200
 msgid "the request to Vimeo failed. "
 msgstr ""
 
-#: lib/helpers.php:123
+#: lib/helpers.php:122
 msgid "Vimeography could not retrieve the featured video: "
+msgstr ""
+
+#: lib/helpers.php:132
+msgid ""
+"Your video privacy settings for must be adjusted to allow displaying this "
+"video on your site."
 msgstr ""
 
 #: lib/renderer.php:80
@@ -340,32 +369,47 @@ msgstr ""
 msgid "Vimeography Error: "
 msgstr ""
 
-#: lib/shortcode.php:133
+#: lib/shortcode.php:134
 #, php-format
 msgid "a Vimeography gallery with an ID of \"%1$s\" was not found."
 msgstr ""
 
-#: lib/shortcode.php:229
+#: lib/shortcode.php:224
+msgid "the Vimeo source for this gallery does not have any videos."
+msgstr ""
+
+#: lib/shortcode.php:234
 msgid "Vimeography error: "
 msgstr ""
 
-#: lib/update.php:197
-msgid "Activation Key Removed."
+#: lib/update.php:143
+msgid "That license key could not be found in our system."
 msgstr ""
 
-#: lib/update.php:198
-msgid "Your activation key has been removed from this site."
+#: lib/update.php:145
+msgid ""
+"You have reached the max number of sites that this license can be used on."
 msgstr ""
 
-#: lib/update.php:203
-msgid "Hmm."
+#: lib/update.php:147
+msgid ""
+"The license key you entered has expired. Please visit http://vimeography.com "
+"to renew it."
 msgstr ""
 
-#: lib/update.php:204
-msgid "Your activation key was not removed from this site."
+#: lib/update.php:149
+msgid "The license key you entered does not match the one we have on file."
 msgstr ""
 
-#: lib/update.php:332
+#: lib/update.php:151
+msgid "Unknown error: "
+msgstr ""
+
+#: lib/update.php:193
+msgid "That license key could not be deactivated."
+msgstr ""
+
+#: lib/update.php:355
 #, php-format
 msgid ""
 "Hey! Don't forget to <a title=\"Activate my Vimeography Addon\" href="
@@ -401,6 +445,6 @@ msgstr ""
 msgid "Vimeography requires the JSON PHP extension."
 msgstr ""
 
-#: vimeography.php:185
+#: vimeography.php:191
 msgid "That site doesn't look like a valid link to a Vimeo collection."
 msgstr ""
