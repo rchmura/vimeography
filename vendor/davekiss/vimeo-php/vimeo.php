@@ -16,6 +16,10 @@
  *   limitations under the License.
  */
 
+if ( ! function_exists('curl_init') ) {
+    throw new Exception('Could not find the cURL PHP extension. If you are running ubuntu try "sudo apt-get install php5-curl" and restart your server. If you need help, contact your hosting provider for support.');
+}
+
 /**
  *
  */
