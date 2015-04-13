@@ -2,8 +2,8 @@
 Contributors: iamdavekiss
 Tags: vimeo, video, videos, gallery, vimeography, media, player, playlist, showcase, skins, themes, video gallery
 Requires at least: 3.3
-Tested up to: 4.0.1
-Stable tag: 1.2.8
+Tested up to: 4.2
+Stable tag: 1.3
 License: GPL3
 
 The easiest way to create beautiful Vimeo galleries on your WordPress site.
@@ -28,7 +28,7 @@ Some amazing features:
 * Built-in caching for quick page loads
 * Create unlimited galleries
 
-For even more control over your galleries, including unlimited videos, custom sorting, hidden collections and more, check out [Vimeography Pro!](http://vimeography.com/pro "Vimeography Pro")
+For even more control over your galleries, including unlimited videos, custom sorting, hidden collections, playlists and more, check out [Vimeography Pro!](http://vimeography.com/pro "Vimeography Pro")
 
 
 Make your gallery stand out with our custom themes!
@@ -105,6 +105,19 @@ Sure, why not. Simply copy your theme's .mustache file(s) into a new folder loca
 4. Get new styles by installing gallery themes.
 
 == Changelog ==
+= 1.3 =
+* [New] The gallery appearance editor received a fresh coat of paint
+* [New] Added a "vimeography/cache-videos" filter that runs just before videos are saved
+* [New] Added a localized JS variable containing gallery data to be used by the theme
+* [New] Rewrote the Utilities and Pagination javascript classes for supporting multiple galleries per page
+* [Fix] Manually wrap the default Bugsauce theme in a fitvids container to prevent flash during load
+* [Fix] Update the appearance editor to use VeinJS instead of jQuery CSS manipulation
+* [Fix] Add a check to ensure the cURL PHP library is installed before requesting videos
+* [Fix] Updated the Froogaloop library to support HSTS (h/t Brad Dougherty)
+* [Fix] Bridge thumbnails sometimes were hidden on smaller devices. Begone, bug!
+* [Tweak] Take a different approach on loading admin pages and scripts
+* [Tweak] Rename the "admin/view" folder to "admin/controllers"
+
 = 1.2.8 =
 * [New] Added a search box to the gallery list page. You can now find a gallery by its name. YUSSS
 * [New] Added schema.org markup to the default theme to improve SEO
@@ -436,6 +449,9 @@ Sure, why not. Simply copy your theme's .mustache file(s) into a new folder loca
 * First public release.
 
 == Upgrade Notice ==
+= 1.3 =
+There is also an update available for Vimeography Pro. If you have Vimeography Pro installed, make sure to update it as well. The available version is marked as 1.0
+
 = 1.2 =
 There is also an update available for Vimeography Pro. If you have Vimeography Pro installed, make sure to update it as well. The available version is marked as 0.7
 
