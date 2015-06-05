@@ -42,6 +42,16 @@ class Vimeography_Base {
     return get_admin_url().'admin.php?page=vimeography-';
   }
 
+
+  /**
+   * The path to the Vimeography Pro icon assets
+   *
+   * @return string
+   */
+  public function icons_url() {
+    return VIMEOGRAPHY_URL . 'lib/admin/assets/img/icons/';
+  }
+
   /**
    * Checks if the Vimeography Pro plugin is installed and activated
    * 

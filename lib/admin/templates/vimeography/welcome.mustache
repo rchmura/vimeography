@@ -1,0 +1,169 @@
+<div class="wrap vimeography">
+    
+    <div class="vimeography-welcome">
+      <h1>Welcome to Vimeography!</h1>
+      <h2>Excellent decision, my friend. You'll be up and running in no time. What's next?</h2>
+
+      <div class="group flex-container">
+        <section>
+          <object data="{{icons_url}}wand.svg" type="image/svg+xml">
+            <img src="{{icons_url}}wand.png" />
+          </object>
+
+          <h1>Create your <br />First Gallery</h1>
+          <p>See just how easy it is to create a World Famous Vimeography gallery from scratch.</p>
+          <a class="vimeography-button" href="{{admin_url}}new-gallery">Get Started &rarr;</a>
+        </section>
+
+        <section class="highlight">
+          <a href="http://vimeography.com/themes?ref=welcome-icon" target="_blank" title="See the Vimeography Gallery Themes" style="display: block;">
+            <object data="{{icons_url}}map.svg" type="image/svg+xml">
+              <img src="{{icons_url}}map.png" />
+            </object>
+          </a>
+
+          <h1>Explore our <br />Gallery Themes</h1>
+          <p>Find the design that matches your site the best and gives your videos the glory that they deserve.</p>
+          <a class="vimeography-button" href="http://vimeography.com/themes?ref=welcome" target="_blank">See the Themes &rarr;</a>
+        </section>
+
+        <section>
+          <a href="http://vimeography.com/pro?ref=welcome-icon" target="_blank" title="See the Vimeography Gallery Themes" style="display: block;">
+            <object data="{{icons_url}}vimeography-pro-logo.svg" type="image/svg+xml" style="max-width: 56px;">
+              <img src="{{icons_url}}vimeography-pro-logo.png" />
+            </object>
+          </a>
+
+          <h1>Learn about Vimeography Pro</h1>
+          <p>Show hidden videos, sort your videos, show unlimited videos, create playlists, allow downloads and more!</p>
+          <a class="vimeography-button" href="http://vimeography.com/pro?ref=welcome" target="_blank">Visit Vimeography Pro &rarr;</a>
+        </section>
+
+      </div>
+    </div>
+</div>
+
+<style>
+
+@media screen and (min-width: 320px) {
+
+  .vimeography {
+    margin: 20px auto;
+  }
+
+  .vimeography h1,
+  .vimeography h2,
+  .vimeography h3,
+  .vimeography h4,
+  .vimeography h5,
+  .vimeography h6 {
+    font-family: 'Open Sans', sans-serif;
+    font-weight: 300;
+  }
+
+  .vimeography-welcome {
+    text-align: center;
+  }
+
+  .group:before,
+  .group:after {
+    content: "";
+    display: table;
+  }
+  .group:after {
+    clear: both;
+  }
+  .group {
+    *zoom: 1;
+    margin: 0 auto;
+    max-width: 1100px;
+  }
+
+  .flex-container {
+    margin-top: 100px;
+    display: -webkit-flex;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-justify-content: space-between;
+    -ms-flex-pack: justify;
+            justify-content: space-between;
+    -webkit-flex-wrap: wrap;
+    -ms-flex-wrap: wrap;
+            flex-wrap: wrap;
+  }
+
+  .vimeography-welcome section {
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+  }
+
+  .vimeography-welcome img {
+    width: 60px;
+  }
+
+  .vimeography-welcome section {
+    padding: 50px;
+    width: 340px;
+    margin: 0 auto;
+    background-color: #fafafa;
+    box-shadow: 0 0 3px rgba(0,0,0,0.2);
+    border: 10px solid transparent;
+  }
+
+  .vimeography-welcome section.highlight {
+    background-color: #fff;
+    -moz-transform: scale(1.2);
+    -webkit-transform: scale(1.2);
+    -o-transform: scale(1.2);
+    -ms-transform: scale(1.2);
+    transform: scale(1.2);
+  }
+
+  .vimeography-welcome section h1 {
+    font-size: 24px;
+    line-height: 1.3em;
+  }
+
+  .vimeography-welcome .vimeography-button {
+    display: block;
+    font-size: 14px;
+    line-height: 1.2em;
+    padding: 5px 20px;
+    margin: 25px 0 0;
+    border: 0;
+    border-radius: 2px;
+    box-shadow: none;
+    background-color: #2ecc71;
+    color: #fafafa;
+    -webkit-transition: background-color 0.25s ease;
+    -moz-transition: background-color 0.25s ease;
+    -ms-transition: background-color 0.25s ease;
+    -o-transition: background-color 0.25s ease;
+    transition: background-color 0.25s ease;
+    padding: 15px 30px;
+    text-decoration: none;
+  }
+
+  .vimeography-welcome section.highlight .vimeography-button {
+    background-color: rgb(41, 128, 185);
+  }
+
+  .vimeography-welcome .vimeography-button:hover {
+    background-color: #199E52;
+  }
+
+  .vimeography-welcome section.highlight .vimeography-button:hover {
+    background-color: #3498db;
+  }
+
+  .wp-box {
+    background: none repeat scroll 0 0 #FFFFFF;
+    border: 1px solid #E1E1E1;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    position: relative;
+  }
+
+}
+
+</style>

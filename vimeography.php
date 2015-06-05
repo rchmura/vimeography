@@ -56,6 +56,7 @@ if ( ! class_exists( 'Vimeography' ) ) {
           new Vimeography_Admin_Actions;
           new Vimeography_Base;
           new Vimeography_Admin_Menu;
+          new Vimeography_Admin_Welcome;
           new Vimeography_Admin_Plugins;
           self::$instance->updater = new Vimeography_Update;
         }
@@ -134,6 +135,7 @@ if ( ! class_exists( 'Vimeography' ) ) {
         require_once VIMEOGRAPHY_PATH . 'lib/admin/actions.php';
         require_once VIMEOGRAPHY_PATH . 'lib/admin/base.php';
         require_once VIMEOGRAPHY_PATH . 'lib/admin/menu.php';
+        require_once VIMEOGRAPHY_PATH . 'lib/admin/welcome.php';
         require_once VIMEOGRAPHY_PATH . 'lib/admin/plugins.php';
         require_once VIMEOGRAPHY_PATH . 'lib/update.php';
       }

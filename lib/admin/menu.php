@@ -35,6 +35,7 @@ class Vimeography_Admin_Menu {
       $submenu['vimeography-edit-galleries'][500] = array( __('Vimeography Themes', 'vimeography'), 'manage_options' , 'http://vimeography.com/themes' );
     $hooks['vimeography_pro'] = add_submenu_page( 'vimeography-edit-galleries', 'Vimeography Pro', 'Vimeography Pro', 'manage_options', 'vimeography-pro', array(&$this, 'vimeography_render_template' ));
     $hooks['vimeography_help'] = add_submenu_page( 'vimeography-edit-galleries', __('Help', 'vimeography'), __('Help', 'vimeography'), 'manage_options', 'vimeography-help', array(&$this, 'vimeography_render_template' ));
+    $hooks['vimeography_welcome'] = add_submenu_page( 'options.php', __('Welcome to Vimeography', 'vimeography'), __('Welcome to Vimeography', 'vimeography'), 'manage_options', 'vimeography-welcome', array(&$this, 'vimeography_render_template') );
 
     foreach ($hooks as $page => $hook) {
       // Runs before any output
@@ -138,6 +139,18 @@ class Vimeography_Admin_Menu {
     require_once VIMEOGRAPHY_PATH . 'lib/admin/controllers/vimeography/help.php';
     $this->_controller = new Vimeography_Help;
     $this->_view = $this->_mustache->loadTemplate('vimeography/help');
+    self::vimeography_process_actions();
+  }
+
+
+  /**
+   * [load_vimeography_welcome_page description]
+   * @return [type] [description]
+   */
+  public function load_vimeography_welcome_page() {
+    require_once VIMEOGRAPHY_PATH . 'lib/admin/controllers/vimeography/welcome.php';
+    $this->_controller = new Vimeography_Welcome;
+    $this->_view = $this->_mustache->loadTemplate('vimeography/welcome');
     self::vimeography_process_actions();
   }
 
