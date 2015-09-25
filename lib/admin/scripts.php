@@ -16,7 +16,7 @@ class Vimeography_Admin_Scripts {
    */
   public function add_scripts( $hook ) {
 
-    if ( strpos( $hook, 'vimeography' ) !== FALSE ) {
+    if ( strpos( $hook, 'vimeography' ) !== FALSE && strpos( $hook, 'vimeography-stats' ) == FALSE ) {
       wp_register_style( 'vimeography-bootstrap', VIMEOGRAPHY_URL.'lib/admin/assets/css/bootstrap.min.css');
       wp_register_style( 'vimeography-admin',     VIMEOGRAPHY_URL.'lib/admin/assets/css/admin.css');
 
