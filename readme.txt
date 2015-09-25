@@ -28,11 +28,12 @@ Some amazing features:
 * Built-in caching for quick page loads
 * Create unlimited galleries
 
+> #### Vimeography Themes
+> Make your gallery stand out with our custom themes! All themes come with one year of updates and support.
+>
+> Check our all of our gallery designs at [http://vimeography.com/themes](http://vimeography.com/themes "vimeography.com/themes")
+
 For even more control over your galleries, including unlimited videos, custom sorting, hidden collections, playlists and more, check out [Vimeography Pro!](http://vimeography.com/pro "Vimeography Pro")
-
-
-Make your gallery stand out with our custom themes!
-[http://vimeography.com/themes](http://vimeography.com/themes "vimeography.com/themes")
 
 For the latest updates, follow us!
 [http://twitter.com/vimeography](http://twitter.com/vimeography "twitter.com/vimeography")
