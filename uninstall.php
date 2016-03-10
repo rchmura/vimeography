@@ -9,7 +9,7 @@ delete_option('vimeography_advanced_settings');
 delete_option('vimeography_default_settings');
 delete_option('vimeography_db_version');
 
-$wpdb->query('DROP TABLE '.$wpdb->prefix.'vimeography_gallery, '.$wpdb->prefix.'vimeography_gallery_meta';
+$wpdb->query('DROP TABLE '.$wpdb->prefix.'vimeography_gallery, '.$wpdb->prefix.'vimeography_gallery_meta');
 
 $wpdb->query('DELETE a, b
 FROM
