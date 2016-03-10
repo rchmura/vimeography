@@ -153,8 +153,8 @@ class Vimeography_Gallery_Edit extends Vimeography_Base {
     global $wpdb;
 
     $this->_gallery = $wpdb->get_results('
-      SELECT * FROM '.VIMEOGRAPHY_GALLERY_META_TABLE.' AS meta
-      JOIN '.VIMEOGRAPHY_GALLERY_TABLE.' AS gallery
+      SELECT * FROM '.$wpdb->vimeography_gallery_meta.' AS meta
+      JOIN '.$wpdb->vimeography_gallery.' AS gallery
       ON meta.gallery_id = gallery.id
       WHERE meta.gallery_id = '.$this->_gallery_id.'
       LIMIT 1;
@@ -399,7 +399,7 @@ class Vimeography_Gallery_Edit extends Vimeography_Base {
         global $wpdb;
 
         $result = $wpdb->update(
-          VIMEOGRAPHY_GALLERY_META_TABLE,
+          $wpdb->vimeography_gallery_meta,
           array( 'theme_name' => $theme),
           array( 'gallery_id' => $this->_gallery_id ),
           array('%s'),
@@ -466,7 +466,7 @@ class Vimeography_Gallery_Edit extends Vimeography_Base {
         }
 
         $result = $wpdb->update(
-          VIMEOGRAPHY_GALLERY_META_TABLE,
+          $wpdb->vimeography_gallery_meta,
           array(
             'cache_timeout'  => $input['vimeography_basic_settings']['cache_timeout'],
             'video_limit'    => $input['vimeography_basic_settings']['video_limit'],

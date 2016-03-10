@@ -17,10 +17,80 @@ class Vimeography_Database extends Vimeography {
   public function __construct() {
     add_action( 'plugins_loaded', array($this, 'vimeography_update_db_version_if_not_exists'), 1 );
     add_action( 'plugins_loaded', array($this, 'vimeography_update_database'), 11 );
+    add_action( 'wpmu_new_blog', array($this, 'install_vimeography_on_new_blog'), 10, 6);
 
-    register_activation_hook( VIMEOGRAPHY_BASENAME, array($this, 'vimeography_update_tables') );
-    register_activation_hook( VIMEOGRAPHY_BASENAME, array($this, 'vimeography_update_db_version') );
+    register_activation_hook( VIMEOGRAPHY_BASENAME, array($this, 'vimeography_activation') );
   }
+
+
+  /**
+   * Helper function to handle DB creation depending on single or multisite installation
+   *
+   * @param  [type] $network_wide [description]
+   * @return [type]               [description]
+   */
+  public function vimeography_activation( $network_wide ) {
+    if ( is_multisite() && $network_wide ) { // See if being activated on the entire network or one blog
+      global $wpdb;
+
+      // Get this so we can switch back to it later
+      $original_blog_id = get_current_blog_id();
+
+      // Get all blogs in the network and activate plugin on each one
+      $blogs = $wpdb->get_results("
+          SELECT blog_id
+          FROM {$wpdb->blogs}
+          WHERE site_id = '{$wpdb->siteid}'
+          AND spam = '0'
+          AND deleted = '0'
+          AND archived = '0'
+      ");
+
+      foreach ( $blogs as $blog ) {
+        switch_to_blog( $blog->blog_id );
+        self::vimeography_update_tables();
+        self::vimeography_update_db_version();
+      }
+
+      // Switch back to the current blog
+      // @link http://wordpress.stackexchange.com/a/89114
+      switch_to_blog( $original_blog_id );
+      $GLOBALS['_wp_switched_stack'] = array();
+      $GLOBALS['switched']           = FALSE;
+
+    } else {
+      // Running on a single blog
+      self::vimeography_update_tables();
+      self::vimeography_update_db_version();
+    }
+  }
+
+
+  /**
+   * [install_vimeography_on_new_blog description]
+   * @param  [type] $blog_id [description]
+   * @param  [type] $user_id [description]
+   * @param  [type] $domain  [description]
+   * @param  [type] $path    [description]
+   * @param  [type] $site_id [description]
+   * @param  [type] $meta    [description]
+   * @return [type]          [description]
+   */
+  public function install_vimeography_on_new_blog($blog_id, $user_id, $domain, $path, $site_id, $meta ) {
+    global $wpdb;
+
+    if ( is_plugin_active_for_network( VIMEOGRAPHY_BASENAME ) ) {
+
+      $original_blog_id = get_current_blog_id();
+
+      switch_to_blog( $blog_id );
+      self::vimeography_update_tables();
+      self::vimeography_update_db_version();
+      switch_to_blog( $original_blog_id );
+
+    }
+  }
+
 
   /**
    * Create tables and define defaults when plugin is activated.
@@ -31,7 +101,7 @@ class Vimeography_Database extends Vimeography {
   public static function vimeography_update_tables() {
     global $wpdb;
 
-    delete_option('vimeography_default_settings');
+    delete_site_option('vimeography_default_settings');
 
     add_option('vimeography_default_settings', array(
       'source_url'     => 'https://vimeo.com/channels/staffpicks/',
@@ -42,14 +112,14 @@ class Vimeography_Database extends Vimeography {
       'theme_name'     => 'bugsauce',
     ));
 
-    $sql = 'CREATE TABLE '.VIMEOGRAPHY_GALLERY_TABLE.' (
+    $sql = 'CREATE TABLE '.$wpdb->prefix.'vimeography_gallery (
     id mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
     title varchar(150) NOT NULL,
     date_created datetime NOT NULL,
     is_active tinyint(1) NOT NULL,
     PRIMARY KEY  (id)
     );
-    CREATE TABLE '.VIMEOGRAPHY_GALLERY_META_TABLE.' (
+    CREATE TABLE '.$wpdb->prefix.'vimeography_gallery_meta (
     id mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
     gallery_id mediumint(8) unsigned NOT NULL,
     source_url varchar(100) NOT NULL,
@@ -128,7 +198,7 @@ class Vimeography_Database extends Vimeography {
   public static function vimeography_update_db_to_0_6() {
     if ( version_compare(self::$_version, '0.6', '<') ) {
       global $wpdb;
-      $old_galleries = $wpdb->get_results('SELECT * FROM '.VIMEOGRAPHY_GALLERY_META_TABLE.' AS meta JOIN '.VIMEOGRAPHY_GALLERY_TABLE.' AS gallery ON meta.gallery_id = gallery.id;');
+      $old_galleries = $wpdb->get_results('SELECT * FROM '.$wpdb->vimeography_gallery_meta.' AS meta JOIN '.$wpdb->vimeography_gallery.' AS gallery ON meta.gallery_id = gallery.id;');
       $new_galleries = array();
 
       if ( is_array($old_galleries) )
@@ -160,14 +230,14 @@ class Vimeography_Database extends Vimeography {
           $new_galleries[] = $new_gallery;
         }
       }
-      $wpdb->query('DROP TABLE '.VIMEOGRAPHY_GALLERY_META_TABLE.';');
+      $wpdb->query('DROP TABLE '.$wpdb->vimeography_gallery_meta.';');
 
       self::vimeography_update_tables();
 
       foreach ($new_galleries as $new_gallery)
       {
         $wpdb->insert(
-          VIMEOGRAPHY_GALLERY_META_TABLE,
+          $wpdb->vimeography_gallery_meta,
           $new_gallery
         );
       }
@@ -200,7 +270,7 @@ class Vimeography_Database extends Vimeography {
     if ( version_compare(self::$_version, '0.8', '<') )
     {
       global $wpdb;
-      $old_galleries = $wpdb->get_results('SELECT * FROM '.VIMEOGRAPHY_GALLERY_META_TABLE.' AS meta JOIN '.VIMEOGRAPHY_GALLERY_TABLE.' AS gallery ON meta.gallery_id = gallery.id;');
+      $old_galleries = $wpdb->get_results('SELECT * FROM '.$wpdb->vimeography_gallery_meta.' AS meta JOIN '.$wpdb->vimeography_gallery.' AS gallery ON meta.gallery_id = gallery.id;');
       $new_galleries = array();
 
       if (is_array($old_galleries))
@@ -219,14 +289,14 @@ class Vimeography_Database extends Vimeography {
           $new_galleries[] = $new_gallery;
         }
       }
-      $wpdb->query('DROP TABLE '.VIMEOGRAPHY_GALLERY_META_TABLE.';');
+      $wpdb->query('DROP TABLE '.$wpdb->vimeography_gallery_meta.';');
 
       self::vimeography_update_tables();
 
       foreach ($new_galleries as $new_gallery)
       {
         $wpdb->insert(
-          VIMEOGRAPHY_GALLERY_META_TABLE,
+          $wpdb->vimeography_gallery_meta,
           $new_gallery
         );
       }
@@ -253,9 +323,9 @@ class Vimeography_Database extends Vimeography {
       global $wpdb;
       $wpdb->hide_errors();
 
-      $wpdb->query('ALTER TABLE '.VIMEOGRAPHY_GALLERY_META_TABLE.' ADD resource_uri VARCHAR(50) NOT NULL AFTER source_url;');
+      $wpdb->query('ALTER TABLE '.$wpdb->vimeography_gallery_meta.' ADD resource_uri VARCHAR(50) NOT NULL AFTER source_url;');
 
-      $rows = $wpdb->get_results('SELECT gallery_id, source_url FROM '.VIMEOGRAPHY_GALLERY_META_TABLE.' WHERE 1');
+      $rows = $wpdb->get_results('SELECT gallery_id, source_url FROM '.$wpdb->vimeography_gallery_meta.' WHERE 1');
 
       if (!empty($rows))
       {
@@ -265,7 +335,7 @@ class Vimeography_Database extends Vimeography {
           {
             // Convert source_url to resource, then update with value
             $resource_uri = $this->validate_vimeo_source($row->source_url);
-            $wpdb->update( VIMEOGRAPHY_GALLERY_META_TABLE, array('resource_uri' => $resource_uri), array('gallery_id' => $row->gallery_id) );
+            $wpdb->update( $wpdb->vimeography_gallery_meta, array('resource_uri' => $resource_uri), array('gallery_id' => $row->gallery_id) );
 
           }
           catch (Vimeography_Exception $e)
@@ -275,7 +345,7 @@ class Vimeography_Database extends Vimeography {
               $wpdb->prepare(
                 '
                 DELETE gallery, meta
-                FROM '.VIMEOGRAPHY_GALLERY_TABLE.' gallery, '.VIMEOGRAPHY_GALLERY_META_TABLE.' meta
+                FROM '.$wpdb->vimeography_gallery.' gallery, '.$wpdb->vimeography_gallery_meta.' meta
                 WHERE gallery.id = %d
                 AND meta.gallery_id = %d
                 ',
@@ -288,7 +358,7 @@ class Vimeography_Database extends Vimeography {
       } // end row manipulation
 
       // Drop the video limit. Edit: 7/28/13 - decided to keep this. The next function will add it if it doesn't exist.
-      // $result = $wpdb->query('ALTER TABLE '. VIMEOGRAPHY_GALLERY_META_TABLE .' DROP COLUMN video_limit');
+      // $result = $wpdb->query('ALTER TABLE '. $wpdb->vimeography_gallery_meta .' DROP COLUMN video_limit');
 
       self::vimeography_update_tables();
     }
@@ -301,7 +371,7 @@ class Vimeography_Database extends Vimeography {
       global $wpdb;
       $wpdb->hide_errors();
 
-      $wpdb->query('ALTER TABLE '.VIMEOGRAPHY_GALLERY_META_TABLE.' ADD video_limit MEDIUMINT(7) NOT NULL AFTER featured_video;');
+      $wpdb->query('ALTER TABLE '.$wpdb->vimeography_gallery_meta.' ADD video_limit MEDIUMINT(7) NOT NULL AFTER featured_video;');
       self::vimeography_update_tables();
     }
   }
@@ -313,7 +383,7 @@ class Vimeography_Database extends Vimeography {
       global $wpdb;
       $wpdb->hide_errors();
 
-      $wpdb->query('ALTER TABLE '.VIMEOGRAPHY_GALLERY_META_TABLE.' MODIFY resource_uri VARCHAR(100) NOT NULL;');
+      $wpdb->query('ALTER TABLE '.$wpdb->vimeography_gallery_meta.' MODIFY resource_uri VARCHAR(100) NOT NULL;');
       self::vimeography_update_tables();
     }
   }

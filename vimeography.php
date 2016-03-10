@@ -87,6 +87,12 @@ if ( ! class_exists( 'Vimeography' ) ) {
      */
     private function _define_constants() {
       global $wpdb;
+
+      if ( ! isset( $wpdb->vimeography_gallery ) && ! isset( $wpdb->vimeography_gallery_meta ) ) {
+        $wpdb->vimeography_gallery      = $wpdb->prefix . 'vimeography_gallery';
+        $wpdb->vimeography_gallery_meta = $wpdb->prefix . 'vimeography_gallery_meta';
+      }
+
       define( 'VIMEOGRAPHY_URL',  plugin_dir_url(__FILE__) );
       define( 'VIMEOGRAPHY_PATH', plugin_dir_path(__FILE__) );
       define( 'VIMEOGRAPHY_ASSETS_URL',  VIMEOGRAPHY_URL . 'lib/shared/assets/' );
@@ -96,8 +102,6 @@ if ( ! class_exists( 'Vimeography' ) ) {
       define( 'VIMEOGRAPHY_CUSTOMIZATIONS_URL',   content_url() . '/vimeography/assets/css/' );
       define( 'VIMEOGRAPHY_BASENAME', plugin_basename( __FILE__ ) );
       define( 'VIMEOGRAPHY_VERSION', '1.3.1');
-      define( 'VIMEOGRAPHY_GALLERY_TABLE', $wpdb->prefix . "vimeography_gallery");
-      define( 'VIMEOGRAPHY_GALLERY_META_TABLE', $wpdb->prefix . "vimeography_gallery_meta");
       define( 'VIMEOGRAPHY_CURRENT_PAGE', basename($_SERVER['PHP_SELF']));
       define( 'VIMEOGRAPHY_CLIENT_ID', 'fc0927c077cb47345eadf7c513d70f4aa564f30d');
     }

@@ -1,18 +1,15 @@
 <?php
 
 if (!defined('WP_UNINSTALL_PLUGIN'))
-	wp_die(__('Plugin uninstallation can not be executed in this fashion.'));
-	
+    wp_die(__('Plugin uninstallation can not be executed in this fashion.'));
+
 global $wpdb;
-	
-define( 'VIMEOGRAPHY_GALLERY_TABLE', $wpdb->prefix . "vimeography_gallery");
-define( 'VIMEOGRAPHY_GALLERY_META_TABLE', $wpdb->prefix . "vimeography_gallery_meta");
 
 delete_option('vimeography_advanced_settings');
 delete_option('vimeography_default_settings');
 delete_option('vimeography_db_version');
-	
-$wpdb->query('DROP TABLE '.VIMEOGRAPHY_GALLERY_TABLE.', '.VIMEOGRAPHY_GALLERY_META_TABLE);
+
+$wpdb->query('DROP TABLE '.$wpdb->prefix.'vimeography_gallery, '.$wpdb->prefix.'vimeography_gallery_meta';
 
 $wpdb->query('DELETE a, b
 FROM

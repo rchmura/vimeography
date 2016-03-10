@@ -98,7 +98,7 @@ class Vimeography_Gallery_New extends Vimeography_Base {
   private static function _create_vimeography_gallery($input) {
     global $wpdb;
 
-    $result = $wpdb->insert( VIMEOGRAPHY_GALLERY_TABLE, array( 'title' => $input['gallery_title'], 'date_created' => current_time('mysql'),  'is_active' => 1 ) );
+    $result = $wpdb->insert( $wpdb->vimeography_gallery, array( 'title' => $input['gallery_title'], 'date_created' => current_time('mysql'),  'is_active' => 1 ) );
 
     if (! $result) {
       throw new Vimeography_Exception(
@@ -106,7 +106,7 @@ class Vimeography_Gallery_New extends Vimeography_Base {
       );
     } else {
       $gallery_id = $wpdb->insert_id;
-      $result = $wpdb->insert( VIMEOGRAPHY_GALLERY_META_TABLE, array(
+      $result = $wpdb->insert( $wpdb->vimeography_gallery_meta, array(
                               'gallery_id'     => $gallery_id,
                               'source_url'     => $input['source_url'],
                               'resource_uri'   => $input['resource_uri'],

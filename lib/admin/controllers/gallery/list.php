@@ -146,10 +146,10 @@ class Vimeography_Gallery_List extends Vimeography_Base {
         }
 
         global $wpdb;
-        $duplicate = $wpdb->get_results('SELECT * from '.VIMEOGRAPHY_GALLERY_META_TABLE.' AS meta JOIN '.VIMEOGRAPHY_GALLERY_TABLE.' AS gallery ON meta.gallery_id = gallery.id WHERE meta.gallery_id = '.$id.' LIMIT 1;');
+        $duplicate = $wpdb->get_results('SELECT * from '.$wpdb->vimeography_gallery_meta.' AS meta JOIN '.$wpdb->vimeography_gallery.' AS gallery ON meta.gallery_id = gallery.id WHERE meta.gallery_id = '.$id.' LIMIT 1;');
 
         $result = $wpdb->insert(
-                    VIMEOGRAPHY_GALLERY_TABLE,
+                    $wpdb->vimeography_gallery,
                     array(
                       'title' => $title,
                       'date_created' => current_time('mysql'),
@@ -163,7 +163,7 @@ class Vimeography_Gallery_List extends Vimeography_Base {
 
         $gallery_id = $wpdb->insert_id;
         $result = $wpdb->insert(
-                    VIMEOGRAPHY_GALLERY_META_TABLE,
+                    $wpdb->vimeography_gallery_meta,
                     array(
                       'gallery_id'     => $gallery_id,
                       'source_url'     => $source_url,
@@ -232,7 +232,7 @@ class Vimeography_Gallery_List extends Vimeography_Base {
     try {
       $id = intval( $params['gallery_id'] );
       global $wpdb;
-      $result = $wpdb->query('DELETE gallery, meta FROM '.VIMEOGRAPHY_GALLERY_TABLE.' gallery, '.VIMEOGRAPHY_GALLERY_META_TABLE.' meta WHERE gallery.id = '.$id.' AND meta.gallery_id = '.$id.';');
+      $result = $wpdb->query('DELETE gallery, meta FROM '.$wpdb->vimeography_gallery.' gallery, '.$wpdb->vimeography_gallery_meta.' meta WHERE gallery.id = '.$id.' AND meta.gallery_id = '.$id.';');
 
       if ($result === FALSE)
         throw new Exception(__('Your gallery could not be deleted.', 'vimeography'));

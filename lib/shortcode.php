@@ -123,8 +123,8 @@ class Vimeography_Shortcode extends Vimeography {
 
     $db_gallery_settings = $wpdb->get_results('
       SELECT *
-      FROM '.VIMEOGRAPHY_GALLERY_META_TABLE.' AS meta
-      JOIN '.VIMEOGRAPHY_GALLERY_TABLE.' AS gallery
+      FROM '.$wpdb->vimeography_gallery_meta.' AS meta
+      JOIN '.$wpdb->vimeography_gallery.' AS gallery
       ON meta.gallery_id = gallery.id
       WHERE meta.gallery_id = '.$id.'
       LIMIT 1;

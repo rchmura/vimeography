@@ -61,13 +61,6 @@ class Tests_Vimeography extends Vimeography_UnitTestCase {
     $this->assertSame( VIMEOGRAPHY_CURRENT_PAGE, 'index.php' );
   }
 
-  public function test_vimeography_database_tables_constants()
-  {
-    global $wpdb;
-    $this->assertSame( VIMEOGRAPHY_GALLERY_TABLE, $wpdb->prefix . "vimeography_gallery");
-    $this->assertSame( VIMEOGRAPHY_GALLERY_META_TABLE, $wpdb->prefix . "vimeography_gallery_meta");
-  }
-
   public function test_vimeography_client_id_constant()
   {
     $this->assertSame( VIMEOGRAPHY_CLIENT_ID, 'fc0927c077cb47345eadf7c513d70f4aa564f30d' );
