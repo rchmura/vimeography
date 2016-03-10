@@ -41,7 +41,14 @@ class Vimeography_Gallery_List_Table extends WP_List_Table {
     $offset = ($this->get_pagenum() - 1) * $this->_per_page;
 
     if ( isset( $_GET['s'] ) && ! empty( $_GET['s'] ) ) {
-      $filter = 'WHERE gallery.title LIKE "%' . sanitize_text_field( $_GET['s'] ) . '%" ';
+      $term = sanitize_text_field( $_GET['s'] );
+
+      if ( intval( $term ) == 0 ) {
+        $filter = 'WHERE gallery.title LIKE "%' . $term . '%" ';
+      } else {
+        $filter = 'WHERE gallery.id = "' . $term . '" ';
+      }
+
     } else {
       $filter = '';
     }
