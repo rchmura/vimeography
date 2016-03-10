@@ -32,7 +32,7 @@ class Vimeography_Update {
    *
    * @var string
    */
-  private $_endpoint = 'http://vimeography.com';
+  private $_endpoint = 'https://vimeography.com';
 
   /**
    * [__construct description]
