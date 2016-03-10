@@ -2,27 +2,6 @@
 // Exit if accessed directly
 if ( ! defined( 'ABSPATH' ) ) exit;
 
-// Once new plugin update is out, we should return a 401 from
-//
-// http://vimeography.com/api/activate/[key]
-//
-// with a JSON response that has a "message" key which will be displayed
-// when a user tries to activate a plugin in an old version of Vimeography.
-//
-// http_response_code(401);
-// status_header(401);
-// $response['status'] = 'error';
-// $response['message'] = __('Please update to the latest version of Vimeography to activate your Vimeography Addon');
-// $to_send = json_encode($response);
-// echo $to_send;
-// die;
-//
-// Always return a 304 response code from the old update endpoint API
-// updates will only work if you have the latest version of the Vimeography plugin.
-// This also will take care of the remote info request for the view_version_details screen
-//
-// http://vimeography.com/api/update/[key]
-
 class Vimeography_Update {
   /**
    * All of the Vimeography activation keys that the user has stored.
