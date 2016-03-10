@@ -14,6 +14,7 @@ class Vimeography_Theme_List extends Vimeography_Base {
     add_action('vimeography_action_deactivate_license', array( $this, 'deactivate_license' ) );
 
     self::_remove_duplicate_keys();
+    $this->_check_licenses();
   }
 
   /**
@@ -128,6 +129,51 @@ class Vimeography_Theme_List extends Vimeography_Base {
     if ( get_option('vimeography_activation_keys') ) {
       $activation_keys = array_map("unserialize", array_unique(array_map("serialize", get_option('vimeography_activation_keys'))));
       update_option('vimeography_activation_keys', $activation_keys);
+    }
+  }
+
+  /**
+   * Make sure licenses are up to date with current information.
+   * Here's what a successful response looks like:
+   *
+   * public 'success' => boolean true
+   * public 'license' => string 'site_inactive' (length=13)
+   * public 'item_name' => string '' (length=0)
+   * public 'expires' => string '2018-07-22 11:49:33' (length=19)
+   * public 'payment_id' => string '1234' (length=4)
+   * public 'customer_name' => string ' ' (length=1)
+   * public 'customer_email' => string 'email@gmail.com' (length=21)
+   * public 'license_limit' => string '0' (length=1)
+   * public 'site_count' => int 2
+   * public 'activations_left' => string 'unlimited' (length=9)
+   *
+   * @since  1.3.2
+   * @return [type] [description]
+   */
+  private function _check_licenses() {
+    $licenses = get_site_option('vimeography_activation_keys');
+
+    if ($licenses) {
+      foreach ($licenses as $index => $license) {
+
+        // Retrieve up-to-date
+        $result = $this->updater->check_license( $license );
+
+        // remove license if not authorized on this site.
+        if ( $result->license == 'site_inactive' ) {
+          unset( $licenses[$index] );
+          continue;
+        }
+
+        $license->status  = $result->license;
+        $license->expires = $result->expires;
+        $license->limit   = $result->license_limit;
+        $license->activations_left = $result->activations_left;
+
+        $licenses[$index] = $license;
+      }
+
+      update_site_option('vimeography_activation_keys', $licenses);
     }
   }
 }
