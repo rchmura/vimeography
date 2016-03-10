@@ -127,6 +127,8 @@ class Vimeography_Update {
           throw new Exception( __('The license key you entered has expired. Please visit http://vimeography.com to renew it.', 'vimeography') );
         case 'key_mismatch':
           throw new Exception( __('The license key you entered does not match the one we have on file.', 'vimeography') );
+        case 'license_not_activable':
+          throw new Exception( __('Looks like you are trying to activate your bundle license. Please activate each of the products in your bundle separately by using their respective individual licenses.', 'vimeography') );
         default:
           throw new Exception( __('Unknown error: ' . $license_data->error, 'vimeography') );
       }
