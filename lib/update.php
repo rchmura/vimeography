@@ -106,8 +106,9 @@ class Vimeography_Update {
     );
 
     // Make sure there are no errors
-    if ( is_wp_error( $response ) )
-      return;
+    if ( is_wp_error( $response ) ) {
+      throw new Exception( __('The HTTP Request failed: ' . $response->get_error_message(), 'vimeography') );
+    }
 
     // Decode license data
     $license_data = json_decode( wp_remote_retrieve_body( $response ) );
