@@ -184,13 +184,17 @@ abstract class Vimeography_Core {
           throw new Vimeography_Exception(
             __('an invalid token was used for the API request. Try removing your Vimeo token on the Vimeography Pro page and following the steps again to create a Vimeo app.', 'vimeography')
           );
+        case 403:
+          throw new Vimeography_Exception(
+            __('your server\'s IP address is currently unauthorized. Please contact Vimeo and ask them to whitelist your server IP address. Make sure you include your server IP address, which you can retrieve by contacting your website hosting provider.', 'vimeography')
+          );
         case 404:
           throw new Vimeography_Exception(
             __('the plugin could not retrieve data from the Vimeo API! ', 'vimeography') . $response['body']->error
           );
-        case 500:
+        case 500: case 503:
           throw new Vimeography_Exception(
-            __('looks like Vimeo is having some API issues. Try reloading, or, check back in a few minutes.', 'vimeography')
+            __('looks like Vimeo is having some API issues. Try reloading, or, check back in a few minutes. You can also check http://vimeostatus.com for live updates.', 'vimeography')
           );
         default:
           throw new Vimeography_Exception(sprintf(__('Unknown response status %1$d, %2$s', 'vimeography'), $response['status'], $response['body']->error ) );
