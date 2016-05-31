@@ -3,7 +3,7 @@ Contributors: iamdavekiss
 Tags: vimeo, video, videos, gallery, vimeography, media, player, playlist, showcase, skins, themes, video gallery
 Requires at least: 3.3
 Tested up to: 4.5
-Stable tag: 1.3.2
+Stable tag: 1.3.3
 License: GPL3
 
 The easiest way to create beautiful Vimeo galleries on your WordPress site.
@@ -44,10 +44,17 @@ For the latest updates, follow us!
 2. Activate the plugin through the 'Plugins' menu in WordPress
 
 == Frequently Asked Questions ==
+= How can I show hidden Vimeo videos? =
+
+If you would like to show videos that are hidden from Vimeo, you will need [Vimeography Pro.](https://vimeography.com/add-ons/vimeography-pro/)
+
+The way that it works is you mark your videos as hidden from Vimeo and then place them in a Public album. You then use that album URL as the source for your gallery. The videos won't appear anywhere on Vimeo, but will still be accessible by the Vimeography WordPress plugin.
+
 = Help! My theme doesn't look right! =
 
 First of all, don't worry! I promise you that we can get it looking right. This can be caused by a multitude of things, so try the following (in the order of appearance):
 
+* Check your browser's javascript console to see if there are any errors that may be causing this issue.
 * Try surrounding your Vimeography shortcode in `[raw][/raw]` tags.
 * Make sure that your WordPress theme is not including multiple versions of jQuery and is using the latest version.
 * Make sure that your theme is calling the `wp_footer()` function so that all of the Vimeography stylesheets are printed.
@@ -63,11 +70,11 @@ This usually means that Vimeo is having some network issues. Follow @Vimeo on tw
 
 = I'm having trouble installing a theme. =
 
-Vimeography themes are now treated at WordPress plugins. Make sure you're installing the Vimeography theme on the "Plugins" page.
+Vimeography themes are treated as WordPress plugins. Make sure you're installing the Vimeography theme on the "Plugins" page in your WordPress dashboard.
 
 = How do I get the latest updates for my themes? =
 
-If you purchased your theme at vimeography.com, you should have received an email receipt containing an activation code for your theme. Enter that activation code on the "Manage Activations" page of the Vimeography plugin. Once done, you will be subscribed to theme updates which will automatically be delivered to your WordPress installation, just like any other plugin.
+If you purchased your theme at vimeography.com, you should have received an email receipt containing an license key for your theme. Enter that license code on the "Manage Licenses" page of the Vimeography plugin. Once done, you will be subscribed to theme updates which will automatically be delivered to your WordPress installation, just like any other plugin.
 
 = Why don’t you support YouTub/MetaHall/Flacker/PreschoolHumor? =
 
@@ -106,6 +113,10 @@ Sure, why not. Simply copy your theme's .mustache file(s) into a new folder loca
 4. Get new styles by installing gallery themes.
 
 == Changelog ==
+= 1.3.3 =
+* [Fix] Ensure multisite installations each use their own cache files.
+* [Fix] Add better error messages for Vimeo connection errors.
+
 = 1.3.2 =
 * [New] Vimeography now supports WordPress multisite installations!
 * [New] You can now search for a gallery based on its gallery ID number
