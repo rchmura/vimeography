@@ -24,7 +24,7 @@ class Tests_Update extends Vimeography_UnitTestCase {
     $entry->plugin_name    = 'vimeography-journey';
 
     $this->_fixture_activation_keys[] = $entry;
-    
+
     $bugsauce = array(
       'name'          => 'Bugsauce',
       'theme-uri'     => 'vimeography.com/themes/bugsauce',
@@ -77,7 +77,7 @@ class Tests_Update extends Vimeography_UnitTestCase {
     $endpoint->setAccessible( true );
     $val = $endpoint->getValue($this->_class);
 
-    $this->assertEquals( 'http://vimeography.com', $val);
+    $this->assertEquals( 'https://vimeography.com', $val);
   }
 
   /**
