@@ -5,8 +5,9 @@ class Vimeography_Core_Basic extends Vimeography_Core
   public function __construct($settings) {
     parent::__construct($settings);
 
-    $this->_auth  = VIMEOGRAPHY_CLIENT_ID;
-    $this->_vimeo = new Vimeography_Vimeo( $this->_auth );
+
+    $this->_auth  = VIMEOGRAPHY_ACCESS_TOKEN;
+    $this->_vimeo = new Vimeography_Vimeo( NULL, NULL, $this->_auth );
     $this->_vimeo->set_user_agent( sprintf( 'Vimeography loves you (%s)', home_url() ) );
   }
 

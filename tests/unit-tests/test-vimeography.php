@@ -61,9 +61,9 @@ class Tests_Vimeography extends Vimeography_UnitTestCase {
     $this->assertSame( VIMEOGRAPHY_CURRENT_PAGE, 'index.php' );
   }
 
-  public function test_vimeography_client_id_constant()
+  public function test_vimeography_access_token_constant()
   {
-    $this->assertSame( VIMEOGRAPHY_CLIENT_ID, 'fc0927c077cb47345eadf7c513d70f4aa564f30d' );
+    $this->assertSame( VIMEOGRAPHY_ACCESS_TOKEN, 'eaf47146f04b5550a3e394f3bbf8273f' );
   }
 
   /**

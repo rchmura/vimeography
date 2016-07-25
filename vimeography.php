@@ -103,7 +103,7 @@ if ( ! class_exists( 'Vimeography' ) ) {
       define( 'VIMEOGRAPHY_BASENAME', plugin_basename( __FILE__ ) );
       define( 'VIMEOGRAPHY_VERSION', '1.3.3');
       define( 'VIMEOGRAPHY_CURRENT_PAGE', basename($_SERVER['PHP_SELF']));
-      define( 'VIMEOGRAPHY_CLIENT_ID', 'fc0927c077cb47345eadf7c513d70f4aa564f30d');
+      define( 'VIMEOGRAPHY_ACCESS_TOKEN', 'eaf47146f04b5550a3e394f3bbf8273f');
     }
 
     /**

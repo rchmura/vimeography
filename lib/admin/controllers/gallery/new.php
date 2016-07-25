@@ -35,7 +35,7 @@ class Vimeography_Gallery_New extends Vimeography_Base {
    */
   public function __construct() {
     if ( ( $this->_token = get_option('vimeography_pro_access_token') ) === FALSE ) :
-      $this->_vimeo = new Vimeography_Vimeo( VIMEOGRAPHY_CLIENT_ID );
+      $this->_vimeo = new Vimeography_Vimeo( NULL, NULL, VIMEOGRAPHY_ACCESS_TOKEN );
     else :
       $this->_vimeo = new Vimeography_Vimeo( NULL, NULL, $this->_token );
     endif;
