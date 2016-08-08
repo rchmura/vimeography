@@ -2,8 +2,8 @@
 Contributors: iamdavekiss
 Tags: vimeo, video, videos, gallery, vimeography, media, player, playlist, showcase, skins, themes, video gallery
 Requires at least: 3.3
-Tested up to: 4.5
-Stable tag: 1.3.3
+Tested up to: 4.6
+Stable tag: 1.4
 License: GPL3
 
 The easiest way to create beautiful Vimeo galleries on your WordPress site.
@@ -15,7 +15,7 @@ Vimeography is a WordPress plugin that allows you to create beautiful, custom vi
 A quick overview:
 http://vimeo.com/44555634
 
-For more information, check out [vimeography.com](http://vimeography.com/ "vimeography.com")
+For more information, check out [vimeography.com](https://vimeography.com/ "vimeography.com")
 
 Some amazing features:
 
@@ -31,9 +31,9 @@ Some amazing features:
 > #### Vimeography Themes
 > Make your gallery stand out with our custom themes! All themes come with one year of updates and support.
 >
-> Check our all of our gallery designs at [http://vimeography.com/themes](http://vimeography.com/themes "vimeography.com/themes")
+> Check our all of our gallery designs at [https://vimeography.com/themes](https://vimeography.com/themes "vimeography.com/themes")
 
-For even more control over your galleries, including unlimited videos, custom sorting, hidden collections, playlists and more, check out [Vimeography Pro!](http://vimeography.com/pro "Vimeography Pro")
+For even more control over your galleries, including unlimited videos, custom sorting, hidden collections, playlists and more, check out [Vimeography Pro!](https://vimeography.com/pro "Vimeography Pro")
 
 For the latest updates, follow us!
 [http://twitter.com/vimeography](http://twitter.com/vimeography "twitter.com/vimeography")
@@ -113,6 +113,11 @@ Sure, why not. Simply copy your theme's .mustache file(s) into a new folder loca
 4. Get new styles by installing gallery themes.
 
 == Changelog ==
+= 1.4 =
+* [New] Thanks to improvements in the Vimeo API, Vimeography is now faster than ever!
+* [Tweak] Updated the Vimeo API authentication method
+* [Tweak] Implemented response field filters for quicker API response times
+
 = 1.3.3 =
 * [Fix] Ensure multisite installations each use their own cache files.
 * [Fix] Add better error messages for Vimeo connection errors.
@@ -475,6 +480,9 @@ Sure, why not. Simply copy your theme's .mustache file(s) into a new folder loca
 * First public release.
 
 == Upgrade Notice ==
+= 1.4 =
+This update removes unnecessary response fields from the Vimeo API. If you've customized your Vimeography theme to use response fields other than what now ships with Vimeography, make sure to add them using the `vimeography.request.fields` WordPress filter.
+
 = 1.3.2 =
 There is also an update available for Vimeography Pro. If you have Vimeography Pro installed, make sure to update it as well. The available version is marked as 1.0.1
 
