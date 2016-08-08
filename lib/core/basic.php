@@ -26,6 +26,7 @@ class Vimeography_Core_Basic extends Vimeography_Core {
       'created_time',
       'stats',
       'pictures',
+      'status',
     ) );
 
     $this->_params = array(
