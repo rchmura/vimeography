@@ -361,6 +361,28 @@ class Vimeography_Update {
   }
 
   /**
+   * Add a reminder to update an expiring key
+   * for the installed Vimeography theme / addon.
+   *
+   */
+  public function vimeography_key_expiring_message() {
+    $today = date("Y-m-d");
+
+
+    if($expiration_date < $today){
+      echo '<div class="notice notice-warning"><p>';
+        printf( __('Heads up! Your %1$s license is expiring soon! For continued support, activate your plugin <a href="http://www.vimeography.com/%2$s">here</a>', 'vimeography'), $this->expiring_addon->product_name, $this->expiring_addon->plugin_name );
+      echo '</p></div>';
+    }
+    else{
+      echo '<div class="notice notice-error"><p>';
+        printf( __('Heads up! Your %1$s license has expired! For continued support, activate your plugin <a href="http://www.vimeography.com/%2$s">here</a>', 'vimeography'), $this->expiring_addon->product_name, $this->expiring_addon->plugin_name );
+      echo '</p></div>';
+    }
+
+  }
+
+  /**
    * Auto updater
    *
    * @access  protected
