@@ -235,6 +235,24 @@ class Vimeography_Update {
       }
     }
   }
+  
+  public function vimeography_check_for_expiring_keys(){
+    //Gather installed addon keys
+    $activation_keys = get_site_option('vimeography_activation_keys');
+    //Check addon expiration date
+    foreach($activation_keys as $activation_key){
+      $expiration_date = substr($activation_key->expires,0,10);
+      $today = date("Y-m-d");
+      $notification_date = date("Y-m-d",strtotime($expiration_date." -1 week"));
+      if($notification_date <= $today){
+        $this->expiring_addon = $activation_key;
+        $this->expiring_addon->expiration_date = $expiration_date;
+        add_action( 'admin_notices', array($this, 'vimeography_key_expiring_message'), 10 );
+      }
+      
+    }
+    //If today's date is within the threshold of the date, display the message
+  }
 
   /**
    * Loop through the activations keys to check if one exists for the
