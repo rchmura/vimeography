@@ -102,10 +102,12 @@
       </div> <!-- end slider -->
 
     </div> <!-- End vimeography-gallery-menu-container -->
-
-    <div id="vimeography-gallery-container" style="max-width: 60%; margin-left: 305px;">
-      {{{vimeography}}}
-    </div>
+      <div id="vimeography-gallery-container" style="width: 50%; margin-left: 305px; float:left;">
+        {{{vimeography}}}
+      </div>
+      <div class="vimeography-cta-container" style="width: calc(50% - 325px); margin-left: 20px; float:left;">
+        {{> email_cta}}
+      </div>
   </div>
   {{/gallery}}
 </div>
