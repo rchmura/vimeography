@@ -2,8 +2,8 @@
 Contributors: iamdavekiss
 Tags: vimeo, video, videos, gallery, vimeography, media, player, playlist, showcase, skins, themes, video gallery
 Requires at least: 3.3
-Tested up to: 4.6
-Stable tag: 1.4
+Tested up to: 4.6.1
+Stable tag: 1.4.1
 License: GPL3
 
 The easiest way to create beautiful Vimeo galleries on your WordPress site.
@@ -113,6 +113,9 @@ Sure, why not. Simply copy your theme's .mustache file(s) into a new folder loca
 4. Get new styles by installing gallery themes.
 
 == Changelog ==
+= 1.4.1 =
+* [Tweak] Updated 403 error message to include more information
+
 = 1.4 =
 * [New] Thanks to improvements in the Vimeo API, Vimeography is now faster than ever!
 * [Tweak] Updated the Vimeo API authentication method
