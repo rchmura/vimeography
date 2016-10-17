@@ -71,6 +71,21 @@ class Vimeography_Base {
     return get_option('vimeography_has_user_signed_up');
   }
   
+  /**
+   * Specifies width of gallery, based on if the user has signed up
+   * 
+   * @return string
+   */
+  public static function gallery_width() {
+    if(get_option('vimeography_has_user_signed_up')){
+      $result = '70%';
+    }
+    else{
+      $result = '50%';
+    }
+    return $result;
+  }
+  
 
   /**
    * Gets the default settings created when Vimeography is installed.
