@@ -60,6 +60,17 @@ class Vimeography_Base {
   public static function has_pro() {
     return is_plugin_active('vimeography-pro/vimeography-pro.php');
   }
+  
+  
+  /**
+   * Checks if the user has already signed up for the email list
+   * 
+   * @return boolean
+   */
+  public static function has_user_signed_up() {
+    return get_option('vimeography_has_user_signed_up');
+  }
+  
 
   /**
    * Gets the default settings created when Vimeography is installed.
