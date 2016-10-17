@@ -237,7 +237,7 @@ class Vimeography_Update {
   }
   
   public function vimeography_check_for_expiring_keys(){
-    $this->expiring_addons = [];
+    $this->expiring_addons = array();
     //Gather installed addon keys
     $activation_keys = get_site_option('vimeography_activation_keys');
     //Check addon expiration date
