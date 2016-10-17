@@ -61,7 +61,7 @@
           event.preventDefault();
           var form = $(this);
           $.ajax({
-            method: form.attr('type'),
+            method: form.attr('method'),
             url: form.attr('action'),
             data: form.serialize(),
             dataType: 'json',
