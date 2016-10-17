@@ -72,7 +72,7 @@ class Vimeography_Update {
     add_action( 'load-plugins.php', array( $this, 'vimeography_check_for_missing_activation_keys' ) );
     
     // Add activation expiration message for plugins with expiring keys 
-    add_action( 'wp_loaded', array( $this, 'vimeography_check_for_expiring_keys' ) );
+    add_action( 'admin_init', array( $this, 'vimeography_check_for_expiring_keys' ) );
 
 	}
 
