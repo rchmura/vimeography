@@ -55,7 +55,30 @@
         }).mouseout(function(){
           $(this).find('.icon-ok').stop(true, true).fadeOut(200);
         });
-
+        
+        // Signup form actions
+        $('#signup-form form').submit(function(event){
+          event.preventDefault();
+          var form = $(this);
+          $.ajax({
+            method: form.attr('method'),
+            url: form.attr('action'),
+            data: form.serialize(),
+            dataType: 'json',
+          }).done(function(data){
+            $('#signup-form').empty().append("<span class='success'>Alright champ, you're signed up. check your inbox for your code.</span>");
+            var data = {
+              'action': 'vimeography_toggle_signup_form',
+            };
+            jQuery.post(ajaxurl, data, function(response){
+              console.log(response);
+            });
+          }).fail(function(data){
+            $('.failure').remove();
+            $('#signup-form').append("<span class='failure'>Hmm...something's not right. Usually this happens because you have already claimed a discount. Check your email for your discount, or contact us directly if you need more help.</span>");
+          })
+          return this;
+        })
       });
     }(jQuery))
   </script>
@@ -102,10 +125,14 @@
       </div> <!-- end slider -->
 
     </div> <!-- End vimeography-gallery-menu-container -->
-
-    <div id="vimeography-gallery-container" style="max-width: 60%; margin-left: 305px;">
-      {{{vimeography}}}
-    </div>
+      <div id="vimeography-gallery-container" style="width: {{gallery_width}}; margin-left: 305px; float:left;">
+        {{{vimeography}}}
+      </div>
+      {{^has_user_signed_up}}
+      <div class="vimeography-cta-container" style="width: calc(50% - 325px); margin-left: 20px; float:left;">
+        {{> email_cta}}
+      </div>
+      {{/has_user_signed_up}}
   </div>
   {{/gallery}}
 </div>
