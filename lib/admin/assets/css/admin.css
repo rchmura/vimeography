@@ -178,7 +178,7 @@ ul.vimeography-theme-list a.theme-info span {
   top: 0;
   bottom: 0;
   height: 600px;
-  width: 280px;
+  width: 250px;
   border: 1px solid #c4c4c4;
   -webkit-border-radius: 4px;
   -moz-border-radius: 4px;
@@ -230,7 +230,7 @@ ul.vimeography-theme-list a.theme-info span {
   position: absolute;
   bottom: 0;
   top: 65px;
-  width: 280px;
+  width: 250px;
   overflow-y: auto;
   overflow-x: hidden;
 }
