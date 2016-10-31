@@ -28,7 +28,7 @@ class Vimeography_Ajax extends Vimeography {
   
   //Flags the user if they have signed up to the email list
   public function vimeography_toggle_signup_form() {
-    update_option('vimeography_has_user_signed_up',true);
+    update_site_option('vimeography_has_user_signed_up',true);
     wp_die();
   }
 }
