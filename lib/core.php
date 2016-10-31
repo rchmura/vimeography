@@ -185,9 +185,13 @@ abstract class Vimeography_Core {
             __('an invalid token was used for the API request. Try removing your Vimeo token on the Vimeography Pro page and following the steps again to create a Vimeo app.', 'vimeography')
           );
         case 403:
-          throw new Vimeography_Exception(
-            __('your server\'s IP address is currently unauthorized. Please contact Vimeo and ask them to whitelist your server IP address. Make sure you include your server IP address, which you can retrieve by contacting your website hosting provider.', 'vimeography')
-          );
+          $error_code = $response['body']->error_code;
+          $developer_message = $response['body']->developer_message;
+
+          $error = sprintf( __('Your server\'s IP address (%1$s) is currently banned from using the Vimeo API. Please contact Vimeo support at https://vimeo.com/help/contact for more information. Make sure you include your server IP address in your support request. (%1$s)', 'vimeography'), $response['headers']['X-Banned-IP'] );
+          $error .= sprintf( __('<br /><br />Error #%1$d: %2$s', 'vimeography'), $error_code, $developer_message );
+
+          throw new Vimeography_Exception( $error );
         case 404:
           throw new Vimeography_Exception(
             __('the plugin could not retrieve data from the Vimeo API! ', 'vimeography') . $response['body']->error
