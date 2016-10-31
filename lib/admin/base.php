@@ -77,11 +77,11 @@ class Vimeography_Base {
    * @return string
    */
   public static function gallery_width() {
-    if(get_option('vimeography_has_user_signed_up')){
-      $result = '70%';
+    if(Vimeography_Base::has_user_signed_up()){
+      $result = '65%';
     }
     else{
-      $result = '50%';
+      $result = '45%';
     }
     return $result;
   }
