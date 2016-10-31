@@ -68,7 +68,7 @@ class Vimeography_Base {
    * @return boolean
    */
   public static function has_user_signed_up() {
-    return get_option('vimeography_has_user_signed_up');
+    return get_site_option('vimeography_has_user_signed_up');
   }
   
   /**
