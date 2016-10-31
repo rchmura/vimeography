@@ -363,6 +363,12 @@ table.widefat.fixed {border-collapse: separate;}
 }
 
 /* email cta */
+
+.vimeography-cta-container{
+  float:left;
+  width: calc(55% - 265px);
+}
+
 .vimeography-cta-container .cta-section {
   margin-left: 50px;
   padding-left: 20px;
