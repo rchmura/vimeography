@@ -224,11 +224,14 @@ class Vimeography_Shortcode extends Vimeography {
         throw new Vimeography_Exception( __('the Vimeo source for this gallery does not have any videos.', 'vimeography') );
       }
 
+      $vimeography = Vimeography::get_instance();
+      $addons = $vimeography->addons->set_active_theme( $settings['theme'] );
+
       // If our theme supports Vimeography 2 and Vimeography PRO is also compatible,
       // use the new rendering method.
       //
-      // Note, you can check if the javascript file_exists, if theme plugin version is >= 2 etc.
-      if ( 1 == 1 ) {
+      // Note, you should also check if PRO is compatible
+      if ( isset( $addons->active_theme['js_app'] ) ) {
 
         /**
          * The old approach was loading up the theme class, setting variables,
@@ -271,7 +274,7 @@ class Vimeography_Shortcode extends Vimeography {
           )
         );
 
-        wp_register_script("vimeography-{$theme_name}", 'path/to/theme/js-bundle.js');
+        wp_register_script( "vimeography-{$theme_name}", $addons->active_theme['js_app'] );
 
         wp_localize_script("vimeography-{$theme_name}",
           "vimeography = window.vimeography || {};
