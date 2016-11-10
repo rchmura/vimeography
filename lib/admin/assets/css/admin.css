@@ -178,7 +178,7 @@ ul.vimeography-theme-list a.theme-info span {
   top: 0;
   bottom: 0;
   height: 600px;
-  width: 280px;
+  width: 250px;
   border: 1px solid #c4c4c4;
   -webkit-border-radius: 4px;
   -moz-border-radius: 4px;
@@ -230,7 +230,7 @@ ul.vimeography-theme-list a.theme-info span {
   position: absolute;
   bottom: 0;
   top: 65px;
-  width: 280px;
+  width: 250px;
   overflow-y: auto;
   overflow-x: hidden;
 }
@@ -361,3 +361,68 @@ table.widefat.fixed {border-collapse: separate;}
 .wp-submenu.wp-submenu-wrap {
   margin: 0;
 }
+
+/* email cta */
+
+.vimeography-cta-container{
+  float:left;
+  width: calc(55% - 265px);
+}
+
+.vimeography-cta-container .cta-section {
+  margin-left: 20px;
+  padding-left: 20px;
+  border-left: 10px solid;
+  margin-top:25px;
+  margin-bottom:25px;
+  max-width:300px;
+  margin-left: 20px;
+}
+
+.vimeography-cta-container .cta-section.primary{
+  border-color:#6CB5E8;
+}
+
+.vimeography-cta-container .cta-section.secondary{
+  border-color:#FFBA08;
+}
+
+.vimeography-cta-container .cta-section.tertiary{
+  border-color:#E94F37;
+}
+
+.vimeography-cta-container input,.vimeography-cta-container select {
+  padding: 12px 8px;
+  width: 100%;
+}
+
+.vimeography-cta-container input[type="submit"]{
+  background:#44BBA4;
+  border:1px solid #666666;
+  border-radius:3px;
+  color:white;
+  font-size:16px;
+  font-weight:bold;
+}
+
+.vimeography-cta-container input[type="submit"]:hover{
+  background:#81d6c6;
+  transition:all 0.1s ease-in-out;
+}
+
+#signup-form .success,
+#signup-form .failure {
+  display: block;
+  max-width: 300px;
+  padding: 10px;
+  margin-left: 50px;
+}
+
+#signup-form .success{
+  border-left: 10px solid #FFBA08;
+}
+
+#signup-form .failure{
+  border-left: 10px solid #E94F37;
+}
+

@@ -3,6 +3,7 @@
 class Vimeography_Ajax extends Vimeography {
   public function __construct() {
     add_action( 'wp_ajax_vimeography_ajax_get_cached_videos', array( &$this, 'vimeography_ajax_get_cached_videos' ) );
+    add_action( 'wp_ajax_vimeography_toggle_signup_form', array( &$this, 'vimeography_toggle_signup_form' ) );
   }
 
   public function vimeography_ajax_get_cached_videos() {
@@ -23,5 +24,11 @@ class Vimeography_Ajax extends Vimeography {
     echo json_encode($videos);
 
     die;
+  }
+  
+  //Flags the user if they have signed up to the email list
+  public function vimeography_toggle_signup_form() {
+    update_site_option('vimeography_has_user_signed_up',true);
+    wp_die();
   }
 }
