@@ -76,7 +76,7 @@ class Vimeography_Base {
    * 
    * @return string
    */
-  public static function gallery_width() {
+  public static function admin_gallery_width() {
     if(Vimeography_Base::has_user_signed_up()){
       $result = '65%';
     }
