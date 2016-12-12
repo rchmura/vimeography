@@ -370,12 +370,12 @@ class Vimeography_Update {
     foreach($this->expiring_addons as $expiring_addon){
       if($expiring_addon->expiration_date < $today){
         echo '<div class="notice notice-warning"><p>';
-          printf( __('To continue to receive updates and support for %1$s <a href="http://www.vimeography.com/checkout/?edd_license_key=%2$s&download_id=%3$s">renew your license</a>', 'vimeography'), $expiring_addon->product_name, $expiring_addon->activation_key, $expiring_addon->activation_key);
+          printf( __('To continue to receive updates and support for %1$s <a href="https://vimeography.com/checkout/?edd_license_key=%2$s&download_id=%3$s">renew your license</a>', 'vimeography'), $expiring_addon->product_name, $expiring_addon->activation_key, $expiring_addon->activation_key);
         echo '</p></div>';
       }
       else{
         echo '<div class="notice notice-error"><p>';
-          printf( __('To continue to receive updates and support for %1$s <a href="http://www.vimeography.com/checkout/?edd_license_key=%2$s&download_id=%3$s">renew your license</a>', 'vimeography'), $expiring_addon->product_name, $expiring_addon->activation_key, $expiring_addon->activation_key);
+          printf( __('To continue to receive updates and support for %1$s <a href="https://vimeography.com/checkout/?edd_license_key=%2$s&download_id=%3$s">renew your license</a>', 'vimeography'), $expiring_addon->product_name, $expiring_addon->activation_key, $expiring_addon->activation_key);
         echo '</p></div>';
       }
     }
