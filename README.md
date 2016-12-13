@@ -36,3 +36,6 @@ There are various ways you can contribute:
 2. Send us a Pull Request with your bug fixes and/or new features
 3. Translate Vimeography into different languages
 4. Provide feedback and suggestions on [enhancements](https://github.com/davekiss/vimeography/issues?direction=desc&labels=Enhancement&page=1&sort=created&state=open)
+
+### Supported by BrowserStack
+Thanks to [BrowserStack](https://browserstack.com/) for their support of this open-source project.
