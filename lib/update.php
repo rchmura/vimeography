@@ -248,7 +248,9 @@ class Vimeography_Update {
       if($notification_date <= $today){
         $this->expiring_addons[$activation_key->plugin_name] = $activation_key;
         $this->expiring_addons[$activation_key->plugin_name]->expiration_date = $expiration_date;
-        add_action( 'admin_notices', array($this, 'vimeography_key_expiring_message'), 10 );
+				$plugin_directory = $this->expiring_addons[$activation_key->plugin_name]->plugin_name;
+				$plugin_file = $plugin_directory.'.php';
+        add_action( 'in_plugin_update_message-'.$plugin_directory.'/'.$plugin_file, array($this, 'vimeography_key_expiring_message'), 20, 2);
       }
     }
     //If today's date is within the threshold of the date, display the message
@@ -365,20 +367,10 @@ class Vimeography_Update {
    * for the installed Vimeography theme / addon.
    *
    */
-  public function vimeography_key_expiring_message() {
+  public function vimeography_key_expiring_message($plugin_data, $response) {
     $today = date("Y-m-d");
-    foreach($this->expiring_addons as $expiring_addon){
-      if($expiring_addon->expiration_date < $today){
-        echo '<div class="notice notice-warning"><p>';
-          printf( __('To continue to receive updates and support for %1$s <a href="https://vimeography.com/checkout/?edd_license_key=%2$s&download_id=%3$s">renew your license</a>', 'vimeography'), $expiring_addon->product_name, $expiring_addon->activation_key, $expiring_addon->activation_key);
-        echo '</p></div>';
-      }
-      else{
-        echo '<div class="notice notice-error"><p>';
-          printf( __('To continue to receive updates and support for %1$s <a href="https://vimeography.com/checkout/?edd_license_key=%2$s&download_id=%3$s">renew your license</a>', 'vimeography'), $expiring_addon->product_name, $expiring_addon->activation_key, $expiring_addon->activation_key);
-        echo '</p></div>';
-      }
-    }
+		$expiring_addon = $this->expiring_addons[$plugin_data['slug']];
+		printf( __('</p><p>To continue to receive updates and support for %1$s <a href="https://vimeography.com/checkout/?edd_license_key=%2$s&download_id=%3$s">renew your license</a>', 'vimeography'), $expiring_addon->product_name, $expiring_addon->activation_key, $expiring_addon->activation_key);
 
   }
 
