@@ -38,5 +38,6 @@ There are various ways you can contribute:
 4. Provide feedback and suggestions on [enhancements](https://github.com/davekiss/vimeography/issues?direction=desc&labels=Enhancement&page=1&sort=created&state=open)
 
 ### Supported by BrowserStack
-![BrowserStack](https://cdn.rawgit.com/davekiss/vimeography/master/browserstack-logo.svg)
 Thanks to [BrowserStack](https://browserstack.com/) for their support of this open-source project.
+
+<img src="https://cdn.rawgit.com/davekiss/vimeography/master/browserstack-logo.svg" width="150">
