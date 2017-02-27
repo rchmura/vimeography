@@ -42,7 +42,7 @@ class Vimeography_Gallery_New extends Vimeography_Base {
 
     if ( isset( $_POST['vimeography_new_gallery_settings'] ) ) {
       try {
-        $input             = self::_validate_form( $_POST['vimeography_new_gallery_settings'] );
+        $input             = $this->_validate_form( $_POST['vimeography_new_gallery_settings'] );
         $this->_gallery_id = self::_create_vimeography_gallery($input);
 
         do_action('vimeography-pro/create-gallery', $this->_gallery_id);
@@ -77,15 +77,33 @@ class Vimeography_Gallery_New extends Vimeography_Base {
    * @access protected
    * @return array $input
    */
-  protected static function _validate_form($input) {
+  protected function _validate_form($input) {
     if ( check_admin_referer('vimeography-gallery-action','vimeography-gallery-verification') ) {
-      if ( empty( $input['gallery_title'] ) OR empty( $input['source_url'] ) ) {
-        throw new Vimeography_Exception( __('Make sure you fill out both of the fields below!', 'vimeography') );
+      if ( empty( $input['gallery_title'] ) || empty( $input['source_url'] ) ) {
+        throw new Vimeography_Exception( __('Make sure you fill out all of the fields below!', 'vimeography') );
       }
 
+      $themes = array_map( array($this, 'get_theme_name'), $this->themes() );
+
+      if ( ! in_array( $input['gallery_theme'], $themes ) ) {
+        throw new Vimeography_Exception( __('The theme you are trying to use is not installed or activated.', 'vimeography') );
+      }
+
+      $input['gallery_theme'] == strtolower( sanitize_text_field( $input['gallery_theme'] ) );
       $input['resource_uri'] = Vimeography::validate_vimeo_source( $input['source_url'] );
       return $input;
     }
+  }
+
+  /**
+   * Maps the Vimeography themes array above and fetches only the name for each theme.
+   *
+   * @since  1.4.2
+   * @param  array $theme
+   * @return string Theme name
+   */
+  private function get_theme_name($theme) {
+    return $theme['name'];
   }
 
   /**
@@ -106,6 +124,8 @@ class Vimeography_Gallery_New extends Vimeography_Base {
       );
     } else {
       $gallery_id = $wpdb->insert_id;
+      $theme = apply_filters('vimeography.gallery.new.theme', $input['gallery_theme'] );
+
       $result = $wpdb->insert( $wpdb->vimeography_gallery_meta, array(
                               'gallery_id'     => $gallery_id,
                               'source_url'     => $input['source_url'],
@@ -114,7 +134,7 @@ class Vimeography_Gallery_New extends Vimeography_Base {
                               'gallery_width'  => NULL,
                               'video_limit'    => 25,
                               'cache_timeout'  => 3600,
-                              'theme_name'     => 'bugsauce' ) );
+                              'theme_name'     => $theme ) );
 
       if (! $result) {
         throw new Vimeography_Exception(
