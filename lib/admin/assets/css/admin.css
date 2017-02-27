@@ -38,26 +38,16 @@ hr { border: 0; height: 0; border-top: 1px solid rgba(0, 0, 0, 0.1); border-bott
   padding-bottom: 10px;
 }
 
-select#vimeography-source
-{
-  width: 250px;
-}
-
-#vimeography-source-url {
-  color: #464646;
-}
-
-#vimeography-basic-settings-form .form-table th {
+#vimeography-basic-settings-form th {
   width: 265px;
 }
 
-#vimeography-advanced-settings .form-table th {
-  width: 320px;
-}
-
-.form-table th h2 {
+#vimeography-basic-settings-form th h2 {
   color: #111;
   font-weight: 500;
+  font-size: 1.4em;
+  line-height: 1.4em;
+  margin: 0;
 }
 
 /* Themes List */
