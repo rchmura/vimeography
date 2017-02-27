@@ -21,14 +21,27 @@ class Vimeography_Admin_Scripts {
       wp_register_style( 'vimeography-admin',     VIMEOGRAPHY_URL.'lib/admin/assets/css/admin.css');
 
       wp_register_script( 'vimeography-bootstrap', VIMEOGRAPHY_URL.'lib/admin/assets/js/bootstrap.min.js');
-      wp_register_script( 'vimeography-admin', VIMEOGRAPHY_URL.'lib/admin/assets/js/admin.js', 'jquery');
+      wp_register_script( 'vimeography-admin', VIMEOGRAPHY_URL.'lib/admin/assets/js/admin.js', array('jquery') );
 
-      wp_enqueue_style( 'vimeography-bootstrap');
+      switch( $hook ) {
+        case 'vimeography_page_vimeography-new-gallery':
+          wp_register_script('fullpage', 'https://cdnjs.cloudflare.com/ajax/libs/fullPage.js/2.9.2/jquery.fullPage.min.js', array('jquery'));
+          wp_register_script( 'select2', 'https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/js/select2.min.js', array( 'jquery' ) );
+          wp_register_style('fullpage', 'https://cdnjs.cloudflare.com/ajax/libs/fullPage.js/2.9.2/jquery.fullPage.min.css');
+          wp_register_style( 'select2', 'https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/css/select2.min.css' );
+          wp_enqueue_script('fullpage');
+          wp_enqueue_style('fullpage');
+          wp_enqueue_script('select2');
+          wp_enqueue_style('select2');
+          break;
+        default:
+          wp_enqueue_style( 'vimeography-bootstrap');
+          wp_enqueue_script( 'vimeography-bootstrap');
+          break;
+      }
+
       wp_enqueue_style( 'vimeography-admin');
-
-      wp_enqueue_script( 'vimeography-bootstrap');
       wp_enqueue_script( 'vimeography-admin');
     }
   }
-
 }
