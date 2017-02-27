@@ -332,8 +332,8 @@ class Vimeography_Update {
       return;
     }
 
-    echo '<tr class="plugin-update-tr"><td colspan="3" class="plugin-update"><div class="update-message">';
-    echo '<span style="border-right: 1px solid #DFDFDF; margin-right: 5px;">';
+    echo '<tr class="plugin-update-tr"><td colspan="3" class="plugin-update"><div class="update-message notice inline notice-warning notice-alt">';
+    echo '<span style="display: block; padding: 5px;">';
     printf( __('Hey! Don\'t forget to <a title="Activate my Vimeography Addon" href="%1$sadmin.php?page=vimeography-manage-activations">enter your activation key</a> to receive the latest updates for the %2$s plugin.', 'vimeography'), get_admin_url(), $plugin_data['Name'] );
     echo '</span>';
     echo '</div></td></tr>';
