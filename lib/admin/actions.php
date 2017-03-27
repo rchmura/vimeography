@@ -7,7 +7,6 @@ class Vimeography_Admin_Actions {
 
   public function __construct() {
     add_action( 'admin_init', array( $this, 'vimeography_requires_wordpress_version') );
-    add_action( 'admin_init', array( $this, 'vimeography_check_if_just_updated') );
     add_action( 'admin_init', array( $this, 'vimeography_maybe_add_activation_key_reset_nag') );
     add_action( 'admin_init', array( $this, 'vimeography_maybe_add_pro_update_nag') );
   }
@@ -26,20 +25,6 @@ class Vimeography_Admin_Actions {
         deactivate_plugins( VIMEOGRAPHY_BASENAME );
         wp_die( sprintf( __('Vimeography requires WordPress 3.3 or higher. Please upgrade WordPress and try again. <a href="%s">Back to WordPress admin</a>', 'vimeography'), admin_url() ) );
       }
-    }
-  }
-
-  /**
-   * If Vimeography was just updated, make sure all the Vimeography plugins are activated.
-   *
-   * @return void
-   */
-  public function vimeography_check_if_just_updated() {
-    $plugins = get_option('vimeography_reactivate_plugins');
-
-    if ( $plugins ) {
-      activate_plugins($plugins);
-      delete_option('vimeography_reactivate_plugins');
     }
   }
 
