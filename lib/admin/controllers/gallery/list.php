@@ -26,6 +26,14 @@ class Vimeography_Gallery_List extends Vimeography_Base {
     require_once 'table.php';
     $this->_table = new Vimeography_Gallery_List_Table;
     $this->load_galleries();
+
+    if ( isset( $_GET['duplicated'] ) && $_GET['duplicated'] == 1) {
+      $this->messages[] = array(
+        'type' => 'updated',
+        'heading' => __('Gallery duplicated.', 'vimeography'),
+        'message' => __('You now have a clone of your own.', 'vimeography')
+      );
+    }
   }
 
   /**
@@ -206,11 +214,20 @@ class Vimeography_Gallery_List extends Vimeography_Base {
         do_action('vimeography-pro/duplicate-gallery', $id, $gallery_id);
         do_action('vimeography/reload-galleries');
 
-        $this->messages[] = array(
-          'type' => 'updated',
-          'heading' => __('Gallery duplicated.', 'vimeography'),
-          'message' => __('You now have a clone of your own.', 'vimeography')
+        $args = array(
+          'page' => 'vimeography-edit-galleries',
+          'duplicated' => 1,
         );
+
+        parse_str( $_REQUEST['_wp_http_referer'], $request );
+
+        if ( isset( $request['paged'] ) && absint( $request['paged'] ) > 1 ) {
+          $args['paged'] = absint( $request['paged'] );
+        }
+
+        $url = add_query_arg( $args, get_admin_url( null, 'admin.php' ) );
+        wp_redirect( $url ); exit;
+
       } catch (Vimeography_Exception $e) {
         $this->messages[] = array(
           'type' => 'error',
