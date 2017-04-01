@@ -1,39 +1,40 @@
-=== Vimeography ===
-Contributors: iamdavekiss
-Tags: vimeo, video, videos, gallery, vimeography, media, player, playlist, showcase, skins, themes, video gallery
+=== Vimeography: Vimeo Video Gallery WordPress Plugin ===
+Contributors: iamdavekiss, videogallery
+Tags: video gallery, gallery, video, vimeo, vimeo gallery
 Requires at least: 3.3
-Tested up to: 4.6.1
-Stable tag: 1.4.1
+Tested up to: 4.7
+Stable tag: 1.5
 License: GPL3
 
-The easiest way to create beautiful Vimeo galleries on your WordPress site.
+The easiest way to create beautiful Vimeo video galleries on your WordPress site.
 
 == Description ==
 
-Vimeography is a WordPress plugin that allows you to create beautiful, custom video galleries in 30 seconds, tops!
+Vimeography is a WordPress plugin that allows you to create beautiful, custom Vimeo video galleries in 30 seconds, tops!
 
 A quick overview:
+
 http://vimeo.com/44555634
 
 For more information, check out [vimeography.com](https://vimeography.com/ "vimeography.com")
 
 Some amazing features:
 
-* Automatically add videos uploaded to a Vimeo user account, channel, album or group
-* Easily insert galleries on a page, post or template with the gallery helper or shortcode
-* Set a featured video to appear as the first video in your gallery
-* Change your gallery's appearance with custom themes
-* Tweak your theme's look with the appearance editor
-* Control the gallery width using pixels or percentages
+* Automatically add videos uploaded to a Vimeo user account, channel, album or group to your video gallery
+* Easily insert video galleries on a page, post or template with the gallery helper or shortcode
+* Set a featured video to appear as the first video in your Vimeo video gallery
+* Change your Vimeo video gallery's appearance with custom themes
+* Tweak your video gallery theme's look with the appearance editor
+* Control the video gallery width using pixels or percentages
 * Built-in caching for quick page loads
-* Create unlimited galleries
+* Create unlimited Vimeo video galleries
 
 > #### Vimeography Themes
-> Make your gallery stand out with our custom themes! All themes come with one year of updates and support.
+> Make your gallery stand out with our custom video gallery themes! All themes come with one year of updates and support.
 >
-> Check our all of our gallery designs at [https://vimeography.com/themes](https://vimeography.com/themes "vimeography.com/themes")
+> Check our all of our video gallery designs at [https://vimeography.com/themes](https://vimeography.com/themes "vimeography.com/themes")
 
-For even more control over your galleries, including unlimited videos, custom sorting, hidden collections, playlists and more, check out [Vimeography Pro!](https://vimeography.com/pro "Vimeography Pro")
+For even more control over your Vimeo video galleries, including unlimited videos, custom sorting, hidden collections, playlists and more, check out [Vimeography Pro!](https://vimeography.com/pro "Vimeography Pro")
 
 For the latest updates, follow us!
 [http://twitter.com/vimeography](http://twitter.com/vimeography "twitter.com/vimeography")
@@ -48,9 +49,9 @@ For the latest updates, follow us!
 
 If you would like to show videos that are hidden from Vimeo, you will need [Vimeography Pro.](https://vimeography.com/add-ons/vimeography-pro/)
 
-The way that it works is you mark your videos as hidden from Vimeo and then place them in a Public album. You then use that album URL as the source for your gallery. The videos won't appear anywhere on Vimeo, but will still be accessible by the Vimeography WordPress plugin.
+The way that it works is you mark your videos as hidden from Vimeo and then place them in a Public album. You then use that album URL as the source for your video gallery. The videos won't appear anywhere on Vimeo, but will still be accessible by the Vimeography WordPress plugin.
 
-= Help! My theme doesn't look right! =
+= Help! My video gallery doesn't look right! =
 
 First of all, don't worry! I promise you that we can get it looking right. This can be caused by a multitude of things, so try the following (in the order of appearance):
 
@@ -68,51 +69,60 @@ Make sure that you have the latest version of the Vimeography theme plugin that 
 
 This usually means that Vimeo is having some network issues. Follow @Vimeo on twitter for updates. If Vimeo is not reporting any issues, you'll need to contact your host and ask why you are unable to connect to Vimeo's IP address. It may be that your host has blocked server access via a firewall.
 
-= I'm having trouble installing a theme. =
+= I'm having trouble installing a video gallery theme. =
 
 Vimeography themes are treated as WordPress plugins. Make sure you're installing the Vimeography theme on the "Plugins" page in your WordPress dashboard.
 
-= How do I get the latest updates for my themes? =
+= How do I get the latest updates for my video gallery themes? =
 
-If you purchased your theme at vimeography.com, you should have received an email receipt containing an license key for your theme. Enter that license code on the "Manage Licenses" page of the Vimeography plugin. Once done, you will be subscribed to theme updates which will automatically be delivered to your WordPress installation, just like any other plugin.
+If you purchased your video gallery theme at vimeography.com, you should have received an email receipt containing an license key for your theme. Enter that license code on the "Manage Licenses" page of the Vimeography plugin. Once done, you will be subscribed to theme updates which will automatically be delivered to your WordPress installation, just like any other plugin.
 
 = Why don’t you support YouTub/MetaHall/Flacker/PreschoolHumor? =
 
-Like many other video professionals, I believe that Vimeo is a beautiful website complete with clean design, a supportive community and a straightforward API. This makes Vimeo a great choice for professional looking portfolios. Yes, there are other crummier sites that may also do the job, but that’s like forcing down squid nuggets for dinner when you could be having baked scallops and a caprese appetizer. Vimeo only; enough said.
+Like many other video professionals, I believe that Vimeo is a beautiful website complete with clean design, a supportive community, a wonderful staff, and a straightforward API. This makes Vimeo a great choice for professional looking portfolios. Yes, there are other crummier sites that may also do the job, but that’s like forcing down squid nuggets for dinner when you could be having baked scallops and a caprese appetizer. Vimeo only; enough said.
 
-= How do I add my Vimeography gallery to a post or page? =
+= How do I add my Vimeography video gallery to a post or page? =
 
-Easy! All you have to do is type `[vimeography id="#"]`, where `#` is replaced by the ID number of your gallery.
+Easy! All you have to do is type `[vimeography id="#"]`, where `#` is replaced by the ID number of your Vimeo video gallery.
 
-= Where do I find the ID number of my Vimeography gallery? =
+= Where do I find the ID number of my Vimeography video gallery? =
 
-Each gallery’s ID number is located next to the gallery’s title in the first column on the edit galleries page.
+Each video gallery’s ID number is located next to the video gallery’s title in the first column on the edit galleries page.
 
 = Can I override my Vimeography gallery settings in the shortcode? =
 
 Sure thing! You can define all of the properties found in the admin panel right in your shortcode as well. Try using one, any, or all of the following parameters:
 `[vimeography id="3" theme="thumbs" featured="http://vimeo.com/28380190" source="http://vimeo.com/channels/staffpicks" limit="60" cache="3600" width="600px"]`
 
-= Can I add the Vimeography gallery to my theme’s sidebar/footer/header etc.? =
+= Can I add the Vimeography video gallery to my theme’s sidebar/footer/header etc.? =
 
-Yes, but you’ll need some PHP knowledge to do it! Open the file you want to add the gallery to, and type `<?php do_shortcode('[vimeography id="#"]'); ?>`, where `#` is replaced by the ID number of your gallery.
+Yes, but you’ll need some PHP knowledge to do it! Open the file you want to add the video gallery to, and type `<?php do_shortcode('[vimeography id="#"]'); ?>`, where `#` is replaced by the ID number of your gallery.
 
 = Can I change the look of my Vimeography theme? =
 
-Heck yeah! Use the appearance editor to change your theme's style so that it matches your site perfectly.
+Heck yeah! Use the appearance editor to change your video gallery theme's style so that it matches your site perfectly.
 
 = Can I override my Vimeography theme template with some custom code? =
 
-Sure, why not. Simply copy your theme's .mustache file(s) into a new folder located at `wp-content/themes/[my_wordpress_theme]/vimeography/[my_vimeography_theme]` or `wp-content/themes/[my_wordpress_theme]/vimeography/[my_vimeography_theme]/partials` and hack away. Vimeography will load that template instead of the default one for your theme.
+Sure, why not. Simply copy your video gallery theme's .mustache file(s) into a new folder located at `wp-content/themes/[my_wordpress_theme]/vimeography/[my_vimeography_theme]` or `wp-content/themes/[my_wordpress_theme]/vimeography/[my_vimeography_theme]/partials` and hack away. Vimeography will load that template instead of the default one for your theme.
 
 == Screenshots ==
 
-1. Create a gallery in 30 seconds, tops!
-2. Preview your gallery and customize its appearance.
-3. Manage your galleries with a simple interface.
-4. Get new styles by installing gallery themes.
+1. Create a Vimeo video gallery in 30 seconds, tops!
+2. Preview your Vimeo video gallery and customize its appearance.
+3. Manage your Vimeo video galleries with a simple interface.
+4. Get new styles by installing video gallery themes.
 
 == Changelog ==
+= 1.5 =
+* [New] Refreshed the Vimeography video gallery creation process
+* [New] You can now specify which gallery theme you would like to use when creating a new video gallery!
+* [New] Added `tags` as a valid Vimeo video gallery collection
+* [New] Added `vimeography.capabilities.menu` filter to allow adjusting permissions to manage Vimeography
+* [Fix] Corrected an issue where duplicating a video gallery could sometimes create multiple copies
+* [Tweak] Removed plugin deactivation behavior when performing the core plugin upgrade
+* [Tweak] Refreshed plugin update notification row styles
+
 = 1.4.1 =
 * [Tweak] Updated 403 error message to include more information
 
@@ -483,6 +493,9 @@ Sure, why not. Simply copy your theme's .mustache file(s) into a new folder loca
 * First public release.
 
 == Upgrade Notice ==
+= 1.5 =
+After this update, Vimeography will no longer disable any add-on plugins while upgrades are being performed. Please make sure your add-on plugins are updated to the latest version, or, are deactivated while updating Vimeography.
+
 = 1.4 =
 This update removes unnecessary response fields from the Vimeo API. If you've customized your Vimeography theme to use response fields other than what now ships with Vimeography, make sure to add them using the `vimeography.request.fields` WordPress filter.
 
