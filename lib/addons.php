@@ -70,7 +70,8 @@ class Vimeography_Addons {
 
       // Provide path to Javascript bundle if theme supports it.
       if ( version_compare( $plugin['version'], '2.0', '>=' ) && file_exists( $plugin['plugin_path'] . 'dist/bundle.js' ) ) {
-        $plugin['js_app'] = plugins_url( 'dist/bundle.js', $plugin_path );
+        $plugin['app_js'] = plugins_url( 'dist/bundle.js', $plugin_path );
+        $plugin['app_css'] = plugins_url( 'dist/main.css', $plugin_path );
       }
 
       $this->themes[] = $plugin;

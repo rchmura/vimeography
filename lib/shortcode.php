@@ -225,13 +225,13 @@ class Vimeography_Shortcode extends Vimeography {
       }
 
       $vimeography = Vimeography::get_instance();
-      $addons = $vimeography->addons->set_active_theme( $settings['theme'] );
+      $addons = $vimeography->addons->set_active_theme( $this->_gallery_settings['theme'] );
 
       // If our theme supports Vimeography 2 and Vimeography PRO is also compatible,
       // use the new rendering method.
       //
       // Note, you should also check if PRO is compatible
-      if ( isset( $addons->active_theme['js_app'] ) ) {
+      if ( isset( $addons->active_theme['app_js'] ) ) {
 
         /**
          * The old approach was loading up the theme class, setting variables,
@@ -255,17 +255,14 @@ class Vimeography_Shortcode extends Vimeography {
         // Set base data for every single gallery
         $data = array(
           'id'    => $this->_gallery_id,
-          'theme' => $theme_name
+          'theme' => $theme_name,
+          'version' => $addons->active_theme['version']
         );
 
         // Merge the API response from Vimeo
         $data = array_merge( $data, (array) $result );
 
         // Set remaining JS variables
-        if ( ! empty( $this->_gallery_settings['width'] ) ) {
-          $data['width'] = $this->_settings['width'];
-        }
-
         $data = apply_filters('vimeography.pro.localize', $data);
 
         $local_data = array(
@@ -274,7 +271,11 @@ class Vimeography_Shortcode extends Vimeography {
           )
         );
 
-        wp_register_script( "vimeography-{$theme_name}", $addons->active_theme['js_app'] );
+        // wp_register_script('livereload', 'https://localhost:35729/livereload.js');
+        // wp_enqueue_script('livereload');
+
+        wp_register_script( "vimeography-{$theme_name}", $addons->active_theme['app_js'] );
+        wp_register_style( "vimeography-{$theme_name}", $addons->active_theme['app_css'] );
 
         wp_localize_script("vimeography-{$theme_name}",
           "vimeography = window.vimeography || {};
@@ -283,7 +284,14 @@ class Vimeography_Shortcode extends Vimeography {
         $local_data);
 
         wp_enqueue_script("vimeography-{$theme_name}");
-        return;
+        wp_enqueue_style("vimeography-{$theme_name}");
+
+        ob_start();
+?>
+      <div id="vimeography-gallery-<?php esc_attr_e($data['id']); ?>" class="vimeography-<?php esc_attr_e( $data['theme'] ); ?>" data-version="<?php esc_attr_e( $data['version'] ); ?>" <?php if ( ! empty( $this->_gallery_settings['width'] ) ) : ?> style="max-width: <?php esc_attr_e( $this->_gallery_settings['width'] ); ?>" <?php endif; ?> itemscope itemtype="http://schema.org/VideoGallery">
+      </div>
+<?php
+        return ob_get_clean();
       } else {
         $renderer->load_theme();
 

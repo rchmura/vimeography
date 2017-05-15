@@ -1,0 +1,31 @@
+{
+  "dependencies": {
+    "@vimeo/player": "^1.0.6",
+    "flickity": "^2.0.5",
+    "flickity-imagesloaded": "^2.0.0"
+  },
+  "devDependencies": {
+    "autoprefixer": "^6.5.2",
+    "babel-core": "^6.18.2",
+    "babel-eslint": "^7.1.0",
+    "babel-loader": "^6.2.7",
+    "babel-preset-es2015": "^6.18.0",
+    "babel-preset-react": "^6.16.0",
+    "babel-preset-stage-0": "^6.16.0",
+    "css-loader": "^0.25.0",
+    "eslint": "^3.10.0",
+    "eslint-loader": "^1.6.1",
+    "eslint-plugin-react": "^6.6.0",
+    "extract-text-webpack-plugin": "^1.0.1",
+    "file-loader": "^0.9.0",
+    "node-sass": "^3.11.2",
+    "postcss-loader": "^1.1.0",
+    "react": "^15.3.2",
+    "react-dom": "^15.3.2",
+    "react-router": "next",
+    "sass-loader": "^4.0.2",
+    "style-loader": "^0.13.1",
+    "webpack": "^1.13.3",
+    "webpack-livereload-plugin": "^0.9.0"
+  }
+}
