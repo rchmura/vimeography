@@ -163,7 +163,9 @@ class Vimeography_Admin_Menu {
    * @return void
    */
   public function vimeography_render_template() {
-    if ( ! current_user_can( 'manage_options' ) ) {
+    $capability = apply_filters('vimeography.capabilities.menu', 'manage_options');
+
+    if ( ! current_user_can( $capability ) ) {
       wp_die( __( 'You do not have sufficient permissions to access this page.', 'vimeography' ) );
     }
 
