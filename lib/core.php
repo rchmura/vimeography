@@ -217,6 +217,10 @@ abstract class Vimeography_Core {
           throw new Vimeography_Exception(
             __('the plugin could not retrieve data from the Vimeo API! ', 'vimeography') . $response['body']->error
           );
+        case 429:
+          throw new Vimeography_Exception(
+            __('too many requests to Vimeo, please wait a moment and try again.', 'vimeography')
+          );
         case 500: case 503:
           throw new Vimeography_Exception(
             __('looks like Vimeo is having some API issues. Try reloading, or, check back in a few minutes. You can also check http://vimeostatus.com for live updates.', 'vimeography')
