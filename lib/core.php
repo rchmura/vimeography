@@ -130,8 +130,29 @@ abstract class Vimeography_Core {
    * @return string  $response  Modified response from Vimeo.
    */
   public function fetch($last_modified = NULL) {
-    if (! $this->_verify_vimeo_endpoint($this->_endpoint) )
+    if ( ! $this->_verify_vimeo_endpoint($this->_endpoint) ) {
       throw new Vimeography_Exception( sprintf( __('Endpoint %s is not valid.', 'vimeography'), $this->_endpoint ) );
+    }
+
+    // Limit the request to return only the fields that
+    // Vimeography themes actually use.
+    $fields = apply_filters( 'vimeography.request.fields', array(
+      'name',
+      'uri',
+      'link',
+      'description',
+      'duration',
+      'width',
+      'height',
+      'embed',
+      'tags.name',
+      'created_time',
+      'stats',
+      'pictures',
+      'status',
+    ) );
+
+    $this->_params['fields'] = implode( $fields, ',' );
 
     $response  = $this->_make_vimeo_request($this->_endpoint, $this->_params, $last_modified);
 
