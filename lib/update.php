@@ -162,18 +162,18 @@ class Vimeography_Update {
     );
 
     // Make sure there are no errors
-    if ( is_wp_error( $response ) )
+    if ( is_wp_error( $response ) ) {
       return;
+    }
 
     // Decode the license data
     $license_data = json_decode( wp_remote_retrieve_body( $response ) );
 
-    if ( $license_data->license == 'deactivated' ) {
-      if ( $this->_vimeography_remove_activation_key( $key ) ) {
-        return TRUE;
-      } else {
-        throw new Exception( __('That license key could not be deactivated.', 'vimeography') );
-      }
+    // Remove the key even if deactivation fails
+    $this->_vimeography_remove_activation_key( $key );
+
+    if ( ! $license_data->success ) {
+      throw new Exception( __('That license key has been removed from your site, but could not be deactivated in our system.', 'vimeography') );
     }
   }
 
