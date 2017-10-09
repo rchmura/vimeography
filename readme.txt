@@ -2,8 +2,8 @@
 Contributors: iamdavekiss, videogallery
 Tags: video gallery, gallery, video, vimeo, vimeo gallery
 Requires at least: 3.3
-Tested up to: 4.7
-Stable tag: 1.5
+Tested up to: 4.8.2
+Stable tag: 1.5.1
 License: GPL3
 
 The easiest way to create beautiful Vimeo video galleries on your WordPress site.
@@ -114,6 +114,16 @@ Sure, why not. Simply copy your video gallery theme's .mustache file(s) into a n
 4. Get new styles by installing video gallery themes.
 
 == Changelog ==
+= 1.5.1 =
+* [New] Added a request field filter to prevent Vimeo rate limit errors.
+* [New] Gallery settings are now run through the `vimeography/gallery-settings` filter before displaying a gallery. This allows for modifying gallery settings programatically while rendering a gallery.
+* [Tweak] Admin notices are now hidden on the new gallery page.
+* [Tweak] Added a required PHP version header of 5.3 (note: 5.3 has been the required PHP version for quite some time, this is not a new requirement)
+* [Fix] Added some code to auto-handle cURL proxy response headers.
+* [Fix] Fixed an issue where license keys could sometimes not be removed.
+* [Fix] Ensure capabilities are filtered on admin page render.
+* [Fix] Update the Vimeography Pro installation instructions to avoid an error.
+
 = 1.5 =
 * [New] Refreshed the Vimeography video gallery creation process
 * [New] You can now specify which gallery theme you would like to use when creating a new video gallery!
