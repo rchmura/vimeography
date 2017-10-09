@@ -503,6 +503,9 @@ Sure, why not. Simply copy your video gallery theme's .mustache file(s) into a n
 * First public release.
 
 == Upgrade Notice ==
+= 1.5.1 = 
+IMPORTANT: Before performing this update, please be sure you have installed the latest versions of any Vimeography themes that you have purchased.
+
 = 1.5 =
 After this update, Vimeography will no longer disable any add-on plugins while upgrades are being performed. Please make sure your add-on plugins are updated to the latest version, or, are deactivated while updating Vimeography.
 
