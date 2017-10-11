@@ -269,7 +269,9 @@ class Vimeography_Shortcode extends Vimeography {
         $data = apply_filters('vimeography.pro.localize', $data);
 
         $local_data = array(
-          'l10n_print_after' => sprintf('vimeography.galleries.push(%1$s)',
+          'l10n_print_after' => sprintf('vimeography2.galleries.%1$s["%2$s"] = %3$s',
+            $data['theme'],
+            $data['id'],
             json_encode( $data )
           )
         );
@@ -278,9 +280,10 @@ class Vimeography_Shortcode extends Vimeography {
         wp_register_style( "vimeography-{$theme_name}", $addons->active_theme['app_css'] );
 
         wp_localize_script("vimeography-{$theme_name}",
-          "vimeography = window.vimeography || {};
-          window.vimeography.galleries = window.vimeography.galleries || [];
-          vimeography.unused",
+          "vimeography2 = window.vimeography2 || {};
+          window.vimeography2.galleries = window.vimeography2.galleries || {};
+          window.vimeography2.galleries.{$theme_name} = window.vimeography2.galleries.{$theme_name} || {};
+          vimeography2.unused",
         $local_data);
 
         wp_enqueue_script("vimeography-{$theme_name}");
@@ -325,9 +328,6 @@ class Vimeography_Shortcode extends Vimeography {
       <?php
 
       return ob_get_clean();
-    }
-  }
-
     }
   }
 }
