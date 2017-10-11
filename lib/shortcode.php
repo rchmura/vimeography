@@ -298,7 +298,31 @@ class Vimeography_Shortcode extends Vimeography {
       }
     }
     catch (Vimeography_Exception $e) {
-      return __("Vimeography error: ", 'vimeography') . $e->getMessage();
+      ob_start();
+
+      ?>
+        <div class="vimeography-error">
+          <h2><?php _e('Our video gallery couldn\'t be loaded.', 'vimeography'); ?></h2>
+          <p><?php echo $e->getMessage(); ?></p>
+        </div>
+
+        <style>
+          .vimeography-error {
+            background-color: rgba(255, 255, 255, 0.25);
+            max-width: 500px;
+            margin: 0 auto 2em;
+            text-align: center;
+            border-radius: 4px;
+            padding: 1em;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+          }
+        </style>
+      <?php
+
+      return ob_get_clean();
+    }
+  }
+
     }
   }
 }
