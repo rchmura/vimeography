@@ -204,8 +204,9 @@ class Vimeography_Shortcode extends Vimeography {
    */
   public function output() {
     try {
+
       require_once VIMEOGRAPHY_PATH . 'lib/core.php';
-      require_once VIMEOGRAPHY_PATH . 'lib/renderer.php';
+      require_once VIMEOGRAPHY_PATH . 'lib/deprecated/renderer.php';
 
       if ( class_exists( 'Vimeography_Pro' ) ) {
         do_action('vimeography/load_pro');
