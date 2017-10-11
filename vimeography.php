@@ -66,7 +66,6 @@ if ( ! class_exists( 'Vimeography' ) ) {
         new Vimeography_Database;
         new Vimeography_Deprecated;
         new Vimeography_Init;
-        new Vimeography_Ajax;
         self::$instance->addons = new Vimeography_Addons;
         new Vimeography_Robots;
         new Vimeography_Shortcode;
@@ -125,7 +124,6 @@ if ( ! class_exists( 'Vimeography' ) ) {
       require_once VIMEOGRAPHY_PATH . 'lib/database.php';
       require_once VIMEOGRAPHY_PATH . 'lib/deprecated.php';
       require_once VIMEOGRAPHY_PATH . 'lib/addons.php';
-      require_once VIMEOGRAPHY_PATH . 'lib/ajax.php';
       require_once VIMEOGRAPHY_PATH . 'lib/rewrite.php';
       require_once VIMEOGRAPHY_PATH . 'lib/filesystem.php';
       require_once VIMEOGRAPHY_PATH . 'lib/init.php';
