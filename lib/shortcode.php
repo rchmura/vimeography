@@ -205,6 +205,11 @@ class Vimeography_Shortcode extends Vimeography {
    * @return string
    */
   public function output() {
+
+    $vimeography = Vimeography::get_instance();
+    $addons = $vimeography->addons->set_active_theme( $this->_gallery_settings['theme'] );
+    $theme = $addons->active_theme;
+
     try {
 
       require_once VIMEOGRAPHY_PATH . 'lib/core.php';
@@ -227,12 +232,9 @@ class Vimeography_Shortcode extends Vimeography {
         throw new Vimeography_Exception( __('the Vimeo source for this gallery does not have any videos.', 'vimeography') );
       }
 
-      $vimeography = Vimeography::get_instance();
-      $addons = $vimeography->addons->set_active_theme( $this->_gallery_settings['theme'] );
-
       // If our theme supports Vimeography 2 and Vimeography PRO is also compatible,
       // use the new rendering method.
-      //
+
       // Note, you should also check if PRO is compatible
       if ( isset( $addons->active_theme['app_js'] ) ) {
 
@@ -253,7 +255,7 @@ class Vimeography_Shortcode extends Vimeography {
          * @return [type] [description]
          */
 
-        $theme_name = strtolower( $this->_gallery_settings['theme'] );
+        $theme_name = strtolower( $theme['name'] );
 
         // Set base data for every single gallery
         $data = array(
@@ -302,7 +304,6 @@ class Vimeography_Shortcode extends Vimeography {
         return ob_get_clean();
       } else {
         $renderer->load_theme();
-
         $renderer = apply_filters('vimeography/deprecated/reload-pro-renderer', $renderer, $this->_gallery_settings, $this->_gallery_id );
         return $renderer->render( $result );
       }
