@@ -4,10 +4,11 @@
 if ( ! defined( 'ABSPATH' ) ) exit;
 
 abstract class Vimeography_Core {
+
   const ENDPOINT  = 'https://api.vimeo.com/';
 
   /**
-   * [$_vimeo description]
+   * Vimeo library instance
    *
    * @var instance
    */
@@ -58,11 +59,12 @@ abstract class Vimeography_Core {
   public function __construct($settings) {
     $this->_endpoint = $settings['source'];
 
-    if ( isset( $settings['limit'] ) )
+    if ( isset( $settings['limit'] ) ) {
       $this->_limit = $settings['limit'];
+    }
 
-    if ( isset($settings['featured']) AND ! empty($settings['featured']) ) {
-      $this->_featured = '/videos/' . preg_replace("/[^0-9]/", '', $settings['featured']);
+    if ( isset( $settings['featured'] ) && ! empty( $settings['featured'] ) ) {
+      $this->_featured = '/videos/' . preg_replace( "/[^0-9]/", '', $settings['featured'] );
     }
   }
 
@@ -88,20 +90,20 @@ abstract class Vimeography_Core {
     if ( $cache->exists() ) {
 
       // and the cache file is expired,
-      if ( ($last_modified = $cache->expired() ) !== FALSE) {
+      if ( ( $last_modified = $cache->expired() ) !== false) {
 
         // make the request with a last modified header.
-        $result = $this->fetch($last_modified);
+        $result = $this->fetch( $last_modified );
 
         // Here is where we need to check if $video_set exists, or if it
         // returned a 304, in which case, we can safely update the
         // cache's last modified and return it.
-        if ( $result == NULL ) {
+        if ( $result === null ) {
           $result = $cache->renew()->get();
         } else {
           // Cache the updated results.
-          if ( intval($expiration) !== 0) {
-            $cache->set($result);
+          if ( intval( $expiration ) !== 0) {
+            $cache->set( $result );
           }
         }
       } else {
@@ -114,9 +116,9 @@ abstract class Vimeography_Core {
       $result = $this->fetch();
 
       // Cache the results.
-      if ( intval($expiration) !== 0 && ( ! empty( $result->video_set ) ) ) {
-        $result = apply_filters('vimeography/cache-videos', $result, $gallery_id);
-        $cache->set($result);
+      if ( intval( $expiration ) !== 0 && ( ! empty( $result->video_set ) ) ) {
+        $result = apply_filters( 'vimeography/cache-videos', $result, $gallery_id );
+        $cache->set( $result );
       }
     }
 
@@ -129,55 +131,34 @@ abstract class Vimeography_Core {
    * @param $last_modified
    * @return string  $response  Modified response from Vimeo.
    */
-  public function fetch($last_modified = NULL) {
-    if ( ! $this->_verify_vimeo_endpoint($this->_endpoint) ) {
+  public function fetch( $last_modified = NULL ) {
+
+    if ( ! $this->_verify_vimeo_endpoint( $this->_endpoint ) ) {
       throw new Vimeography_Exception( sprintf( __('Endpoint %s is not valid.', 'vimeography'), $this->_endpoint ) );
     }
 
-    // Limit the request to return only the fields that
-    // Vimeography themes actually use.
-    $fields = apply_filters( 'vimeography.request.fields', array(
-      'name',
-      'uri',
-      'link',
-      'description',
-      'duration',
-      'width',
-      'height',
-      'embed',
-      'tags.name',
-      'created_time',
-      'stats',
-      'pictures',
-      'status',
-    ) );
-
-    $this->_params['fields'] = implode( $fields, ',' );
-
-    $response  = $this->_make_vimeo_request($this->_endpoint, $this->_params, $last_modified);
+    $response = $this->_make_vimeo_request($this->_endpoint, $this->_params, $last_modified);
 
     // If 304 not modified, return
-    if ($response == NULL) {
+    if ( $response == NULL ) {
       return $response;
     }
 
-    $video_set = $this->_get_video_set($response);
+    $video_set = $response->data;
 
-    if (! empty($this->_featured)) {
-      $featured_response = $this->_make_vimeo_request($this->_featured, array(), NULL);
-      $featured_video    = $this->_get_video_set($featured_response);
-      $result_set        = $this->_arrange_featured_video($video_set, $featured_video);
+    if ( ! empty( $this->_featured ) ) {
+      $featured_video = $this->_make_vimeo_request( $this->_featured );
+      $result_set     = $this->_arrange_featured_video( $video_set, $featured_video );
     } else {
       $result_set = $video_set;
     }
 
-    if ( isset($this->_limit) )
+    if ( isset( $this->_limit ) ) {
       $result_set = $this->_limit_video_set($result_set);
+    }
 
     unset($response->data);
     $response->video_set = $result_set;
-
-    // $combined_json = str_replace(']', ',', $videos) . str_replace('[', ' ', $response);
 
     return $response;
   }
@@ -258,7 +239,7 @@ abstract class Vimeography_Core {
   private function _arrange_featured_video($video_set, $featured_video) {
     // Does the featured video exist in the set?
     // If so, remove it from the set and place at front.
-    $found = FALSE;
+    $found = false;
 
     // We have to do this because if the featured video
     // exists in the collection as a contextual video,
@@ -267,21 +248,22 @@ abstract class Vimeography_Core {
     $featured_id = str_replace('/', '', strrchr($featured_video->link, '/'));
 
     foreach ($video_set as $key => $video) {
-      if (strpos($video->uri, $featured_id) !== FALSE) {
+      if (strpos($video->uri, $featured_id) !== false) {
         unset($video_set[$key]);
-        $found = TRUE;
+        $found = true;
       }
     }
 
     // If it does not exist, we need to remove the last video in the
     // video set and place the featured video up front.
-    if ($found == FALSE AND $this->_limit == count($video_set))
+    if ( $found == false && $this->_limit == count($video_set) ) {
       array_pop($video_set);
+    }
 
     // Add the featured video to the front.
-    array_unshift($video_set, $featured_video);
+    array_unshift( $video_set, $featured_video );
 
-    return array_values($video_set);
+    return array_values( $video_set );
   }
 
   /**
@@ -290,9 +272,10 @@ abstract class Vimeography_Core {
    * @return array of Vimeo videos.
    */
   private function _limit_video_set($video_set) {
-    if ($this->_limit < count($video_set) AND $this->_limit != 0) {
-      for ($video_to_delete = (count($video_set) - 1); $video_to_delete >= $this->_limit; $video_to_delete--)
-        unset($video_set[$video_to_delete]);
+    if ( $this->_limit < count($video_set) && $this->_limit != 0 ) {
+      for ($video_to_delete = ( count($video_set) - 1 ); $video_to_delete >= $this->_limit; $video_to_delete--) {
+        unset( $video_set[$video_to_delete] );
+      }
     }
 
     return $video_set;
