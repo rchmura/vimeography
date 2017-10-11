@@ -220,18 +220,6 @@ abstract class Vimeography_Core {
     }
   }
 
-  /**
-   * [_get_video_set description]
-   * @param  [type] $body [description]
-   * @return [type]       [description]
-   */
-  private static function _get_video_set($body) {
-    if (isset($body->data)) :
-      return $body->data;
-    else :
-      return $body; // featured video
-    endif;
-  }
 
   /**
    * Arrange the video set to contain the video to be featured at the beginning of the set.
