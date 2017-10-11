@@ -289,7 +289,9 @@ class Vimeography_Shortcode extends Vimeography {
         ob_start();
 ?>
       <div id="vimeography-gallery-<?php esc_attr_e($data['id']); ?>" class="vimeography-<?php esc_attr_e( $data['theme'] ); ?>" data-version="<?php esc_attr_e( $data['version'] ); ?>" <?php if ( ! empty( $this->_gallery_settings['width'] ) ) : ?> style="max-width: <?php esc_attr_e( $this->_gallery_settings['width'] ); ?>" <?php endif; ?> itemscope itemtype="http://schema.org/VideoGallery">
-        <gallery></gallery>
+        <div>
+          <gallery></gallery>
+        </div>
       </div>
 <?php
         return ob_get_clean();
