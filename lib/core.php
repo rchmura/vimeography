@@ -83,12 +83,13 @@ abstract class Vimeography_Core {
    * @return [type]             [description]
    */
   public function get_videos($expiration, $gallery_id) {
-    require_once VIMEOGRAPHY_PATH . 'lib/cache.php';
-    $cache = new Vimeography_Cache($gallery_id, $expiration);
 
     if ( isset( $_GET['vimeography_nocache'] ) && $_GET['vimeography_nocache'] == 1 ) {
       return $this->fetch();
     }
+
+    require_once VIMEOGRAPHY_PATH . 'lib/cache.php';
+    $cache = new Vimeography_Cache($gallery_id, $expiration);
 
     // If the cache file exists,
     if ( $cache->exists() ) {
