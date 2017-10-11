@@ -28,8 +28,9 @@ class Vimeography_Cache extends Vimeography {
     $scope = is_multisite() ? get_current_blog_id() . '-' . $gallery_id : $gallery_id;
     $this->_cache_file = VIMEOGRAPHY_CACHE_PATH . 'vimeography-gallery-' . $scope . '.cache';
 
-    if ( isset($expiration) )
+    if ( isset($expiration) ) {
       $this->_expiration = intval($expiration);
+    }
   }
 
   /**
@@ -121,8 +122,9 @@ class Vimeography_Cache extends Vimeography {
    * @return bool          Success or failure deleting file.
    */
   public function delete() {
-    if ( substr($this->_cache_file, -6) == '.cache' )
+    if ( substr($this->_cache_file, -6) == '.cache' ) {
       return unlink($this->_cache_file);
+    }
   }
 
   /**
