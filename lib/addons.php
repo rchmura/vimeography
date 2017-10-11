@@ -69,9 +69,22 @@ class Vimeography_Addons {
       $plugin['settings_file']          = plugin_dir_path( $plugin_path ) . 'settings.php';
 
       // Provide path to Javascript bundle if theme supports it.
-      if ( version_compare( $plugin['version'], '2.0', '>=' ) && file_exists( $plugin['plugin_path'] . 'dist/bundle.js' ) ) {
-        $plugin['app_js'] = plugins_url( 'dist/bundle.js', $plugin_path );
-        $plugin['app_css'] = plugins_url( 'dist/main.css', $plugin_path );
+      if ( version_compare( $plugin['version'], '2.0', '>=' ) ) {
+
+        if ( defined('VIMEOGRAPHY_DEV') && VIMEOGRAPHY_DEV ) {
+          $plugin['app_path'] = 'https://localhost:8080/';
+          $plugin['app_js'] = 'https://localhost:8080/scripts.js';
+          $plugin['app_css'] = 'https://localhost:8080/styles.css';
+        } else {
+          $manifest = $plugin['plugin_path'] . 'dist/manifest.json';
+          $manifest = file_get_contents( $manifest );
+          $manifest = (array) json_decode( $manifest );
+
+          $plugin['app_path'] = plugins_url( 'dist/', $plugin_path );
+          $plugin['app_js'] = plugins_url( sprintf( 'dist/%s', $manifest['main.js'] ), $plugin_path );
+          $plugin['app_css'] = plugins_url( sprintf( 'dist/%s', $manifest['main.css'] ), $plugin_path );
+        }
+
       }
 
       $this->themes[] = $plugin;
