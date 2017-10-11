@@ -279,6 +279,8 @@ class Vimeography_Shortcode extends Vimeography {
         wp_register_script( "vimeography-{$theme_name}", $addons->active_theme['app_js'] );
         wp_register_style( "vimeography-{$theme_name}", $addons->active_theme['app_css'] );
 
+        wp_localize_script("vimeography-{$theme_name}", 'vimeographyBuildPath', $addons->active_theme['app_path']);
+
         wp_localize_script("vimeography-{$theme_name}",
           "vimeography2 = window.vimeography2 || {};
           window.vimeography2.galleries = window.vimeography2.galleries || {};
