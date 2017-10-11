@@ -236,7 +236,7 @@ class Vimeography_Shortcode extends Vimeography {
       // use the new rendering method.
 
       // Note, you should also check if PRO is compatible
-      if ( isset( $addons->active_theme['app_js'] ) ) {
+      if ( version_compare( $theme['version'], '2.0', '>=' ) ) {
 
         /**
          * The old approach was loading up the theme class, setting variables,
