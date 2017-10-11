@@ -86,6 +86,10 @@ abstract class Vimeography_Core {
     require_once VIMEOGRAPHY_PATH . 'lib/cache.php';
     $cache = new Vimeography_Cache($gallery_id, $expiration);
 
+    if ( isset( $_GET['vimeography_nocache'] ) && $_GET['vimeography_nocache'] == 1 ) {
+      return $this->fetch();
+    }
+
     // If the cache file exists,
     if ( $cache->exists() ) {
 
