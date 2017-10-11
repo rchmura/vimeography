@@ -174,15 +174,55 @@ abstract class Vimeography_Core {
    * @param  string $endpoint Vimeo API endpoint
    * @return array  Response Body
    */
-  private function _make_vimeo_request($endpoint, $params, $last_modified) {
+  private function _make_vimeo_request($endpoint, $params = array(), $last_modified = null) {
     try {
-      $response = $this->_vimeo->request( $endpoint, $params, 'GET', $last_modified );
 
-      switch ($response['status']) {
+      // Limit the request to return only the fields that
+      // Vimeography themes actually use.
+      $fields = apply_filters( 'vimeography.request.fields', array(
+        'name',
+        'uri',
+        'link',
+        'description',
+        'duration',
+        'width',
+        'height',
+        'embed',
+        'tags.name',
+        'created_time',
+        'stats',
+        'pictures',
+        'status',
+      ) );
+
+      // Add parameters which are common to all requests
+      $params = array_merge( array(
+        'fields' => implode( $fields, ',' ),
+        'filter' => 'embeddable',
+        'filter_embeddable' => 'true',
+      ), $params );
+
+      $headers = array(
+        'User-Agent' => sprintf( 'Vimeography loves you (%s)', home_url() ),
+      );
+
+      if ( $last_modified !== null ) {
+        $headers['If-Modified-Since'] = $last_modified;
+      }
+
+      $response = $this->_vimeo->request( $endpoint, $params, 'GET', true, $headers );
+
+      $rate_limit = array(
+        'limit' => $response['headers']['X-RateLimit-Limit'],
+        'remaining' => $response['headers']['X-RateLimit-Remaining'],
+        'reset' => new DateTime( $response['headers']['X-RateLimit-Reset'] . ':00:00' )
+      );
+
+      switch ( $response['status'] ) {
         case 200:
           return $response['body'];
         case 304:
-          return NULL;
+          return null;
         case 400:
           throw new Vimeography_Exception(
             __('a bad request made was made. ', 'vimeography') . $response['body']->error
