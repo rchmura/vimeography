@@ -20,7 +20,7 @@
         "require-dev": {
             "phpunit/phpunit": "*"
         },
-        "time": "2014-01-09 00:36:09",
+        "time": "2014-01-09T00:36:09+00:00",
         "type": "library",
         "installation-source": "dist",
         "autoload": {
@@ -55,7 +55,7 @@
             "url": "https://github.com/davekiss/vimeo-php.git",
             "reference": "8ae1a4a33e48a1b58473ba496f8bf732736254ab"
         },
-        "time": "2014-04-23 02:39:12",
+        "time": "2014-04-23T02:39:12+00:00",
         "type": "library",
         "installation-source": "source",
         "license": [
@@ -68,5 +68,53 @@
             }
         ],
         "description": "PHP Library for the Vimeo API 3.0"
+    },
+    {
+        "name": "vimeo/vimeo-api",
+        "version": "1.2.7",
+        "version_normalized": "1.2.7.0",
+        "source": {
+            "type": "git",
+            "url": "https://github.com/vimeo/vimeo.php.git",
+            "reference": "9f931763c87dbb94014dd9706bd505e5f015ef84"
+        },
+        "dist": {
+            "type": "zip",
+            "url": "https://api.github.com/repos/vimeo/vimeo.php/zipball/9f931763c87dbb94014dd9706bd505e5f015ef84",
+            "reference": "9f931763c87dbb94014dd9706bd505e5f015ef84",
+            "shasum": ""
+        },
+        "require": {
+            "ext-curl": "*",
+            "ext-json": "*",
+            "php": ">=5.3.0"
+        },
+        "require-dev": {
+            "phpunit/phpunit": "^4.8"
+        },
+        "time": "2017-10-04T15:29:45+00:00",
+        "type": "library",
+        "installation-source": "dist",
+        "autoload": {
+            "psr-4": {
+                "Vimeo\\": "src/Vimeo"
+            }
+        },
+        "notification-url": "https://packagist.org/downloads/",
+        "license": [
+            "Apache-2.0"
+        ],
+        "authors": [
+            {
+                "name": "Vimeo",
+                "homepage": "http://vimeo.com"
+            }
+        ],
+        "description": "Official PHP library for the Vimeo API.",
+        "homepage": "https://github.com/vimeo/vimeo.php",
+        "keywords": [
+            "video",
+            "vimeo"
+        ]
     }
 ]
