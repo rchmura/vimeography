@@ -1,5 +1,7 @@
-const webpack = require('webpack')
-const path = require('path')
+const webpack = require('webpack');
+const path = require('path');
+const ManifestPlugin = require('webpack-manifest-plugin');
+const CleanPlugin = require('clean-webpack-plugin');
 
 /*
  * We've enabled UglifyJSPlugin for you! This minifies your app
@@ -22,11 +24,30 @@ const UglifyJSPlugin = require('uglifyjs-webpack-plugin');
 
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
 
+const isProduction = process.env.NODE_ENV === 'production';
+
 module.exports = {
+  devtool: isProduction ? 'cheap-module-source-map' : 'inline-source-map',
+  devServer: {
+    publicPath: 'http://localhost:8080/',
+    contentBase: './dist',
+    https: true,
+    hot: true,
+    inline: true,
+    historyApiFallback: true,
+    headers: {
+      'Access-Control-Allow-Origin': '*'
+    },
+    watchOptions: {
+      aggregateTimeout: 300,
+      poll: true
+    }
+  },
+  target: 'web',
   entry: './src/index',
 
   output: {
-    filename: 'bundle.js',
+    filename: isProduction ? 'scripts.[hash:8].js' : 'scripts.js',
     path: path.resolve(__dirname, 'dist')
   },
 
@@ -72,10 +93,17 @@ module.exports = {
   },
 
   plugins: [
-    new UglifyJSPlugin(),
+    new CleanPlugin([path.resolve(__dirname, 'dist')], {
+      verbose: false
+    }),
     new ExtractTextPlugin({
-      filename: 'styles.[contentHash].css',
-      disable: true
-    })
+      filename: isProduction ? 'styles.[hash:8].css' : 'styles.css',
+      disable: false
+    }),
+    new ManifestPlugin()
   ]
+}
+
+if (isProduction) {
+  module.exports.plugins.push(new UglifyJSPlugin());
 }
