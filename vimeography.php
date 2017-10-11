@@ -122,7 +122,7 @@ if ( ! class_exists( 'Vimeography' ) ) {
       }
 
       require_once VIMEOGRAPHY_PATH . 'lib/database.php';
-      require_once VIMEOGRAPHY_PATH . 'lib/deprecated.php';
+      require_once VIMEOGRAPHY_PATH . 'lib/deprecated/deprecated.php';
       require_once VIMEOGRAPHY_PATH . 'lib/addons.php';
       require_once VIMEOGRAPHY_PATH . 'lib/rewrite.php';
       require_once VIMEOGRAPHY_PATH . 'lib/filesystem.php';
