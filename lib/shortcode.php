@@ -89,7 +89,7 @@ class Vimeography_Shortcode extends Vimeography {
     $fallback_gallery_settings['cache']    = isset($db_gallery_settings->cache_timeout)  ? $db_gallery_settings->cache_timeout  : $default_settings['cache_timeout'];
     $fallback_gallery_settings['width']    = isset($db_gallery_settings->gallery_width)  ? $db_gallery_settings->gallery_width  : '';
 
-    $fallback_gallery_settings = apply_filters('vimeography/gallery-settings', $fallback_gallery_settings, $atts['id']);
+    $fallback_gallery_settings = apply_filters('vimeography.gallery.settings', $fallback_gallery_settings, $atts['id']);
 
     // Get shortcode attributes
     $shortcode_gallery_settings = shortcode_atts( array(
