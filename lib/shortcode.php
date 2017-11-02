@@ -226,11 +226,80 @@ class Vimeography_Shortcode extends Vimeography {
         throw new Vimeography_Exception( __('the Vimeo source for this gallery does not have any videos.', 'vimeography') );
       }
 
-      // Render that ish.
-      $renderer->load_theme();
+      $vimeography = Vimeography::get_instance();
+      $addons = $vimeography->addons->set_active_theme( $this->_gallery_settings['theme'] );
 
-      $renderer = apply_filters('vimeography/deprecated/reload-pro-renderer', $renderer, $this->_gallery_settings, $this->_gallery_id );
-      return $renderer->render( $result );
+      // If our theme supports Vimeography 2 and Vimeography PRO is also compatible,
+      // use the new rendering method.
+      //
+      // Note, you should also check if PRO is compatible
+      if ( isset( $addons->active_theme['app_js'] ) ) {
+
+        /**
+         * The old approach was loading up the theme class, setting variables,
+         * filtering the data, loading dependencies, and rendering
+         * theme HTML server-side
+         *
+         * In 2.0, let's just make the video data
+         * available to the theme by setting it on a global javascript
+         * variable on the window and then triggering a load event on the
+         * active theme's built javascript bundle.
+         *
+         * The theme javascript can then take over from there, performing
+         * all of the tasks that used to be left up to the theme's PHP files and
+         * Mustache implementation.
+         *
+         * @return [type] [description]
+         */
+
+        $theme_name = strtolower( $this->_gallery_settings['theme'] );
+
+        // Set base data for every single gallery
+        $data = array(
+          'id'    => $this->_gallery_id,
+          'theme' => $theme_name,
+          'version' => $addons->active_theme['version']
+        );
+
+        // Merge the API response from Vimeo
+        $data = array_merge( $data, (array) $result );
+
+        // Set remaining JS variables
+        $data = apply_filters('vimeography.pro.localize', $data);
+
+        $local_data = array(
+          'l10n_print_after' => sprintf('vimeography.galleries.push(%1$s)',
+            json_encode( $data )
+          )
+        );
+
+        // wp_register_script('livereload', 'https://localhost:35729/livereload.js');
+        // wp_enqueue_script('livereload');
+
+        wp_register_script( "vimeography-{$theme_name}", $addons->active_theme['app_js'] );
+        wp_register_style( "vimeography-{$theme_name}", $addons->active_theme['app_css'] );
+
+        wp_localize_script("vimeography-{$theme_name}",
+          "vimeography = window.vimeography || {};
+          window.vimeography.galleries = window.vimeography.galleries || [];
+          vimeography.unused",
+        $local_data);
+
+        wp_enqueue_script("vimeography-{$theme_name}");
+        wp_enqueue_style("vimeography-{$theme_name}");
+
+        ob_start();
+?>
+      <div id="vimeography-gallery-<?php esc_attr_e($data['id']); ?>" class="vimeography-<?php esc_attr_e( $data['theme'] ); ?>" data-version="<?php esc_attr_e( $data['version'] ); ?>" <?php if ( ! empty( $this->_gallery_settings['width'] ) ) : ?> style="max-width: <?php esc_attr_e( $this->_gallery_settings['width'] ); ?>" <?php endif; ?> itemscope itemtype="http://schema.org/VideoGallery">
+      </div>
+<?php
+        return ob_get_clean();
+      } else {
+        $renderer->load_theme();
+
+        $renderer = apply_filters('vimeography/deprecated/reload-pro-renderer', $renderer, $this->_gallery_settings, $this->_gallery_id );
+        return $renderer->render( $result );
+      }
     }
     catch (Vimeography_Exception $e) {
       return __("Vimeography error: ", 'vimeography') . $e->getMessage();

@@ -1,0 +1,54 @@
+.vimeography-bugsauce
+  .vimeography-player
+    margin-bottom: 10px;
+
+  .vimeography-thumbnail
+    width: 100%;
+    height: auto;
+    max-height: 100px;
+    margin: 0 8px 0 0;
+    border: 1px solid #ddd;
+    border-radius: 4px 4px 4px 4px;
+    box-shadow: 0 1px 1px rgba(0, 0, 0, 0.075);
+
+    &:hover
+      opacity: 0.95;
+
+    &.is-selected
+      border: 1px solid #0088cc;
+      opacity: 0.95;
+      box-shadow: 0 1px 4px rgba(0, 105, 214, 0.25);
+
+    a
+      display: block;
+
+  /* smaller, dark, rounded square */
+  .flickity-prev-next-button
+    width: 20px;
+    height: 20px;
+    border-radius: 5px;
+
+  /* arrow color */
+  .flickity-prev-next-button .arrow
+    fill: #333;
+
+  .flickity-prev-next-button.no-svg
+    color: #333;
+
+  /* position outside */
+  .flickity-prev-next-button.previous
+    left: -25px;
+
+  .flickity-prev-next-button.next
+    right: -25px;
+
+
+@media screen and ( min-width: 451px )
+  .vimeography-bugsauce
+    .vimeography-thumbnail
+      width: 50%;
+
+@media screen and ( min-width: 768px )
+  .vimeography-bugsauce
+    .vimeography-thumbnail
+      width: 25%;
