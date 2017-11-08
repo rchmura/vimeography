@@ -19,20 +19,56 @@ class Vimeography_Helpers {
         continue;
       }
 
+      /**
+       * Deprecated, use `id` below instead
+       * @var [type]
+       */
       $item->video_id = str_replace('/', '', strrchr($item->link, '/'));
 
-      if ($item->duration AND ! strpos($item->duration, ':'))
+      /**
+       * @since 2.0
+       * @var $id Video ID
+       */
+      $item->id = absint( preg_replace('/\D/', '', $item->uri) );
+
+      if ( $item->duration && ! strpos($item->duration, ':') ) {
         $item->duration = $this->seconds_to_minutes($item->duration);
+      }
 
       $item = $this->format_video_thumbnails($item);
 
       // Linkify any URLs in the description
       $item->description = $this->link_urls( nl2br($item->description) );
 
-      $items[] = apply_filters('vimeography/edit-video/' . $item->video_id, $item);
+      /**
+       * Deprecated, use filter below.
+       *
+       * @var [type]
+       */
+      $item = apply_filters('vimeography/edit-video/' . $item->video_id, $item);
+
+      /**
+       * @since  2.0
+       * @var [type]
+       */
+      $item = apply_filters('vimeography.video.edit', $item, $item->id);
+      $items[] = $item;
     }
 
-    return apply_filters('vimeography/edit-videos', $items);
+    /**
+     * Deprecated, use filter below.
+     * @var [type]
+     */
+    $items = apply_filters('vimeography/edit-videos', $items);
+
+
+    /**
+     * @since 2.0
+     * @var [type]
+     */
+    $items = apply_filters('vimeography.videos.edit', $items);
+
+    return $items;
   }
 
   /**
@@ -44,12 +80,9 @@ class Vimeography_Helpers {
    */
   public function format_video_thumbnails($item) {
     // Format the video thumbnails
-    for ($i = 0; $i < count($item->pictures); $i++)
-    {
-      if ($item->pictures[$i]->type == 'thumbnail')
-      {
-        switch ($i)
-        {
+    for ( $i = 0; $i < count( $item->pictures ); $i++ ) {
+      if ( $item->pictures[$i]->type === 'thumbnail' ) {
+        switch ( $i ) {
           case 0:
             $item->thumbnail_large = $item->pictures[$i]->link;
             break;
@@ -59,7 +92,7 @@ class Vimeography_Helpers {
           case 2:
             $item->thumbnail_small = $item->pictures[$i]->link;
             break;
-          case count($item->pictures) - 1:
+          case count( $item->pictures ) - 1:
             $item->thumbnail_tiny = $item->pictures[$i]->link;
             break;
           default:
@@ -78,8 +111,7 @@ class Vimeography_Helpers {
    * @param mixed $seconds
    * @return void
    */
-  public function seconds_to_minutes($seconds)
-  {
+  public function seconds_to_minutes( $seconds ) {
     /// get minutes
     $minResult = floor($seconds/60);
 
@@ -102,8 +134,7 @@ class Vimeography_Helpers {
    * @param  [type] $link [description]
    * @return [type]       [description]
    */
-  public function get_featured_embed($link)
-  {
+  public function get_featured_embed( $link ) {
     $params = array(
       'url'       => $link,
       'autoplay'  => 0,
@@ -120,9 +151,7 @@ class Vimeography_Helpers {
 
     if ( is_wp_error( $oembed ) ) {
       throw new Vimeography_Exception( __('Vimeography could not retrieve the featured video: ', 'vimeography') . $oembed->get_error_message() );
-    }
-    else
-    {
+    } else {
       switch( $oembed['response']['code'] ) {
         case 200:
           $oembed = json_decode($oembed['body']);
@@ -147,8 +176,7 @@ class Vimeography_Helpers {
    * @param string $pad (default: "...")
    * @return void
    */
-  public function truncate($string, $limit, $break = ' ', $pad = '...')
-  {
+  public function truncate($string, $limit, $break = ' ', $pad = '...') {
     // return with no change if string is shorter than $limit
     if (strlen($string) <= $limit)
       return $string;
@@ -171,8 +199,7 @@ class Vimeography_Helpers {
    * @param mixed $input
    * @return void
    */
-  public function restore_tags($input)
-  {
+  public function restore_tags($input) {
     $opened = array();
     // loop through opened and closed tags in order
     if(preg_match_all("/<(\/?[a-z]+)>?/i", $input, $matches))
@@ -215,8 +242,7 @@ class Vimeography_Helpers {
    *  Can be used in any Vimeography theme file. EG:
    *  $item->description = $helpers->link_urls($item->description);
    */
-  public function link_urls($text)
-  {
+  public function link_urls( $text ) {
     /*
      *  Regular expression bits used by link_urls() to match URLs.
      */
