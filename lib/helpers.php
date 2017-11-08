@@ -343,4 +343,23 @@ class Vimeography_Helpers {
     return $html;
   }
 
+  /**
+   * Remove videos from the video set if there is an imposing limit.
+   *
+   * @return array of Vimeo videos.
+   */
+  public function limit_video_set( $video_set, $limit ) {
+    if ( $limit < count( $video_set ) && $limit != 0 ) {
+      for (
+        $video_to_delete = ( count( $video_set ) - 1 );
+        $video_to_delete >= $limit;
+        $video_to_delete--
+      ) {
+        unset( $video_set[$video_to_delete] );
+      }
+    }
+
+    return $video_set;
+  }
+
 }
