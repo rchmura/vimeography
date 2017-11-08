@@ -1,12 +1,11 @@
 <?php
 
-namespace Vimeography;
+// Exit if accessed directly
+if ( ! defined( 'ABSPATH' ) ) exit;
 
-abstract class Core {
+abstract class Vimeography_Core {
 
-  public $version = '2.0';
-
-  protected $_endpoint = 'https://api.vimeo.com/';
+  const ENDPOINT  = 'https://api.vimeo.com/';
 
   /**
    * Vimeo library instance
@@ -16,7 +15,7 @@ abstract class Core {
   protected $_vimeo;
 
   /**
-   * Access token to send along with the Vimeo request.
+   * [$_auth description]
    *
    * @var string
    */
@@ -29,16 +28,21 @@ abstract class Core {
    */
   protected $_params = array();
 
+  /**
+   * The gallery id associated with the current request, if any.
+   * Used to look up the corresponding cache file.
+   *
+   * @since 2.0
+   * @var [type]
+   */
+  protected $_gallery_id;
 
   /**
-   * The resource to request in the Vimeo request
-   *
-   * example: `/channels/staffpicks/videos`
+   * [$_endpoint description]
    *
    * @var string
    */
-  protected $_resource;
-
+  protected $_endpoint;
 
   /**
    * Limit a gallery to show only this amount of videos.
@@ -47,7 +51,6 @@ abstract class Core {
    */
   protected $_limit = 0;
 
-
   /**
    * An optional resource string pointing to the video that
    * should be featured in the gallery.
@@ -55,33 +58,6 @@ abstract class Core {
    * @var string
    */
   protected $_featured;
-
-
-  /**
-   * [$_cache description]
-   * @var [type]
-   */
-  protected $_cache;
-
-
-  /**
-   * Whether or not to bypass checking and setting
-   * the cache with relevant video data.
-   *
-   * Can be set with $engine->skip_cache()->fetch();
-   *
-   * @var bool
-   */
-  public $skip_cache = false;
-
-
-  /**
-   * Length of time that a cache file is good for,
-   * in seconds.
-   *
-   * @var integer
-   */
-  private $_expiration = 3600;
 
 
   /**
@@ -109,84 +85,82 @@ abstract class Core {
   /**
    * Set the class properties from the provided
    * shortcode settings array.
+   *
+   * @param array $settings
    */
-  public function __construct( $engine ) {
-    $this->gallery_id = $engine->gallery_id;
-    $this->gallery_settings = $engine->gallery_settings;
+  public function __construct($settings) {
+    $this->_endpoint = $settings['source'];
 
-    $this->_resource = $this->gallery_settings['source'];
-
-    if ( isset( $this->gallery_settings['limit'] ) ) {
-      $this->_limit = $this->gallery_settings['limit'];
+    if ( isset( $settings['limit'] ) ) {
+      $this->_limit = $settings['limit'];
     }
 
-    if ( isset( $this->gallery_settings['featured'] ) && ! empty( $this->gallery_settings['featured'] ) ) {
-      $this->_featured = '/videos/' . preg_replace( "/[^0-9]/", '', $this->gallery_settings['featured'] );
+    if ( isset( $settings['featured'] ) && ! empty( $settings['featured'] ) ) {
+      $this->_featured = '/videos/' . preg_replace( "/[^0-9]/", '', $settings['featured'] );
     }
-
-    if ( isset( $engine->gallery_settings['cache'] ) ) {
-      $this->_expiration = intval( $engine->gallery_settings['cache'] );
-    }
-
-    require_once VIMEOGRAPHY_PATH . 'lib/cache.php';
-    $this->_cache = new Cache( $engine );
   }
 
-
   /**
-   * [_verify_vimeo_resource description]
+   * [_verify_vimeo_endpoint description]
    * @param  [type] $resource [description]
    * @return [type]           [description]
    */
-  abstract protected function _verify_vimeo_resource( $resource );
-
+  abstract protected function _verify_vimeo_endpoint($resource);
 
   /**
-   * Retrieves the videos for the gallery.
+   * Gets the videos for the gallery.
    *
+   * @param  int $expiration Length that the cache is valid, in seconds
+   * @param  int $gallery_id
    * @return [type]             [description]
    */
-  public function get_videos() {
-    if ( isset( $_GET['vimeography_nocache'] ) || $this->skip_cache === true ) {
+  public function get_videos($expiration, $gallery_id) {
+
+    if ( isset( $_GET['vimeography_nocache'] ) && $_GET['vimeography_nocache'] == 1 ) {
       return $this->fetch();
     }
 
+    require_once VIMEOGRAPHY_PATH . 'lib/deprecated/cache.php';
+    $cache = new Vimeography_Cache($gallery_id, $expiration);
+
     // If the cache file exists,
-    if ( $this->_cache->exists() ) {
+    if ( $cache->exists() ) {
 
       // and the cache file is expired,
-      if ( $this->_cache->expired() === true ) {
+      if ( ( $last_modified = $cache->expired() ) !== false) {
 
         // make the request with a last modified header.
-        $result = $this->fetch( $this->_cache->last_modified );
+        $result = $this->fetch( $last_modified );
 
         // Here is where we need to check if $video_set exists, or if it
         // returned a 304, in which case, we can safely update the
         // cache's last modified and return it.
         if ( $result === null ) {
-          $result = $this->_cache->renew()->get();
+          $result = $cache->renew()->get();
         } else {
-          // Cache the updated results if we can.
-          $this->_set_cache( $result );
+          // Cache the updated results.
+          if ( intval( $expiration ) !== 0) {
+            $cache->set( $result );
+          }
         }
       } else {
-        // If it isn't expired, return it.
-        $result = $this->_cache->get();
 
-        $result = apply_filters('vimeography.pro.paginate', $result);
+        // If it isn't expired, return it.
+        $result = $cache->get();
       }
     } else {
-
       // If a cache doesn't exist, go get the videos, dude.
       $result = $this->fetch();
 
-      // Cache the results if we can.
-      $this->_set_cache( $result );
+      // Cache the results.
+      if ( intval( $expiration ) !== 0 && ( ! empty( $result->video_set ) ) ) {
+        $result = apply_filters( 'vimeography/cache-videos', $result, $gallery_id );
+        $cache->set( $result );
+      }
     }
 
     return $result;
   }
-
 
   /**
    * Fetch the videos to be displayed in the Vimeography Gallery.
@@ -194,16 +168,16 @@ abstract class Core {
    * @param $last_modified
    * @return string  $response  Modified response from Vimeo.
    */
-  public function fetch( $last_modified = null ) {
+  public function fetch( $last_modified = NULL ) {
 
-    if ( ! $this->_verify_vimeo_resource( $this->_resource ) ) {
-      throw new \Vimeography_Exception( sprintf( __('The "%s" resource is not valid.', 'vimeography'), $this->_resource ) );
+    if ( ! $this->_verify_vimeo_endpoint( $this->_endpoint ) ) {
+      throw new Vimeography_Exception( sprintf( __('Endpoint %s is not valid.', 'vimeography'), $this->_endpoint ) );
     }
 
-    $response = $this->_make_vimeo_request( $this->_resource, $this->_params, $last_modified );
+    $response = $this->_make_vimeo_request($this->_endpoint, $this->_params, $last_modified);
 
     // If 304 not modified, return
-    if ( $response === null ) {
+    if ( $response == NULL ) {
       return $response;
     }
 
@@ -216,12 +190,11 @@ abstract class Core {
       $result_set = $video_set;
     }
 
-    unset( $response->data );
+    unset($response->data);
     $response->video_set = $result_set;
 
     return $response;
   }
-
 
   /**
    * Send a cURL Wordpress request to retrieve the requested data from the Vimeo API.
@@ -229,31 +202,30 @@ abstract class Core {
    * @param  string $endpoint Vimeo API endpoint
    * @return array  Response Body
    */
-  private function _make_vimeo_request( $endpoint, $params = array(), $last_modified = null ) {
+  private function _make_vimeo_request($endpoint, $params = array(), $last_modified = null) {
     try {
 
       /**
-       * Limit the request to return only the fields that
-       * Vimeography themes actually use.
-       *
-       * @var [type]
+       * Only add request parameters if they don't already exist within
+       * a query string in the $endpoint
        */
-      $fields = apply_filters( 'vimeography.request.fields', $this->fields );
+      $query = parse_url($endpoint, PHP_URL_QUERY);
 
-      /**
-       * Add parameters which are common to all requests
-       */
-      $params = array_unique(
-        array_merge( array(
+      if ( empty( $query ) ) {
+
+        // Limit the request to return only the fields that
+        // Vimeography themes actually use.
+        $fields = apply_filters( 'vimeography.request.fields', $this->fields );
+
+        // Add parameters which are common to all requests
+        $params = array_merge( array(
           'fields' => implode( $fields, ',' ),
           'filter' => 'embeddable',
           'filter_embeddable' => 'true',
-        ), $params )
-      );
+        ), $params );
 
-      /**
-       * Set the headers to send along with the Vimeo request.
-       */
+      }
+
       $headers = array(
         'User-Agent' => sprintf( 'Vimeography loves you (%s)', home_url() ),
       );
@@ -262,17 +234,12 @@ abstract class Core {
         $headers['If-Modified-Since'] = $last_modified;
       }
 
-      $headers = apply_filters( 'vimeography.request.headers', $headers, $this->gallery_id, $this->gallery_settings );
-
-      /**
-       * Perform the request.
-       */
       $response = $this->_vimeo->request( $endpoint, $params, 'GET', true, $headers );
 
-      $this->rate_limit = array(
+      $rate_limit = array(
         'limit' => $response['headers']['X-RateLimit-Limit'],
         'remaining' => $response['headers']['X-RateLimit-Remaining'],
-        'reset' => new \DateTime( $response['headers']['X-RateLimit-Reset'] . ':00:00' )
+        'reset' => new DateTime( $response['headers']['X-RateLimit-Reset'] . ':00:00' )
       );
 
       switch ( $response['status'] ) {
@@ -305,11 +272,11 @@ abstract class Core {
             __('looks like Vimeo is having some API issues. Try reloading, or, check back in a few minutes. You can also check http://vimeostatus.com for live updates.', 'vimeography')
           );
         default:
-          throw new Vimeography_Exception( sprintf( __( 'Unknown response status %1$d, %2$s', 'vimeography' ), $response['status'], $response['body']->error ) );
+          throw new Vimeography_Exception(sprintf(__('Unknown response status %1$d, %2$s', 'vimeography'), $response['status'], $response['body']->error ) );
       }
     } catch (Exception $e) {
       throw new Vimeography_Exception(
-        __( 'the request to Vimeo failed. ', 'vimeography' ) . $e->getMessage()
+        __('the request to Vimeo failed. ', 'vimeography') . $e->getMessage()
       );
     }
   }
@@ -322,7 +289,7 @@ abstract class Core {
    * @param  array $featured_video a Vimeo Video
    * @return string $video_set      Arranged array of Vimeo Videos
    */
-  private function _arrange_featured_video( $video_set, $featured_video ) {
+  private function _arrange_featured_video($video_set, $featured_video) {
     // Does the featured video exist in the set?
     // If so, remove it from the set and place at front.
     $found = false;
@@ -331,11 +298,11 @@ abstract class Core {
     // exists in the collection as a contextual video,
     // it would not be removed if we only compared resouce urls
     // since they would not match.
-    $featured_id = str_replace( '/', '', strrchr( $featured_video->link, '/' ) );
+    $featured_id = str_replace('/', '', strrchr($featured_video->link, '/'));
 
-    foreach ( $video_set as $key => $video ) {
-      if ( strpos( $video->uri, $featured_id ) !== false ) {
-        unset( $video_set[$key] );
+    foreach ($video_set as $key => $video) {
+      if (strpos($video->uri, $featured_id) !== false) {
+        unset($video_set[$key]);
         $found = true;
       }
     }
@@ -350,25 +317,5 @@ abstract class Core {
     array_unshift( $video_set, $featured_video );
 
     return array_values( $video_set );
-  }
-
-
-  /**
-   * Set the cache file contents if our
-   * gallery settings and response data meet all
-   * of the required criteria.
-   *
-   * @param array $data
-   */
-  private function _set_cache( $data ) {
-    if (
-      ! empty( $data->video_set ) &&
-      $data->page === 1 &&
-      $this->_expiration !== 0 &&
-      isset( $this->gallery_id )
-    ) {
-      $data = apply_filters( 'vimeography/cache-videos', $data, $this->gallery_id );
-      $this->_cache->set( $data );
-    }
   }
 }
