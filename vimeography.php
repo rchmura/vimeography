@@ -128,6 +128,8 @@ if ( ! class_exists( 'Vimeography' ) ) {
       require_once VIMEOGRAPHY_PATH . 'lib/filesystem.php';
       require_once VIMEOGRAPHY_PATH . 'lib/init.php';
       require_once VIMEOGRAPHY_PATH . 'lib/robots.php';
+
+      require_once VIMEOGRAPHY_PATH . 'lib/engine.php';
       require_once VIMEOGRAPHY_PATH . 'lib/shortcode.php';
       require_once VIMEOGRAPHY_PATH . 'vimeography-bugsauce/vimeography-bugsauce.php';
       require_once VIMEOGRAPHY_PATH . 'vimeography-harvestone/vimeography-harvestone.php';
