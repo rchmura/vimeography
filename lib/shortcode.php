@@ -174,7 +174,7 @@ class Vimeography_Shortcode extends Vimeography {
    * @return string  A unique token representing the current gallery
    */
   private static function _get_inline_gallery_id($shortcode) {
-    return substr( md5( serialize($shortcode) ), 0, -24 );
+    return substr( md5( serialize( $shortcode ) ), 0, -24 );
   }
 
   /**
@@ -189,9 +189,9 @@ class Vimeography_Shortcode extends Vimeography {
     $filepath = VIMEOGRAPHY_CUSTOMIZATIONS_PATH . $filename;
     $file_url = VIMEOGRAPHY_CUSTOMIZATIONS_URL  . $filename;
 
-    if ( file_exists($filepath) ) {
+    if ( file_exists( $filepath ) ) {
       // Make sure the current theme's stylesheet handle is set as a dependency
-      $dependency = strtolower( $this->_gallery_settings['theme'] );
+      $dependency = 'vimeography-' . strtolower( $this->_gallery_settings['theme'] );
       wp_register_style($name, $file_url, array($dependency), strval( filemtime($filepath) ) );
       wp_enqueue_style($name);
     }
@@ -210,108 +210,22 @@ class Vimeography_Shortcode extends Vimeography {
 
     try {
 
-      require_once VIMEOGRAPHY_PATH . 'lib/core.php';
-      require_once VIMEOGRAPHY_PATH . 'lib/deprecated/renderer.php';
+      $engine = new \Vimeography\Engine;
+      return $engine
+              ->set_gallery_id( $this->_gallery_id )
+              ->set_gallery_settings( $this->_gallery_settings )
+              ->set_theme( $theme )
+              ->load()
+              ->fetch()
+              ->post_process()
+              ->render();
 
-      if ( class_exists( 'Vimeography_Pro' ) ) {
-        do_action('vimeography/load_pro');
-        $vimeography = new Vimeography_Core_Pro( $this->_gallery_settings );
-        $renderer    = new Vimeography_Pro_Renderer( $this->_gallery_settings, $this->_gallery_id );
-      } else {
-        require_once VIMEOGRAPHY_PATH . 'lib/core/basic.php';
-
-        $vimeography = new Vimeography_Core_Basic( $this->_gallery_settings );
-        $renderer    = new Vimeography_Renderer( $this->_gallery_settings, $this->_gallery_id );
-      }
-
-      $result = $vimeography->get_videos( $this->_gallery_settings['cache'], $this->_gallery_id );
-
-      if ( empty( $result->video_set ) ) {
-        throw new Vimeography_Exception( __('the Vimeo source for this gallery does not have any videos.', 'vimeography') );
-      }
-
-      // If our theme supports Vimeography 2 and Vimeography PRO is also compatible,
-      // use the new rendering method.
-
-      // Note, you should also check if PRO is compatible
-      if ( version_compare( $theme['version'], '2.0', '>=' ) ) {
-
-        /**
-         * The old approach was loading up the theme class, setting variables,
-         * filtering the data, loading dependencies, and rendering
-         * theme HTML server-side
-         *
-         * In 2.0, let's just make the video data
-         * available to the theme by setting it on a global javascript
-         * variable on the window and then triggering a load event on the
-         * active theme's built javascript bundle.
-         *
-         * The theme javascript can then take over from there, performing
-         * all of the tasks that used to be left up to the theme's PHP files and
-         * Mustache implementation.
-         *
-         * @return [type] [description]
-         */
-
-        $theme_name = strtolower( $theme['name'] );
-
-        // Set base data for every single gallery
-        $data = array(
-          'id'    => $this->_gallery_id,
-          'theme' => $theme_name,
-          'version' => $addons->active_theme['version']
-        );
-
-        // Merge the API response from Vimeo
-        $data = array_merge( $data, (array) $result );
-
-        // Set remaining JS variables
-        $data = apply_filters('vimeography.pro.localize', $data);
-
-        $local_data = array(
-          'l10n_print_after' => sprintf('vimeography2.galleries.%1$s["%2$s"] = %3$s',
-            $data['theme'],
-            $data['id'],
-            json_encode( $data )
-          )
-        );
-
-        wp_register_script( "vimeography-{$theme_name}", $addons->active_theme['app_js'] );
-        wp_register_style( "vimeography-{$theme_name}", $addons->active_theme['app_css'] );
-
-        wp_localize_script("vimeography-{$theme_name}", 'vimeographyBuildPath', $addons->active_theme['app_path']);
-
-        wp_localize_script("vimeography-{$theme_name}",
-          "vimeography2 = window.vimeography2 || {};
-          window.vimeography2.galleries = window.vimeography2.galleries || {};
-          window.vimeography2.galleries.{$theme_name} = window.vimeography2.galleries.{$theme_name} || {};
-          vimeography2.unused",
-        $local_data);
-
-        wp_enqueue_script("vimeography-{$theme_name}");
-        wp_enqueue_style("vimeography-{$theme_name}");
-
-        ob_start();
-?>
-      <div id="vimeography-gallery-<?php esc_attr_e($data['id']); ?>" class="vimeography-<?php esc_attr_e( $data['theme'] ); ?>" data-version="<?php esc_attr_e( $data['version'] ); ?>" <?php if ( ! empty( $this->_gallery_settings['width'] ) ) : ?> style="max-width: <?php esc_attr_e( $this->_gallery_settings['width'] ); ?>" <?php endif; ?> itemscope itemtype="http://schema.org/VideoGallery">
-        <div>
-          <gallery></gallery>
-        </div>
-      </div>
-<?php
-        return ob_get_clean();
-      } else {
-        $renderer->load_theme();
-        $renderer = apply_filters('vimeography/deprecated/reload-pro-renderer', $renderer, $this->_gallery_settings, $this->_gallery_id );
-        return $renderer->render( $result );
-      }
-    }
-    catch (Vimeography_Exception $e) {
+    } catch (Vimeography_Exception $e) {
       ob_start();
 
       ?>
         <div class="vimeography-error">
-          <h2><?php _e('Our video gallery couldn\'t be loaded.', 'vimeography'); ?></h2>
+          <h2><?php _e('This video gallery couldn\'t be loaded.', 'vimeography'); ?></h2>
           <p><?php echo $e->getMessage(); ?></p>
         </div>
 
@@ -319,10 +233,10 @@ class Vimeography_Shortcode extends Vimeography {
           .vimeography-error {
             background-color: rgba(255, 255, 255, 0.25);
             max-width: 500px;
-            margin: 0 auto 2em;
+            margin: 0 auto 2rem;
             text-align: center;
             border-radius: 4px;
-            padding: 1em;
+            padding: 1rem;
             box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
           }
         </style>
