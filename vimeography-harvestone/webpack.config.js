@@ -3,15 +3,7 @@ const path = require('path');
 const ManifestPlugin = require('webpack-manifest-plugin');
 const CleanPlugin = require('clean-webpack-plugin');
 
-/*
- * We've enabled UglifyJSPlugin for you! This minifies your app
- * in order to load faster and run less javascript.
- *
- * https://github.com/webpack-contrib/uglifyjs-webpack-plugin
- *
- */
-
-const UglifyJSPlugin = require('uglifyjs-webpack-plugin');
+const MinifyPlugin = require('babel-minify-webpack-plugin');
 
 /*
  * We've enabled ExtractTextPlugin for you. This allows your app to
@@ -105,5 +97,5 @@ module.exports = {
 }
 
 if (isProduction) {
-  module.exports.plugins.push(new UglifyJSPlugin());
+  module.exports.plugins.push(new MinifyPlugin());
 }
