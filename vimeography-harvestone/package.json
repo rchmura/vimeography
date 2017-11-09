@@ -9,9 +9,11 @@
   "devDependencies": {
     "babel-core": "^6.24.1",
     "babel-loader": "^7.0.0",
-    "babel-preset-env": "^1.5.2",
+    "babel-plugin-transform-runtime": "^6.23.0",
+    "babel-preset-env": "^1.6.0",
     "babel-preset-es2015": "^6.24.1",
     "babel-preset-stage-0": "^6.24.1",
+    "clean-webpack-plugin": "^0.1.17",
     "css-loader": "^0.28.4",
     "extract-text-webpack-plugin": "^2.1.2",
     "node-sass": "^4.5.3",
@@ -21,15 +23,24 @@
     "vue-loader": "^13.0.0",
     "vue-template-compiler": "^2.3.4",
     "webpack": "^3.0.0",
-    "webpack-cli": "^1.3.3"
+    "webpack-cli": "^1.3.3",
+    "webpack-dev-server": "^2.9.1",
+    "webpack-manifest-plugin": "^1.3.2"
   },
   "dependencies": {
-    "@vimeo/player": "^2.1.0",
-    "flickity": "^2.0.9",
-    "flickity-imagesloaded": "^2.0.0",
-    "swiper": "^3.4.2",
+    "@vimeo/player": "^2.2.0",
+    "axios": "^0.16.2",
+    "babel-runtime": "^6.26.0",
+    "lodash": "^4.17.4",
+    "swiper": "^4.0.2",
+    "vimeography-blueprint": "https://github.com/davekiss/vimeography-blueprint",
     "vue": "^2.3.4",
     "vue-router": "^2.7.0",
+    "vue-simple-spinner": "^1.2.8",
     "vuex": "^2.3.1"
+  },
+  "scripts": {
+    "start": "webpack-dev-server --hot --inline",
+    "build": "NODE_ENV=production webpack -p --progress --colors --env production"
   }
 }
