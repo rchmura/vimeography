@@ -520,34 +520,33 @@ class Vimeography_Gallery_Edit extends Vimeography_Base {
    */
   public function vimeography_validate_theme_settings($input) {
 
-    if ( isset( $input['vimeography_theme_settings_serialized'] ) AND ! empty($input['vimeography_theme_settings_serialized']) ) {
+    if ( isset( $input['vimeography_theme_settings_serialized'] ) && ! empty($input['vimeography_theme_settings_serialized']) ) {
       $input = unserialize( stripslashes( $input['vimeography_theme_settings_serialized'] ) );
     } else {
       $input = $input['vimeography_theme_settings'];
     }
-
 
     // if this fails, check_admin_referer() will automatically print a "failed" page and die.
     if (check_admin_referer('vimeography-theme-settings-action','vimeography-theme-settings-verification') ) {
       try {
         $settings = array();
 
-        foreach ($input as $setting) {
+        foreach ( $input as $setting ) {
           $attributes = array();
 
-          foreach ($setting['attributes'] as $attribute) {
+          foreach ( $setting['attributes'] as $attribute ) {
             $attributes[] = self::_convert_jquery_css_attribute($attribute);
           }
 
           $setting['attributes'] = $attributes;
 
-          if (isset($setting['expressions']) AND ! empty($setting['expressions'])) {
+          if ( isset($setting['expressions'] ) && ! empty( $setting['expressions'] ) ) {
 
-            foreach ($setting['expressions'] as $selector => $attributes) {
-              foreach ($attributes as $attribute => $value) {
+            foreach ( $setting['expressions'] as $selector => $attributes ) {
+              foreach ( $attributes as $attribute => $value ) {
                 $new_attr = self::_convert_jquery_css_attribute($attribute);
 
-                unset($setting['expressions'][$selector][$attribute]);
+                unset( $setting['expressions'][$selector][$attribute] );
                 $setting['expressions'][$selector][$new_attr] = $value;
               }
             }
@@ -555,12 +554,12 @@ class Vimeography_Gallery_Edit extends Vimeography_Base {
 
           $targets = array();
 
-          foreach ($setting['targets'] as $target) {
+          foreach ( $setting['targets'] as $target ) {
             $targets[] = esc_attr($target);
           }
 
           $setting['targets'] = $targets;
-          $setting['value'] = esc_attr($setting['value']);
+          $setting['value'] = esc_attr( $setting['value'] );
           $settings[] = $setting;
         }
 
@@ -569,17 +568,20 @@ class Vimeography_Gallery_Edit extends Vimeography_Base {
         $filename = 'vimeography-gallery-' . $this->_gallery_id . '-custom.css';
         $filepath = VIMEOGRAPHY_CUSTOMIZATIONS_PATH . $filename;
 
-        foreach ($settings as $setting) {
-          $namespace = $setting['namespace'] == TRUE  ? '#vimeography-gallery-'.$this->_gallery_id : '';
+        foreach ( $settings as $setting ) {
+          $namespace = $setting['namespace'] === true  ? '#vimeography-gallery-'.$this->_gallery_id : '';
           $important = isset( $setting['important'] ) ? ' !important' : '';
           $target_count = count( $setting['targets'] );
 
-          for ($i = 0; $i < $target_count; $i++) {
+          for ( $i = 0; $i < $target_count; $i++ ) {
             // If this is an expression, change the value to the expression value calculated by the appearance widget.
-            if (isset($setting['expressions']) AND array_key_exists($setting['targets'][$i], $setting['expressions']))
-            {
-              if (array_key_exists($setting['attributes'][$i], $setting['expressions'][$setting['targets'][$i]]))
-              {
+            if (
+              isset( $setting['expressions'] ) &&
+              array_key_exists( $setting['targets'][$i], $setting['expressions'] )
+            ) {
+              if (
+                array_key_exists($setting['attributes'][$i], $setting['expressions'][$setting['targets'][$i]] )
+              ) {
                 $setting['value'] = $setting['expressions'][$setting['targets'][$i]][$setting['attributes'][$i]];
               }
             }
