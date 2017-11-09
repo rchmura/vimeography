@@ -12,7 +12,9 @@ Copyright: Dave Kiss
 */
 
 if ( ! class_exists('Vimeography_Themes_Harvestone') ) {
+
   class Vimeography_Themes_Harvestone {
+
     /**
      * The current version of this theme
      *
@@ -35,18 +37,6 @@ if ( ! class_exists('Vimeography_Themes_Harvestone') ) {
      */
     public function load_theme() {
       do_action('vimeography/load-addon-plugin', __FILE__);
-    }
-
-
-    /**
-     * Register js + css dependencies used by this theme
-     *
-     * @return void
-     */
-    public static function load_dependencies() {
-      // if ( defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ) {
-      //   wp_register_script('')
-      // }
     }
 
   }
