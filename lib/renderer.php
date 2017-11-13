@@ -111,7 +111,7 @@ class Renderer {
 
     wp_localize_script("vimeography-{$theme_name}", 'vimeographyBuildPath', $this->theme['app_path']);
 
-    $router_mode = is_admin() ? 'abstract' : 'history';
+    $router_mode = apply_filters('vimeography.pro.router_mode', 'abstract');
     wp_localize_script("vimeography-{$theme_name}", 'vimeographyRouterMode', $router_mode);
 
     wp_localize_script("vimeography-{$theme_name}",
