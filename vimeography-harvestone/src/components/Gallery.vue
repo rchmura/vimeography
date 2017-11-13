@@ -53,6 +53,7 @@
 
 <style lang="scss" scoped>
   .vimeography-gallery {
-    margin-bottom: 1rem;
+    width: 90%;
+    margin: 0 auto 1rem;
   }
 </style>
