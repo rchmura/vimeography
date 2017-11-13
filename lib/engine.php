@@ -133,7 +133,7 @@ class Engine {
 
     } else {
       if ( version_compare( $this->theme['version'], '2.0', '>=' ) ) {
-        $this->core = new Core( $this );
+        $this->core = new Basic\Core( $this );
         $this->renderer = new Renderer( $this ); // load 2.0 renderer
       } else {
         $this->core = new \Vimeography_Core_Basic( $this->gallery_settings );

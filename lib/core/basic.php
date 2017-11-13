@@ -1,8 +1,8 @@
 <?php
 
-namespace Vimeography\Core;
+namespace Vimeography\Basic;
 
-class Basic extends \Vimeography\Core {
+class Core extends \Vimeography\Core {
 
   public function __construct( $engine ) {
     parent::__construct( $engine );
