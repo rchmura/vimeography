@@ -269,11 +269,13 @@ abstract class Core {
        */
       $response = $this->_vimeo->request( $endpoint, $params, 'GET', true, $headers );
 
-      $this->rate_limit = array(
-        'limit' => $response['headers']['X-RateLimit-Limit'],
-        'remaining' => $response['headers']['X-RateLimit-Remaining'],
-        'reset' => new \DateTime( $response['headers']['X-RateLimit-Reset'] . ':00:00' )
-      );
+      if ( isset( $response['headers']['X-RateLimit-Limit'] ) ) {
+        $this->rate_limit = array(
+          'limit' => $response['headers']['X-RateLimit-Limit'],
+          'remaining' => $response['headers']['X-RateLimit-Remaining'],
+          'reset' => new \DateTime( $response['headers']['X-RateLimit-Reset'] . ':00:00' )
+        );
+      }
 
       switch ( $response['status'] ) {
         case 200:
