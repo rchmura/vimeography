@@ -8,7 +8,7 @@ class Core extends \Vimeography\Core {
     parent::__construct( $engine );
 
     $this->_auth  = VIMEOGRAPHY_ACCESS_TOKEN;
-    $this->_vimeo = new \Vimeo\Vimeo( null, null, $this->_auth );
+    $this->_vimeo = new \Vimeography_Vimeo( null, null, $this->_auth );
   }
 
   /**
