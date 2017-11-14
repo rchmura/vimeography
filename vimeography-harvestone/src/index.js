@@ -1,14 +1,17 @@
 __webpack_public_path__ = window.vimeographyBuildPath;
 
 import Vue from 'vue';
+import Vuex from 'vuex';
 import VueRouter from 'vue-router';
+
+Vue.use(Vuex);
 Vue.use(VueRouter);
 
 import Gallery from './components/Gallery.vue';
-import { store } from 'vimeography-blueprint';
+import { storeModules } from 'vimeography-blueprint';
 
-// import store from './store';
 import head from 'lodash/head';
+import cloneDeep from 'lodash/cloneDeep';
 
 const router = new VueRouter({
   mode: window.vimeographyRouterMode,
@@ -24,7 +27,7 @@ let params = new URLSearchParams(location.search.slice(1));
  * @param  {[type]} Component [description]
  * @return {[type]}           [description]
  */
-const render = (Component, galleryId) => {
+const render = (Component, galleryId, store) => {
 
   const mount = `#vimeography-gallery-${galleryId} > div`;
   const gallery = window.vimeography2.galleries.harvestone[galleryId];
@@ -49,7 +52,9 @@ const render = (Component, galleryId) => {
 }
 
 for (let id in window.vimeography2.galleries.harvestone) {
-  render(Gallery, id);
+  let store = new Vuex.Store({ modules: cloneDeep( storeModules ) });
+  console.dir(storeModules)
+  render(Gallery, id, store);
 }
 
 // Set default page route, if applicable
