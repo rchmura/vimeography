@@ -24,8 +24,8 @@
         </div>
       </div>
 
-      <div class="swiper-button-prev"></div>
-      <div class="swiper-button-next"></div>
+      <div class="swiper-button-prev" ref="prev"></div>
+      <div class="swiper-button-next" ref="next"></div>
     </div>
   `;
 
@@ -86,8 +86,8 @@
         */
 
         navigation: {
-          nextEl: '.swiper-button-next',
-          prevEl: '.swiper-button-prev',
+          nextEl: this.$refs.next,
+          prevEl: this.$refs.prev,
         },
         observer: true,
         // observeParents: true,
