@@ -256,7 +256,7 @@ class Vimeography_Gallery_List extends Vimeography_Base {
 
       do_action('vimeography-pro/delete-gallery', $id);
 
-      require_once VIMEOGRAPHY_PATH . 'lib/cache.php';
+      require_once VIMEOGRAPHY_PATH . 'lib/deprecated/cache.php';
       $cache = new Vimeography_Cache($id);
       if ($cache->exists())
         $cache->delete();
