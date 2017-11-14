@@ -28,14 +28,18 @@
     },
     watch: {
       '$route' (to, from) {
-        if (to.query.vimeography_video) {
-          this.loadVideo(to.query.vimeography_video)
+        const videoId = to.query.vimeography_video;
+        const gallery = to.query.vimeography_gallery;
+
+        if (videoId && gallery && parseInt(gallery) === this.galleryId) {
+          this.loadVideo(videoId)
         }
       }
     },
     computed: {
       ...mapState({
-        activeVideo: state => state.videos.items[state.videos.active]
+        activeVideo: state => state.videos.items[state.videos.active],
+        galleryId: state => state.gallery.id
       }),
       videos() {
         return this.$store.getters.videos
