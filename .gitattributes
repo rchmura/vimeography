@@ -1,0 +1,17 @@
+.gitattributes export-ignore
+.gitignore export-ignore
+.gitmodules export-ignore
+
+composer.json export-ignore
+composer.lock export-ignore
+/tests export-ignore
+/bin export-ignore
+browserstack-logo.svg export-ignore
+
+/vimeography-harvestone/node_modules export-ignore
+/vimeography-harvestone/.babelrc export-ignore
+/vimeography-harvestone/yarn.lock export-ignore
+/vimeography-harvestone/package.json export-ignore
+/vimeography-harvestone/package-lock.json export-ignore
+/vimeography-harvestone/webpack.config.js export-ignore
+/vimeography-harvestone/src export-ignore
