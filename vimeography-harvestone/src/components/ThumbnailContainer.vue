@@ -3,7 +3,11 @@
   import { mapActions } from 'vuex'
 
   // Import Swiper and modules
-  import { Swiper, Navigation, Pagination } from 'swiper/dist/js/swiper.esm.js';
+  import {
+    Swiper,
+    Navigation,
+    Pagination
+  } from 'swiper/dist/js/swiper.esm.js';
 
   // Install modules
   Swiper.use([Navigation, Pagination]);

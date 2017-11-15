@@ -44,16 +44,12 @@ const render = (Component, galleryId, store) => {
     el: mount,
     store,
     router,
-    // components: {
-    //   Gallery
-    // }
     render: h => h(Component)
   });
 }
 
 for (let id in window.vimeography2.galleries.harvestone) {
   let store = new Vuex.Store({ modules: cloneDeep( storeModules ) });
-  console.dir(storeModules)
   render(Gallery, id, store);
 }
 
