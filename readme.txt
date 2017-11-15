@@ -2,9 +2,9 @@
 Contributors: iamdavekiss, videogallery
 Tags: video gallery, gallery, video, vimeo, vimeo gallery
 Requires at least: 3.3
-Tested up to: 4.8.2
-Stable tag: 1.5.3
-License: GPL3
+Tested up to: 4.9
+Stable tag: 2.0.0-alpha
+License: GPL-3.0
 
 The easiest way to create beautiful Vimeo video galleries on your WordPress site.
 
@@ -114,6 +114,19 @@ Sure, why not. Simply copy your video gallery theme's .mustache file(s) into a n
 4. Get new styles by installing video gallery themes.
 
 == Changelog ==
+
+= 2.0.0-alpha =
+
+* [New] Introducing Harvestone, our new default Vimeography theme!
+* [New] Vimeography themes are now supported by Vue.js instead of Mustache.php
+* [New] Vimeography theme development is now supported by the Webpack build process.
+* [New] Complete rewrite of the Vimeography request and rendering engine for better control flow.
+* [New] You can now skip Vimeography's cache entirely by adding ?vimeography_nocache=1 to the url.
+* [New] Add styles for any Vimeography errors that occur during render.
+* [New] Rewrote the Vimeography cache class, introducing several new filters
+* [Tweak] Video limit is now enforced after cache is set rather than before
+* [Tweak] Rewrote copy in several locations
+
 = 1.5.3 =
 * [Fix] Fixed the Endpoint 1/videos is not valid error
 
