@@ -34,6 +34,7 @@
     "swiper": "^4.0.2",
     "vimeography-blueprint": "https://github.com/davekiss/vimeography-blueprint",
     "vue": "^2.3.4",
+    "vue-observe-visibility": "^0.3.1",
     "vue-router": "^2.7.0",
     "vue-simple-spinner": "^1.2.8",
     "vuex": "^2.3.1"

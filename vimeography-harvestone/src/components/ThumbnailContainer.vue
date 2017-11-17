@@ -16,7 +16,7 @@
   require('../../node_modules/swiper/dist/css/swiper.min.css');
 
   const template = `
-    <div class="vimeography-thumbnail-container">
+    <div class="vimeography-thumbnail-container" v-observe-visibility="visibilityChanged">
       <div class="swiper-container">
         <div class="swiper-wrapper">
           <thumbnail
@@ -43,18 +43,26 @@
       ...mapActions([
         'fetchPage',
       ]),
+      reload: function () {
+        setTimeout(function () {
+
+          this.swiper.update();
+          this.swiper.navigation.update();
+          this.swiper.updateSize()
+          this.swiper.updateSlides()
+          this.swiper.updateProgress()
+          this.swiper.updateSlidesClasses()
+
+        }.bind(this), 250)
+      },
+      visibilityChanged: function (isVisible) {
+        if (isVisible) {
+          this.reload();
+        }
+      }
     },
     updated: function() {
-      setTimeout(function () {
-
-        this.swiper.update();
-        this.swiper.navigation.update();
-        this.swiper.updateSize()
-        this.swiper.updateSlides()
-        this.swiper.updateProgress()
-        this.swiper.updateSlidesClasses()
-
-      }.bind(this), 250)
+      this.reload();
     },
     watch: {
       activeVideoId(id) {

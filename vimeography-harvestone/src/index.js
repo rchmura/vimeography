@@ -3,9 +3,11 @@ __webpack_public_path__ = window.vimeographyBuildPath;
 import Vue from 'vue';
 import Vuex from 'vuex';
 import VueRouter from 'vue-router';
+import VueObserveVisibility from 'vue-observe-visibility';
 
 Vue.use(Vuex);
 Vue.use(VueRouter);
+Vue.use(VueObserveVisibility);
 
 import Gallery from './components/Gallery.vue';
 import { storeModules } from 'vimeography-blueprint';
