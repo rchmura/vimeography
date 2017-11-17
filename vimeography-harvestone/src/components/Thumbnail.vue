@@ -13,7 +13,7 @@ const userTemplate = document.querySelector('#vimeography-harvestone-thumbnail')
 
 const Thumbnail = {
   props: ['video'],
-  template: userTemplate || defaultTemplate,
+  template: userTemplate ? userTemplate.innerText : defaultTemplate,
   computed: {
     query() {
       const q = {

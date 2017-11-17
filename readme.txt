@@ -104,7 +104,30 @@ Heck yeah! Use the appearance editor to change your video gallery theme's style 
 
 = Can I override my Vimeography theme template with some custom code? =
 
-Sure, why not. Simply copy your video gallery theme's .mustache file(s) into a new folder located at `wp-content/themes/[my_wordpress_theme]/vimeography/[my_vimeography_theme]` or `wp-content/themes/[my_wordpress_theme]/vimeography/[my_vimeography_theme]/partials` and hack away. Vimeography will load that template instead of the default one for your theme.
+Sure, why not. Here's an example:
+
+```
+<?php
+
+  function my_custom_harvestone_thumbnail() {
+    ob_start();
+  ?>
+    <script type="text/x-template" id="vimeography-harvestone-thumbnail">
+      <figure class="swiper-slide vimeography-thumbnail">
+        <router-link class="vimeography-link" :to="this.query" exact exact-active-class="vimeography-link-active">
+          <img class="vimeography-thumbnail-img" :src="thumbnailUrl" :title="video.name" />
+        </router-link>
+      </figure>
+    </script>
+  <?php
+    echo ob_get_clean();
+  }
+
+  add_action('admin_head', 'my_custom_harvestone_thumbnail');
+  add_action('wp_head', 'my_custom_harvestone_thumbnail');
+```
+
+Vimeography will load your template for the defined module instead of the default one for your theme.
 
 == Screenshots ==
 

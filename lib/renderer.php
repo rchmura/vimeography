@@ -46,13 +46,6 @@ class Renderer {
       'limit'   => absint( $this->gallery_settings['limit'] ),
       'order'   => array(),
       'filter'  => array(),
-      'templates' => array(
-        'thumbnailContainer' => apply_filters('vimeography.templates.thumbnailContainer', '', $this->gallery_id, $this->theme, $this->gallery_settings),
-        'thumbnail' => apply_filters('vimeography.templates.thumbnail', '', $this->gallery_id, $this->theme, $this->gallery_settings),
-        'player' => apply_filters('vimeography.templates.player', '', $this->gallery_id, $this->theme, $this->gallery_settings),
-        'gallery' => apply_filters('vimeography.templates.gallery', '', $this->gallery_id, $this->theme, $this->gallery_settings),
-        'search' => apply_filters('vimeography.templates.search', '', $this->gallery_id, $this->theme, $this->gallery_settings),
-      )
     );
 
     // Merge the API response from Vimeo
