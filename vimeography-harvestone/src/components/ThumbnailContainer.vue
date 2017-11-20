@@ -1,6 +1,6 @@
 <script>
   /** Theme specific file. */
-  import { mapActions } from 'vuex'
+  import { mapActions, mapState } from 'vuex'
 
   // Import Swiper and modules
   import {
@@ -61,6 +61,11 @@
         }
       }
     },
+    computed: {
+      ...mapState({
+        pro: state => state.gallery.pro
+      }),
+    },
     updated: function() {
       this.reload();
     },
@@ -120,8 +125,12 @@
         }
       });
 
-      /** Note: this should only happen in PRO */
       this.swiper.on('progress', progress => {
+        if (! this.pro) {
+          console.log('Vimeography PRO is not installed, pagination is unavailable.')
+          return;
+        }
+
         console.log('Vimeography: gallery progress is ' + progress );
 
         if ( progress < 0.25 ) {
