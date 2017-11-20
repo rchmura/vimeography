@@ -68,6 +68,7 @@ class Vimeography_Gallery_List extends Vimeography_Base {
       $this->_table->search_box( 'search', 'search_id' );
       $this->_table->display();
       echo '</form>';
+      echo '<style>.hidden {visibility: initial;}</style>';
     $result = ob_get_contents();
     ob_end_clean();
     return $result;
