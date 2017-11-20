@@ -68,6 +68,9 @@ class Vimeography_Addons {
       $plugin['partials_override_path'] = get_stylesheet_directory() . '/vimeography/' . trailingslashit( strtolower( $plugin['name'] ) ) . 'partials';
       $plugin['settings_file']          = plugin_dir_path( $plugin_path ) . 'settings.php';
 
+      $default_theme = apply_filters('vimeography.gallery.new.theme', 'harvestone' );
+      $plugin['is_default'] = strtolower( $plugin['name'] ) === strtolower( $default_theme );
+
       // Provide path to Javascript bundle if theme supports it.
       if ( version_compare( $plugin['version'], '2.0', '>=' ) ) {
 
