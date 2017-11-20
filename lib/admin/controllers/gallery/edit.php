@@ -168,6 +168,14 @@ class Vimeography_Gallery_Edit extends Vimeography_Base {
       );
     } else {
 
+      if ( strtolower($this->_gallery[0]->theme_name) === 'bugsauce' ) {
+        $this->messages[] = array(
+          'type' => 'error',
+          'heading' => __('Heads up!', 'vimeography'),
+          'message' => __("The Bugsauce gallery theme has been discontinued in Vimeography 2. We recommend switching over to the free Harvestone gallery theme.", 'vimeography')
+        );
+      }
+
       $theme = self::_set_active_theme( $this->_gallery[0]->theme_name );
       $this->_load_theme_settings( $theme['settings_file'] );
       $this->_render_theme_settings_controls();
