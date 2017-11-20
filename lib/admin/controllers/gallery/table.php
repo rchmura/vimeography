@@ -14,6 +14,16 @@ class Vimeography_Gallery_List_Table extends WP_List_Table {
 
   public function __construct() {
     parent::__construct();
+
+    $user = get_current_user_id();
+    $screen = get_current_screen();
+    $screen_option = $screen->get_option('per_page', 'option');
+    $per_page = get_user_meta($user, $screen_option, true);
+
+    if ( ! empty ( $per_page) ) {
+      $this->_per_page = intval( $per_page );
+    }
+
   }
 
   /**

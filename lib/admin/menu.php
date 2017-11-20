@@ -11,6 +11,7 @@ class Vimeography_Admin_Menu {
 
   public function __construct() {
     add_action( 'admin_menu', array($this, 'vimeography_add_menu') );
+    add_filter('set-screen-option', array($this, 'set_galleries_per_page'), 10, 3);
 
     $this->_mustache = new Mustache_Engine( array(
       'loader' => new Mustache_Loader_FilesystemLoader(VIMEOGRAPHY_PATH . 'lib/admin/templates'),
@@ -80,7 +81,7 @@ class Vimeography_Admin_Menu {
       $args = array(
         'label' => __('Galleries to show per page', 'vimeography'),
         'default' => 10,
-        'option' => 'galleries_per_page'
+        'option' => 'vimeography_galleries_per_page'
       );
 
       add_screen_option( 'per_page', $args );
@@ -194,6 +195,19 @@ class Vimeography_Admin_Menu {
 
     if ( isset( $_GET['vimeography-action'] ) ) {
       do_action( 'vimeography_action_' . $_GET['vimeography-action'], $_GET );
+    }
+  }
+
+  /**
+   * Sets the galleries per page in the screen options on the gallery list page.
+   *
+   * @param [type] $status [description]
+   * @param [type] $option [description]
+   * @param [type] $value  [description]
+   */
+  public function set_galleries_per_page( $status, $option, $value ) {
+    if ( 'vimeography_galleries_per_page' == $option ) {
+      return $value;
     }
   }
 }
