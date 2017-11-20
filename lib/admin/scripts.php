@@ -7,6 +7,7 @@ class Vimeography_Admin_Scripts {
 
   public function __construct() {
     add_action( 'admin_enqueue_scripts', array( $this, 'add_scripts' ) );
+    // add_action( 'enqueue_block_editor_assets', array( $this, 'add_block_editor_assets' ) );
   }
 
   /**
@@ -43,5 +44,17 @@ class Vimeography_Admin_Scripts {
       wp_enqueue_style( 'vimeography-admin');
       wp_enqueue_script( 'vimeography-admin');
     }
+  }
+
+  /**
+   * Add Gutenberg block compatibility
+   */
+  public function add_block_editor_assets() {
+    wp_enqueue_script(
+      'vimeography-blocks',
+      VIMEOGRAPHY_URL . 'lib/admin/assets/js/vimeography-blocks.js',
+      array( 'wp-blocks', 'wp-element' ),
+      filemtime( VIMEOGRAPHY_PATH . 'lib/admin/assets/js/vimeography-blocks.js' )
+    );
   }
 }
