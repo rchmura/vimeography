@@ -36,7 +36,7 @@ const Tag = {
 export default Tag;
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
   a {
     background-color: #fff;
     padding: 0.5rem 1rem;

@@ -139,7 +139,7 @@
   export default ThumbnailContainer;
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
   .vimeography-thumbnail-container {
     position: relative;
   }
