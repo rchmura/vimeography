@@ -76,6 +76,15 @@ class Vimeography_Admin_Menu {
       $this->_view = $this->_mustache->loadTemplate('gallery/edit/layout');
 
     } else {
+
+      $args = array(
+        'label' => __('Galleries to show per page', 'vimeography'),
+        'default' => 10,
+        'option' => 'galleries_per_page'
+      );
+
+      add_screen_option( 'per_page', $args );
+
       require_once VIMEOGRAPHY_PATH . 'lib/admin/controllers/gallery/list.php';
       if ( is_plugin_active('vimeography-pro/vimeography-pro.php') ) {
         do_action('vimeography-pro/load-list');
