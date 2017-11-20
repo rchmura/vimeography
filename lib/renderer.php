@@ -99,7 +99,7 @@ class Renderer {
     );
 
     $theme_name = strtolower( $this->theme['name'] );
-    wp_register_script( "vimeography-{$theme_name}", $this->theme['app_js'] );
+    wp_register_script( "vimeography-{$theme_name}", $this->theme['app_js'], array(), false, true );
     wp_register_style( "vimeography-{$theme_name}", $this->theme['app_css'] );
 
     wp_localize_script("vimeography-{$theme_name}", 'vimeographyBuildPath', $this->theme['app_path']);
