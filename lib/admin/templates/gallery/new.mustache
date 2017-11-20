@@ -73,7 +73,7 @@
         <h3>Choose your gallery theme</h3>
         <select id="gallery_theme_selector" name="vimeography_new_gallery_settings[gallery_theme]" style="width: 180px;">
           {{#themes}}
-            <option value='{{name}}'>{{name}}</option>
+            <option value='{{name}}' {{#is_default}}selected="selected"{{/is_default}}>{{name}}</option>
           {{/themes}}
         </select>
         <p>You can display your gallery using many different designs.<br />For more choices, check out our <a href="https://vimeography.com/themes?utm_source=vimeography&utm_medium=new_gallery" target="_blank">Vimeography Gallery Themes.</a></p>
