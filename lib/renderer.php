@@ -125,9 +125,12 @@ class Renderer {
    * @return [type] [description]
    */
   public function template( $data ) {
+    $wrapper_class = 'vimeography-' . esc_attr( $data['theme'] );
+    $wrapper_class = apply_filters('vimeography.gallery.wrapper_class', $wrapper_class, $data);
+
     ob_start();
     ?>
-      <div id="vimeography-gallery-<?php esc_attr_e($data['id']); ?>" class="vimeography-<?php esc_attr_e( $data['theme'] ); ?>" data-version="<?php esc_attr_e( $data['version'] ); ?>" <?php if ( ! empty( $this->gallery_settings['width'] ) ) : ?> style="max-width: <?php esc_attr_e( $this->gallery_settings['width'] ); ?>" <?php endif; ?> itemscope itemtype="http://schema.org/VideoGallery">
+      <div id="vimeography-gallery-<?php esc_attr_e($data['id']); ?>" class="<?php echo $wrapper_class; ?>" data-version="<?php esc_attr_e( $data['version'] ); ?>" <?php if ( ! empty( $this->gallery_settings['width'] ) ) : ?> style="max-width: <?php esc_attr_e( $this->gallery_settings['width'] ); ?>" <?php endif; ?> itemscope itemtype="http://schema.org/VideoGallery">
         <div id="subbie">
           <gallery></gallery>
         </div>

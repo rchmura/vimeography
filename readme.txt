@@ -145,8 +145,13 @@ Vimeography will load your template for the defined module instead of the defaul
 * [New] Vimeography theme development is now supported by the Webpack build process.
 * [New] Complete rewrite of the Vimeography request and rendering engine for better control flow.
 * [New] You can now skip Vimeography's cache entirely by adding ?vimeography_nocache=1 to the url.
+* [New] You can now set the galleries to show per page on the Gallery List page in the admin.
 * [New] Add styles for any Vimeography errors that occur during render.
 * [New] Rewrote the Vimeography cache class, introducing several new filters
+* [New] Added the `vimeography.gallery.wrapper_class` filter so you can apply custom CSS classes to your gallery wrappers.
+* [New] You can override all of Vimeography's component templates with your own custom layout definition. (See the FAQ!)
+* [Tweak] Harvestone is now the default theme gallery used during new galleries.
+* [Tweak] Vimeography now observes gallery visibility to allow hiding galleries on page load.
 * [Tweak] Video limit is now enforced after cache is set rather than before
 * [Tweak] Rewrote copy in several locations
 
