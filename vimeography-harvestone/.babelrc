@@ -1,4 +1,11 @@
 {
-  "presets": ["env", "stage-0"],
-  "plugins": ["transform-runtime"]
+  "presets": [
+    ["@babel/preset-env", {
+      "targets": {
+        "browsers": ["last 2 versions", "safari >= 7"]
+      }
+    }],
+    "@babel/preset-stage-0"
+  ],
+  "plugins": ["@babel/plugin-transform-runtime"]
 }
