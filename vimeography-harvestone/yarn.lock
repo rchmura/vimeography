@@ -6684,7 +6684,7 @@ verror@1.10.0:
 
 "vimeography-blueprint@https://github.com/davekiss/vimeography-blueprint":
   version "1.0.0"
-  resolved "https://github.com/davekiss/vimeography-blueprint#1b36ef9778399039364c1596d5e1c1a58536807a"
+  resolved "https://github.com/davekiss/vimeography-blueprint#6e99e213c3a4c593663c5ae55c42b3cf1f088224"
   dependencies:
     "@babel/runtime" "^7.0.0-beta.32"
     "@vimeo/player" "^2.2.0"
