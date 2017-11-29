@@ -29,7 +29,7 @@ class Vimeography_Helpers {
        * @since 2.0
        * @var $id Video ID
        */
-      $item->id = absint( preg_replace('/\D/', '', $item->uri) );
+      $item->id = absint( str_replace('/', '', strrchr($item->link, '/')) );
 
       if ( $item->duration && ! strpos($item->duration, ':') ) {
         $item->duration = $this->seconds_to_minutes($item->duration);
