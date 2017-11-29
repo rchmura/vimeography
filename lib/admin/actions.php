@@ -9,7 +9,55 @@ class Vimeography_Admin_Actions {
     add_action( 'admin_init', array( $this, 'vimeography_requires_wordpress_version') );
     add_action( 'admin_init', array( $this, 'vimeography_maybe_add_activation_key_reset_nag') );
     add_action( 'admin_init', array( $this, 'vimeography_maybe_add_pro_update_nag') );
+
+    add_action( 'vc_before_init', array( $this, 'register_visual_composer_element') );
   }
+
+  /**
+   * Register a custom element for use in WPBakery Page Builder.
+   * (formally Visual Composer)
+   *
+   * @since 2.0
+   */
+  public function register_visual_composer_element() {
+
+    if ( ! function_exists('vc_map') ) {
+      return;
+    }
+
+    global $wpdb;
+    $galleries = $wpdb->get_results('SELECT id, title FROM '. $wpdb->vimeography_gallery);
+
+    if ( empty( $galleries ) ) {
+      return;
+    }
+
+    $values = array();
+
+    foreach( $galleries as $gallery ) {
+      $values[$gallery->title] = $gallery->id;
+    }
+
+    vc_map( array(
+        'name' => __('Vimeography Gallery', 'vimeography'),
+        'description' => __('Add a Vimeography Gallery to this page.', 'vimeography'),
+        'base' => 'vimeography',
+        'icon' => VIMEOGRAPHY_URL . 'lib/admin/assets/img/vimeography-icon.png', 
+        'category' => 'Content',
+        'params' => array(
+          array(
+            'type' => 'dropdown',
+            'heading'     => __('Choose your Gallery', 'vimeography'),
+            'param_name'  => 'id',
+            'description' => __('To create a new gallery, visit the Vimeography Gallery Editor.', 'vimeography'),
+            'value'       => $values,
+            'std'         => $galleries[0]->title,
+            'admin_label' => true,
+          ),
+        )
+    ) );
+  }
+
 
   /**
    * Check the wordpress version is compatible, and disable plugin if not.
