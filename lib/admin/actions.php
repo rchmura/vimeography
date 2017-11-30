@@ -42,7 +42,7 @@ class Vimeography_Admin_Actions {
         'name' => __('Vimeography Gallery', 'vimeography'),
         'description' => __('Add a Vimeography Gallery to this page.', 'vimeography'),
         'base' => 'vimeography',
-        'icon' => VIMEOGRAPHY_URL . 'lib/admin/assets/img/vimeography-icon.png', 
+        'icon' => VIMEOGRAPHY_URL . 'lib/admin/assets/img/vimeography-logo-512px-transparent.png',
         'category' => 'Content',
         'params' => array(
           array(
