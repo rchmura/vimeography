@@ -150,6 +150,7 @@ Vimeography will load your template for the defined module instead of the defaul
 * [New] Rewrote the Vimeography cache class, introducing several new filters
 * [New] Added the `vimeography.gallery.wrapper_class` filter so you can apply custom CSS classes to your gallery wrappers.
 * [New] You can override all of Vimeography's component templates with your own custom layout definition. (See the FAQ!)
+* [New] You can now insert a Vimeography element within WPBakery Page Builder (formally Visual Composer)
 * [Tweak] Harvestone is now the default theme gallery used during new galleries.
 * [Tweak] Vimeography now observes gallery visibility to allow hiding galleries on page load.
 * [Tweak] Video limit is now enforced after cache is set rather than before
