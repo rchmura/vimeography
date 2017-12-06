@@ -80,7 +80,9 @@ class Vimeography_Helpers {
    */
   public function format_video_thumbnails($item) {
     // Format the video thumbnails
-    for ( $i = 0; $i < count( $item->pictures ); $i++ ) {
+    $count = count( $item->pictures );
+
+    for ( $i = 0; $i < $count; $i++ ) {
       if ( $item->pictures[$i]->type === 'thumbnail' ) {
         switch ( $i ) {
           case 0:
