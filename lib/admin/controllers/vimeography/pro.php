@@ -14,18 +14,9 @@ class Vimeography_Pro_About extends Vimeography_Base {
    * [__construct description]
    */
   public function __construct() {
-    add_action('admin_enqueue_scripts', array( $this, 'load_scripts' ) );
-
     if ($_SERVER['REQUEST_METHOD'] == 'POST') {
       $this->_validate_form();
     }
-  }
-
-  public function load_scripts() {
-    wp_register_script('jquery-slick', '//cdn.jsdelivr.net/jquery.slick/1.3.8/slick.min.js', array('jquery') );
-    wp_enqueue_script('jquery-slick');
-    wp_register_style('jquery-slick', '//cdn.jsdelivr.net/jquery.slick/1.3.8/slick.css');
-    wp_enqueue_style('jquery-slick');
   }
 
   /**

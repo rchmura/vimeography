@@ -12,80 +12,24 @@
 
     {{^access_token}}
 
-    <script>
-    (function($){
-      $(document).ready(function(){
-        $('.vimeography-pro-installation').slick({
-          dots: true,
-          infinite: false,
-          speed: 300,
-          slidesToShow: 1,
-          adaptiveHeight: true,
-          draggable: false
-        });
-      });
-    })(jQuery)
-    </script>
+    <div class="vimeography-pro-installation">
+      <h1><strong>Vimeography Pro</strong> is installed. Now what?</h1>
+      <p style="margin-bottom: 2rem;">In order to connect your Vimeo account to your WordPress site, you’ll need to obtain an <strong>access token</strong> that securely establishes this connection.</p>
 
-    <div class="vimeography-pro-installation-message" style="max-width: 260px; float: left; margin: 20px 50px 0 20px;">
-      <h3 style="line-height: 1.2em;"><strong>Vimeography Pro</strong> is installed. Now what?</h3>
-      <p>In order to access all of the features Vimeography Pro has to offer, you need to set up an app on Vimeo.</p>
-    </div>
-
-    <div class="vimeography-pro-installation" style="float: left; max-width: 650px; width: 100%; text-align: center; margin: 20px auto 0;">
       <div class="step-1">
-        <h1>Step 1: Create Your App</h1>
-        <p>Go to the <a href="https://developer.vimeo.com/apps/new" title="Create a new Vimeo application" target="_blank">Vimeo Apps page</a> and fill out the form with the following values:</p>
-        <table class="table table-striped wp-box" style="width: 600px; margin: 0 auto; text-align: left;">
-          <thead>
-            <tr>
-              <th>Form Option</th>
-              <th>Your Response</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td><strong>App Name:</strong></td>
-              <td>Video Gallery WordPress plugin</td>
-            </tr>
-            <tr>
-              <td><strong>App Description:</strong></td>
-              <td>Displays videos with a custom theme on {{home_url}}</td>
-            </tr>
-            <tr>
-              <td><strong>App URL:</strong></td>
-              <td>http://vimeography.com</td>
-            </tr>
-            <tr>
-              <td><strong>App Logo URL:</strong></td>
-              <td>[leave this blank]</td>
-            </tr>
-            <tr>
-              <td><strong>App Callback URL:</strong></td>
-              <td>[leave this blank]</td>
-            </tr>
-            <tr>
-              <td><strong>Terms of Service:</strong></td>
-              <td>[check the box]</td>
-            </tr>
-          </tbody>
-        </table>
+        <h2>Step 1: Connect your Vimeo account</h2>
+        <p style="margin-bottom: 1.5rem;"><a href="https://vimeography.com/pro/authorize" title="Connect your Vimeo account to Vimeography" target="_blank">Visit the Vimeography app page</a> to connect your Vimeo account to Vimeography. Once you have connected your Vimeo account, your access token will be displayed on the screen.</p>
+        <p style="background: #e45f68; color: #fff; padding: 1rem; font-size: 0.9rem; line-height: 1.4rem;"><strong>Note:</strong> your access token is similar to a password for your Vimeo account, so be sure to protect it and don’t give it out to anyone that you don't trust.</p>
       </div>
 
       <div class="step-2">
-        <h1>Step 2: Generate an Access Token</h1>
-        <p>Click the <strong>Authentication tab</strong>, scroll to the bottom of the page, and click the yellow <strong>Generate Token</strong> button.</p>
-        <img src="{{icons_url}}vimeo-app-generate-token.jpg" alt="Generate an Access Token" style="box-sizing: border-box; border: 8px solid #E0E2E6;" />
-      </div>
-
-      <div class="step-3">
-        <h1>Step 3: Register Your App</h1>
-        <p>Copy your <strong>new Access token</strong> and paste it here to register your app.</p>
+        <h2>Step 2. Enter your access token below</h2>
+        <p>Copy your <strong>new access token</strong> and paste it below to finish connecting your site.</p>
 
         <form method="post" action="">
-          <input type="text" value="" name="vimeography_pro_settings[access_token]">
+          <input type="text" value="" placeholder="paste your access token here" name="vimeography_pro_settings[access_token]">
           {{{settings_nonce}}}
-          <input type="submit" value="Register my App">
+          <input type="submit" value="Connect my Vimeo Account">
         </form>
       </div>
     </div>
@@ -265,6 +209,34 @@
     margin: 0 20px 0;
   }
 
+  .vimeography-pro-installation {
+    max-width: 650px;
+    width: 100%;
+    text-align: left;
+    margin: 0 auto;
+    padding-top: 1rem;
+  }
+
+  .vimeography-pro-installation h1 {
+    font-size: 1.8rem;
+    line-height: 1.8rem;
+    margin-bottom: 1rem;
+  }
+
+  .vimeography-pro-installation h2 {
+    font-size: 1.5rem;
+    font-weight: 600;
+  }
+
+  .vimeography-pro-installation p {
+    font-size: 1.1rem;
+    line-height: 2rem;
+  }
+
+  .vimeography-pro-installation .step-1 {
+    margin-bottom: 2rem;
+  }
+
   .vimeography-pro-installation input[type="text"] {
     height: 36px;
     width: 360px;
@@ -299,16 +271,6 @@
   .vimeography-pro .vimeography-button:hover {
     background-color: #199E52;
   }
-
-  .slick-slider {
-    -webkit-user-select: text !important;
-    -khtml-user-select: text !important;
-    -moz-user-select: text !important;
-    -ms-user-select: text !important;
-    user-select: text !important;
-  }
-
-  .slick-prev:before, .slick-next:before { color: black !important; }
 
   .wp-box {
     background: none repeat scroll 0 0 #FFFFFF;
