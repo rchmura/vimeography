@@ -147,7 +147,7 @@ class Vimeography_Helpers {
 
     $query = http_build_query($params);
 
-    $oembed = wp_remote_get( 'http://vimeo.com/api/oembed.json?' . $query);
+    $oembed = wp_remote_get( 'https://vimeo.com/api/oembed.json?' . $query);
 
     if ( is_wp_error( $oembed ) ) {
       throw new Vimeography_Exception( __('Vimeography could not retrieve the featured video: ', 'vimeography') . $oembed->get_error_message() );
