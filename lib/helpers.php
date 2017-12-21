@@ -79,27 +79,32 @@ class Vimeography_Helpers {
    * @return [type]       [description]
    */
   public function format_video_thumbnails($item) {
+
+    $sizes = $item->pictures->sizes;
+
     // Format the video thumbnails
-    $count = count( $item->pictures );
+    $count = count( $sizes );
 
     for ( $i = 0; $i < $count; $i++ ) {
-      if ( $item->pictures[$i]->type === 'thumbnail' ) {
-        switch ( $i ) {
-          case 0:
-            $item->thumbnail_large = $item->pictures[$i]->link;
-            break;
-          case 1:
-            $item->thumbnail_medium = $item->pictures[$i]->link;
-            break;
-          case 2:
-            $item->thumbnail_small = $item->pictures[$i]->link;
-            break;
-          case count( $item->pictures ) - 1:
-            $item->thumbnail_tiny = $item->pictures[$i]->link;
-            break;
-          default:
-            break;
-        }
+      switch ( $i ) {
+        case 2:
+          $item->thumbnail_tiny = $sizes[$i]->link;
+          $item->thumbnail_tiny_with_play_button = $sizes[$i]->link_with_play_button;
+          break;
+        case 3:
+          $item->thumbnail_small = $sizes[$i]->link;
+          $item->thumbnail_small_with_play_button = $sizes[$i]->link_with_play_button;
+          break;
+        case 4:
+          $item->thumbnail_medium = $sizes[$i]->link;
+          $item->thumbnail_medium_with_play_button = $sizes[$i]->link_with_play_button;
+          break;
+        case 5:
+          $item->thumbnail_large = $sizes[$i]->link;
+          $item->thumbnail_large_with_play_button = $sizes[$i]->link_with_play_button;
+          break;
+        default:
+          break;
       }
     }
 
