@@ -273,7 +273,7 @@ abstract class Core {
         $this->rate_limit = array(
           'limit' => $response['headers']['X-RateLimit-Limit'],
           'remaining' => $response['headers']['X-RateLimit-Remaining'],
-          'reset' => new \DateTime( $response['headers']['X-RateLimit-Reset'] . ':00' )
+          'reset' => new \DateTime( $response['headers']['X-RateLimit-Reset'] )
         );
       }
 
