@@ -283,11 +283,11 @@ abstract class Core {
         case 304:
           return null;
         case 400:
-          throw new Vimeography_Exception(
+          throw new \Vimeography_Exception(
             __('a bad request made was made. ', 'vimeography') . $response['body']->error
           );
         case 401:
-          throw new Vimeography_Exception(
+          throw new \Vimeography_Exception(
             __('an invalid token was used for the API request. Try removing your Vimeo token on the Vimeography Pro page and following the steps again to create a Vimeo app.', 'vimeography')
           );
         case 403:
@@ -297,24 +297,24 @@ abstract class Core {
           $error = sprintf( __('Your server\'s IP address (%1$s) is currently banned from using the Vimeo API. Please contact Vimeo support at https://vimeo.com/help/contact for more information. Make sure you include your server IP address in your support request. (%1$s)', 'vimeography'), $response['headers']['X-Banned-IP'] );
           $error .= sprintf( __('<br /><br />Error #%1$d: %2$s', 'vimeography'), $error_code, $developer_message );
 
-          throw new Vimeography_Exception( $error );
+          throw new \Vimeography_Exception( $error );
         case 404:
-          throw new Vimeography_Exception(
+          throw new \Vimeography_Exception(
             __('the plugin could not retrieve data from the Vimeo API! ', 'vimeography') . $response['body']->error
           );
         case 429:
-          throw new Vimeography_Exception(
+          throw new \Vimeography_Exception(
             __('too many requests to Vimeo, please wait a moment and try again.', 'vimeography')
           );
         case 500: case 503:
-          throw new Vimeography_Exception(
+          throw new \Vimeography_Exception(
             __('looks like Vimeo is having some API issues. Try reloading, or, check back in a few minutes. You can also check http://vimeostatus.com for live updates.', 'vimeography')
           );
         default:
-          throw new Vimeography_Exception( sprintf( __( 'Unknown response status %1$d, %2$s', 'vimeography' ), $response['status'], $response['body']->error ) );
+          throw new \Vimeography_Exception( sprintf( __( 'Unknown response status %1$d, %2$s', 'vimeography' ), $response['status'], $response['body']->error ) );
       }
     } catch (Exception $e) {
-      throw new Vimeography_Exception(
+      throw new \Vimeography_Exception(
         __( 'the request to Vimeo failed. ', 'vimeography' ) . $e->getMessage()
       );
     }
