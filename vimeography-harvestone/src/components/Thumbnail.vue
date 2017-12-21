@@ -25,7 +25,7 @@ const Thumbnail = {
       return '?' + Object.keys(q).map(k => k + '=' + encodeURIComponent(q[k])).join('&')
     },
     thumbnailUrl: (data) => {
-      return data.video.pictures.filter(img => img.width === 640)[0].link
+      return data.video.pictures.sizes.filter(img => img.width === 640)[0].link
     },
     ...mapState({
       galleryId: state => state.id
