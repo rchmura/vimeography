@@ -1,4 +1,8 @@
 <?php
+
+use Vimeo\Vimeo;
+use Vimeo\Exceptions\VimeoUploadException;
+
 /**
  *   Copyright 2013 Vimeo
  *
@@ -14,13 +18,8 @@
  *   See the License for the specific language governing permissions and
  *   limitations under the License.
  */
-require_once('../vimeo.php');
 
-if (!function_exists('json_decode')) {
-    throw new Exception('We could not find json_decode. json_decode is found in php 5.2 and up, but not found on many linux systems due to licensing conflicts. If you are running ubuntu try "sudo apt-get install php5-json".');
-}
-
-$config = json_decode(file_get_contents('./config.json'), true);
+$config = require(__DIR__ . '/init.php');
 
 if (empty($config['access_token'])) {
     throw new Exception('You can not upload a file without an access token. You can find this token on your app page, or generate one using auth.php');
@@ -49,7 +48,7 @@ foreach ($files as $file_name) {
         //  Pull the link out of successful data responses.
         $link = '';
         if($video_data['status'] == 200) {
-            $link = $video_data['body']->link;
+            $link = $video_data['body']['link'];
         }
 
         //  Store this in our array of complete videos.

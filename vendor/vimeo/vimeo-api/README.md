@@ -53,7 +53,7 @@ composer require vimeo/vimeo-api
 
 ### Manual
 
-1. Download the latest release : [v1.2.7](https://github.com/vimeo/vimeo.php/archive/1.2.7.zip)
+1. Download the latest release : [v1.3.0](https://github.com/vimeo/vimeo.php/archive/1.3.0.zip)
 2. Include the autoloader `require("/path/to/vimeo.php/autoload.php");`
 3. Use the library `$lib = new \Vimeo\Vimeo($client_id, $client_secret)`
 
@@ -159,10 +159,9 @@ For more information check out the [example](https://github.com/vimeo/vimeo.php/
 Name      | Type     | Description
 ----------|----------|------------
 file      | string   | Full path to the upload file on the local system.
-upgrade   | boolean  | (Optional) Defaults to false. Requests for a 1080p encode to be made from this video. This feature is only available to [Vimeo PRO](https://vimeo.com/pro) members. For more information, check out the [FAQ](https://vimeo.com/help/faq/uploading-to-vimeo/uploading-basics#does-vimeo-support-1080p-hd).
 
 ```php
-$response = $lib->upload('/home/aaron/Downloads/ada.mp4', false)
+$response = $lib->upload('/home/aaron/Downloads/ada.mp4')
 ```
 
 ## Replace videos from the Server
@@ -173,10 +172,9 @@ Name      | Type     | Description
 ----------|----------|------------
 video_uri | string   | The URI of the original video. Once uploaded and successfully transcoded your source video file will be swapped with this new video file.
 file      | string   | Full path to the upload file on the local system.
-upgrade   | boolean  | (Optional) Defaults to false. Requests for a 1080p encode to be made from this video. This feature is only available to [Vimeo PRO](https://vimeo.com/pro) members. For more information, check out the [FAQ](https://vimeo.com/help/faq/uploading-to-vimeo/uploading-basics#does-vimeo-support-1080p-hd).
 
 ```php
-$response = $lib->replace('/videos/12345', '/home/aaron/Downloads/ada.mp4', false)
+$response = $lib->replace('/videos/12345', '/home/aaron/Downloads/ada.mp4')
 ```
 
 ## Upload or replace videos from the client
@@ -219,7 +217,7 @@ $response = $lib->uploadImage('/videos/12345/pictures', '/home/aaron/Downloads/a
 
 ## Troubleshooting
 
-We are not aware of any issues with the latest version (1.2.7). If you have any questions or problems, create a [ticket](https://github.com/vimeo/vimeo.php/issues) or [contact us](https://vimeo.com/help/contact)
+We are not aware of any issues with the latest version (1.3.0). If you have any questions or problems, create a [ticket](https://github.com/vimeo/vimeo.php/issues) or [contact us](https://vimeo.com/help/contact)
 
 ## Framework Integrations
 

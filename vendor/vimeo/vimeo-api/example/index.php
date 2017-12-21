@@ -1,4 +1,7 @@
 <?php
+
+use Vimeo\Vimeo;
+
 /**
  *   Copyright 2013 Vimeo
  *
@@ -14,12 +17,16 @@
  *   See the License for the specific language governing permissions and
  *   limitations under the License.
  */
-ini_set('display_errors', 'On');
-error_reporting(E_ALL);
 
-require_once('../vimeo.php');
-$config = json_decode(file_get_contents('./config.json'), true);
+$config = require(__DIR__ . '/init.php');
 
 $lib = new Vimeo($config['client_id'], $config['client_secret']);
-$user = $lib->request('/users/dashron');
+
+if (!empty($config['access_token'])) {
+    $lib->setToken($config['access_token']);
+    $user = $lib->request('/me');
+} else {
+    $user = $lib->request('/users/dashron');
+}
+
 print_r($user);

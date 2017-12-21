@@ -4,29 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "26cb37093dbe820bbfc86e78dd0a6de4",
+    "content-hash": "b6fcc722b22eac43b5a8d188a1788f84",
     "packages": [
-        {
-            "name": "davekiss/vimeo-php",
-            "version": "dev-vimeography",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/davekiss/vimeo-php.git",
-                "reference": "8ae1a4a33e48a1b58473ba496f8bf732736254ab"
-            },
-            "type": "library",
-            "license": [
-                "Apache"
-            ],
-            "authors": [
-                {
-                    "name": "Dave Kiss",
-                    "email": "hello@davekiss.com"
-                }
-            ],
-            "description": "PHP Library for the Vimeo API 3.0",
-            "time": "2014-04-23T02:39:12+00:00"
-        },
         {
             "name": "mustache/mustache",
             "version": "v2.5.1",
@@ -74,17 +53,11 @@
         },
         {
             "name": "vimeo/vimeo-api",
-            "version": "1.2.7",
+            "version": "dev-vimeography",
             "source": {
                 "type": "git",
-                "url": "https://github.com/vimeo/vimeo.php.git",
-                "reference": "9f931763c87dbb94014dd9706bd505e5f015ef84"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/vimeo/vimeo.php/zipball/9f931763c87dbb94014dd9706bd505e5f015ef84",
-                "reference": "9f931763c87dbb94014dd9706bd505e5f015ef84",
-                "shasum": ""
+                "url": "https://github.com/davekiss/vimeo.php.git",
+                "reference": "aa16d3c5fbca1009b331f685baee1d6a91e0395e"
             },
             "require": {
                 "ext-curl": "*",
@@ -100,7 +73,14 @@
                     "Vimeo\\": "src/Vimeo"
                 }
             },
-            "notification-url": "https://packagist.org/downloads/",
+            "scripts": {
+                "coverage": [
+                    "phpunit --coverage-html reports/"
+                ],
+                "tests": [
+                    "phpunit"
+                ]
+            },
             "license": [
                 "Apache-2.0"
             ],
@@ -116,14 +96,14 @@
                 "video",
                 "vimeo"
             ],
-            "time": "2017-10-04T15:29:45+00:00"
+            "time": "2017-12-16T14:47:03+00:00"
         }
     ],
     "packages-dev": [],
     "aliases": [],
     "minimum-stability": "stable",
     "stability-flags": {
-        "davekiss/vimeo-php": 20
+        "vimeo/vimeo-api": 20
     },
     "prefer-stable": false,
     "prefer-lowest": false,

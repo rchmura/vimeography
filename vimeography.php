@@ -117,8 +117,11 @@ if ( ! class_exists( 'Vimeography' ) ) {
         require_once VIMEOGRAPHY_PATH . '/vendor/mustache/mustache/src/Mustache/Autoloader.php';
       }
 
-      if ( ! class_exists('Vimeography_Vimeo') ) {
-        require_once VIMEOGRAPHY_PATH . 'vendor/davekiss/vimeo-php/vimeo.php';
+      if ( ! class_exists('\Vimeography\Vimeo') ) {
+        require_once VIMEOGRAPHY_PATH . 'vendor/vimeo/vimeo-api/src/Vimeo/Vimeo.php';
+        require_once VIMEOGRAPHY_PATH . 'vendor/vimeo/vimeo-api/src/Vimeo/Exceptions/ExceptionInterface.php';
+        require_once VIMEOGRAPHY_PATH . 'vendor/vimeo/vimeo-api/src/Vimeo/Exceptions/VimeoRequestException.php';
+        require_once VIMEOGRAPHY_PATH . 'vendor/vimeo/vimeo-api/src/Vimeo/Exceptions/VimeoUploadException.php';
       }
 
       require_once VIMEOGRAPHY_PATH . 'lib/database.php';

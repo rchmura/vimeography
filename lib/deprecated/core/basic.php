@@ -8,7 +8,7 @@ class Vimeography_Core_Basic extends Vimeography_Core {
     parent::__construct( $settings );
 
     $this->_auth  = VIMEOGRAPHY_ACCESS_TOKEN;
-    $this->_vimeo = new Vimeography_Vimeo( null, null, $this->_auth );
+    $this->_vimeo = new Vimeography\Vimeo( null, null, $this->_auth );
   }
 
   /**

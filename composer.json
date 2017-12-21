@@ -3,14 +3,13 @@
     "description": "Super simple galleries for your WordPress site.",
     "repositories": [
         {
-            "url": "https://github.com/davekiss/vimeo-php.git",
+            "url": "https://github.com/davekiss/vimeo.php.git",
             "type": "git"
         }
     ],
     "require": {
         "mustache/mustache": "2.5.1",
-        "davekiss/vimeo-php": "dev-vimeography",
-        "vimeo/vimeo-api": "^1.2"
+        "vimeo/vimeo-api": "dev-vimeography"
     },
     "license": "GPL3",
     "authors": [

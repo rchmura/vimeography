@@ -1,5 +1,5 @@
 <?php
-namespace Vimeo\Exceptions;
+namespace Vimeography\Exceptions;
 
 /**
  * VimeoRequestException class for failure to make request.
