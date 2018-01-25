@@ -109,7 +109,7 @@ class Vimeography_Database extends Vimeography {
       'featured_video' => '',
       'video_limit'    => 25,
       'cache_timeout'  => 3600,
-      'theme_name'     => 'bugsauce',
+      'theme_name'     => 'harvestone',
     ));
 
     $sql = 'CREATE TABLE '.$wpdb->prefix.'vimeography_gallery (
