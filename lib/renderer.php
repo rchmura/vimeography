@@ -63,7 +63,7 @@ class Renderer {
      * @since  2.0
      */
     foreach ( $data['video_set'] as $i => $video ) {
-      $id = absint( str_replace('/', '', strrchr($video->link, '/')) );
+      $id = absint( str_replace('/', '', strrchr($video->uri, '/')) );
       $data['video_set'][$id] = $video;
       unset($data['video_set'][$i]);
       $data['order'][] = absint( $id );
