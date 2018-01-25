@@ -5,19 +5,19 @@ if (!defined('WP_UNINSTALL_PLUGIN'))
 
 global $wpdb;
 
-delete_option('vimeography_advanced_settings');
-delete_option('vimeography_default_settings');
-delete_option('vimeography_db_version');
+// delete_option('vimeography_advanced_settings');
+// delete_option('vimeography_default_settings');
+// delete_option('vimeography_db_version');
 
-$wpdb->query('DROP TABLE '.$wpdb->prefix.'vimeography_gallery, '.$wpdb->prefix.'vimeography_gallery_meta');
+// $wpdb->query('DROP TABLE '.$wpdb->prefix.'vimeography_gallery, '.$wpdb->prefix.'vimeography_gallery_meta');
 
-$wpdb->query('DELETE a, b
-FROM
-    wp_options a, wp_options b
-WHERE
- a.option_name LIKE "_transient_vimeography_%" AND
- b.option_name LIKE "_transient_timeout_vimeography_%";
-');
+// $wpdb->query('DELETE a, b
+// FROM
+//     wp_options a, wp_options b
+// WHERE
+//  a.option_name LIKE "_transient_vimeography_%" AND
+//  b.option_name LIKE "_transient_timeout_vimeography_%";
+// ');
 
 // Hell, let's do the user a favor by cleaning up ALL stale transients.
 
