@@ -176,9 +176,17 @@ class Vimeography_Gallery_Edit extends Vimeography_Base {
         );
       }
 
-      $theme = self::_set_active_theme( $this->_gallery[0]->theme_name );
-      $this->_load_theme_settings( $theme['settings_file'] );
-      $this->_render_theme_settings_controls();
+      try {
+        $theme = self::_set_active_theme( $this->_gallery[0]->theme_name );
+        $this->_load_theme_settings( $theme['settings_file'] );
+        $this->_render_theme_settings_controls();
+      } catch (Exception $e) {
+        $this->messages[] = array(
+          'type' => 'error',
+          'heading' => __('Heads up!', 'vimeography'),
+          'message' => $e->getMessage()
+        );
+      }
     }
 
     $this->_gallery[0]->featured_video = $this->_gallery[0]->featured_video === 0 ? '' : $this->_gallery[0]->featured_video;
