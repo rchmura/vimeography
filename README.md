@@ -6,7 +6,7 @@ Vimeography was born out of a desire to create a good-looking gallery layout fro
 
 More information can be found at [vimeography.com](http://vimeography.com/).
 
-## Installation ##
+## Installation
 
 For detailed setup instructions, visit the official [Documentation](http://vimeography.com/help/guide) page.
 
@@ -15,19 +15,40 @@ For detailed setup instructions, visit the official [Documentation](http://vimeo
 
 This will download the latest developer copy of Vimeography.
 
-## Tests ##
+Then, be sure to define a constant called `VIMEOGRAPHY_DEV` in your `wp-config.php` file. This will ensure that the code bundle of your Vimeography themes will be loaded from the Webpack dev server rather than the theme's `dist` folder.
+
+`define('VIMEOGRAPHY_DEV', true);`
+
+Lastly, you can install the theme dependencies and start up the webpack dev server like so:
+
+```
+  cd wp-content/plugins/vimeography/vimeography-harvestone
+  yarn install
+
+  # After a few minutes, the install will complete and you can start the server.
+  yarn start
+```
+
+## Building Themes for Production
+
+```
+  cd wp-content/plugins/vimeography/vimeography-harvestone
+  yarn build
+```
+
+## Tests
 
 1. Install PHPUnit
 2. Install WP tests and database: `sh bin/install-wp-tests.sh wordpress_test root '' localhost latest`
 3. `cd vimeography && phpunit`
 
-## Bugs ##
+## Bugs
 If you find an issue, let us know [here](https://github.com/davekiss/vimeography/issues?state=open)!
 
-## Support ##
+## Support
 This is a developer's portal for Vimeography and should _not_ be used for support. Please visit the [contact page](https://vimeography.com/contact).
 
-## Contributions ##
+## Contributions
 Anyone is welcome to contribute to Vimeography. Please read the [guidelines for contributing](https://github.com/davekiss/vimeography/blob/master/CONTRIBUTING.md) to this repository.
 
 There are various ways you can contribute:
