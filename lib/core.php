@@ -243,13 +243,11 @@ abstract class Core {
       /**
        * Add parameters which are common to all requests
        */
-      $params = array_unique(
-        array_merge( array(
-          'fields' => implode( $fields, ',' ),
-          'filter' => 'embeddable',
-          'filter_embeddable' => 'true',
-        ), $params )
-      );
+      $params = array_merge( array(
+        'fields' => implode( $fields, ',' ),
+        'filter' => 'embeddable',
+        'filter_embeddable' => 'true',
+      ), $params );
 
       /**
        * Set the headers to send along with the Vimeo request.
