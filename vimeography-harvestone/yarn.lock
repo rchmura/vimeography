@@ -4333,6 +4333,10 @@ lodash@^3.10.0, lodash@^3.9.3:
   version "3.10.1"
   resolved "https://registry.yarnpkg.com/lodash/-/lodash-3.10.1.tgz#5bf45e8e49ba4189e17d482789dfd15bd140b7b6"
 
+lodash@^4.17.5:
+  version "4.17.5"
+  resolved "https://registry.yarnpkg.com/lodash/-/lodash-4.17.5.tgz#99a92d65c0272debe8c96b6057bc8fbfa3bed511"
+
 log-symbols@^1.0.1, log-symbols@^1.0.2:
   version "1.0.2"
   resolved "https://registry.yarnpkg.com/log-symbols/-/log-symbols-1.0.2.tgz#376ff7b58ea3086a0f09facc74617eca501e1a18"
@@ -6684,11 +6688,13 @@ verror@1.10.0:
 
 "vimeography-blueprint@https://github.com/davekiss/vimeography-blueprint":
   version "1.0.0"
-  resolved "https://github.com/davekiss/vimeography-blueprint#4d2f29ce9833afb17a6587201c416e0d8ed5fe15"
+  resolved "https://github.com/davekiss/vimeography-blueprint#6dd72f92b6e74bf494bff489a226afdd9176fad4"
   dependencies:
     "@babel/runtime" "^7.0.0-beta.32"
     "@vimeo/player" "^2.2.0"
     axios "^0.17.0"
+    lodash "^4.17.5"
+    vue-simple-spinner "^1.2.8"
 
 vinyl-file@^2.0.0:
   version "2.0.0"
