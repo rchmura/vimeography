@@ -547,7 +547,7 @@ class Vimeography_Gallery_Edit extends Vimeography_Base {
       try {
         $settings = array();
 
-        foreach ( $input as $setting ) {
+        foreach ( $input as $setting_id => $setting ) {
           $attributes = array();
 
           foreach ( $setting['attributes'] as $attribute ) {
@@ -576,7 +576,7 @@ class Vimeography_Gallery_Edit extends Vimeography_Base {
 
           $setting['targets'] = $targets;
           $setting['value'] = esc_attr( $setting['value'] );
-          $settings[] = $setting;
+          $settings[$setting_id] = $setting;
         }
 
         // Settings are ready to be generated.
@@ -584,25 +584,46 @@ class Vimeography_Gallery_Edit extends Vimeography_Base {
         $filename = 'vimeography-gallery-' . $this->_gallery_id . '-custom.css';
         $filepath = VIMEOGRAPHY_CUSTOMIZATIONS_PATH . $filename;
 
-        foreach ( $settings as $setting ) {
+        foreach ( $settings as $setting_id => $setting ) {
           $namespace = $setting['namespace'] === true  ? '#vimeography-gallery-'.$this->_gallery_id : '';
           $important = isset( $setting['important'] ) ? ' !important' : '';
           $target_count = count( $setting['targets'] );
 
+
+          // Load the stored setting that is hardcoded in the theme's settings.php file
+          foreach ( $this->_theme_settings as $s ) {
+            if ( $s['id'] === $setting_id ) {
+              $stored_setting = $s;
+            }
+          }
+
           for ( $i = 0; $i < $target_count; $i++ ) {
-            // If this is an expression, change the value to the expression value calculated by the appearance widget.
-            if (
-              isset( $setting['expressions'] ) &&
-              array_key_exists( $setting['targets'][$i], $setting['expressions'] )
-            ) {
-              if (
-                array_key_exists($setting['attributes'][$i], $setting['expressions'][$setting['targets'][$i]] )
-              ) {
-                $setting['value'] = $setting['expressions'][$setting['targets'][$i]][$setting['attributes'][$i]];
+            $target = $setting['targets'][$i];
+            $attribute = $setting['attributes'][$i];
+
+            // Transform the value based on the stored theme setting if a value transform is defined
+            if ( isset( $stored_setting ) ) {
+              $stored_property = $stored_setting['properties'][$i];
+
+              if ( isset( $stored_property['transform'] ) ) {
+                // Apply the transform to the value for this rule
+                $setting['value'] = str_replace( '{{value}}', $setting['value'], $stored_property['transform'] );
               }
             }
 
-            $css .= $namespace . $setting['targets'][$i] . ' { ' . $setting['attributes'][$i] . ': ' . $setting['value'] . $important . "; } \n";
+            // If this is an expression, change the value to the expression value calculated by the appearance widget.
+            if (
+              isset( $setting['expressions'] ) &&
+              array_key_exists( $target, $setting['expressions'] )
+            ) {
+              if (
+                array_key_exists($attribute, $setting['expressions'][$target] )
+              ) {
+                $setting['value'] = $setting['expressions'][$target][$attribute];
+              }
+            }
+
+            $css .= $namespace . $target . ' { ' . $attribute . ': ' . $setting['value'] . $important . "; } \n";
           }
         }
 
