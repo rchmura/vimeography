@@ -125,7 +125,7 @@ class Cache {
    */
   public function delete() {
     if ( substr( $this->_cache_file, -6 ) === '.cache' ) {
-      return unlink( $this->_cache_file );
+      return @unlink( $this->_cache_file );
     }
   }
 
