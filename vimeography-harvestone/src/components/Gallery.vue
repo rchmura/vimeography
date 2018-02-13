@@ -1,8 +1,7 @@
 <script>
   import { mapState, mapActions } from 'vuex'
 
-  import Filters from './Filters.vue';
-  import { Player } from 'vimeography-blueprint';
+  import { Player, Filters } from 'vimeography-blueprint';
 
   import ThumbnailContainer from './ThumbnailContainer.vue';
 
