@@ -46,10 +46,18 @@ class Renderer {
       'limit'   => absint( $this->gallery_settings['limit'] ),
       'order'   => array(),
       'filter'  => array(),
+      'pages'   => array(
+        'default' => array(),
+        'filter'  => array(),
+      ),
     );
 
     // Merge the API response from Vimeo
     $data = array_merge( $data, (array) $result );
+
+    // Override Vimeo's paging info with our local settings
+    $data['per_page'] = $this->gallery_settings['per_page'];
+    unset( $data['paging'] );
 
     /**
      * Strip the video ID from its uri and set it
@@ -66,7 +74,7 @@ class Renderer {
       $id = absint( str_replace('/', '', strrchr($video->uri, '/')) );
       $data['video_set'][$id] = $video;
       unset($data['video_set'][$i]);
-      $data['order'][] = absint( $id );
+      $data['pages']['default'][$data['page']][] = absint( $id );
     }
 
     // Set remaining JS variables
