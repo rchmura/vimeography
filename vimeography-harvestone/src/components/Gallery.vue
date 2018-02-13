@@ -38,7 +38,7 @@
         pro: state => state.gallery.pro
       }),
       videos() {
-        return this.$store.getters.videos
+        return this.$store.getters.getVideos
       }
     },
     components: {

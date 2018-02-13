@@ -41,7 +41,7 @@
     },
     methods: {
       ...mapActions([
-        'fetchPage',
+        'paginate'
       ]),
       reload: function () {
         setTimeout(function () {
@@ -131,14 +131,16 @@
           return;
         }
 
+        let paging = this.$store.getters.paging
+
         console.log('Vimeography: gallery progress is ' + progress );
 
         if ( progress < 0.25 ) {
-          this.fetchPage( 'previous' );
+          this.paginate( paging.previous );
         }
 
         if ( progress > 0.75 ) {
-          this.fetchPage( 'next' );
+          this.paginate( paging.next );
         }
       } );
 
