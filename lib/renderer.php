@@ -44,8 +44,6 @@ class Renderer {
       'version' => $this->theme['version'],
       'source'  => $this->gallery_settings['source'],
       'limit'   => absint( $this->gallery_settings['limit'] ),
-      'order'   => array(),
-      'filter'  => array(),
       'pages'   => array(
         'default' => array(),
         'filter'  => array(),
@@ -55,8 +53,7 @@ class Renderer {
     // Merge the API response from Vimeo
     $data = array_merge( $data, (array) $result );
 
-    // Override Vimeo's paging info with our local settings
-    $data['per_page'] = $this->gallery_settings['per_page'];
+    // We won't use Vimeo's paging object, so delete it.
     unset( $data['paging'] );
 
     /**
@@ -64,7 +61,7 @@ class Renderer {
      * as the index in the video_set array.
      *
      * Let's also save the existing sort order to the
-     * `order` property in the store. That way, we can
+     * `pages` property in the store. That way, we can
      * always revert to it if we end up filtering the
      * videos on the client side and want to go back "home"
      *
@@ -74,6 +71,7 @@ class Renderer {
       $id = absint( str_replace('/', '', strrchr($video->uri, '/')) );
       $data['video_set'][$id] = $video;
       unset($data['video_set'][$i]);
+
       $data['pages']['default'][$data['page']][] = absint( $id );
     }
 
