@@ -22,18 +22,18 @@ Then, be sure to define a constant called `VIMEOGRAPHY_DEV` in your `wp-config.p
 Lastly, you can install the theme dependencies and start up the webpack dev server like so:
 
 ```
-  cd wp-content/plugins/vimeography/vimeography-harvestone
-  yarn install
+cd wp-content/plugins/vimeography/vimeography-harvestone
+yarn install
 
-  # After a few minutes, the install will complete and you can start the server.
-  yarn start
+# After a few minutes, the install will complete and you can start the server.
+yarn start
 ```
 
 ## Building Themes for Production
 
 ```
-  cd wp-content/plugins/vimeography/vimeography-harvestone
-  yarn build
+cd wp-content/plugins/vimeography/vimeography-harvestone
+yarn build
 ```
 
 ## Tests
