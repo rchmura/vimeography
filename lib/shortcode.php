@@ -241,6 +241,10 @@ class Vimeography_Shortcode extends Vimeography {
             padding: 1rem;
             box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
           }
+
+          .vimeography-error h2 {
+            font-size: 1.3rem;
+          }
         </style>
       <?php
 
