@@ -36,6 +36,10 @@ class Vimeography_Deprecated {
     if ( $this->_vimeography_pro_version && version_compare($this->_vimeography_pro_version, '0.7.1', '<' ) ) {
       @class_alias('Vimeography_Vimeo', 'Vimeo');
     }
+
+    if ( $this->_vimeography_pro_version && version_compare($this->_vimeography_pro_version, '2.0', '<') ) {
+      @class_alias('Vimeography\Vimeo', 'Vimeography_Vimeo');
+    }
   }
 
   /**

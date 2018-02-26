@@ -70,6 +70,16 @@ class Vimeo
     }
 
     /**
+     * Deprecated, but must remain defined so
+     * Vimeography Pro < 2.0 doesn't error out.
+     *
+     * @param [type] $ua_string [description]
+     */
+    public function set_user_agent( $ua_string ) {
+        $this->user_agent = $ua_string;
+    }
+
+    /**
      * Make an API request to Vimeo.
      *
      * @param string $url A Vimeo API Endpoint. Should not include the host

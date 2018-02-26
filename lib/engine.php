@@ -127,6 +127,28 @@ class Engine {
         $this->core = new Pro\Core( $this );
         $this->renderer = new Pro\Renderer( $this ); // load 2.0 pro renderer
       } else {
+
+        if ( version_compare( $this->theme['version'], '2.0', '>=' ) ) {
+          $keys = get_site_option('vimeography_activation_keys');
+
+          if ( ! empty( $keys ) ) {
+            foreach ( $keys as $key ) {
+              if ( $key->plugin_name === 'vimeography-pro' ) {
+                $link = sprintf( "https://vimeography.com/checkout/?edd_license_key=%s&download_id=36", $key->activation_key );
+              }
+            }
+          }
+
+          $message = sprintf( __('The <strong>%s</strong> gallery theme is only compatible with <strong>Vimeography Pro 2.</strong><br /> You\'re currently using <strong>Vimeography Pro version %s.</strong> Please try updating to the latest version of Vimeography Pro to use this theme. ', 'vimeography'), $this->theme['name'], VIMEOGRAPHY_PRO_VERSION );
+
+          if ( isset( $link ) ) {
+            $message .= '<br /><br />';
+            $message .= sprintf( __('If your Vimeography Pro license key is expired, you can gain access to <strong>another year of updates and support</strong> by <a href="%s">renewing your license key on this page.</a>', 'vimeography'), $link );
+          }
+
+          throw new \Vimeography_Exception( $message );
+        }
+
         $this->core = new \Vimeography_Core_Pro( $this->gallery_settings );
         $this->renderer = new \Vimeography_Pro_Renderer( $this->gallery_settings, $this->gallery_id ); // load deprecated 1.x pro renderer
       }
