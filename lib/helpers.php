@@ -35,6 +35,8 @@ class Vimeography_Helpers {
         $item->duration = $this->seconds_to_minutes($item->duration);
       }
 
+      $item->human_created_time = date('F j, Y', strtotime( $item->created_time ) );
+
       $item = $this->format_video_thumbnails($item);
 
       // Linkify any URLs in the description
