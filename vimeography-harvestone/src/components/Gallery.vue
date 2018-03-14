@@ -26,7 +26,7 @@
         const videoId = to.query.vimeography_video;
         const gallery = to.query.vimeography_gallery;
 
-        if (videoId && gallery && parseInt(gallery) === this.galleryId) {
+        if (videoId && gallery && gallery == this.galleryId) {
           this.loadVideo(videoId)
         }
       }
