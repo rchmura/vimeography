@@ -10,13 +10,13 @@ The easiest way to create beautiful Vimeo video galleries on your WordPress site
 
 == Description ==
 
-Vimeography is a WordPress plugin that allows you to create beautiful, custom Vimeo video galleries in 30 seconds, tops!
+Vimeography is a free WordPress plugin that allows you to create beautiful, custom Vimeo video galleries in 30 seconds, tops!
 
 A quick overview:
 
 http://vimeo.com/44555634
 
-For more information, check out [vimeography.com](https://vimeography.com/ "vimeography.com")
+For more information, check out [vimeography.com](https://vimeography.com/?utm_source=wpdotorg&utm_medium=description "vimeography.com")
 
 Some amazing features:
 
@@ -32,9 +32,9 @@ Some amazing features:
 > #### Vimeography Themes
 > Make your gallery stand out with our custom video gallery themes! All themes come with one year of updates and support.
 >
-> Check our all of our video gallery designs at [https://vimeography.com/themes](https://vimeography.com/themes "vimeography.com/themes")
+> Check our all of our video gallery designs at [https://vimeography.com/themes](https://vimeography.com/themes?utm_source=wpdotorg&utm_medium=description "vimeography.com/themes")
 
-For even more control over your Vimeo video galleries, including unlimited videos, custom sorting, hidden collections, playlists and more, check out [Vimeography Pro!](https://vimeography.com/pro "Vimeography Pro")
+For even more control over your Vimeo video galleries, including unlimited videos, custom sorting, hidden collections, playlists and more, check out [Vimeography Pro!](https://vimeography.com/pro?utm_source=wpdotorg&utm_medium=repo "Vimeography Pro")
 
 For the latest updates, follow us!
 [http://twitter.com/vimeography](http://twitter.com/vimeography "twitter.com/vimeography")
@@ -47,7 +47,7 @@ For the latest updates, follow us!
 == Frequently Asked Questions ==
 = How can I show hidden Vimeo videos? =
 
-If you would like to show videos that are hidden from Vimeo, you will need [Vimeography Pro.](https://vimeography.com/add-ons/vimeography-pro/)
+If you would like to show videos that are hidden from Vimeo, you will need [Vimeography Pro.](https://vimeography.com/add-ons/vimeography-pro/?utm_source=wpdotorg&utm_medium=faq)
 
 The way that it works is you mark your videos as hidden from Vimeo and then place them in a Public album. You then use that album URL as the source for your video gallery. The videos won't appear anywhere on Vimeo, but will still be accessible by the Vimeography WordPress plugin.
 
