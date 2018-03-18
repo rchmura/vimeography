@@ -136,7 +136,7 @@ class Renderer {
 
     ob_start();
     ?>
-      <div id="vimeography-gallery-<?php esc_attr_e($data['id']); ?>" class="<?php echo $wrapper_class; ?>" data-version="<?php esc_attr_e( $data['version'] ); ?>" <?php if ( ! empty( $this->gallery_settings['width'] ) ) : ?> style="max-width: <?php esc_attr_e( $this->gallery_settings['width'] ); ?>" <?php endif; ?> itemscope itemtype="http://schema.org/VideoGallery">
+      <div id="vimeography-gallery-<?php esc_attr_e($data['id']); ?>" class="<?php echo $wrapper_class; ?>" data-version="<?php esc_attr_e( $data['version'] ); ?>" <?php if ( ! empty( $this->gallery_settings['width'] ) ) : ?> style="max-width: <?php esc_attr_e( $this->gallery_settings['width'] ); ?>; margin: 0 auto;" <?php endif; ?> itemscope itemtype="http://schema.org/VideoGallery">
         <div id="subbie">
           <gallery></gallery>
         </div>
