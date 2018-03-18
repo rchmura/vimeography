@@ -162,6 +162,21 @@ class Vimeography_Admin_Menu {
   public function load_vimeography_welcome_page() {
     require_once VIMEOGRAPHY_PATH . 'lib/admin/controllers/vimeography/welcome.php';
     $this->_controller = new Vimeography_Welcome;
+
+    switch ( $_GET['step'] ) {
+      case 2:
+        $step = 'welcome-step-2';
+        break;
+      case 3:
+        $step = 'welcome-step-3';
+        break;
+      default:
+        $step = 'welcome-step-1';
+        break;
+    }
+
+    $this->_controller->step = $this->_mustache->loadTemplate('vimeography/partials/' . $step)->render($this->_controller);
+
     $this->_view = $this->_mustache->loadTemplate('vimeography/welcome');
     self::vimeography_process_actions();
   }

@@ -49,7 +49,13 @@ class Vimeography_Gallery_New extends Vimeography_Base {
 
         //$trigger = $this->_vimeography_subscribe_to_trigger($input['resource_uri'], $gallery_id);
 
-        wp_redirect( get_admin_url().'admin.php?page=vimeography-edit-galleries&id=' . $this->_gallery_id . '&created=1' ); exit;
+        if ( isset( $_GET['redirect'] ) && $_GET['redirect'] == 'welcome' ) {
+          wp_redirect( get_admin_url().'options.php?page=vimeography-welcome&step=2&id=' . $this->_gallery_id );
+        } else {
+          wp_redirect( get_admin_url().'admin.php?page=vimeography-edit-galleries&id=' . $this->_gallery_id . '&created=1' );
+        }
+
+        exit;
       } catch (Vimeography_Exception $e) {
         require_once(ABSPATH . 'wp-admin/admin-header.php');
         $this->messages[] = array(
