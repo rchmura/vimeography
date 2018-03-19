@@ -4,7 +4,6 @@
     <p>Here's how your videos would look by using one of our <strong>top 3 best-selling gallery themes.</strong></p>
     <p>Looking for something a bit more custom? We have 14 different gallery theme options <a href="https://vimeography.com/themes?utm_source=plugin&utm_content=onboarding">available on our website.</a></p>
 
-
     <div class="vimeography-newsletter">
       <h3>Psst. Join our Newsletter!</h3>
       <p>Join now and we'll send you a discount code good for 10% off any of our gallery themes.</p>
@@ -58,27 +57,13 @@
     height: 60vh;
   }
 
-  .vimeography-loading:before {
-    content: '';
-    width: 50px;
-    height: 50px;
-    border: 3px solid rgba(0,0,0,.3);
-    border-radius: 50%;
-    border-top-color: #6d1414;
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    animation: spin 1s ease-in-out infinite;
-    -webkit-animation: spin 1s ease-in-out infinite;
-  }
-
   .vimeography-browser > iframe {
     width: 100%;
     height: 100%;
     overflow-y: auto;
     margin: 0 auto 1rem;
     display: block;
-    z-index: 10;
+    background: url(data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMzgiIGhlaWdodD0iMzgiIHZpZXdCb3g9IjAgMCAzOCAzOCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIiBzdHJva2U9IiMwNDhlZDkiPiAgICA8ZyBmaWxsPSJub25lIiBmaWxsLXJ1bGU9ImV2ZW5vZGQiPiAgICAgICAgPGcgdHJhbnNmb3JtPSJ0cmFuc2xhdGUoMSAxKSIgc3Ryb2tlLXdpZHRoPSIyIj4gICAgICAgICAgICA8Y2lyY2xlIHN0cm9rZS1vcGFjaXR5PSIuNSIgY3g9IjE4IiBjeT0iMTgiIHI9IjE4Ii8+ICAgICAgICAgICAgPHBhdGggZD0iTTM2IDE4YzAtOS45NC04LjA2LTE4LTE4LTE4Ij4gICAgICAgICAgICAgICAgPGFuaW1hdGVUcmFuc2Zvcm0gICAgICAgICAgICAgICAgICAgIGF0dHJpYnV0ZU5hbWU9InRyYW5zZm9ybSIgICAgICAgICAgICAgICAgICAgIHR5cGU9InJvdGF0ZSIgICAgICAgICAgICAgICAgICAgIGZyb209IjAgMTggMTgiICAgICAgICAgICAgICAgICAgICB0bz0iMzYwIDE4IDE4IiAgICAgICAgICAgICAgICAgICAgZHVyPSIxcyIgICAgICAgICAgICAgICAgICAgIHJlcGVhdENvdW50PSJpbmRlZmluaXRlIi8+ICAgICAgICAgICAgPC9wYXRoPiAgICAgICAgPC9nPiAgICA8L2c+PC9zdmc+) no-repeat center center;
   }
 
   @keyframes spin {
