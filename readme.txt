@@ -77,10 +77,6 @@ Vimeography themes are treated as WordPress plugins. Make sure you're installing
 
 If you purchased your video gallery theme at vimeography.com, you should have received an email receipt containing an license key for your theme. Enter that license code on the "Manage Licenses" page of the Vimeography plugin. Once done, you will be subscribed to theme updates which will automatically be delivered to your WordPress installation, just like any other plugin.
 
-= Why don’t you support YouTub/MetaHall/Flacker/PreschoolHumor? =
-
-Like many other video professionals, I believe that Vimeo is a beautiful website complete with clean design, a supportive community, a wonderful staff, and a straightforward API. This makes Vimeo a great choice for professional looking portfolios. Yes, there are other crummier sites that may also do the job, but that’s like forcing down squid nuggets for dinner when you could be having baked scallops and a caprese appetizer. Vimeo only; enough said.
-
 = How do I add my Vimeography video gallery to a post or page? =
 
 Easy! All you have to do is type `[vimeography id="#"]`, where `#` is replaced by the ID number of your Vimeo video gallery.
@@ -141,7 +137,7 @@ Vimeography will load your template for the defined module instead of the defaul
 = 2.0.0-alpha =
 
 * [New] Introducing Harvestone, our new default Vimeography theme!
-* [New] Vimeography themes are now supported by Vue.js instead of Mustache.php
+* [New] Vimeography themes are now rendered with Vue.js instead of Mustache.php
 * [New] Vimeography theme development is now supported by the Webpack build process.
 * [New] Complete rewrite of the Vimeography request and rendering engine for better control flow.
 * [New] You can now skip Vimeography's cache entirely by adding ?vimeography_nocache=1 to the url.
