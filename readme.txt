@@ -3,7 +3,7 @@ Contributors: iamdavekiss, videogallery
 Tags: video gallery, gallery, video, vimeo, vimeo gallery
 Requires at least: 3.3
 Tested up to: 4.9
-Stable tag: 2.0.0-alpha
+Stable tag: 2.0.0
 License: GPL-3.0
 
 The easiest way to create beautiful Vimeo video galleries on your WordPress site.
@@ -64,10 +64,6 @@ First of all, don't worry! I promise you that we can get it looking right. This 
 = I'm getting an error: This Vimeography gallery does not have a theme assigned to it. =
 
 Make sure that you have the latest version of the Vimeography theme plugin that you are using installed and that it is activated. Then, go to the gallery editor and select that theme under the Appearance tab. If you're still having problems, reach out on the Vimeography contact page.
-
-= I'm getting an error: Vimeography error: the plugin did not retrieve data from the Vimeo API! connect() timed out! =
-
-This usually means that Vimeo is having some network issues. Follow @Vimeo on twitter for updates. If Vimeo is not reporting any issues, you'll need to contact your host and ask why you are unable to connect to Vimeo's IP address. It may be that your host has blocked server access via a firewall.
 
 = I'm having trouble installing a video gallery theme. =
 
@@ -134,12 +130,13 @@ Vimeography will load your template for the defined module instead of the defaul
 
 == Changelog ==
 
-= 2.0.0-alpha =
+= 2.0.0 =
 
 * [New] Introducing Harvestone, our new default Vimeography theme!
 * [New] Vimeography themes are now rendered with Vue.js instead of Mustache.php
 * [New] Vimeography theme development is now supported by the Webpack build process.
 * [New] Complete rewrite of the Vimeography request and rendering engine for better control flow.
+* [New] Added a brand new tutorial onboarding process when the plugin is first installed.
 * [New] You can now skip Vimeography's cache entirely by adding ?vimeography_nocache=1 to the url.
 * [New] You can now set the galleries to show per page on the Gallery List page in the admin.
 * [New] Add styles for any Vimeography errors that occur during render.
@@ -147,6 +144,10 @@ Vimeography will load your template for the defined module instead of the defaul
 * [New] Added the `vimeography.gallery.wrapper_class` filter so you can apply custom CSS classes to your gallery wrappers.
 * [New] You can override all of Vimeography's component templates with your own custom layout definition. (See the FAQ!)
 * [New] You can now insert a Vimeography element within WPBakery Page Builder (formally Visual Composer)
+* [Tweak] Replaced the Vimeography icon in the menu with our new logo.
+* [Tweak] Swapped out the Vimeography Pro demo video with a new shorter video.
+* [Tweak] Vimeography gallery data is now preserved after the plugin is uninstalled.
+* [Tweak] Updated the plugin screenshots on the plugin homepage.
 * [Tweak] Harvestone is now the default theme gallery used during new galleries.
 * [Tweak] Vimeography now observes gallery visibility to allow hiding galleries on page load.
 * [Tweak] Video limit is now enforced after cache is set rather than before
