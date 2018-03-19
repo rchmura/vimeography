@@ -85,7 +85,10 @@ class Vimeography_Addons {
 
           $plugin['app_path'] = plugins_url( 'dist/', $plugin_path );
           $plugin['app_js'] = plugins_url( sprintf( 'dist/%s', $manifest['main.js'] ), $plugin_path );
-          $plugin['app_css'] = plugins_url( sprintf( 'dist/%s', $manifest['main.css'] ), $plugin_path );
+
+          if ( isset( $manifest['main.css'] ) ) {
+            $plugin['app_css'] = plugins_url( sprintf( 'dist/%s', $manifest['main.css'] ), $plugin_path );
+          }
         }
 
       }

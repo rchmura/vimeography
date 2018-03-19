@@ -106,7 +106,11 @@ class Renderer {
 
     $theme_name = strtolower( $this->theme['name'] );
     wp_register_script( "vimeography-{$theme_name}", $this->theme['app_js'], array(), false, true );
-    wp_register_style( "vimeography-{$theme_name}", $this->theme['app_css'] );
+
+    if ( isset( $this->theme['app_css'] ) ) {
+      wp_register_style( "vimeography-{$theme_name}", $this->theme['app_css'] );
+      wp_enqueue_style("vimeography-{$theme_name}");
+    }
 
     wp_localize_script("vimeography-{$theme_name}", 'vimeographyBuildPath', $this->theme['app_path']);
 
@@ -121,7 +125,6 @@ class Renderer {
     $local_data);
 
     wp_enqueue_script("vimeography-{$theme_name}");
-    wp_enqueue_style("vimeography-{$theme_name}");
 
     return $this;
   }
