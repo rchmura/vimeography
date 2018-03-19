@@ -16,6 +16,10 @@ class Vimeography_Welcome extends Vimeography_Base {
      return wp_nonce_field('vimeography-gallery-action','vimeography-gallery-verification');
   }
 
+  /**
+   * [gallery description]
+   * @return [type] [description]
+   */
   public function gallery() {
     if ( function_exists('do_shortcode') ) {
 
@@ -27,6 +31,29 @@ class Vimeography_Welcome extends Vimeography_Base {
 
       return do_shortcode( $shortcode );
     }
+  }
+
+  /**
+   * [gallery_source description]
+   * @return [type] [description]
+   */
+  public function gallery_source() {
+    global $wpdb;
+
+    if ( isset( $_GET['id'] ) ) {
+      $row = $wpdb->get_results(
+        $wpdb->prepare(
+          "SELECT source_url FROM $wpdb->vimeography_gallery_meta WHERE gallery_id = %d",
+          absint( $_GET['id'] )
+        )
+      );
+
+      if ( $row ) {
+        return $row[0]->source_url;
+      }
+    }
+
+    return '';
   }
 
   /**
@@ -45,6 +72,10 @@ class Vimeography_Welcome extends Vimeography_Base {
     return $url;
   }
 
+  /**
+   * [edit_gallery_url description]
+   * @return [type] [description]
+   */
   public function edit_gallery_url() {
     $base = parent::admin_url();
     $url = sprintf( '%sedit-galleries&id=%s', $base, absint( $_GET['id'] ) );
@@ -52,6 +83,10 @@ class Vimeography_Welcome extends Vimeography_Base {
     return $url;
   }
 
+  /**
+   * [admin_email description]
+   * @return [type] [description]
+   */
   public function admin_email() {
     $user = wp_get_current_user();
     return $user->user_email;
