@@ -124,9 +124,9 @@ Vimeography will load your template for the defined module instead of the defaul
 == Screenshots ==
 
 1. Create a Vimeo video gallery in 30 seconds, tops!
-2. Preview your Vimeo video gallery and customize its appearance.
-3. Manage your Vimeo video galleries with a simple interface.
-4. Get new styles by installing video gallery themes.
+2. User-friendly tutorials to get you up and running.
+3. Perfect gallery themes for every application.
+4. Gain additional features with Vimeography PRO.
 
 == Changelog ==
 
