@@ -134,7 +134,7 @@ class Renderer {
    * @return [type] [description]
    */
   public function template( $data ) {
-    $wrapper_class = 'vimeography-' . esc_attr( $data['theme'] );
+    $wrapper_class = 'vimeography-theme-' . esc_attr( $data['theme'] );
     $wrapper_class = apply_filters('vimeography.gallery.wrapper_class', $wrapper_class, $data);
 
     ob_start();
