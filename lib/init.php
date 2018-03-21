@@ -8,7 +8,28 @@ class Vimeography_Init extends Vimeography {
     add_action( 'init', array($this, 'vimeography_load_text_domain') );
     add_action( 'init', array($this, 'vimeography_written_block_robots') );
     add_action( 'init', array($this, 'vimeography_add_gallery_helper') );
+
+    add_action( 'wp_head', array( $this, 'output_referrer_tag' ) );
+    add_action( 'admin_head', array( $this, 'output_referrer_tag') );
   }
+
+  /**
+   * Adds a referrer policy to the user's site so that
+   * Vimeo videos with a domain restriction are aware
+   * of this domain name being the referring domain.
+   *
+   * @return void
+   */
+  public function output_referrer_tag() {
+    $enable = apply_filters( 'vimeography.privacy.enable_referrer', false );
+
+    if ( $enable ) {
+      echo '<meta name="referrer" content="origin">';
+    }
+
+    return;
+  }
+
 
   /**
    * Localization
