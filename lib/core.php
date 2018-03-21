@@ -245,9 +245,18 @@ abstract class Core {
        */
       $params = array_merge( array(
         'fields' => implode( $fields, ',' ),
-        'filter' => 'embeddable',
-        'filter_embeddable' => 'true',
       ), $params );
+
+      /**
+       * Allows Vimeography to disclude videos in the request response
+       * that cannot be embedded due to their privacy settings or domain restrictions.
+       */
+      $filter = apply_filters('vimeography.request.privacy.filter', 'embeddable', $this->gallery_id, $this->gallery_settings);
+
+      if ( $filter === 'embeddable' ) {
+        $params['filter'] = $embeddable;
+        $params['filter_embeddable'] = 'true';
+      }
 
       /**
        * Set the headers to send along with the Vimeo request.
