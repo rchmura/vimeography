@@ -45,7 +45,7 @@ class Vimeography_Admin_Welcome {
     }
 
     // Redirect
-    wp_safe_redirect( add_query_arg( array( 'page' => 'vimeography-welcome' ), admin_url( 'options.php' ) ) );
+    wp_safe_redirect( add_query_arg( array( 'page' => 'vimeography-welcome', 'step' => '1' ), admin_url( 'options.php' ) ) );
   }
 
 }
