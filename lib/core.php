@@ -254,7 +254,7 @@ abstract class Core {
       $filter = apply_filters('vimeography.request.privacy.filter', 'embeddable', $this->gallery_id, $this->gallery_settings);
 
       if ( $filter === 'embeddable' ) {
-        $params['filter'] = $embeddable;
+        $params['filter'] = 'embeddable';
         $params['filter_embeddable'] = 'true';
       }
 
