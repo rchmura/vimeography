@@ -2,9 +2,9 @@
 import { mapState } from 'vuex'
 
 const defaultTemplate = `
-  <figure class="swiper-slide vimeography-thumbnail">
-    <router-link class="vimeography-link" :to="this.query" exact exact-active-class="vimeography-link-active">
-      <img class="vimeography-thumbnail-img" :src="thumbnailUrl" :title="video.name" />
+  <figure :class="this.thumbnailClass">
+    <router-link class="vimeography-link" :title="video.name" :to="this.query" exact exact-active-class="vimeography-link-active">
+      <img class="vimeography-thumbnail-img" :src="thumbnailUrl" :alt="video.name" />
     </router-link>
   </figure>
 `;
@@ -15,6 +15,9 @@ const Thumbnail = {
   props: ['video'],
   template: userTemplate ? userTemplate.innerText : defaultTemplate,
   computed: {
+    thumbnailClass() {
+      return `swiper-slide vimeography-thumbnail vimeography-video-${this.video.id}`
+    },
     query() {
       const q = {
         ...this.$route.query,
