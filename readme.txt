@@ -3,7 +3,7 @@ Contributors: iamdavekiss, videogallery
 Tags: video gallery, gallery, video, vimeo, vimeo gallery
 Requires at least: 3.3
 Tested up to: 4.9
-Stable tag: 2.0.1
+Stable tag: 2.0.2
 License: GPL-3.0
 
 The easiest way to create beautiful Vimeo video galleries on your WordPress site.
@@ -129,6 +129,9 @@ Vimeography will load your template for the defined module instead of the defaul
 4. Gain additional features with Vimeography PRO.
 
 == Changelog ==
+= 2.0.2 =
+* [Fix] Only set custom CSS stylesheet dependencies if they actually exist (900edad)
+* [Fix] Disable strong check against namespace bool value during custom appearance changes. (ea2c592)
 
 = 2.0.1 =
 * [New] Added Video ID classnames to each thumbnail in the Harvestone theme. (https://github.com/davekiss/vimeography/commit/d7aedee90a25f938d047fe208766371a6a148fbd)
