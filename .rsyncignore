@@ -1,0 +1,13 @@
+.git
+.gitignore
+.gitattributes
+.rsyncignore
+_config.yml
+.DS_Store
+node_modules/
+vimeography-harvestone/src/
+vimeography-harvestone/package.json
+vimeography-harvestone/package-lock.json
+vimeography-harvestone/webpack.config.js
+vimeography-harvestone/yarn.lock
+browserstack-logo.svg
