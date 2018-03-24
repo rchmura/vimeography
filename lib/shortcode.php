@@ -192,9 +192,16 @@ class Vimeography_Shortcode extends Vimeography {
     $file_url = VIMEOGRAPHY_CUSTOMIZATIONS_URL  . $filename;
 
     if ( file_exists( $filepath ) ) {
+      $vimeography = Vimeography::get_instance();
+      $addons = $vimeography->addons->set_active_theme( $this->_gallery_settings['theme'] );
+      $theme = $addons->active_theme;
+
       // Make sure the current theme's stylesheet handle is set as a dependency
-      $dependency = 'vimeography-' . strtolower( $this->_gallery_settings['theme'] );
-      wp_register_style($name, $file_url, array($dependency), strval( filemtime($filepath) ) );
+      if ( version_compare( $theme['version'], '2.0', '<' ) || isset( $theme['app_css'] ) ) {
+        $dependencies = array( 'vimeography-' . strtolower( $this->_gallery_settings['theme'] ) );
+      }
+
+      wp_register_style($name, $file_url, $dependencies, strval( filemtime($filepath) ) );
       wp_enqueue_style($name);
     }
   }
