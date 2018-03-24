@@ -585,7 +585,7 @@ class Vimeography_Gallery_Edit extends Vimeography_Base {
         $filepath = VIMEOGRAPHY_CUSTOMIZATIONS_PATH . $filename;
 
         foreach ( $settings as $setting_id => $setting ) {
-          $namespace = $setting['namespace'] === true  ? '#vimeography-gallery-'.$this->_gallery_id : '';
+          $namespace = $setting['namespace'] == true  ? '#vimeography-gallery-'.$this->_gallery_id : '';
           $important = isset( $setting['important'] ) ? ' !important' : '';
           $target_count = count( $setting['targets'] );
 
