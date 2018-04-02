@@ -37,4 +37,16 @@
           array('target' => '.vimeography-theme-harvestone .vimeography-player:before', 'attribute' => 'borderTopColor'),
         )
     ),
+    array(
+      'type'       => 'visibility',
+      'label'      => __('Show Video Titles'),
+      'id'         => 'video-title-visibility',
+      'value'      => 'none',
+      'pro'        => true,
+      'namespace'  => true,
+      'properties' =>
+        array(
+          array('target' => '.vimeography-theme-harvestone .vimeography-title', 'attribute' => 'display'),
+        )
+    ),
   );
