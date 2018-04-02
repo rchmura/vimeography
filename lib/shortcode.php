@@ -42,6 +42,12 @@ class Vimeography_Shortcode extends Vimeography {
   public function __construct() {
     add_filter( 'widget_text', 'do_shortcode' );
     add_shortcode( 'vimeography', array($this, 'vimeography_shortcode') );
+
+    if ( function_exists('register_block_type') ) {
+      register_block_type( 'vimeography/gallery', array(
+        'render_callback' => array($this, 'vimeography_shortcode'),
+      ) );
+    }
   }
 
   /**
