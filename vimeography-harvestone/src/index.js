@@ -14,6 +14,7 @@ import { storeModules } from 'vimeography-blueprint';
 
 import head from 'lodash/head';
 import cloneDeep from 'lodash/cloneDeep';
+var URLSearchParams = require('url-search-params');
 
 const router = new VueRouter({
   mode: window.vimeographyRouterMode,

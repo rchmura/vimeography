@@ -32,6 +32,7 @@
     "axios": "^0.16.2",
     "lodash": "^4.17.4",
     "swiper": "^4.0.2",
+    "url-search-params": "^0.10.0",
     "vimeography-blueprint": "https://github.com/davekiss/vimeography-blueprint",
     "vue": "^2.3.4",
     "vue-observe-visibility": "^0.3.1",
