@@ -202,6 +202,8 @@ class Vimeography_Shortcode extends Vimeography {
       $addons = $vimeography->addons->set_active_theme( $this->_gallery_settings['theme'] );
       $theme = $addons->active_theme;
 
+      $dependencies = array();
+
       // Make sure the current theme's stylesheet handle is set as a dependency
       if ( version_compare( $theme['version'], '2.0', '<' ) || isset( $theme['app_css'] ) ) {
         $dependencies = array( 'vimeography-' . strtolower( $this->_gallery_settings['theme'] ) );
