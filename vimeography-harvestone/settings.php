@@ -10,7 +10,7 @@
       'namespace'  => true,
       'properties' =>
         array(
-          array('target' => '.vimeography-theme-harvestone .vimeography-thumbnail-container .vimeography-link', 'attribute' => 'borderColor'),
+          array('target' => '.vimeography-theme-harvestone .vimeography-thumbnail-container .vimeography-link img', 'attribute' => 'borderColor'),
         )
     ),
     array(
@@ -22,7 +22,7 @@
       'namespace'  => true,
       'properties' =>
         array(
-          array('target' => '.vimeography-theme-harvestone .vimeography-thumbnail-container .vimeography-link.vimeography-link-active', 'attribute' => 'borderColor'),
+          array('target' => '.vimeography-theme-harvestone .vimeography-thumbnail-container .vimeography-link.vimeography-link-active img', 'attribute' => 'borderColor'),
         )
     ),
     array(

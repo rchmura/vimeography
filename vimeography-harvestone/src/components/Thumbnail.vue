@@ -48,11 +48,15 @@ export default Thumbnail;
     display: block;
     font-size: 0;
     line-height: 0;
-    border: 1px solid #cccccc;
     border-radius: 4px;
+    box-shadow: none;
+
+    img {
+      border: 1px solid #cccccc;
+    }
   }
 
-  .vimeography-link-active {
+  .vimeography-link-active img {
     border: 1px solid #5580e6;
   }
 
