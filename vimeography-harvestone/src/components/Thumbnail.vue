@@ -65,4 +65,11 @@ export default Thumbnail;
     max-width: 198px;
     cursor: pointer;
   }
+
+  .vimeography-title {
+    font-size: 1rem;
+    line-height: 1.2rem;
+    text-align: center;
+    margin: 1rem 0 0;
+  }
 </style>
