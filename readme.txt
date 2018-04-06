@@ -3,7 +3,7 @@ Contributors: iamdavekiss, videogallery
 Tags: video gallery, gallery, video, vimeo, vimeo gallery
 Requires at least: 3.3
 Tested up to: 4.9
-Stable tag: 2.0.2
+Stable tag: 2.0.3
 License: GPL-3.0
 
 The easiest way to create beautiful Vimeo video galleries on your WordPress site.
@@ -129,6 +129,12 @@ Vimeography will load your template for the defined module instead of the defaul
 4. Gain additional features with Vimeography PRO.
 
 == Changelog ==
+
+= 2.0.3 =
+* [New] Vimeography is now compatible with Gutenberg! Try inserting your gallery as a block.
+* [New] Vimeography CURL request default parameters can now be modified using the vimeography.request.curl_defaults filter.
+* [Fix] We've added a URLSearchParams polyfill to Harvestone for Edge and IE support
+
 = 2.0.2 =
 * [Fix] Only set custom CSS stylesheet dependencies if they actually exist (900edad)
 * [Fix] Disable strong check against namespace bool value during custom appearance changes. (ea2c592)
