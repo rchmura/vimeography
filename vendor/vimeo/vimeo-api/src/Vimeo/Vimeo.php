@@ -58,7 +58,8 @@ class Vimeo
         $this->_client_id = $client_id;
         $this->_client_secret = $client_secret;
         $this->_access_token = $access_token;
-        $this->CURL_DEFAULTS = array(
+
+        $this->CURL_DEFAULTS = apply_filters('vimeography.request.curl_defaults', array(
             CURLOPT_HEADER => 1,
             CURLOPT_RETURNTRANSFER => true,
             CURLOPT_TIMEOUT => 30,
@@ -66,7 +67,7 @@ class Vimeo
             //Certificate must indicate that the server is the server to which you meant to connect.
             CURLOPT_SSL_VERIFYHOST => 2,
             CURLOPT_CAINFO => realpath(__DIR__ .'/../..') . self::CERTIFICATE_PATH
-        );
+        ));
     }
 
     /**
