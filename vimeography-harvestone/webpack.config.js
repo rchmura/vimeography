@@ -36,16 +36,15 @@ module.exports = {
     rules: [{
       test: /\.js$/,
       exclude: /node_modules\/(?!(dom7|swiper)\/).*/,
-      loader: 'babel-loader',
-
-      options: {
-        presets: ['@babel/preset-env']
-      }
+      loader: 'babel-loader'
     },
     {
       test: /\.vue$/,
       loader: 'vue-loader',
-      exclude : /node_modules/
+      exclude: /node_modules/,
+      options: {
+        postcss: [require('postcss-cssnext')()]
+      }
     },
     {
       test: /\.(scss|css)$/,
