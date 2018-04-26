@@ -168,12 +168,14 @@ if ( ! class_exists( 'Vimeography' ) ) {
       if ( ( ($url = parse_url($source_url) ) !== FALSE ) && (preg_match('~vimeo(?:pro)?\.com$~', $url['host']) > 0)) {
         $host = $url['host'];
 
+        $url['path'] = str_replace('/manage', '', $url['path']);
+
         // Create an array with the resource parts
         $url = array_values(array_filter(explode('/', $url['path']), 'strlen'));
 
         // If the array doesn't contain one of the following strings, it
         // must be either a user or a video
-        if (in_array($url[0], array('album', 'channels', 'groups', 'categories', 'tags')) !== TRUE) {
+        if (in_array($url[0], array('album', 'albums', 'channels', 'groups', 'categories', 'tags')) !== TRUE) {
           if (is_numeric($url[0])) {
             array_unshift($url, 'videos');
           } else {
