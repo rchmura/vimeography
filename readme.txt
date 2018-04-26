@@ -3,7 +3,7 @@ Contributors: iamdavekiss, videogallery
 Tags: video gallery, gallery, video, vimeo, vimeo gallery
 Requires at least: 3.3
 Tested up to: 4.9
-Stable tag: 2.0.3
+Stable tag: 2.0.4
 License: GPL-3.0
 
 The easiest way to create beautiful Vimeo video galleries on your WordPress site.
@@ -98,7 +98,7 @@ Heck yeah! Use the appearance editor to change your video gallery theme's style 
 
 Sure, why not. Here's an example:
 
-```
+`
 <?php
 
   function my_custom_harvestone_thumbnail() {
@@ -117,7 +117,7 @@ Sure, why not. Here's an example:
 
   add_action('admin_head', 'my_custom_harvestone_thumbnail');
   add_action('wp_head', 'my_custom_harvestone_thumbnail');
-```
+`
 
 Vimeography will load your template for the defined module instead of the default one for your theme.
 
@@ -129,6 +129,10 @@ Vimeography will load your template for the defined module instead of the defaul
 4. Gain additional features with Vimeography PRO.
 
 == Changelog ==
+= 2.0.4 =
+* [Tweak] Allow validation of album urls in /manage/albums/xxx format (https://github.com/davekiss/vimeography/commit/b38633554e4da532dde9ea86f85e3c4b1ac606d4)
+* [Tweak] Autoprefix Harvestone styles using postcss-cssnext (https://github.com/davekiss/vimeography/commit/b37d713391765ca82c9a2f79a6afc577d395f8e6)
+* [Fix] Correct padding applied to player on loadVideo (https://github.com/davekiss/vimeography/commit/56c2eea7ba9911579db14f547a88a932fb92ed5a)
 
 = 2.0.3 =
 * [New] Vimeography is now compatible with Gutenberg! Try inserting your gallery as a block.
