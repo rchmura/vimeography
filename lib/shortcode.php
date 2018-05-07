@@ -238,6 +238,11 @@ class Vimeography_Shortcode extends Vimeography {
               ->render();
 
     } catch (Vimeography_Exception $e) {
+
+      $link = get_permalink();
+      $time = current_time( 'timestamp', true );
+      do_action( 'vimeography.exception.report', $e, $this, $link, $time );
+
       ob_start();
 
       ?>
