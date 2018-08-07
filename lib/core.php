@@ -104,6 +104,7 @@ abstract class Core {
     'stats',
     'pictures',
     'status',
+    'user.account'
   );
 
   /**
