@@ -3259,8 +3259,8 @@ follow-redirects@^1.2.3:
     debug "^2.6.9"
 
 follow-redirects@^1.2.5:
-  version "1.4.1"
-  resolved "https://registry.yarnpkg.com/follow-redirects/-/follow-redirects-1.4.1.tgz#d8120f4518190f55aac65bb6fc7b85fcd666d6aa"
+  version "1.5.2"
+  resolved "https://registry.yarnpkg.com/follow-redirects/-/follow-redirects-1.5.2.tgz#5a9d80e0165957e5ef0c1210678fc5c4acb9fb03"
   dependencies:
     debug "^3.1.0"
 
@@ -7097,7 +7097,7 @@ viewport-dimensions@^0.2.0:
 
 "vimeography-blueprint@https://github.com/davekiss/vimeography-blueprint":
   version "1.0.0"
-  resolved "https://github.com/davekiss/vimeography-blueprint#8462a413936f08b86863f33aadf1c93ad8553d5c"
+  resolved "https://github.com/davekiss/vimeography-blueprint#7b4bb25c6aed3b937458af45449820e4ba711cc0"
   dependencies:
     "@babel/runtime" "^7.0.0-beta.32"
     "@vimeo/player" "^2.2.0"
