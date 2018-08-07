@@ -85,5 +85,9 @@ module.exports = {
 }
 
 if (isProduction) {
-  module.exports.plugins.push(new MinifyPlugin());
+  module.exports.plugins.push(new MinifyPlugin({
+    mangle: {
+      safari10: true
+    }
+  }));
 }
