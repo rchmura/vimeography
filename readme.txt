@@ -10,11 +10,17 @@ The easiest way to create beautiful Vimeo video galleries on your WordPress site
 
 == Description ==
 
+#### 70+ 5-star Reviews! Vimeography is the Best and Most Powerful Video Gallery Plugin for Membership and Course Sites. ★★★★★
+
+More than 10,000 websites use Vimeography to show their Vimeo videos on their own WordPress website.
+
 Vimeography is a free WordPress plugin that allows you to create beautiful, custom Vimeo video galleries in 30 seconds, tops!
 
 A quick overview:
 
 http://vimeo.com/44555634
+
+Our video gallery plugin is used to power **over 10,000 video membership, course, and portfolio websites.**
 
 For more information, check out [vimeography.com](https://vimeography.com/?utm_source=wpdotorg&utm_medium=description "vimeography.com")
 
@@ -35,9 +41,6 @@ Some amazing features:
 > Check our all of our video gallery designs at [https://vimeography.com/themes](https://vimeography.com/themes?utm_source=wpdotorg&utm_medium=description "vimeography.com/themes")
 
 For even more control over your Vimeo video galleries, including unlimited videos, custom sorting, hidden collections, playlists and more, check out [Vimeography Pro!](https://vimeography.com/pro?utm_source=wpdotorg&utm_medium=repo "Vimeography Pro")
-
-For the latest updates, follow us!
-[http://twitter.com/vimeography](http://twitter.com/vimeography "twitter.com/vimeography")
 
 == Installation ==
 
