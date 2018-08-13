@@ -16,7 +16,7 @@ More than 10,000 websites use Vimeography to show their Vimeo videos on their ow
 
 Vimeography is a free WordPress plugin that allows you to create beautiful, custom Vimeo video galleries in 30 seconds, tops!
 
-A quick overview:
+Check out our intro video to learn how to create your own Netflix style website.
 
 http://vimeo.com/44555634
 
@@ -26,21 +26,29 @@ For more information, check out [vimeography.com](https://vimeography.com/?utm_s
 
 Some amazing features:
 
-* Automatically add videos uploaded to a Vimeo user account, channel, album or group to your video gallery
-* Easily insert video galleries on a page, post or template with the gallery helper or shortcode
+* Automatically add videos uploaded to a Vimeo user account, channel, or album to your video gallery
+* Easily insert video galleries on a page, post or template with one click
 * Set a featured video to appear as the first video in your Vimeo video gallery
 * Change your Vimeo video gallery's appearance with custom themes
 * Tweak your video gallery theme's look with the appearance editor
 * Control the video gallery width using pixels or percentages
 * Built-in caching for quick page loads
-* Create unlimited Vimeo video galleries
 
 > #### Vimeography Themes
 > Make your gallery stand out with our custom video gallery themes! All themes come with one year of updates and support.
 >
 > Check our all of our video gallery designs at [https://vimeography.com/themes](https://vimeography.com/themes?utm_source=wpdotorg&utm_medium=description "vimeography.com/themes")
 
-For even more control over your Vimeo video galleries, including unlimited videos, custom sorting, hidden collections, playlists and more, check out [Vimeography Pro!](https://vimeography.com/pro?utm_source=wpdotorg&utm_medium=repo "Vimeography Pro")
+#### Want more features?
+
+[Check out Vimeography Pro](https://vimeography.com/pro?utm_source=wpdotorg&utm_medium=repo "Vimeography Pro") for additional features:
+
+* Create searchable galleries
+* Create shareable links to videos in your collection
+* Show unlimited videos
+* Enable download links for your videos
+* Show hidden videos, create auto-playing playlists, custom sorting and more!
+* Supports Vimeo video interaction tools (end screens, cards, email capture)
 
 == Installation ==
 
