@@ -2,7 +2,7 @@
 Contributors: iamdavekiss, videogallery
 Tags: video gallery, gallery, video, vimeo, vimeo gallery
 Requires at least: 3.3
-Tested up to: 4.9
+Tested up to: 5.0
 Stable tag: 2.0.5
 License: GPL-3.0
 
