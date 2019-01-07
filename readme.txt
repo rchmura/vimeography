@@ -3,7 +3,7 @@ Contributors: iamdavekiss, videogallery
 Tags: video gallery, gallery, video, vimeo, vimeo gallery
 Requires at least: 3.3
 Tested up to: 5.0
-Stable tag: 2.0.7
+Stable tag: 2.0.8
 License: GPL-3.0
 
 The easiest way to create beautiful Vimeo video galleries on your WordPress site.
@@ -138,6 +138,9 @@ Vimeography will load your template for the defined module instead of the defaul
 4. Gain additional features with Vimeography PRO.
 
 == Changelog ==
+= 2.0.8 =
+* [Fix] Ignore rate limit response header until Vimeo settles on a format.
+
 = 2.0.7 =
 * [Fix] Hotfix for parsing Vimeo's new rate limit header format
 
