@@ -56,7 +56,7 @@ class Vimeography_Admin_Scripts {
     wp_enqueue_script(
       'vimeography-blocks',
       VIMEOGRAPHY_URL . 'lib/admin/assets/js/vimeography-blocks.js',
-      array( 'wp-blocks', 'wp-i18n', 'wp-element' ),
+      array( 'wp-blocks', 'wp-components', 'wp-i18n', 'wp-element' ),
       filemtime( VIMEOGRAPHY_PATH . 'lib/admin/assets/js/vimeography-blocks.js' )
     );
 
