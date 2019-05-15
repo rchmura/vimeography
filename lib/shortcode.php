@@ -116,6 +116,9 @@ class Vimeography_Shortcode extends Vimeography {
       $shortcode_gallery_settings['source'] = Vimeography::validate_vimeo_source( $shortcode_gallery_settings['source'] );
     }
 
+    // Hot swap the showcases source for albums until showcases are supported via the API
+    $shortcode_gallery_settings['source'] = str_replace( "showcases", "albums", $shortcode_gallery_settings['source'] );
+
     $shortcode_gallery_settings['source'] = $shortcode_gallery_settings['source'] . '/videos';
 
     return $shortcode_gallery_settings;

@@ -175,7 +175,7 @@ if ( ! class_exists( 'Vimeography' ) ) {
 
         // If the array doesn't contain one of the following strings, it
         // must be either a user or a video
-        if (in_array($url[0], array('album', 'albums', 'channels', 'groups', 'categories', 'tags')) !== TRUE) {
+        if (in_array($url[0], array('album', 'albums', 'showcase', 'showcases', 'channels', 'groups', 'categories', 'tags')) !== TRUE) {
           if (is_numeric($url[0])) {
             array_unshift($url, 'videos');
           } else {
