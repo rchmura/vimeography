@@ -4,7 +4,7 @@ Plugin Name: Vimeography Theme: Harvestone
 Plugin URI: https://vimeography.com/themes
 Theme Name: Harvestone
 Theme URI: https://vimeography.com/themes/harvestone
-Version: 2.0
+Version: 2.1
 Description: Harvestone is the base gallery theme that comes prepackaged with Vimeography.
 Author: Dave Kiss
 Author URI: https://vimeography.com
@@ -20,7 +20,7 @@ if ( ! class_exists('Vimeography_Themes_Harvestone') ) {
      *
      * @var string
      */
-    public $version = '2.0';
+    public $version = '2.1';
 
 
     /**

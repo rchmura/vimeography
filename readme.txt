@@ -2,7 +2,7 @@
 Contributors: iamdavekiss, videogallery
 Tags: video gallery, gallery, video, vimeo, vimeo gallery
 Requires at least: 3.3
-Tested up to: 5.2
+Tested up to: 5.3
 Stable tag: 2.1
 License: GPL-3.0
 
@@ -138,6 +138,13 @@ Vimeography will load your template for the defined module instead of the defaul
 4. Gain additional features with Vimeography PRO.
 
 == Changelog ==
+= 2.1 =
+* [Pro] Harvestone will now show the number of search results above the search box
+* [New] Harvestone now implements native browser lazy loading for thumbnails
+* [Tweak] Update language from albums to showcases
+* [Tweak] Update dependencies and build process
+* [Update] Mark compatibility with WordPress 5.3
+
 = 2.0.10 =
 * [Update] Mark compatibility with WordPress 5.2
 * [Update] Allow Vimeo Showcase links to be used as the source for your gallery
