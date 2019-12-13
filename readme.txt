@@ -3,7 +3,7 @@ Contributors: iamdavekiss, videogallery
 Tags: video gallery, gallery, video, vimeo, vimeo gallery
 Requires at least: 3.3
 Tested up to: 5.2
-Stable tag: 2.0.10
+Stable tag: 2.1
 License: GPL-3.0
 
 The easiest way to create beautiful Vimeo video galleries on your WordPress site.
@@ -24,7 +24,7 @@ For more information, check out [vimeography.com](https://vimeography.com/?utm_s
 
 Some amazing features:
 
-* Automatically add videos uploaded to a Vimeo user account, channel, or album to your video gallery
+* Automatically add videos uploaded to a Vimeo user account, channel, or showcase to your video gallery
 * Easily insert video galleries on a page, post or template with one click
 * Set a featured video to appear as the first video in your Vimeo video gallery
 * Change your Vimeo video gallery's appearance with custom themes
@@ -58,7 +58,7 @@ Some amazing features:
 
 If you would like to show videos that are hidden from Vimeo, you will need [Vimeography Pro.](https://vimeography.com/add-ons/vimeography-pro/?utm_source=wpdotorg&utm_medium=faq)
 
-The way that it works is you mark your videos as hidden from Vimeo and then place them in a Public album. You then use that album URL as the source for your video gallery. The videos won't appear anywhere on Vimeo, but will still be accessible by the Vimeography WordPress plugin.
+The way that it works is you mark your videos as hidden from Vimeo and then place them in a Public showcase. You then use that showcase URL as the source for your video gallery. The videos won't appear anywhere on Vimeo, but will still be accessible by the Vimeography WordPress plugin.
 
 = Help! My video gallery doesn't look right! =
 
