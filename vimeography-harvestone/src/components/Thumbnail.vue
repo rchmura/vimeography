@@ -1,24 +1,26 @@
 <script>
-import { mapState } from 'vuex'
-import { Mixins } from 'vimeography-blueprint'
+import { mapState } from "vuex";
+import { Mixins } from "vimeography-blueprint";
 
 const defaultTemplate = `
   <figure :class="this.thumbnailClass">
     <router-link class="vimeography-link" :title="video.name" :to="this.query" exact exact-active-class="vimeography-link-active">
-      <img class="vimeography-thumbnail-img" :src="thumbnailUrl" :alt="video.name" />
+      <img loading="lazy" class="vimeography-thumbnail-img" :src="thumbnailUrl" :alt="video.name" />
     </router-link>
   </figure>
 `;
 
-const userTemplate = document.querySelector('#vimeography-harvestone-thumbnail');
+const userTemplate = document.querySelector(
+  "#vimeography-harvestone-thumbnail"
+);
 
 const Thumbnail = {
-  props: ['video'],
+  props: ["video"],
   mixins: [Mixins.Thumbnail],
   template: userTemplate ? userTemplate.innerText : defaultTemplate,
   computed: {
     thumbnailClass() {
-      return `swiper-slide vimeography-thumbnail vimeography-video-${this.video.id}`
+      return `swiper-slide vimeography-thumbnail vimeography-video-${this.video.id}`;
     },
     query() {
       const q = {
@@ -27,49 +29,54 @@ const Thumbnail = {
         vimeography_video: this.video.id
       };
 
-      return '?' + Object.keys(q).map(k => k + '=' + encodeURIComponent(q[k])).join('&')
+      return (
+        "?" +
+        Object.keys(q)
+          .map(k => k + "=" + encodeURIComponent(q[k]))
+          .join("&")
+      );
     },
     ...mapState({
       galleryId: state => state.id
     })
   }
-}
+};
 
 export default Thumbnail;
 </script>
 
 <style lang="scss" scoped>
-  .vimeography-thumbnail {
-    margin: 0;
-    max-width: 200px;
-  }
+.vimeography-thumbnail {
+  margin: 0;
+  max-width: 200px;
+}
 
-  .vimeography-link {
-    display: block;
-    font-size: 0;
-    line-height: 0;
-    border-radius: 4px;
-    box-shadow: none;
+.vimeography-link {
+  display: block;
+  font-size: 0;
+  line-height: 0;
+  border-radius: 4px;
+  box-shadow: none;
 
-    img {
-      border: 1px solid #cccccc;
-    }
+  img {
+    border: 1px solid #cccccc;
   }
+}
 
-  .vimeography-link-active img {
-    border: 1px solid #5580e6;
-  }
+.vimeography-link-active img {
+  border: 1px solid #5580e6;
+}
 
-  .vimeography-thumbnail-img {
-    border-radius: 4px;
-    max-width: 198px;
-    cursor: pointer;
-  }
+.vimeography-thumbnail-img {
+  border-radius: 4px;
+  max-width: 198px;
+  cursor: pointer;
+}
 
-  .vimeography-title {
-    font-size: 1rem;
-    line-height: 1.2rem;
-    text-align: center;
-    margin: 1rem 0 0;
-  }
+.vimeography-title {
+  font-size: 1rem;
+  line-height: 1.2rem;
+  text-align: center;
+  margin: 1rem 0 0;
+}
 </style>
