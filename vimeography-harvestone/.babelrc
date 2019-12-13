@@ -1,11 +1,16 @@
 {
   "presets": [
-    ["@babel/preset-env", {
-      "targets": {
-        "browsers": ["last 2 versions", "safari >= 7"]
+    [
+      "@babel/preset-env",
+      {
+        "debug": true,
+        "useBuiltIns": "usage",
+        "forceAllTransforms": true,
+        "targets": {
+          "browsers": ["last 2 versions", "safari >= 7"]
+        }
       }
-    }],
-    "@babel/preset-stage-0"
+    ]
   ],
   "plugins": ["@babel/plugin-transform-runtime"]
 }
