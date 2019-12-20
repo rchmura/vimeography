@@ -2,6 +2,8 @@
 .gitignore
 .gitattributes
 .rsyncignore
+.wordpress-org/
+.github/
 _config.yml
 .DS_Store
 node_modules/
