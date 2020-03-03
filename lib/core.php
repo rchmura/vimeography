@@ -103,6 +103,7 @@ abstract class Core {
     'created_time',
     'stats',
     'pictures',
+    'privacy.view',
     'status',
     'user.account'
   );
