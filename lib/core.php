@@ -174,7 +174,7 @@ abstract class Core {
         // If it isn't expired, return it.
         $result = $this->_cache->get();
 
-        $result = apply_filters('vimeography.pro.paginate', $result);
+        $result = apply_filters('vimeography.pro.paginate', $result, $this->gallery_id);
       }
     } else {
 
