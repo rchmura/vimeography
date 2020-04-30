@@ -2,8 +2,8 @@
 Contributors: iamdavekiss, videogallery
 Tags: video gallery, gallery, video, vimeo, vimeo gallery
 Requires at least: 3.3
-Tested up to: 5.3
-Stable tag: 2.1
+Tested up to: 5.4
+Stable tag: 2.1.1
 License: GPL-3.0
 
 The easiest way to create beautiful Vimeo video galleries on your WordPress site.
@@ -138,6 +138,14 @@ Vimeography will load your template for the defined module instead of the defaul
 4. Gain additional features with Vimeography PRO.
 
 == Changelog ==
+= 2.1.1 =
+* [Update] Mark compatibility with WordPress 5.4
+* [Update] Rebuilt vimeography/gallery block for better compatibility
+* [Update] Fresh color scheme in the gallery editor
+* [Update] Upgraded Harvestone to use latest Swiper library
+* [Fix] Multiple galleries on a page were all affected by any preceding gallery video limits when Pro is installed.
+* [Fix] Throw exception from root namespace if cURL is not installed
+
 = 2.1 =
 * [Pro] Harvestone will now show the number of search results above the search box
 * [New] Harvestone now implements native browser lazy loading for thumbnails
