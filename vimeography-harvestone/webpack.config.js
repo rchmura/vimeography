@@ -16,21 +16,22 @@ module.exports = {
     https: true,
     hot: true,
     inline: true,
+    disableHostCheck: true,
     historyApiFallback: true,
     headers: {
-      "Access-Control-Allow-Origin": "*"
+      "Access-Control-Allow-Origin": "*",
     },
     watchOptions: {
       aggregateTimeout: 300,
-      poll: true
-    }
+      poll: true,
+    },
   },
   target: "web",
   entry: "./src/index",
 
   output: {
     filename: isProduction ? "scripts.[hash:8].js" : "scripts.js",
-    path: path.resolve(__dirname, "dist")
+    path: path.resolve(__dirname, "dist"),
   },
 
   module: {
@@ -38,15 +39,15 @@ module.exports = {
       {
         test: /\.js$/,
         exclude: /node_modules\/(?!(dom7|swiper)\/).*/,
-        loader: "babel-loader"
+        loader: "babel-loader",
       },
       {
         test: /\.vue$/,
         loader: "vue-loader",
         exclude: /node_modules/,
         options: {
-          postcss: [require("postcss-cssnext")()]
-        }
+          postcss: [require("postcss-cssnext")()],
+        },
       },
       {
         test: /\.(scss|css)$/,
@@ -55,48 +56,48 @@ module.exports = {
           {
             loader: MiniCssExtractPlugin.loader,
             options: {
-              hmr: process.env.NODE_ENV === "development"
-            }
+              hmr: process.env.NODE_ENV === "development",
+            },
           },
           {
             loader: "css-loader",
             options: {
-              sourceMap: true
-            }
+              sourceMap: true,
+            },
           },
           {
             loader: "sass-loader",
             options: {
-              sourceMap: true
-            }
-          }
-        ]
-      }
-    ]
+              sourceMap: true,
+            },
+          },
+        ],
+      },
+    ],
   },
 
   resolve: {
     alias: {
-      vue$: "vue/dist/vue.esm.js"
-    }
+      vue$: "vue/dist/vue.esm.js",
+    },
   },
 
   plugins: [
     new VueLoaderPlugin(),
     new CleanWebpackPlugin(),
     new MiniCssExtractPlugin({
-      filename: isProduction ? "styles.[hash:8].css" : "styles.css"
+      filename: isProduction ? "styles.[hash:8].css" : "styles.css",
     }),
-    new ManifestPlugin()
-  ]
+    new ManifestPlugin(),
+  ],
 };
 
 if (isProduction) {
   module.exports.plugins.push(
     new MinifyPlugin({
       mangle: {
-        safari10: true
-      }
+        safari10: true,
+      },
     })
   );
 }
