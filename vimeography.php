@@ -145,6 +145,9 @@ if ( ! class_exists( 'Vimeography' ) ) {
         require_once VIMEOGRAPHY_PATH . 'lib/admin/welcome.php';
         require_once VIMEOGRAPHY_PATH . 'lib/admin/plugins.php';
         require_once VIMEOGRAPHY_PATH . 'lib/update.php';
+
+        // Gallery block
+        require_once VIMEOGRAPHY_PATH . 'lib/admin/blocks/vimeography-gallery/vimeography-gallery.php';
       }
     }
 

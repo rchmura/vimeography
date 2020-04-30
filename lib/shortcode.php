@@ -45,6 +45,9 @@ class Vimeography_Shortcode extends Vimeography {
 
     if ( function_exists('register_block_type') ) {
       register_block_type( 'vimeography/gallery', array(
+        'editor_script' => 'vimeography-gallery-block-editor',
+        'editor_style'  => 'vimeography-gallery-block-editor',
+        'style'         => 'vimeography-gallery-block',
         'render_callback' => array($this, 'vimeography_shortcode'),
       ) );
     }
