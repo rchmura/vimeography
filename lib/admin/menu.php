@@ -224,5 +224,6 @@ class Vimeography_Admin_Menu {
     if ( 'vimeography_galleries_per_page' == $option ) {
       return $value;
     }
+    return $status;
   }
 }
