@@ -52,7 +52,9 @@ class Vimeography_Init extends Vimeography {
       $robotstxt = file_get_contents( ABSPATH . '/robots.txt' );
       $blocked_asset_path = str_ireplace( site_url(), '', VIMEOGRAPHY_ASSETS_URL );
 
-      if ( strpos( $robotstxt, 'Disallow: ' . $blocked_asset_path === FALSE ) ) {
+      $disallow_value = $blocked_asset_path === false ? "true" : "false";
+
+      if ( strpos( $robotstxt, 'Disallow: ' . $disallow_value ) ) {
         // Write our rule.
         $robotstxt .= "\nDisallow: " . $blocked_asset_path."\n";
         file_put_contents(ABSPATH . '/robots.txt', $robotstxt);
