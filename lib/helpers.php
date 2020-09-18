@@ -12,6 +12,8 @@ class Vimeography_Helpers {
   public function apply_common_formatting($data) {
     $items = array();
 
+    $should_linkify_descriptions = apply_filters('vimeography.settings.linkify_descriptions', true, $data);
+
     foreach($data as $item) {
       // status can be one of the following:
       // 'available';'uploading''transcoding';'uploading_error';'transcoding_error';
@@ -40,7 +42,9 @@ class Vimeography_Helpers {
       $item = $this->format_video_thumbnails($item);
 
       // Linkify any URLs in the description
-      $item->description = $this->link_urls( nl2br($item->description) );
+      if ($should_linkify_descriptions) {
+        $item->description = $this->link_urls( nl2br($item->description) );
+      }
 
       /**
        * Deprecated, use filter below.
