@@ -17,11 +17,12 @@ namespace Vimeography;
  *
  * @return [type] [description]
  */
-class Renderer {
-
+class Renderer
+{
   public $version = '2.0';
 
-  public function __construct( $engine ) {
+  public function __construct($engine)
+  {
     $this->gallery_id = $engine->gallery_id;
     $this->gallery_settings = $engine->gallery_settings;
     $this->theme = $engine->theme;
@@ -33,27 +34,28 @@ class Renderer {
    * @param  array $result Vimeo API response
    * @return $this
    */
-  public function prepare( $result ) {
-    $theme_name = strtolower( $this->theme['name'] );
+  public function prepare($result)
+  {
+    $theme_name = strtolower($this->theme['name']);
 
     // Set base data for every single gallery
     $data = array(
-      'id'      => $this->gallery_id,
-      'theme'   => $theme_name,
+      'id' => $this->gallery_id,
+      'theme' => $theme_name,
       'version' => $this->theme['version'],
-      'source'  => $this->gallery_settings['source'],
-      'limit'   => absint( $this->gallery_settings['limit'] ),
-      'pages'   => array(
+      'source' => $this->gallery_settings['source'],
+      'limit' => absint($this->gallery_settings['limit']),
+      'pages' => array(
         'default' => array(),
-        'filter'  => array(),
-      ),
+        'filter' => array()
+      )
     );
 
     // Merge the API response from Vimeo
-    $data = array_merge( $data, (array) $result );
+    $data = array_merge($data, (array) $result);
 
     // We won't use Vimeo's paging object, so delete it.
-    unset( $data['paging'] );
+    unset($data['paging']);
 
     /**
      * Strip the video ID from its uri and set it
@@ -66,62 +68,83 @@ class Renderer {
      *
      * @since  2.0
      */
-    foreach ( $data['video_set'] as $i => $video ) {
-      $id = absint( str_replace('/', '', strrchr($video->uri, '/')) );
+    foreach ($data['video_set'] as $i => $video) {
+      $id = absint(str_replace('/', '', strrchr($video->uri, '/')));
       $data['video_set'][$id] = $video;
       unset($data['video_set'][$i]);
 
-      $data['pages']['default'][$data['page']][] = absint( $id );
+      $data['pages']['default'][$data['page']][] = absint($id);
     }
 
     // Set remaining JS variables
-    $this->data = apply_filters('vimeography.pro.localize', $data, $this->gallery_settings);
+    $this->data = apply_filters(
+      'vimeography.pro.localize',
+      $data,
+      $this->gallery_settings
+    );
 
     return $this;
   }
-
 
   /**
    * [render description]
    * @return [type] [description]
    */
-  public function render() {
-    return $this->hydrate( $this->data )->template( $this->data );
+  public function render()
+  {
+    return $this->hydrate($this->data)->template($this->data);
   }
 
   /**
    * [hydrate description]
    * @return [type] [description]
    */
-  protected function hydrate( $data ) {
-
+  protected function hydrate($data)
+  {
     $local_data = array(
-      'l10n_print_after' => sprintf('vimeography2.galleries.%1$s["%2$s"] = %3$s',
+      'l10n_print_after' => sprintf(
+        'vimeography2.galleries.%1$s["%2$s"] = %3$s',
         $data['theme'],
         $data['id'],
-        json_encode( $data )
+        json_encode($data)
       )
     );
 
-    $theme_name = strtolower( $this->theme['name'] );
-    wp_register_script( "vimeography-{$theme_name}", $this->theme['app_js'], array(), false, true );
+    $theme_name = strtolower($this->theme['name']);
+    wp_register_script(
+      "vimeography-{$theme_name}",
+      $this->theme['app_js'],
+      array(),
+      false,
+      true
+    );
 
-    if ( isset( $this->theme['app_css'] ) ) {
-      wp_register_style( "vimeography-{$theme_name}", $this->theme['app_css'] );
+    if (isset($this->theme['app_css'])) {
+      wp_register_style("vimeography-{$theme_name}", $this->theme['app_css']);
       wp_enqueue_style("vimeography-{$theme_name}");
     }
 
-    wp_localize_script("vimeography-{$theme_name}", 'vimeographyBuildPath', $this->theme['app_path']);
+    wp_localize_script(
+      "vimeography-{$theme_name}",
+      'vimeographyBuildPath',
+      $this->theme['app_path']
+    );
 
     $router_mode = apply_filters('vimeography.pro.router_mode', 'abstract');
-    wp_localize_script("vimeography-{$theme_name}", 'vimeographyRouterMode', $router_mode);
+    wp_localize_script(
+      "vimeography-{$theme_name}",
+      'vimeographyRouterMode',
+      $router_mode
+    );
 
-    wp_localize_script("vimeography-{$theme_name}",
+    wp_localize_script(
+      "vimeography-{$theme_name}",
       "vimeography2 = window.vimeography2 || {};
       window.vimeography2.galleries = window.vimeography2.galleries || {};
       window.vimeography2.galleries.{$theme_name} = window.vimeography2.galleries.{$theme_name} || {};
       vimeography2.unused",
-    $local_data);
+      $local_data
+    );
 
     wp_enqueue_script("vimeography-{$theme_name}");
 
@@ -132,19 +155,25 @@ class Renderer {
    * [template description]
    * @return [type] [description]
    */
-  public function template( $data ) {
-    $wrapper_class = 'vimeography-theme-' . esc_attr( $data['theme'] );
-    $wrapper_class = apply_filters('vimeography.gallery.wrapper_class', $wrapper_class, $data);
+  public function template($data)
+  {
+    $wrapper_class = 'vimeography-theme-' . esc_attr($data['theme']);
+    $wrapper_class = apply_filters(
+      'vimeography.gallery.wrapper_class',
+      $wrapper_class,
+      $data
+    );
 
     ob_start();
     ?>
-      <div id="vimeography-gallery-<?php esc_attr_e($data['id']); ?>" class="<?php echo $wrapper_class; ?>" data-version="<?php esc_attr_e( $data['version'] ); ?>" <?php if ( ! empty( $this->gallery_settings['width'] ) ) : ?> style="max-width: <?php esc_attr_e( $this->gallery_settings['width'] ); ?>; margin: 0 auto;" <?php endif; ?> itemscope itemtype="http://schema.org/VideoGallery">
+      <div id="vimeography-gallery-<?php esc_attr_e(
+        $data['id']
+      ); ?>" class="<?php echo $wrapper_class; ?>" data-version="<?php esc_attr_e($data['version']); ?>" <?php if (!empty($this->gallery_settings['width'])): ?> style="max-width: <?php esc_attr_e($this->gallery_settings['width']); ?>; margin: 0 auto;" <?php endif; ?> itemscope itemtype="http://schema.org/VideoGallery">
         <div id="subbie">
           <gallery></gallery>
         </div>
       </div>
-    <?php
-    return ob_get_clean();
+    <?php return ob_get_clean();
   }
 
   /**
@@ -152,10 +181,11 @@ class Renderer {
    *
    * @return string
    */
-  public function debug() {
+  public function debug()
+  {
     echo '<pre>';
-    print_r( $this->data );
+    print_r($this->data);
     echo '</pre>';
-    die;
+    die();
   }
 }
