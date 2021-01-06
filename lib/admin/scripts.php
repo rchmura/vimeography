@@ -83,6 +83,14 @@ class Vimeography_Admin_Scripts
               "1.0",
               false
             );
+
+            wp_enqueue_script(
+              'vimeography_admin_react',
+              'https://localhost:8024/index.js',
+              [],
+              "1.0",
+              true
+            );
           } else {
             wp_enqueue_script(
               'vimeography_admin_chunks',

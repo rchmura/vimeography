@@ -12,6 +12,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@ungap/url-search-params": "^0.2.2",
     "postcss": "^8.2.2",
     "react": "^17.0.1",
     "react-color": "^2.19.3",
