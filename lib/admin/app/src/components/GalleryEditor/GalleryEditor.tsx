@@ -1,13 +1,32 @@
 import * as React from "react";
-import { NavLink, Route, Switch } from "react-router-dom";
+import { NavLink, Route, Switch, useRouteMatch } from "react-router-dom";
 import GalleryContext from "~/context/Gallery";
+import ThemesContext from "~/context/Themes";
+
+import AppearanceEditor from "./AppearanceEditor/AppearanceEditor";
+import BasicSettings from "./BasicSettings/BasicSettings";
+import ThemeList from "./ThemeList/ThemeList";
+
+import { motion } from "framer-motion";
 
 const Menu = () => {
+  const variants = {
+    open: { height: "auto" },
+    closed: { height: "0" },
+  };
+
+  const isSettingsPanel = useRouteMatch({ path: "/", strict: true });
+  const isAppearancePanel = useRouteMatch({
+    path: "/appearance",
+    strict: true,
+  });
+
   return (
     <>
       <NavLink
-        to="/settings"
-        className="vm-flex vm-items-center vm-px-4 vm-py-3 hover:vm-bg-gray-200 hover:vm-text-gray-700 hover:no-underline focus:vm-text-white focus:vm-outline-none focus:vm-no-underline"
+        to="/"
+        exact
+        className="vm-flex vm-items-center vm-px-4 vm-py-3 hover:vm-text-gray-700 hover:no-underline focus:vm-text-white focus:vm-outline-none focus:vm-no-underline"
         activeClassName="vm-bg-gray-800 vm-text-white"
       >
         <svg
@@ -24,9 +43,19 @@ const Menu = () => {
         </svg>
         <span>Settings</span>
       </NavLink>
+
+      <motion.div
+        className="vm-overflow-hidden"
+        animate={isSettingsPanel.isExact ? "open" : "closed"}
+        variants={variants}
+        transition={{ duration: 0.3, ease: "easeIn", bounce: 0 }}
+      >
+        <BasicSettings />
+      </motion.div>
+
       <NavLink
         to="/appearance"
-        className="vm-flex vm-items-center vm-px-4 vm-py-3 hover:vm-bg-gray-200 hover:vm-text-gray-700 hover:no-underline focus:vm-text-white focus:vm-outline-none focus:vm-no-underline"
+        className="vm-bg-gray-50 vm-flex vm-items-center vm-px-4 vm-py-3 hover:vm-text-gray-700 hover:no-underline focus:vm-text-white focus:vm-outline-none focus:vm-no-underline"
         activeClassName="vm-bg-gray-800 vm-text-white"
       >
         <svg
@@ -43,121 +72,50 @@ const Menu = () => {
         </svg>
         <span>Appearance</span>
       </NavLink>
+      <motion.div
+        className="vm-overflow-hidden"
+        animate={isAppearancePanel?.isExact ? "open" : "closed"}
+        variants={variants}
+        transition={{ duration: 0.3, ease: "easeIn", bounce: 0 }}
+      >
+        <AppearanceEditor />
+        {/* <ThemeList /> */}
+      </motion.div>
     </>
   );
-};
-
-const Setting = ({ children }) => <div className="vm-mb-4">{children}</div>;
-
-const SettingLabel = ({ children }) => (
-  <label className="vm-font-semibold vm-text-gray-700">{children}</label>
-);
-
-const BasicSettings = () => {
-  const ctx = React.useContext(GalleryContext);
-
-  const handleUpdate = (payload) => {
-    ctx.dispatch({
-      type: `EDIT_GALLERY_STATE`,
-      payload,
-    });
-  };
-
-  return (
-    <>
-      <Setting>
-        <SettingLabel>Refresh the videos every</SettingLabel>
-        {/* Specifies how frequently Vimeography should check your Vimeo source for any new videos that may have been added. */}
-        <select
-          value={ctx.state.cache_timeout}
-          onChange={(e) => handleUpdate({ cache_timeout: e.target.value })}
-        >
-          <option value="0">page load</option>
-          <option value="900">15 minutes</option>
-          <option value="1800">30 minutes</option>
-          <option value="3600">hour</option>
-          <option value="86400">day</option>
-          <option value="604800">week</option>
-          <option value="2419200">month</option>
-        </select>
-
-        <button
-          onClick={() => {
-            // {{admin_url}}edit-galleries&id={{id}}&vimeography-action=refresh_gallery_cache
-            return false;
-          }}
-        />
-      </Setting>
-      <Setting>
-        <SettingLabel>Number of videos</SettingLabel>
-        <input
-          type="text"
-          value={ctx.state.video_limit}
-          onChange={(e) => handleUpdate({ video_limit: e.target.value })}
-        />
-        <p className="vm-text-xs vm-text-gray-400">
-          Specifies the number of videos that will appear in your gallery. Set
-          to 0 for the maximum amount. You can display a maximum of up to 25
-          videos.
-        </p>
-      </Setting>
-      <Setting>
-        <SettingLabel>Max gallery width</SettingLabel>
-        <input
-          type="text"
-          placeholder="eg. 960px, 35%"
-          value={ctx.state.gallery_width}
-          onChange={(e) => handleUpdate({ gallery_width: e.target.value })}
-        />
-        <p className="vm-text-xs vm-text-gray-400">
-          Specifies the maximum width that your gallery container can expand to.
-        </p>
-      </Setting>
-      <Setting>
-        <SettingLabel>Featured video URL</SettingLabel>
-        <input
-          type="text"
-          placeholder="eg. https://vimeo.com/3567483"
-          value={ctx.state.featured_video}
-          onChange={(e) => handleUpdate({ featured_video: e.target.value })}
-        />
-        <p className="vm-text-xs vm-text-gray-400">
-          Sets the specified video as the first video that appears in your
-          gallery.
-        </p>
-      </Setting>
-    </>
-  );
-};
-
-const AppearanceSettings = () => {
-  const ctx = React.useContext(GalleryContext);
-  return <div>{ctx.state.theme_name}</div>;
 };
 
 const GalleryEditor = () => {
   const ctx = React.useContext(GalleryContext);
 
+  if (ctx.isLoading) return "Loading…";
+
+  // {{#messages}}
+  //   <div class="{{type}}">
+  //     <p><strong>{{heading}}</strong> {{message}}</p>
+  //   </div>
+  // {{/messages}}
+
+  // {{^has_pro}}
+  //   <div class="updated">
+  //     <p><strong>Unlock extra features!</strong> With <a href="http://vimeography.com/pro?utm_source=plugin&utm_medium=edit_gallery" title="Learn more about Vimeography Pro" target="_blank">Vimeography Pro,</a> you can show hidden videos, sort your videos, show unlimited videos, search your gallery, create playlists, allow downloads and more.</p>
+  //   </div>
+  // {{/has_pro}}
+
   return (
     <div className="vm-bg-gray-100 vm-rounded vm-border vm-border-gray-200">
-      <div className="vm-p-4">
+      <div className="vm-p-4 vm-bg-gray-200">
         <h2 className="vm-text-lg vm-text-gray-600">{ctx.state.title}</h2>
         <a className="vm-text-blue-600">{ctx.state.source_url}</a>
       </div>
 
       <Menu />
-      <div className="vm-p-4">
-        <Switch>
-          <Route path="/settings">
-            <BasicSettings />{" "}
-          </Route>
-          <Route path="/appearance">
-            <AppearanceSettings />
-          </Route>
-          <Route>
-            <div>nomatch</div>
-          </Route>
-        </Switch>
+      <div>
+        <div className="vm-m-4 vm-flex vm-justify-end">
+          <button className="vm-bg-blue-600 vm-text-white vm-px-3 vm-py-2 vm-rounded">
+            Save changes
+          </button>
+        </div>
       </div>
     </div>
   );

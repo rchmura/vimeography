@@ -2,6 +2,7 @@ import * as React from "react";
 import GalleryContext from "../context/Gallery";
 import { useQuery } from "react-query";
 import { produce } from "immer";
+import { Helmet } from "react-helmet";
 
 type GalleryProviderProps = React.PropsWithChildren<{ id?: string }>;
 
@@ -103,6 +104,18 @@ const GalleryProvider = (props: GalleryProviderProps) => {
         dispatch,
       }}
     >
+      <Helmet>
+        <style type="text/css">{`
+        body {
+            background-color: blue;
+        }
+
+        p {
+            font-size: 12px;
+        }
+    `}</style>
+      </Helmet>
+
       {props.children}
     </GalleryContext.Provider>
   );

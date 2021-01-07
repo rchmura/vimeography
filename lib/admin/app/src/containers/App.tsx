@@ -5,6 +5,8 @@ import { MemoryRouter as Router } from "react-router-dom";
 import { QueryClient, QueryClientProvider } from "react-query";
 const queryClient = new QueryClient();
 
+import ThemesProvider from "../providers/Themes";
+
 import GalleryProvider from "../providers/Gallery";
 import GalleryEditor from "../components/GalleryEditor/GalleryEditor";
 
@@ -16,13 +18,15 @@ const App = () => {
 
   return (
     <QueryClientProvider client={queryClient}>
-      <GalleryProvider id={id}>
-        <Router>
-          <div className="vm-mx-auto vm-max-w-xl">
-            <GalleryEditor />
-          </div>
-        </Router>
-      </GalleryProvider>
+      <ThemesProvider>
+        <GalleryProvider id={id}>
+          <Router>
+            <div className="vm-mx-auto vm-max-w-xl">
+              <GalleryEditor />
+            </div>
+          </Router>
+        </GalleryProvider>
+      </ThemesProvider>
     </QueryClientProvider>
   );
 };
