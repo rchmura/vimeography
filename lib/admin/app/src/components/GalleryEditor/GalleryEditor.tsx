@@ -9,10 +9,21 @@ import ThemeList from "./ThemeList/ThemeList";
 
 import { motion } from "framer-motion";
 
+const NavItem = (props) => (
+  <NavLink
+    to={props.to}
+    exact
+    className="vm-bg-gray-50 vm-flex vm-items-center vm-px-4 vm-py-3 vm-text-gray-700 vm-outline-none hover:no-underline focus:vm-outline-none focus:vm-no-underline vm-font-semibold"
+    activeClassName="vm-bg-white vm-border-l-4 vm-border-indigo-700 vm-outline-none focus:vm-outline-none focus:vm-no-underline"
+  >
+    {props.children}
+  </NavLink>
+);
+
 const Menu = () => {
   const variants = {
-    open: { height: "auto" },
-    closed: { height: "0" },
+    open: { height: "auto", opacity: 1 },
+    closed: { height: "0", opacity: 0 },
   };
 
   const isSettingsPanel = useRouteMatch({ path: "/", strict: true });
@@ -23,12 +34,7 @@ const Menu = () => {
 
   return (
     <>
-      <NavLink
-        to="/"
-        exact
-        className="vm-flex vm-items-center vm-px-4 vm-py-3 hover:vm-text-gray-700 hover:no-underline focus:vm-text-white focus:vm-outline-none focus:vm-no-underline"
-        activeClassName="vm-bg-gray-800 vm-text-white"
-      >
+      <NavItem to="/">
         <svg
           className="vm-w-5 vm-h-5 vm-mr-2"
           fill="currentColor"
@@ -42,22 +48,18 @@ const Menu = () => {
           />
         </svg>
         <span>Settings</span>
-      </NavLink>
+      </NavItem>
 
       <motion.div
         className="vm-overflow-hidden"
         animate={isSettingsPanel.isExact ? "open" : "closed"}
         variants={variants}
-        transition={{ duration: 0.3, ease: "easeIn", bounce: 0 }}
+        transition={{ duration: 0.25, ease: "easeOut", bounce: 0 }}
       >
         <BasicSettings />
       </motion.div>
 
-      <NavLink
-        to="/appearance"
-        className="vm-bg-gray-50 vm-flex vm-items-center vm-px-4 vm-py-3 hover:vm-text-gray-700 hover:no-underline focus:vm-text-white focus:vm-outline-none focus:vm-no-underline"
-        activeClassName="vm-bg-gray-800 vm-text-white"
-      >
+      <NavItem to="/appearance">
         <svg
           className="vm-w-5 vm-h-5 vm-mr-2"
           fill="currentColor"
@@ -71,12 +73,12 @@ const Menu = () => {
           />
         </svg>
         <span>Appearance</span>
-      </NavLink>
+      </NavItem>
       <motion.div
         className="vm-overflow-hidden"
-        animate={isAppearancePanel?.isExact ? "open" : "closed"}
+        animate={isAppearancePanel ? "open" : "closed"}
         variants={variants}
-        transition={{ duration: 0.3, ease: "easeIn", bounce: 0 }}
+        transition={{ duration: 0.25, ease: "easeOut", bounce: 0 }}
       >
         <AppearanceEditor />
         {/* <ThemeList /> */}
@@ -88,7 +90,7 @@ const Menu = () => {
 const GalleryEditor = () => {
   const ctx = React.useContext(GalleryContext);
 
-  if (ctx.isLoading) return "Loading…";
+  if (ctx.isLoading) return <div>Loading…</div>;
 
   // {{#messages}}
   //   <div class="{{type}}">
@@ -103,10 +105,14 @@ const GalleryEditor = () => {
   // {{/has_pro}}
 
   return (
-    <div className="vm-bg-gray-100 vm-rounded vm-border vm-border-gray-200">
-      <div className="vm-p-4 vm-bg-gray-200">
-        <h2 className="vm-text-lg vm-text-gray-600">{ctx.state.title}</h2>
-        <a className="vm-text-blue-600">{ctx.state.source_url}</a>
+    <div className="vm-bg-gray-100 vm-rounded vm-border vm-border-gray-200 vm-mt-5">
+      <div className="vm-p-4 vm-bg-indigo-700 vm-rounded-t">
+        <h2 className="vm-text-lg vm-text-white vm-font-bold">
+          {ctx.state.title}
+        </h2>
+        <a href={ctx.state.source_url} className="vm-text-indigo-50 vm-text-sm">
+          {ctx.state.source_url}
+        </a>
       </div>
 
       <Menu />

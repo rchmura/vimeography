@@ -108,8 +108,11 @@ class Vimeography_Admin_Scripts
             );
           }
 
-          wp_enqueue_style('vimeography-bootstrap');
-          wp_enqueue_script('vimeography-bootstrap');
+          if (!isset($_GET['id'])) {
+            wp_enqueue_style('vimeography-bootstrap');
+            wp_enqueue_script('vimeography-bootstrap');
+          }
+
           break;
         default:
           wp_enqueue_style('vimeography-bootstrap');

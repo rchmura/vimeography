@@ -21,9 +21,7 @@ const App = () => {
       <ThemesProvider>
         <GalleryProvider id={id}>
           <Router>
-            <div className="vm-mx-auto vm-max-w-xl">
-              <GalleryEditor />
-            </div>
+            <GalleryEditor />
           </Router>
         </GalleryProvider>
       </ThemesProvider>

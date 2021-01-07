@@ -5,7 +5,9 @@ import GalleryContext from "~/context/Gallery";
 const Setting = ({ children }) => <div className="vm-mb-4">{children}</div>;
 
 const SettingLabel = ({ children }) => (
-  <label className="vm-font-semibold vm-text-gray-700">{children}</label>
+  <label className="vm-font-semibold vm-text-gray-700 vm-block vm-mb-1">
+    {children}
+  </label>
 );
 
 const BasicSettings = () => {
@@ -49,11 +51,18 @@ const BasicSettings = () => {
           type="text"
           value={ctx.state.video_limit}
           onChange={(e) => handleUpdate({ video_limit: e.target.value })}
+          className="vm-mb-2"
         />
         <p className="vm-text-xs vm-text-gray-400">
           Specifies the number of videos that will appear in your gallery. Set
-          to 0 for the maximum amount. You can display a maximum of up to 25
-          videos.
+          to 0 for the maximum amount. You can display unlimited videos with{" "}
+          <a
+            className="vm-text-blue-500"
+            href="https://vimeography.com/pro"
+            target="_blank"
+          >
+            Vimeography Pro.
+          </a>
         </p>
       </Setting>
       <Setting>
@@ -63,6 +72,7 @@ const BasicSettings = () => {
           placeholder="eg. 960px, 35%"
           value={ctx.state.gallery_width}
           onChange={(e) => handleUpdate({ gallery_width: e.target.value })}
+          className="vm-mb-2"
         />
         <p className="vm-text-xs vm-text-gray-400">
           Specifies the maximum width that your gallery container can expand to.
@@ -75,6 +85,7 @@ const BasicSettings = () => {
           placeholder="eg. https://vimeo.com/3567483"
           value={ctx.state.featured_video}
           onChange={(e) => handleUpdate({ featured_video: e.target.value })}
+          className="vm-mb-2 vm-w-full"
         />
         <p className="vm-text-xs vm-text-gray-400">
           Sets the specified video as the first video that appears in your

@@ -8,101 +8,59 @@ import Colorpicker from "./Colorpicker";
 import NumericControl from "./Numeric";
 import SliderControl from "./Slider";
 import VisibilityControl from "./Visibility";
-
-/** Defines which CSS selectors and properties that the setting will control.
- An array of one or more arrays, with each array containing two key/value pairs: */
-export type AppearanceControlProperty = {
-  /** defines the CSS property that this setting will control for the corresponding target selector. */
-  attribute: string;
-
-  /** defines the CSS selector that the setting will affect */
-  target: string;
-
-  /** allows you to provide a string with a {{value}} token to define where the resulting pixel value should be injected in the generated CSS string value. */
-  transform?: string;
-};
-
-/** Contains all of the configurable settings for a theme. */
-export type AppearanceControl = {
-  /** An arbitrary identifier string to associate with the UI control's form field. */
-  id: string;
-
-  /** The i18n-compatible label for this particular setting. */
-  label: string;
-
-  /**
-   * Whether or not the DOM element being targeted by the CSS is a child of the
-   * vimeography-gallery-{{gallery_id}} container. Usually TRUE, unless your theme
-   * uses a fancybox plugin, in which case, the modal window is outside of the container
-   * element, so FALSE would be appropriate.
-   */
-  namespace: boolean;
-
-  /** Whether or not this setting requires the Vimeography Pro plugin to be installed. TRUE if `type` is 'colorpicker', otherwise FALSE. */
-  pro: boolean;
-
-  /** The default CSS value for this setting. */
-  value: string;
-
-  /** Defines which CSS selectors and properties that the setting will control. */
-  properties: AppearanceControlProperty[];
-
-  /** The UI control to render for the current setting. */
-  type: "colorpicker" | "slider" | "numeric" | "visibility";
-
-  /**
-   * Defines additional CSS selectors and properties that the setting will control,
-   * but this time, relatively manipulating the value before associating it with the
-   * selector. This is useful if you have two selectors whose values are linked and
-   * change relative to one another (widescreen image ratios, margins etc.)
-   */
-  expressions?: AppearanceControlExpression[];
-
-  /** If set to TRUE, the CSS rule will be saved with an `!important` flag. */
-  important?: boolean;
-
-  /** [required if `type` is 'slider' or 'numeric'] The minimum value that a CSS property can be set. */
-
-  min?: number;
-
-  /** [required if `type` is 'slider' or 'numeric'] The maximum value that a CSS property can be set. */
-
-  max?: number;
-
-  /** [required if `type` is 'slider' or 'numeric'] The increment/decrement value of the UI control. */
-  step?: number;
-};
-
-/**
- * Defines additional CSS selectors and properties that the setting will control,
- * but this time, relatively manipulating the value before associating it with the
- * selector. This is useful if you have two selectors whose values are linked and
- * change relative to one another (widescreen image ratios, margins etc.)
- */
-export type AppearanceControlExpression = {
-  /** defines the CSS selector that the setting will affect */
-  target: string;
-  /** the CSS property that this setting will control for the target selector. */
-  attribute: string;
-  /** defines the symbol(s) to use for the mathmatical operation to perform on the original setting value. */
-  operator: string;
-  /** is the input integer which acts as the addend, subtrahend, divisor, multiplier etc. to the original setting value. */
-  value: string;
-};
+import Label from "./Label";
 
 const AppearanceEditor = () => {
   const gallery = React.useContext(GalleryContext);
   const themes = React.useContext(ThemesContext);
 
-  const activeTheme = themes.data.find(
+  if (themes.isLoading) return "Loading…";
+
+  const activeTheme: Theme = themes.data.find(
     (theme: Theme) => theme.name === gallery.data.theme_name
   );
 
   return (
     <div>
-      Now using: {activeTheme.name}
-      Change theme…
-      {activeTheme.settings.map((control: AppearanceControl) => {
+      <div className="vm-px-4 vm-py-5 vm-border-b vm-border-gray-200 vm-relative">
+        <div
+          className="vm-absolute vm-inset-0 vm-opacity-70"
+          style={{
+            background: `url(${activeTheme.thumbnail}) no-repeat`,
+            backgroundSize: `cover`,
+            filter: `blur(3px)`,
+          }}
+        />
+        <div className="vm-z-10 vm-relative">
+          <Label>Current gallery theme</Label>
+
+          <div className="vm-flex vm-items-center">
+            {/* <img
+              src={activeTheme.thumbnail}
+              className="vm-w-12 vm-border-4 vm-border-white vm-mr-2 vm-rounded vm-shadow"
+            /> */}
+            <div
+              className="vm-font-semibold vm-text-white vm-text-3xl vm-flex-1"
+              style={{ textShadow: `rgb(28 31 35 / 40%) 0px 2px 2px` }}
+            >
+              {activeTheme.name}
+            </div>
+            <button className="vm-bg-white vm-px-2 vm-py-1 vm-rounded vm-text-gray-700 vm-flex vm-items-center vm-text-sm vm-border">
+              <svg
+                className="vm-w-4 vm-h-4 vm-mr-1"
+                fill="currentColor"
+                viewBox="0 0 20 20"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path d="M8 5a1 1 0 100 2h5.586l-1.293 1.293a1 1 0 001.414 1.414l3-3a1 1 0 000-1.414l-3-3a1 1 0 10-1.414 1.414L13.586 5H8zM12 15a1 1 0 100-2H6.414l1.293-1.293a1 1 0 10-1.414-1.414l-3 3a1 1 0 000 1.414l3 3a1 1 0 001.414-1.414L6.414 15H12z" />
+              </svg>
+              Switch theme…
+            </button>
+          </div>
+        </div>
+      </div>
+
+      {activeTheme.settings.map((control) => {
         let Control = null;
 
         if (control.type === "colorpicker") {
@@ -118,8 +76,11 @@ const AppearanceEditor = () => {
         }
 
         return (
-          <div key={control.id}>
-            <Control {...control} />
+          <div
+            key={control.id}
+            className="vm-px-4 vm-py-5 vm-border-b vm-border-gray-200"
+          >
+            <Control setting={control} />
           </div>
         );
       })}

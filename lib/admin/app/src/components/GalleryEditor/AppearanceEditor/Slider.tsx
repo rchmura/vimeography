@@ -3,13 +3,36 @@ import * as React from "react";
 import Slider from "rc-slider";
 import "rc-slider/assets/index.css";
 
-import { AppearanceControl } from "./AppearanceEditor";
+import GalleryContext from "~/context/Gallery";
+import { ThemeSetting } from "~/providers/Themes";
 
-const SliderControl = (props: AppearanceControl) => {
+type ControlProps = {
+  setting: ThemeSetting;
+};
+
+const SliderControl = (props: ControlProps) => {
+  const setting = props.setting;
+  const [value, setValue] = React.useState(parseInt(setting.value));
+  const ctx = React.useContext(GalleryContext);
+
+  const handleChange = (value: number) => {
+    setValue(value);
+    ctx.dispatch({
+      type: `UPDATE_GALLERY_APPEARANCE`,
+      payload: { ...setting, value },
+    });
+  };
+
   return (
-    <div className="vm-px-4 vm-mb-4">
-      <div className="vm-font-semibold vm-mb-2">{props.label}</div>
-      <Slider />
+    <div>
+      <div className="vm-font-semibold vm-mb-2">{setting.label}</div>
+      <Slider
+        value={parseInt(value)}
+        onChange={handleChange}
+        min={parseInt(setting.min)}
+        max={parseInt(setting.max)}
+        step={parseInt(setting.step)}
+      />
     </div>
   );
 };

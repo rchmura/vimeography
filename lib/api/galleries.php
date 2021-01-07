@@ -160,6 +160,9 @@ class Galleries extends \WP_REST_Controller
   '
     );
 
+    // need to add pro settings like this
+    // apply_filters('vimeography/gallery-settings', $this->_gallery);
+
     return $result[0];
 
     //get parameters from request

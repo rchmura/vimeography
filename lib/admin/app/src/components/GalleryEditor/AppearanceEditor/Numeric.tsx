@@ -2,18 +2,37 @@ import * as React from "react";
 import InputNumber from "rc-input-number";
 import "rc-input-number/assets/index.css";
 
-import { AppearanceControl } from "./AppearanceEditor";
+import { ThemeSetting } from "~/providers/Themes";
+import GalleryContext from "~/context/Gallery";
 
-const NumericControl = (props: AppearanceControl) => {
+type ControlProps = {
+  setting: ThemeSetting;
+};
+
+const NumericControl = (props: ControlProps) => {
+  const setting = props.setting;
+  const [value, setValue] = React.useState(parseInt(setting.value));
+  const ctx = React.useContext(GalleryContext);
+
+  const handleChange = (value: number) => {
+    setValue(value);
+    ctx.dispatch({
+      type: `UPDATE_GALLERY_APPEARANCE`,
+      payload: { ...setting, value },
+    });
+  };
+
   return (
-    <div className="vm-px-4 vm-mb-4">
-      <div className="vm-font-semibold vm-mb-2">{props.label}</div>
+    <div>
+      <div className="vm-font-semibold vm-mb-2">{setting.label}</div>
       <InputNumber
-        defaultValue={props.value}
-        min={props.min}
-        max={props.max}
-        step={props.step}
+        value={value}
+        defaultValue={setting.value}
+        min={setting.min}
+        max={setting.max}
+        step={setting.step}
         formatter={(val) => `${val}px`}
+        onChange={handleChange}
       />
     </div>
   );

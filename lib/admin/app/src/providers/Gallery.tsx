@@ -4,6 +4,8 @@ import { useQuery } from "react-query";
 import { produce } from "immer";
 import { Helmet } from "react-helmet";
 
+import { ThemeSetting, ThemeSettingType } from "~/providers/Themes";
+
 type GalleryProviderProps = React.PropsWithChildren<{ id?: string }>;
 
 export type GalleryState = {
@@ -17,6 +19,7 @@ export type GalleryState = {
   theme_name?: string;
   title?: string;
   video_limit?: string;
+  appearanceRules?: GalleryAppearanceRule[];
 };
 
 interface GalleryResponse {
@@ -32,9 +35,19 @@ interface GalleryResponse {
   video_limit: string;
 }
 
+export type GalleryAppearanceRule = {
+  id: string;
+  css: string;
+};
+
+type GalleryAppearancePayload = {
+  rules: GalleryAppearanceRule[];
+};
+
 type Action =
   | { type: `HYDRATE`; payload: GalleryResponse }
-  | { type: `EDIT_GALLERY_STATE`; payload: GalleryState };
+  | { type: `EDIT_GALLERY_STATE`; payload: GalleryState }
+  | { type: `UPDATE_GALLERY_APPEARANCE`; payload: ThemeSetting };
 
 const initialState = {
   id: "",
@@ -47,6 +60,24 @@ const initialState = {
   theme_name: "",
   title: "",
   video_limit: "",
+  appearanceRules: [],
+};
+
+const convertToDashedAttribute = (attr: string) =>
+  attr.replace(/[A-Z]/g, (a) => "-" + a.toLowerCase());
+
+const computeValue = (
+  type: ThemeSettingType,
+  transform: string = "",
+  value: string
+) => {
+  const suffix = type === "numeric" || type === "slider" ? "px" : "";
+
+  if (transform !== "") {
+    return `${transform.replace(/{{value}}/, value + suffix)}`;
+  } else {
+    return `${value}${suffix}`;
+  }
 };
 
 const reducer = (state: GalleryState, action: Action) => {
@@ -72,14 +103,109 @@ const reducer = (state: GalleryState, action: Action) => {
       };
     }
 
+    case `UPDATE_GALLERY_APPEARANCE`: {
+      let rules: GalleryAppearanceRule[] = [];
+
+      const buildCSS = (
+        target: string,
+        attribute: string,
+        computedValue: string,
+        label: string
+      ) =>
+        `/* ${label}  */
+        ${
+          namespace ? "#vimeography-gallery-" + state.id : ""
+        }${target} { ${attribute}: ${computedValue}${
+          important ? " !important;" : ";"
+        } }
+        `;
+
+      const {
+        id,
+        label,
+        type,
+        value,
+        properties,
+        namespace,
+        important,
+        expressions = [],
+      } = action.payload;
+
+      properties.map((property) => {
+        const computedValue = computeValue(type, property.transform, value);
+        const attribute = convertToDashedAttribute(property.attribute);
+
+        rules.push({
+          id,
+          css: buildCSS(property.target, attribute, computedValue, label),
+        });
+      });
+
+      expressions.map((expression) => {
+        const attribute = convertToDashedAttribute(expression.attribute);
+
+        let calculatedValue;
+
+        switch (expression.operator) {
+          case "+":
+            calculatedValue = Math.ceil(
+              parseInt(value) + eval(expression.value)
+            );
+            break;
+          case "-":
+            calculatedValue = Math.ceil(
+              parseInt(value) - eval(expression.value)
+            );
+            break;
+          case "/":
+            calculatedValue = Math.ceil(
+              parseInt(value) / eval(expression.value)
+            );
+            break;
+          case "*":
+            calculatedValue = Math.ceil(
+              parseInt(value) * eval(expression.value)
+            );
+            break;
+        }
+
+        const computedValue = computeValue(
+          type,
+          expression.transform,
+          calculatedValue.toString()
+        );
+
+        rules.push({
+          id,
+          css: buildCSS(expression.target, attribute, computedValue, label),
+        });
+      });
+
+      return produce(state, (next) => {
+        rules.map((rule) => {
+          const index = next.appearanceRules.findIndex(
+            (el) => el.id === rule.id
+          );
+
+          if (index === -1) {
+            next.appearanceRules.push(rule);
+          } else {
+            next.appearanceRules[index] = rule;
+          }
+        });
+      });
+    }
+
     default:
-      console.log(`unknown action type: ${action.type}`);
+      // console.log(`unknown action type: ${action.type}`);
       return state;
   }
 };
 
 const GalleryProvider = (props: GalleryProviderProps) => {
   const [state, dispatch] = React.useReducer(reducer, initialState);
+
+  document.getElementById(`vimeography-gallery-${props.id}-custom-css`)?.remove();
 
   const { isLoading, error, data } = useQuery(
     ["getGallery", props.id, dispatch],
@@ -106,13 +232,7 @@ const GalleryProvider = (props: GalleryProviderProps) => {
     >
       <Helmet>
         <style type="text/css">{`
-        body {
-            background-color: blue;
-        }
-
-        p {
-            font-size: 12px;
-        }
+      ${state.appearanceRules.map((rule) => rule.css).join("\r\n\r\n")}
     `}</style>
       </Helmet>
 

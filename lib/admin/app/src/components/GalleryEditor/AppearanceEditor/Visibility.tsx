@@ -2,14 +2,38 @@ import * as React from "react";
 import Toggle from "react-toggle";
 import "react-toggle/style.css"; // for ES6 modules
 
-import { AppearanceControl } from "./AppearanceEditor";
+import GalleryContext from "~/context/Gallery";
+import { ThemeSetting } from "~/providers/Themes";
 
-const VisibilityControl = (props: AppearanceControl) => {
+type ControlProps = {
+  setting: ThemeSetting;
+};
+
+const VisibilityControl = (props: ControlProps) => {
+  const setting = props.setting;
+  const [checked, setChecked] = React.useState(false);
+  const ctx = React.useContext(GalleryContext);
+
+  const handleChange = (e) => {
+    const isChecked = e.target.checked;
+    setChecked(isChecked);
+    ctx.dispatch({
+      type: `UPDATE_GALLERY_APPEARANCE`,
+      payload: { ...setting, value: isChecked ? `block` : `none` },
+    });
+  };
+
   return (
-    <div className="vm-px-4 vm-mb-4">
+    <div>
       <label className="vm-flex vm-items-center">
-        <Toggle defaultChecked={false} onChange={() => {}} />
-        <span className="vm-font-semibold vm-mb-2 vm-ml-2">{props.label}</span>
+        <Toggle
+          checked={checked}
+          defaultChecked={false}
+          onChange={handleChange}
+        />
+        <span className="vm-font-semibold vm-mb-2 vm-ml-2">
+          {setting.label}
+        </span>
       </label>
     </div>
   );

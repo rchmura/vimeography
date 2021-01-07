@@ -115,10 +115,6 @@ class Vimeography_Admin_Menu
       // Render whatever you want at the bottom
       // add_action( $hook, array($this, 'render_' . $page . '_page') );
     }
-
-    add_action('toplevel_page_vimeography-edit-galleries', function () {
-      echo '<div id="vimeography_admin_app"></div>';
-    });
   }
 
   /**

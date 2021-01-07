@@ -1,29 +1,35 @@
 import * as React from "react";
 import { ChromePicker } from "react-color";
-import { AppearanceControl } from "./AppearanceEditor";
+import GalleryContext from "~/context/Gallery";
+import { ThemeSetting } from "~/providers/Themes";
 
-const Colorpicker = (props: AppearanceControl) => {
+type ControlProps = {
+  setting: ThemeSetting;
+};
+
+const Colorpicker = (props: ControlProps) => {
+  const setting = props.setting;
   const [visible, setVisible] = React.useState(false);
-  const [color, setColor] = React.useState(props.value);
+  const [color, setColor] = React.useState(setting.value);
+  const ctx = React.useContext(GalleryContext);
 
   const handleChange = (color) => {
     const colorStr = `rgb(${color.rgb.r} ${color.rgb.g} ${color.rgb.b} / ${
       color.rgb.a
     })`;
+
     setColor(colorStr);
-
-    // var attr = prop.attribute.replace(/[A-Z]/g, function(a) {return '-' + a.toLowerCase()});
-    // var rule = {};
-    // rule[attr] = e.value;
-
-    // vein.inject( prop.target, rule );
+    ctx.dispatch({
+      type: `UPDATE_GALLERY_APPEARANCE`,
+      payload: { ...setting, value: colorStr },
+    });
   };
 
   return (
-    <div className="vm-p-5">
-      <label className="vm-font-semibold">{props.label}</label>
+    <div>
+      <label className="vm-font-semibold">{setting.label}</label>
       <div
-        className="vm-w-8 vm-h-5 vm-border vm-shadow vm-cursor-pointer vm-mb-2"
+        className="vm-w-8 vm-h-6 vm-border vm-shadow vm-cursor-pointer vm-mb-2"
         style={{ backgroundColor: color }}
         onClick={() => setVisible(!visible)}
       />
