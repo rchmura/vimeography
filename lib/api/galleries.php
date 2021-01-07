@@ -139,6 +139,29 @@ class Galleries extends \WP_REST_Controller
    */
   public function get_item($request)
   {
+    $params = $request->get_params();
+    $gallery_id = intval($params['id']);
+
+    global $wpdb;
+
+    $result = $wpdb->get_results(
+      '
+    SELECT * FROM ' .
+        $wpdb->vimeography_gallery_meta .
+        ' AS meta
+    JOIN ' .
+        $wpdb->vimeography_gallery .
+        ' AS gallery
+    ON meta.gallery_id = gallery.id
+    WHERE meta.gallery_id = ' .
+        $gallery_id .
+        '
+    LIMIT 1;
+  '
+    );
+
+    return $result[0];
+
     //get parameters from request
     $params = $request->get_params();
     $item = array(); //do a query, call another class, etc

@@ -74,6 +74,7 @@ if (!class_exists('Vimeography')) {
         new Vimeography_Robots();
         new Vimeography_Shortcode();
         new \Vimeography\Api\Galleries();
+        new \Vimeography\Api\Themes();
       }
 
       return self::$instance;
@@ -163,6 +164,7 @@ if (!class_exists('Vimeography')) {
       require_once VIMEOGRAPHY_PATH . 'lib/shortcode.php';
 
       require_once VIMEOGRAPHY_PATH . 'lib/api/galleries.php';
+      require_once VIMEOGRAPHY_PATH . 'lib/api/themes.php';
 
       require_once VIMEOGRAPHY_PATH .
         'vimeography-bugsauce/vimeography-bugsauce.php';
