@@ -11,7 +11,12 @@ type ControlProps = {
 
 const VisibilityControl = (props: ControlProps) => {
   const setting = props.setting;
-  const [checked, setChecked] = React.useState(false);
+
+  // uses the default value from the theme settings.php file
+  const [checked, setChecked] = React.useState(
+    setting.value === "block" ? true : false
+  );
+
   const ctx = React.useContext(GalleryContext);
 
   const handleChange = (e) => {

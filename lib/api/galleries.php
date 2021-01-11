@@ -74,6 +74,46 @@ class Galleries extends \WP_REST_Controller
         )
       )
     );
+
+    register_rest_route(
+      $namespace,
+      '/' . $base . '/(?P<id>[\d]+)/appearance',
+      array(
+        array(
+          'methods' => \WP_REST_Server::EDITABLE,
+          'callback' => array($this, 'update_gallery_appearance'),
+          'permission_callback' => array(
+            $this,
+            'update_item_permissions_check'
+          ),
+          'args' => array(
+            'css' => array(
+              'default' => '',
+              'required' => true,
+              'validate_callback' => function ($param, $request, $key) {
+                // Markup is not allowed in CSS.
+                $has_invalid_tags = preg_match('#</?\w+#', $param);
+                return !$has_invalid_tags;
+              }
+            )
+          )
+        ),
+        array(
+          'methods' => \WP_REST_Server::DELETABLE,
+          'callback' => array($this, 'delete_gallery_appearance'),
+          'permission_callback' => array(
+            $this,
+            'delete_item_permissions_check'
+          ),
+          'args' => array(
+            'force' => array(
+              'default' => false
+            )
+          )
+        )
+      )
+    );
+
     register_rest_route($namespace, '/' . $base . '/schema', array(
       'methods' => \WP_REST_Server::READABLE,
       'callback' => array($this, 'get_public_item_schema')
@@ -384,6 +424,51 @@ class Galleries extends \WP_REST_Controller
       $order = 'ASC';
     }
     return $orderby . ' ' . $order;
+  }
+
+
+  /**
+   * Stores custom CSS for a gallery in the db using
+   * a key that matches the incoming gallery id
+   */
+  public function update_gallery_appearance($request)
+  {
+    $params = $request->get_params();
+    $gallery_id = intval($params['id']);
+
+    $stylesheet_key = "vimeography_gallery_" . $gallery_id;
+
+    // Requires WordPress 4.7
+    // https://github.com/WordPress/wordpress-develop/blob/6aca60d33a6f4c1e7e38dacdfcc6fb171af81831/tests/phpunit/tests/customize/custom-css-setting.php
+
+    // this is an upsert operation.
+    // https://github.com/WordPress/WordPress/blob/7ced0efbf4afa3c0eab3289596bcea9a4e367fca/wp-includes/theme.php#L1939
+    if (function_exists('wp_update_custom_css_post')) {
+      $r = wp_update_custom_css_post($params['css'], array(
+        'stylesheet' => $stylesheet_key // should be unique per gallery, copy on galleryduplicate
+      ));
+
+      return true;
+    } else {
+      return new \WP_Error(
+        'cant-update',
+        __('Your css could not be saved.', 'vimeography'),
+        array(
+          'status' => 500
+        )
+      );
+    }
+  }
+
+  public function delete_gallery_appearance($request)
+  {
+    $params = $request->get_params();
+    $gallery_id = intval($params['id']);
+    $stylesheet_key = "vimeography_gallery_" + $gallery_id;
+
+    $css_post = wp_get_custom_css_post($stylesheet_key);
+    wp_delete_post($css_post->post_id);
+    return true;
   }
 
   /**

@@ -98,18 +98,6 @@ const GalleryEditor = () => {
 
   if (ctx.isLoading) return <div>Loading…</div>;
 
-  // {{#messages}}
-  //   <div class="{{type}}">
-  //     <p><strong>{{heading}}</strong> {{message}}</p>
-  //   </div>
-  // {{/messages}}
-
-  // {{^has_pro}}
-  //   <div class="updated">
-  //     <p><strong>Unlock extra features!</strong> With <a href="http://vimeography.com/pro?utm_source=plugin&utm_medium=edit_gallery" title="Learn more about Vimeography Pro" target="_blank">Vimeography Pro,</a> you can show hidden videos, sort your videos, show unlimited videos, search your gallery, create playlists, allow downloads and more.</p>
-  //   </div>
-  // {{/has_pro}}
-
   return (
     <div className="vm-bg-gray-100 vm-rounded vm-border vm-border-gray-200 vm-mt-5 vm-sticky vm-top-10">
       <div className="vm-p-4 vm-bg-indigo-700 vm-rounded-t">

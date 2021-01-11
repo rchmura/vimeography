@@ -1,7 +1,7 @@
 import * as React from "react";
 import ThemesContext from "../context/Themes";
 import { useQuery } from "react-query";
-import { produce } from "immer";
+import produce from "immer";
 
 type ThemesProviderProps = React.PropsWithChildren<{ id?: string }>;
 
@@ -109,7 +109,18 @@ export type ThemesState = {
   themes?: Theme[] | [];
 };
 
-type Action = { type: `HYDRATE`; payload: Theme[] };
+type UpdateThemeSettingDefaultValuePayload = {
+  themeName: string;
+  settingId: string;
+  value: any;
+};
+
+type Action =
+  | { type: `HYDRATE`; payload: Theme[] }
+  | {
+      type: `THEME.SETTING.UPDATE_DEFAULT_VALUE`;
+      payload: UpdateThemeSettingDefaultValuePayload;
+    };
 
 const initialState: ThemesState = {
   themes: [],
@@ -117,10 +128,30 @@ const initialState: ThemesState = {
 
 const reducer = (state: ThemesState, action: Action) => {
   switch (action.type) {
-    case "HYDRATE":
+    case "HYDRATE": {
+      if (state.themes.length > 0) return state; //only hydrate once
+
       return produce(state, (next) => {
         next.themes = action.payload;
       });
+    }
+
+    case `THEME.SETTING.UPDATE_DEFAULT_VALUE`: {
+      // console.log(action.payload);
+      const themeIndex = state.themes.findIndex(
+        (theme) => theme.name === action.payload.themeName
+      );
+      const settingIndex = state.themes[themeIndex].settings.findIndex(
+        (setting) => setting.id === action.payload.settingId
+      );
+
+      const nextState = produce(state, (draft) => {
+        draft.themes[themeIndex].settings[settingIndex].value =
+          action.payload.value;
+      });
+
+      return nextState;
+    }
 
     default:
       console.log(`unknown action type: ${action.type}`);

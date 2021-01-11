@@ -1,10 +1,12 @@
 import * as React from "react";
 import GalleryContext from "../context/Gallery";
 import { useQuery } from "react-query";
-import { produce } from "immer";
+import produce from "immer";
 import { Helmet } from "react-helmet";
+import { useDebouncedCallback } from "use-debounce";
 
-import { ThemeSetting, ThemeSettingType } from "~/providers/Themes";
+import { Theme, ThemeSetting, ThemeSettingType } from "~/providers/Themes";
+import ThemesContext from "../context/Themes";
 
 type GalleryProviderProps = React.PropsWithChildren<{ id?: string }>;
 
@@ -63,8 +65,22 @@ const initialState = {
   appearanceRules: [],
 };
 
-const convertToDashedAttribute = (attr: string) =>
-  attr.replace(/[A-Z]/g, (a) => "-" + a.toLowerCase());
+const convertToDashedAttribute = (attr: string) => {
+  let shimmedAttribute;
+
+  // backwards-compat for old gallery theme settings
+  // removes grid prefix from deprecated theme attributes
+  // for browser compatibility
+  if (attr === `gridColumnGap`) {
+    shimmedAttribute = `columnGap`;
+  } else if (attr === `gridRowGap`) {
+    shimmedAttribute = `rowGap`;
+  } else {
+    shimmedAttribute = attr;
+  }
+
+  return shimmedAttribute.replace(/[A-Z]/g, (a) => "-" + a.toLowerCase());
+};
 
 const computeValue = (
   type: ThemeSettingType,
@@ -203,9 +219,8 @@ const reducer = (state: GalleryState, action: Action) => {
 };
 
 const GalleryProvider = (props: GalleryProviderProps) => {
+  const themesCtx = React.useContext(ThemesContext);
   const [state, dispatch] = React.useReducer(reducer, initialState);
-
-  document.getElementById(`vimeography-gallery-${props.id}-custom-css`)?.remove();
 
   const { isLoading, error, data } = useQuery(
     ["getGallery", props.id, dispatch],
@@ -220,6 +235,183 @@ const GalleryProvider = (props: GalleryProviderProps) => {
         })
   );
 
+  // Detect any theme CSS customizations on load and
+  // send them to the themes context to hydrate
+  // the appearance controls with the correct values
+  React.useEffect(
+    () => {
+      if (!data) return;
+      if (!themesCtx.data) return;
+
+      const activeTheme: Theme = themesCtx.data.find(
+        (theme: Theme) => theme.name === data.theme_name
+      );
+
+      if (!activeTheme) return;
+
+      const customStyle = document.getElementById(
+        `vimeography-gallery-${props.id}-custom-css`
+      );
+
+      if (!customStyle) return;
+      console.log(`custom style found!`);
+      console.log(customStyle);
+      // since it is possible that the element it hidden (as in a modal)
+      // try to get the defined value based on the loaded stylesheet
+      activeTheme.settings.map((setting) => {
+        setting.properties.map((prop) => {
+          // build the expected selector
+          const selectorToMatch = setting.namespace
+            ? `#vimeography-gallery-${props.id}${prop.target}`
+            : prop.target;
+
+          // search the stylesheet for the selector
+          for (let rule of customStyle.sheet.cssRules) {
+            // need to find a match for the target defined in our theme settings
+
+            if (rule.selectorText === selectorToMatch) {
+              // get the value for the current prop attribute
+
+              let value = rule.style.getPropertyValue(
+                convertToDashedAttribute(prop.attribute)
+              );
+
+              // if no value, no customization found for this particular setting
+              if (!value) continue;
+
+              // console.log(`value found for ${selectorToMatch}!`);
+              // console.log(value);
+
+              // check if it needs to be un-transformed to extract the value
+              if (prop.transform) {
+                // console.log(
+                //   `extracting value from transform ${prop.transform}`
+                // );
+
+                const searchTerm = `{{value}}`;
+
+                // find the index of `{{value}}` in the transform
+                const tokenIndex = prop.transform.indexOf(searchTerm);
+
+                // find the characters which appear after the searchTerm in the transform
+                const terminator = prop.transform.substr(
+                  tokenIndex + searchTerm.length
+                );
+
+                // get the index of the terminating characters within the existing customized css value
+                const terminatorIndex = value.indexOf(terminator);
+
+                // pull the value out of the string
+                const extractedValue = value.substring(
+                  tokenIndex,
+                  terminatorIndex
+                );
+
+                // console.log(
+                //   `extracted ${extractedValue} as the value based on the transform`
+                // );
+
+                value = extractedValue;
+              }
+
+              // reformat the incoming `action.payload.value` to the expected format for the ui control based on the settings type `setting.type`
+
+              let computedValue;
+
+              // console.log(setting);
+
+              switch (setting.type) {
+                case "colorpicker": {
+                  // { r: 51, g: 51, b: 51, a: 1 } react-color may already convert this for us, test!
+                  computedValue = value;
+                  break;
+                }
+
+                case "numeric":
+                case "slider": {
+                  // must be a number
+                  const strippedValue = value.replace("px", "");
+                  const convertedValue = Math.ceil(strippedValue);
+
+                  computedValue = convertedValue;
+                  break;
+                }
+
+                default: {
+                  computedValue = value;
+                  break;
+                }
+              }
+
+              console.log(
+                `updating value for ${setting.id} to ${computedValue}`
+              );
+
+              // update the default `activeTheme`s `setting.value` for `setting.id` to the determined configured `value`
+              themesCtx.dispatch({
+                type: `THEME.SETTING.UPDATE_DEFAULT_VALUE`,
+                payload: {
+                  themeName: activeTheme.name,
+                  settingId: setting.id,
+                  value: computedValue,
+                },
+              });
+
+              dispatch({
+                type: `UPDATE_GALLERY_APPEARANCE`,
+                payload: { ...setting, value: computedValue },
+              });
+            }
+          }
+        });
+      });
+
+      // Remove the style that came from the server since we'll be
+      // generating a new one in the client anyway
+      customStyle.remove();
+    },
+    [data, themesCtx]
+  );
+
+  const saveCSS = useDebouncedCallback(
+    // function
+    async (stylesheetId) => {
+      const styles = document.getElementById(stylesheetId).innerText;
+      console.log({ styles });
+
+      const response = await fetch(
+        window.wpApiSettings.root +
+          `vimeography/v1/galleries/${props.id}/appearance`,
+        {
+          method: "POST",
+          mode: "same-origin",
+          cache: "no-cache",
+          credentials: "same-origin",
+          headers: {
+            "Content-Type": "application/json",
+            "X-WP-Nonce": window.wpApiSettings.nonce,
+            // 'Content-Type': 'application/x-www-form-urlencoded',
+          },
+          body: JSON.stringify({ css: styles }), // body data type must match "Content-Type" header
+        }
+      );
+
+      console.log(response.ok);
+    },
+    // delay in ms
+    2500
+  );
+
+  React.useEffect(
+    () => {
+      if (!data) return;
+
+      console.log(`appearanceRules changed, debouncing and syncing…`);
+      saveCSS.callback(`vimeography-gallery-${props.id}-custom-css-preview`);
+    },
+    [state.appearanceRules]
+  );
+
   return (
     <GalleryContext.Provider
       value={{
@@ -231,7 +423,10 @@ const GalleryProvider = (props: GalleryProviderProps) => {
       }}
     >
       <Helmet>
-        <style type="text/css">{`
+        <style
+          type="text/css"
+          id={`vimeography-gallery-${props.id}-custom-css-preview`}
+        >{`
       ${state.appearanceRules.map((rule) => rule.css).join("\r\n\r\n")}
     `}</style>
       </Helmet>

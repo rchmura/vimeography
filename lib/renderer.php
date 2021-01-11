@@ -164,8 +164,16 @@ class Renderer
       $data
     );
 
+    $styles = wp_get_custom_css('vimeography_gallery_' . $data['id']); // returns css string
     ob_start();
     ?>
+    <?php if ($styles): ?>
+      <style type="text/css" id="vimeography-gallery-<?php esc_attr_e(
+        $data['id']
+      ); ?>-custom-css">
+        <?php echo strip_tags($styles); ?>
+      </style>
+      <?php endif; ?>
       <div id="vimeography-gallery-<?php esc_attr_e(
         $data['id']
       ); ?>" class="<?php echo $wrapper_class; ?>" data-version="<?php esc_attr_e($data['version']); ?>" <?php if (!empty($this->gallery_settings['width'])): ?> style="max-width: <?php esc_attr_e($this->gallery_settings['width']); ?>; margin: 0 auto;" <?php endif; ?> itemscope itemtype="http://schema.org/VideoGallery">

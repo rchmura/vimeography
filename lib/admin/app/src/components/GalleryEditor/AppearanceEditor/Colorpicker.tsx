@@ -10,7 +10,7 @@ type ControlProps = {
 const Colorpicker = (props: ControlProps) => {
   const setting = props.setting;
   const [visible, setVisible] = React.useState(false);
-  const [color, setColor] = React.useState(setting.value);
+  const [colorStr, setColorStr] = React.useState(setting.value);
   const ctx = React.useContext(GalleryContext);
 
   const handleChange = (color) => {
@@ -18,7 +18,8 @@ const Colorpicker = (props: ControlProps) => {
       color.rgb.a
     })`;
 
-    setColor(colorStr);
+    setColorStr(colorStr);
+
     ctx.dispatch({
       type: `UPDATE_GALLERY_APPEARANCE`,
       payload: { ...setting, value: colorStr },
@@ -27,13 +28,24 @@ const Colorpicker = (props: ControlProps) => {
 
   return (
     <div>
-      <label className="vm-font-semibold">{setting.label}</label>
       <div
-        className="vm-w-8 vm-h-6 vm-border vm-shadow vm-cursor-pointer vm-mb-2"
-        style={{ backgroundColor: color }}
+        className="vm-flex vm-items-center"
         onClick={() => setVisible(!visible)}
-      />
-      {visible && <ChromePicker color={color} onChange={handleChange} />}
+      >
+        <div
+          className="vm-w-8 vm-h-6 vm-mr-2 vm-border-2 vm-border-white vm-shadow vm-cursor-pointer"
+          style={{ backgroundColor: colorStr }}
+        />
+        <label className="vm-font-semibold">{setting.label}</label>
+      </div>
+
+      {visible && (
+        <ChromePicker
+          color={colorStr}
+          onChange={handleChange}
+          className="vm-mt-2"
+        />
+      )}
     </div>
   );
 };

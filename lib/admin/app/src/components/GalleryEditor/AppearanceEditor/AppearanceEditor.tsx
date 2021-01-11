@@ -13,16 +13,16 @@ import Label from "./Label";
 
 const AppearanceEditor = () => {
   const gallery = React.useContext(GalleryContext);
-  const themes = React.useContext(ThemesContext);
+  const themesCtx = React.useContext(ThemesContext);
 
-  if (themes.isLoading) return <div>Loading…</div>;
+  if (themesCtx.isLoading) return <div>Loading…</div>;
 
-  const activeTheme: Theme = themes.data.find(
+  const activeTheme: Theme = themesCtx.state.themes.find(
     (theme: Theme) => theme.name === gallery.data.theme_name
   );
 
   return (
-    <div className="vm-overflow-scroll vm-max-h-96">
+    <div className="vm-overflow-scroll" style={{ maxHeight: `30rem` }}>
       <div className="vm-px-4 vm-py-5 vm-border-b vm-border-gray-200 vm-relative">
         <div
           className="vm-absolute vm-inset-0 vm-opacity-70"
