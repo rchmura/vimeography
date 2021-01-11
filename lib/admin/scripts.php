@@ -91,6 +91,12 @@ class Vimeography_Admin_Scripts
               "1.0",
               true
             );
+
+            wp_localize_script(
+              "vimeography_admin_react",
+              "vimeographyThemeNonce",
+              wp_create_nonce("vimeography-theme-action")
+            );
           } else {
             wp_enqueue_script(
               'vimeography_admin_chunks',

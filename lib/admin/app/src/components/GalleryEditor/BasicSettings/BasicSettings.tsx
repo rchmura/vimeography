@@ -13,6 +13,8 @@ const SettingLabel = ({ children }) => (
 const BasicSettings = () => {
   const ctx = React.useContext(GalleryContext);
 
+  const [isRefreshing, setIsRefreshing] = React.useState(false);
+
   const handleUpdate = (payload) => {
     ctx.dispatch({
       type: `EDIT_GALLERY_STATE`,
@@ -25,25 +27,49 @@ const BasicSettings = () => {
       <Setting>
         <SettingLabel>Refresh the videos every</SettingLabel>
         {/* Specifies how frequently Vimeography should check your Vimeo source for any new videos that may have been added. */}
-        <select
-          value={ctx.state.cache_timeout}
-          onChange={(e) => handleUpdate({ cache_timeout: e.target.value })}
-        >
-          <option value="0">page load</option>
-          <option value="900">15 minutes</option>
-          <option value="1800">30 minutes</option>
-          <option value="3600">hour</option>
-          <option value="86400">day</option>
-          <option value="604800">week</option>
-          <option value="2419200">month</option>
-        </select>
 
-        <button
-          onClick={() => {
-            // {{admin_url}}edit-galleries&id={{id}}&vimeography-action=refresh_gallery_cache
-            return false;
-          }}
-        />
+        <div className="vm-flex vm-items-center vm-justify-between">
+          <select
+            className=""
+            value={ctx.state.cache_timeout}
+            onChange={(e) => handleUpdate({ cache_timeout: e.target.value })}
+          >
+            <option value="0">page load</option>
+            <option value="900">15 minutes</option>
+            <option value="1800">30 minutes</option>
+            <option value="3600">hour</option>
+            <option value="86400">day</option>
+            <option value="604800">week</option>
+            <option value="2419200">month</option>
+          </select>
+
+          <button
+            className="vm-flex vm-items-center vm-text-blue-500 vm-outline-none focus:vm-outline-none"
+            onClick={() => {
+              setIsRefreshing(true);
+              const url =
+                window.location.href +
+                `&vimeography-action=refresh_gallery_cache`;
+              window.location.href = url;
+            }}
+          >
+            <svg
+              className={`vm-w-4 vm-h-4 vm-mr-1 ${
+                isRefreshing ? "vm-animate-spin" : ""
+              }`}
+              fill="currentColor"
+              viewBox="0 0 20 20"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                fillRule="evenodd"
+                d="M4 2a1 1 0 011 1v2.101a7.002 7.002 0 0111.601 2.566 1 1 0 11-1.885.666A5.002 5.002 0 005.999 7H9a1 1 0 010 2H4a1 1 0 01-1-1V3a1 1 0 011-1zm.008 9.057a1 1 0 011.276.61A5.002 5.002 0 0014.001 13H11a1 1 0 110-2h5a1 1 0 011 1v5a1 1 0 11-2 0v-2.101a7.002 7.002 0 01-11.601-2.566 1 1 0 01.61-1.276z"
+                clipRule="evenodd"
+              />
+            </svg>
+            {isRefreshing ? "Refreshing…" : "Force refresh"}
+          </button>
+        </div>
       </Setting>
       <Setting>
         <SettingLabel>Number of videos</SettingLabel>

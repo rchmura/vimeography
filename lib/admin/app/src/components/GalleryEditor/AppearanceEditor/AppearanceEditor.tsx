@@ -1,6 +1,7 @@
 import * as React from "react";
 import GalleryContext from "~/context/Gallery";
 import ThemesContext from "~/context/Themes";
+import { Link } from "react-router-dom";
 
 import { Theme } from "~/providers/Themes";
 
@@ -14,14 +15,14 @@ const AppearanceEditor = () => {
   const gallery = React.useContext(GalleryContext);
   const themes = React.useContext(ThemesContext);
 
-  if (themes.isLoading) return "Loading…";
+  if (themes.isLoading) return <div>Loading…</div>;
 
   const activeTheme: Theme = themes.data.find(
     (theme: Theme) => theme.name === gallery.data.theme_name
   );
 
   return (
-    <div>
+    <div className="vm-overflow-scroll vm-max-h-96">
       <div className="vm-px-4 vm-py-5 vm-border-b vm-border-gray-200 vm-relative">
         <div
           className="vm-absolute vm-inset-0 vm-opacity-70"
@@ -45,7 +46,10 @@ const AppearanceEditor = () => {
             >
               {activeTheme.name}
             </div>
-            <button className="vm-bg-white vm-px-2 vm-py-1 vm-rounded vm-text-gray-700 vm-flex vm-items-center vm-text-sm vm-border">
+            <Link
+              to="/appearance/themes"
+              className="vm-bg-white vm-px-2 vm-py-1 vm-rounded vm-text-gray-700 vm-flex vm-items-center vm-text-sm vm-border"
+            >
               <svg
                 className="vm-w-4 vm-h-4 vm-mr-1"
                 fill="currentColor"
@@ -55,7 +59,7 @@ const AppearanceEditor = () => {
                 <path d="M8 5a1 1 0 100 2h5.586l-1.293 1.293a1 1 0 001.414 1.414l3-3a1 1 0 000-1.414l-3-3a1 1 0 10-1.414 1.414L13.586 5H8zM12 15a1 1 0 100-2H6.414l1.293-1.293a1 1 0 10-1.414-1.414l-3 3a1 1 0 000 1.414l3 3a1 1 0 001.414-1.414L6.414 15H12z" />
               </svg>
               Switch theme…
-            </button>
+            </Link>
           </div>
         </div>
       </div>

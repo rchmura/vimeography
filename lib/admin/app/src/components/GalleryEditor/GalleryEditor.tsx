@@ -36,7 +36,7 @@ const Menu = () => {
     <>
       <NavItem to="/">
         <svg
-          className="vm-w-5 vm-h-5 vm-mr-2"
+          className="vm-w-5 vm-h-5 vm-mr-2 vm-text-blue-600"
           fill="currentColor"
           viewBox="0 0 20 20"
           xmlns="http://www.w3.org/2000/svg"
@@ -61,7 +61,7 @@ const Menu = () => {
 
       <NavItem to="/appearance">
         <svg
-          className="vm-w-5 vm-h-5 vm-mr-2"
+          className="vm-w-5 vm-h-5 vm-mr-2 vm-text-green-600"
           fill="currentColor"
           viewBox="0 0 20 20"
           xmlns="http://www.w3.org/2000/svg"
@@ -80,8 +80,14 @@ const Menu = () => {
         variants={variants}
         transition={{ duration: 0.25, ease: "easeOut", bounce: 0 }}
       >
-        <AppearanceEditor />
-        {/* <ThemeList /> */}
+        <Switch>
+          <Route path="/appearance/themes">
+            <ThemeList />
+          </Route>
+          <Route path="/appearance" strict>
+            <AppearanceEditor />
+          </Route>
+        </Switch>
       </motion.div>
     </>
   );
@@ -105,7 +111,7 @@ const GalleryEditor = () => {
   // {{/has_pro}}
 
   return (
-    <div className="vm-bg-gray-100 vm-rounded vm-border vm-border-gray-200 vm-mt-5">
+    <div className="vm-bg-gray-100 vm-rounded vm-border vm-border-gray-200 vm-mt-5 vm-sticky vm-top-10">
       <div className="vm-p-4 vm-bg-indigo-700 vm-rounded-t">
         <h2 className="vm-text-lg vm-text-white vm-font-bold">
           {ctx.state.title}
