@@ -11,8 +11,8 @@ import ThemesContext from "../context/Themes";
 type GalleryProviderProps = React.PropsWithChildren<{ id?: string }>;
 
 export type GalleryState = {
-  id?: string;
-  cache_timeout?: string;
+  id?: number;
+  cache_timeout?: number;
   date_created?: string;
   featured_video?: string;
   gallery_width?: string;
@@ -20,13 +20,29 @@ export type GalleryState = {
   source_url?: string;
   theme_name?: string;
   title?: string;
-  video_limit?: string;
+  video_limit?: number;
   appearanceRules?: GalleryAppearanceRule[];
+  allow_downloads?: boolean;
+  sort?: SortType;
+  direction?: SortDirection;
+  enable_search?: boolean;
+  enable_tags?: boolean;
+  enable_playlist?: boolean;
+  per_page?: number;
 };
 
+type SortDirection = "asc" | "desc";
+type SortType =
+  | "date"
+  | "likes"
+  | "comments"
+  | "plays"
+  | "alphabetical"
+  | "duration"
+  | "default";
 interface GalleryResponse {
-  id?: string;
-  cache_timeout: string;
+  id: number;
+  cache_timeout: number;
   date_created: string;
   featured_video: string;
   gallery_width: string;
@@ -34,16 +50,19 @@ interface GalleryResponse {
   source_url: string;
   theme_name: string;
   title: string;
-  video_limit: string;
+  video_limit: number;
+  allow_downloads?: boolean;
+  sort?: SortType;
+  direction?: SortDirection;
+  enable_search?: boolean;
+  enable_tags?: boolean;
+  enable_playlist?: boolean;
+  per_page?: number;
 }
 
 export type GalleryAppearanceRule = {
   id: string;
   css: string;
-};
-
-type GalleryAppearancePayload = {
-  rules: GalleryAppearanceRule[];
 };
 
 type Action =
@@ -52,16 +71,6 @@ type Action =
   | { type: `UPDATE_GALLERY_APPEARANCE`; payload: ThemeSetting };
 
 const initialState = {
-  id: "",
-  cache_timeout: "",
-  date_created: "",
-  featured_video: "",
-  gallery_width: "",
-  resource_uri: "",
-  source_url: "",
-  theme_name: "",
-  title: "",
-  video_limit: "",
   appearanceRules: [],
 };
 
@@ -99,19 +108,6 @@ const computeValue = (
 const reducer = (state: GalleryState, action: Action) => {
   switch (action.type) {
     case "HYDRATE":
-      return produce(state, (next) => {
-        next.id = action.payload.id;
-        next.cache_timeout = action.payload.cache_timeout;
-        next.date_created = action.payload.date_created;
-        next.featured_video = action.payload.featured_video;
-        next.gallery_width = action.payload.gallery_width;
-        next.resource_uri = action.payload.resource_uri;
-        next.source_url = action.payload.source_url;
-        next.theme_name = action.payload.theme_name;
-        next.title = action.payload.title;
-        next.video_limit = action.payload.video_limit;
-      });
-
     case `EDIT_GALLERY_STATE`: {
       return {
         ...state,
