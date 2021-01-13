@@ -133,7 +133,7 @@ class Vimeography_Admin_Scripts
             'vimeographyApiSettings',
             array(
               'root' => esc_url_raw(rest_url()),
-              'nonce' => wp_create_nonce('vimeographyApiSettings')
+              'nonce' => wp_create_nonce('wp_rest')
             )
           );
 
