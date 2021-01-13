@@ -32,7 +32,7 @@ const VisibilityControl = (props: ControlProps) => {
     <div>
       <label className="vm-flex vm-items-center">
         <Toggle checked={checked} onChange={handleChange} />
-        <span className="vm-font-semibold vm-mb-2 vm-ml-2">
+        <span className="vm-font-semibold vm-mb-2 vm-ml-2 vm-transform vm-translate-y-1">
           {setting.label}
         </span>
       </label>
