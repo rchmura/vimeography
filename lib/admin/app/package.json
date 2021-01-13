@@ -21,6 +21,7 @@
     "react": "^17.0.1",
     "react-color": "^2.19.3",
     "react-dom": "^17.0.1",
+    "react-error-boundary": "^3.1.0",
     "react-helmet": "^6.1.0",
     "react-query": "^3.5.11",
     "react-router": "^5.2.0",
@@ -32,6 +33,7 @@
   },
   "devDependencies": {
     "@babel/core": "^7.12.10",
+    "@babel/plugin-syntax-dynamic-import": "^7.8.3",
     "@pmmmwh/react-refresh-webpack-plugin": "^0.4.3",
     "@types/react": "^17.0.0",
     "@types/react-dom": "^17.0.0",

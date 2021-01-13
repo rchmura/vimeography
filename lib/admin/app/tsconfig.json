@@ -3,7 +3,7 @@
     "rootDir": "src",
     "outDir": "./dist/",
     "noImplicitAny": true,
-    "module": "es6",
+    "module": "es2020",
     "target": "es5",
     "jsx": "react",
     "allowJs": true,
