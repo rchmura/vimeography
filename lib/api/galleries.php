@@ -5,6 +5,11 @@ class Galleries extends \WP_REST_Controller
 {
   public function __construct()
   {
+    // needed for is_plugin_active() calls
+    if (!function_exists('is_plugin_active')) {
+      include_once ABSPATH . 'wp-admin/includes/plugin.php';
+    }
+
     add_action('rest_api_init', function () {
       $this->register_routes();
     });
