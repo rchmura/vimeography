@@ -69,20 +69,20 @@ class Vimeography_Admin_Scripts
           break;
         case "toplevel_page_vimeography-edit-galleries":
           if (defined('VIMEOGRAPHY_DEV') && VIMEOGRAPHY_DEV) {
-            wp_enqueue_script(
-              'vimeography_admin_dev',
-              'http://localhost:8080/js/app.js',
-              [],
-              "1.0",
-              false
-            );
-            wp_enqueue_script(
-              'vimeography_admin_chunks',
-              'http://localhost:8080/js/chunk-vendors.js',
-              [],
-              "1.0",
-              false
-            );
+            // wp_enqueue_script(
+            //   'vimeography_admin_dev',
+            //   'http://localhost:8080/js/app.js',
+            //   [],
+            //   "1.0",
+            //   false
+            // );
+            // wp_enqueue_script(
+            //   'vimeography_admin_chunks',
+            //   'http://localhost:8080/js/chunk-vendors.js',
+            //   [],
+            //   "1.0",
+            //   false
+            // );
 
             wp_enqueue_script(
               'vimeography_admin_react',
@@ -91,28 +91,42 @@ class Vimeography_Admin_Scripts
               "1.0",
               true
             );
-
-            wp_localize_script(
-              "vimeography_admin_react",
-              "vimeographyThemeNonce",
-              wp_create_nonce("vimeography-theme-action")
-            );
           } else {
+            // wp_enqueue_script(
+            //   'vimeography_admin_chunks',
+            //   plugin_dir_url(__DIR__) . 'dist/js/chunk-vendors.js',
+            //   [],
+            //   "1.0",
+            //   false
+            // );
+            // wp_enqueue_script(
+            //   'vimeography_admin',
+            //   plugin_dir_url(__DIR__) . 'dist/js/app.js',
+            //   [],
+            //   "1.0",
+            //   false
+            // );
+
+            $manifest = VIMEOGRAPHY_PATH . 'lib/admin/app/dist/manifest.json';
+            $manifest = file_get_contents($manifest);
+            $manifest = (array) json_decode($manifest);
+
+            $script_url =
+              VIMEOGRAPHY_PATH . 'lib/admin/app/dist' . $manifest['index.js'];
             wp_enqueue_script(
-              'vimeography_admin_chunks',
-              plugin_dir_url(__DIR__) . 'dist/js/chunk-vendors.js',
+              'vimeography_admin_react',
+              $script_url,
               [],
               "1.0",
-              false
-            );
-            wp_enqueue_script(
-              'vimeography_admin',
-              plugin_dir_url(__DIR__) . 'dist/js/app.js',
-              [],
-              "1.0",
-              false
+              true
             );
           }
+
+          wp_localize_script(
+            "vimeography_admin_react",
+            "vimeographyThemeNonce",
+            wp_create_nonce("vimeography-theme-action")
+          );
 
           if (!isset($_GET['id'])) {
             wp_enqueue_style('vimeography-bootstrap');
