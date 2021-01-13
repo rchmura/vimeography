@@ -219,16 +219,23 @@ const GalleryProvider = (props: GalleryProviderProps) => {
   const [state, dispatch] = React.useReducer(reducer, initialState);
 
   const { isLoading, error, data } = useQuery(
-    ["getGallery", props.id, dispatch],
-    () =>
-      fetch(window.wpApiSettings.root + `vimeography/v1/galleries/${props.id}`)
-        .then((res) => {
-          return res.json();
-        })
-        .then((payload) => {
-          dispatch({ payload, type: "HYDRATE" });
-          return payload;
-        })
+    [`galleries`, props.id],
+    () => {
+      return fetch(
+        window.wpApiSettings.root + `vimeography/v1/galleries/${props.id}`
+      ).then((res) => {
+        return res.json();
+      });
+    },
+    { staleTime: Infinity }
+  );
+
+  React.useEffect(
+    () => {
+      if (!data) return;
+      dispatch({ payload: data, type: "HYDRATE" });
+    },
+    [data]
   );
 
   // Detect any theme CSS customizations on load and
