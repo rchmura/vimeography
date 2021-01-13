@@ -32,7 +32,9 @@ const BasicSettings = () => {
           <select
             className=""
             value={ctx.state.cache_timeout}
-            onChange={(e) => handleUpdate({ cache_timeout: e.target.value })}
+            onChange={(e) =>
+              handleUpdate({ cache_timeout: parseInt(e.target.value) })
+            }
           >
             <option value="0">page load</option>
             <option value="900">15 minutes</option>
@@ -74,10 +76,14 @@ const BasicSettings = () => {
       <Setting>
         <SettingLabel>Number of videos</SettingLabel>
         <input
-          type="text"
+          type="number"
+          min="0"
+          max="25"
           value={ctx.state.video_limit}
-          onChange={(e) => handleUpdate({ video_limit: e.target.value })}
-          className="vm-mb-2"
+          onChange={(e) =>
+            handleUpdate({ video_limit: parseInt(e.target.value) })
+          }
+          className="vm-mb-2 vm-w-24"
         />
         <p className="vm-text-xs vm-text-gray-400">
           Specifies the number of videos that will appear in your gallery. Set
