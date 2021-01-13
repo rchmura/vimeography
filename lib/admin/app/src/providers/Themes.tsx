@@ -117,6 +117,7 @@ type UpdateThemeSettingDefaultValuePayload = {
 
 type Action =
   | { type: `HYDRATE`; payload: Theme[] }
+  | { type: `RESET`; payload: Theme[] }
   | {
       type: `THEME.SETTING.UPDATE_DEFAULT_VALUE`;
       payload: UpdateThemeSettingDefaultValuePayload;
@@ -131,6 +132,12 @@ const reducer = (state: ThemesState, action: Action) => {
     case "HYDRATE": {
       if (state.themes.length > 0) return state; //only hydrate once
 
+      return produce(state, (next) => {
+        next.themes = action.payload;
+      });
+    }
+
+    case "RESET": {
       return produce(state, (next) => {
         next.themes = action.payload;
       });

@@ -68,6 +68,7 @@ export type GalleryAppearanceRule = {
 type Action =
   | { type: `HYDRATE`; payload: GalleryResponse }
   | { type: `EDIT_GALLERY_STATE`; payload: GalleryState }
+  | { type: `RESET_GALLERY_APPEARANCE` }
   | { type: `UPDATE_GALLERY_APPEARANCE`; payload: ThemeSetting };
 
 const initialState = {
@@ -113,6 +114,12 @@ const reducer = (state: GalleryState, action: Action) => {
         ...state,
         ...action.payload,
       };
+    }
+
+    case `RESET_GALLERY_APPEARANCE`: {
+      return produce(state, (next) => {
+        next.appearanceRules = [];
+      });
     }
 
     case `UPDATE_GALLERY_APPEARANCE`: {
