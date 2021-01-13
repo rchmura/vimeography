@@ -9,7 +9,6 @@ import Colorpicker from "./Colorpicker";
 import NumericControl from "./Numeric";
 import SliderControl from "./Slider";
 import VisibilityControl from "./Visibility";
-import Label from "./Label";
 
 const AppearanceEditor = () => {
   const gallery = React.useContext(GalleryContext);
@@ -23,32 +22,36 @@ const AppearanceEditor = () => {
 
   return (
     <div className="vm-overflow-scroll" style={{ maxHeight: `30rem` }}>
-      <div className="vm-px-4 vm-py-5 vm-border-b vm-border-gray-200 vm-relative">
+      <div className="vm-py-5 vm-border-b vm-border-gray-200 vm-relative">
         <div
-          className="vm-absolute vm-inset-0 vm-opacity-70"
+          className="vm-absolute vm-inset-0 vm-opacity-90"
           style={{
-            background: `url(${activeTheme.thumbnail}) no-repeat`,
-            backgroundSize: `cover`,
-            filter: `blur(3px)`,
+            background: `linear-gradient(to left, rgb(230, 100, 101), rgb(145 152 229 / 56%)), url(${
+              activeTheme.thumbnail
+            }) no-repeat 100% 100%`,
           }}
         />
         <div className="vm-z-10 vm-relative">
-          <Label>Current gallery theme</Label>
+          <div className="vm-flex vm-items-center vm-px-4 vm-py-2">
+            <div className="vm-flex-1">
+              <div
+                className="vm-text-white"
+                style={{ textShadow: `rgb(28 31 35 / 40%) 0px 2px 2px` }}
+              >
+                Current gallery theme
+              </div>
 
-          <div className="vm-flex vm-items-center">
-            {/* <img
-              src={activeTheme.thumbnail}
-              className="vm-w-12 vm-border-4 vm-border-white vm-mr-2 vm-rounded vm-shadow"
-            /> */}
-            <div
-              className="vm-font-semibold vm-text-white vm-text-3xl vm-flex-1"
-              style={{ textShadow: `rgb(28 31 35 / 40%) 0px 2px 2px` }}
-            >
-              {activeTheme.name}
+              <div
+                className="vm-font-semibold vm-text-white vm-text-2xl"
+                style={{ textShadow: `rgb(28 31 35 / 40%) 0px 2px 2px` }}
+              >
+                {activeTheme.name}
+              </div>
             </div>
+
             <Link
               to="/appearance/themes"
-              className="vm-bg-white vm-px-2 vm-py-1 vm-rounded vm-text-gray-700 vm-flex vm-items-center vm-text-sm vm-border"
+              className="vm-bg-white vm-px-2 vm-py-1 vm-rounded vm-text-gray-700 vm-flex vm-items-center vm-text-xs vm-border"
             >
               <svg
                 className="vm-w-4 vm-h-4 vm-mr-1"
