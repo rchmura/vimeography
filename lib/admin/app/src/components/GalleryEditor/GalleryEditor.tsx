@@ -12,7 +12,7 @@ const NavItem = (props) => (
   <NavLink
     to={props.to}
     exact
-    className="vm-bg-gray-50 vm-flex vm-items-center vm-px-4 vm-py-3 vm-text-gray-700 vm-outline-none hover:no-underline focus:vm-outline-none focus:vm-no-underline vm-font-semibold"
+    className="vm-bg-gray-50 vm-border-b vm-flex vm-items-center vm-px-4 vm-py-3 vm-text-gray-700 vm-outline-none hover:no-underline focus:vm-outline-none focus:vm-no-underline vm-font-semibold"
     activeClassName="vm-bg-white vm-border-l-4 vm-border-indigo-700 vm-outline-none focus:vm-outline-none focus:vm-no-underline"
   >
     {props.children}
