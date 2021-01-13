@@ -155,6 +155,43 @@ const Skeleton = () => {
 
 const GalleryEditor = () => {
   const ctx = React.useContext(GalleryContext);
+  const [submitting, setSubmitting] = React.useState(false);
+
+  const handleSubmit = async () => {
+    setSubmitting(true);
+
+    try {
+      const {
+        id,
+        resource_uri,
+        date_created,
+        appearanceRules,
+        ...payload
+      } = ctx.state;
+      const response = await fetch(
+        window.wpApiSettings.root + `vimeography/v1/galleries/${ctx.data.id}`,
+        {
+          method: "PATCH",
+          mode: "same-origin",
+          cache: "no-cache",
+          credentials: "same-origin",
+          headers: {
+            "Content-Type": "application/json",
+            "X-WP-Nonce": window.wpApiSettings.nonce,
+            // 'Content-Type': 'application/x-www-form-urlencoded',
+          },
+          body: JSON.stringify(payload), // body data type must match "Content-Type" header
+        }
+      );
+
+      await response.json();
+    } catch (error) {
+      console.log(error);
+    } finally {
+      // setSubmitting(false);
+      location.reload();
+    }
+  };
 
   if (ctx.isLoading) return <Skeleton />;
 
@@ -172,8 +209,12 @@ const GalleryEditor = () => {
       <Menu />
       <div>
         <div className="vm-m-4 vm-flex vm-justify-end">
-          <button className="vm-bg-blue-600 vm-text-white vm-px-3 vm-py-2 vm-rounded">
-            Save changes
+          <button
+            className="vm-bg-blue-600 vm-text-white vm-px-3 vm-py-2 vm-rounded"
+            onClick={handleSubmit}
+            disabled={submitting}
+          >
+            {submitting ? "Saving…" : "Save changes"}
           </button>
         </div>
       </div>
