@@ -112,7 +112,7 @@ class Vimeography_Admin_Scripts
             $manifest = (array) json_decode($manifest);
 
             $script_url =
-              VIMEOGRAPHY_PATH . 'lib/admin/app/dist' . $manifest['index.js'];
+              VIMEOGRAPHY_URL . 'lib/admin/app/dist/' . $manifest['index.js'];
             wp_enqueue_script(
               'vimeography_admin_react',
               $script_url,
@@ -126,6 +126,15 @@ class Vimeography_Admin_Scripts
             "vimeography_admin_react",
             "vimeographyThemeNonce",
             wp_create_nonce("vimeography-theme-action")
+          );
+
+          wp_localize_script(
+            'vimeography_admin_react',
+            'vimeographyApiSettings',
+            array(
+              'root' => esc_url_raw(rest_url()),
+              'nonce' => wp_create_nonce('vimeographyApiSettings')
+            )
           );
 
           if (!isset($_GET['id'])) {

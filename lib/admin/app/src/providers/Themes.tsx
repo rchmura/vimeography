@@ -170,7 +170,7 @@ const ThemesProvider = (props: ThemesProviderProps) => {
   const [state, dispatch] = React.useReducer(reducer, initialState);
 
   const { isLoading, error, data } = useQuery(`getThemes`, () =>
-    fetch(window.wpApiSettings.root + `vimeography/v1/themes`)
+    fetch(window.vimeographyApiSettings.root + `vimeography/v1/themes`)
       .then((res) => {
         return res.json();
       })

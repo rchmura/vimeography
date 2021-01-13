@@ -202,7 +202,8 @@ const GalleryEditor = () => {
         ...payload
       } = ctx.state;
       const response = await fetch(
-        window.wpApiSettings.root + `vimeography/v1/galleries/${ctx.data.id}`,
+        window.vimeographyApiSettings.root +
+          `vimeography/v1/galleries/${ctx.data.id}`,
         {
           method: "PATCH",
           mode: "same-origin",
@@ -210,7 +211,7 @@ const GalleryEditor = () => {
           credentials: "same-origin",
           headers: {
             "Content-Type": "application/json",
-            "X-WP-Nonce": window.wpApiSettings.nonce,
+            "X-WP-Nonce": window.vimeographyApiSettings.nonce,
             // 'Content-Type': 'application/x-www-form-urlencoded',
           },
           body: JSON.stringify(payload), // body data type must match "Content-Type" header

@@ -229,7 +229,8 @@ const GalleryProvider = (props: GalleryProviderProps) => {
     [`galleries`, props.id],
     () => {
       return fetch(
-        window.wpApiSettings.root + `vimeography/v1/galleries/${props.id}`
+        window.vimeographyApiSettings.root +
+          `vimeography/v1/galleries/${props.id}`
       ).then((res) => {
         return res.json();
       });
@@ -390,7 +391,7 @@ const GalleryProvider = (props: GalleryProviderProps) => {
       console.log({ styles });
 
       const response = await fetch(
-        window.wpApiSettings.root +
+        window.vimeographyApiSettings.root +
           `vimeography/v1/galleries/${props.id}/appearance`,
         {
           method: "POST",
@@ -399,7 +400,7 @@ const GalleryProvider = (props: GalleryProviderProps) => {
           credentials: "same-origin",
           headers: {
             "Content-Type": "application/json",
-            "X-WP-Nonce": window.wpApiSettings.nonce,
+            "X-WP-Nonce": window.vimeographyApiSettings.nonce,
             // 'Content-Type': 'application/x-www-form-urlencoded',
           },
           body: JSON.stringify({ css: styles }), // body data type must match "Content-Type" header
