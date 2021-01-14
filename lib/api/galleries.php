@@ -10,6 +10,11 @@ class Galleries extends \WP_REST_Controller
       include_once ABSPATH . 'wp-admin/includes/plugin.php';
     }
 
+    // needed for duplicate gallery calls
+    if (!function_exists('request_filesystem_credentials')) {
+      include_once ABSPATH . 'wp-admin/includes/file.php';
+    }
+
     add_action('rest_api_init', function () {
       $this->register_routes();
     });
@@ -542,18 +547,51 @@ class Galleries extends \WP_REST_Controller
    */
   public function delete_item($request)
   {
-    $item = $this->prepare_item_for_database($request);
+    $params = $request->get_params();
+    $id = intval($params['id']);
 
-    if (function_exists('slug_some_function_to_delete_item')) {
-      $deleted = slug_some_function_to_delete_item($item);
-      if ($deleted) {
-        return new WP_REST_Response(true, 200);
+    try {
+      global $wpdb;
+      $result = $wpdb->query(
+        'DELETE gallery, meta FROM ' .
+          $wpdb->vimeography_gallery .
+          ' gallery, ' .
+          $wpdb->vimeography_gallery_meta .
+          ' meta WHERE gallery.id = ' .
+          $id .
+          ' AND meta.gallery_id = ' .
+          $id .
+          ';'
+      );
+
+      if ($result === false) {
+        return new \WP_Error(
+          'cant-delete',
+          __('Your gallery could not be deleted.', 'vimeography'),
+          array(
+            'status' => 500
+          )
+        );
       }
-    }
 
-    return new WP_Error('cant-delete', __('message', 'text-domain'), array(
-      'status' => 500
-    ));
+      do_action('vimeography-pro/delete-gallery', $id);
+
+      require_once VIMEOGRAPHY_PATH . 'lib/deprecated/cache.php';
+      $cache = new \Vimeography_Cache($id);
+      if ($cache->exists()) {
+        $cache->delete();
+      }
+
+      return new \WP_REST_Response(true, 204);
+    } catch (Exception $e) {
+      return new \WP_Error(
+        'cant-delete',
+        __('Your gallery could not be deleted.', 'vimeography'),
+        array(
+          'status' => 500
+        )
+      );
+    }
   }
 
   /**
@@ -773,7 +811,7 @@ class Galleries extends \WP_REST_Controller
         'vimeography-duplicate-gallery-verification'
       );
 
-      $filesystem = new Vimeography_Filesystem($url, array(
+      $filesystem = new \Vimeography_Filesystem($url, array(
         'vimeography_duplicate_gallery_serialized',
         'vimeography-action'
       ));
@@ -887,6 +925,22 @@ class Galleries extends \WP_REST_Controller
                 )
               );
             }
+          }
+        } elseif (function_exists('wp_update_custom_css_post')) {
+          // if 4.7+, find styles in db and copy to new gallery.
+          $styles = wp_get_custom_css('vimeography_gallery_' . $id); // returns css string
+
+          if ($styles) {
+            $search_string = '#vimeography-gallery-' . $id;
+            $replace_string = '#vimeography-gallery-' . $gallery_id;
+
+            $new_css = str_ireplace($search_string, $replace_string, $styles);
+
+            $stylesheet_key = "vimeography_gallery_" . $gallery_id;
+
+            $r = wp_update_custom_css_post($new_css, array(
+              'stylesheet' => $stylesheet_key
+            ));
           }
         }
       }

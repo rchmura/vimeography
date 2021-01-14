@@ -1,0 +1,32 @@
+import * as React from "react";
+import { NavLink } from "react-router-dom";
+
+type MenuItemProps = {
+  to: string;
+  children: any;
+};
+
+const MenuItem = (props: MenuItemProps) => {
+  return (
+    <NavLink
+      className="vm-mr-6 vm-text-base focus:vm-outline-none vm-font-semibold vm-text-gray-600"
+      activeClassName="vm-border-b-2 vm-border-indigo-500"
+      to={props.to}
+      exact
+    >
+      {props.children}
+    </NavLink>
+  );
+};
+
+const ListGalleriesMenu = () => {
+  return (
+    <div className="vm-my-8">
+      <MenuItem to="/">Galleries</MenuItem>
+      <MenuItem to="/tools">Tools</MenuItem>
+      {/* <MenuItem to="/filters">Filters</MenuItem> */}
+    </div>
+  );
+};
+
+export default ListGalleriesMenu;
