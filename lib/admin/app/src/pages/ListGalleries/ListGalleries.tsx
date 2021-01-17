@@ -36,6 +36,23 @@ const NoGalleries = () => {
   );
 };
 
+const ProToolsAd = () => {
+  return (
+    <div>
+      <h2 className="vm-text-lg vm-text-gray-700">
+        Back up all of your galleries with Vimeography Pro.
+      </h2>
+      <a
+        href="https://vimeography.com/pro"
+        className="vm-text-blue-500 vm-text-base"
+        target="_blank"
+      >
+        Learn more
+      </a>
+    </div>
+  );
+};
+
 const ListGalleries = () => {
   const [
     duplicateGalleryModalOpen,
@@ -67,58 +84,59 @@ const ListGalleries = () => {
 
       <Menu />
 
-      {data.length === 0 ? (
-        <NoGalleries />
-      ) : (
-        <Switch>
-          <Route path="/" exact>
-            <table className="vm-my-4 vm-w-full vm-max-w-screen-2xl">
-              <thead>
-                <tr>
-                  <th className="vm-px-4 vm-py-4 vm-text-left">ID</th>
-                  <th className="vm-px-4 vm-py-4 vm-text-left">Title</th>
-                  <th className="vm-px-4 vm-py-4 vm-text-left">Video Source</th>
-                  <th className="vm-px-4 vm-py-4 vm-text-left">Shortcode</th>
-                  <th className="vm-px-4 vm-py-4 vm-text-left">
-                    Gallery Theme
-                  </th>
-                  <th className="vm-px-4 vm-py-4 vm-text-left">Created on</th>
-                  <th className="vm-px-4 vm-py-4 vm-text-left">Actions</th>
-                </tr>
-              </thead>
-              <tbody>
-                {data.map((gallery: Gallery) => {
-                  return (
-                    <GalleryRow
-                      gallery={gallery}
-                      setDuplicateGalleryModalOpen={
-                        setDuplicateGalleryModalOpen
-                      }
-                      setGalleryToDuplicate={setGalleryToDuplicate}
-                    />
-                  );
-                })}
-              </tbody>
-            </table>
-          </Route>
+      <div className="vm-container">
+        {data.length === 0 ? (
+          <NoGalleries />
+        ) : (
+          <Switch>
+            <Route path="/" exact>
+              <table className="vm-my-4 vm-w-full vm-border vm-shadow-xl">
+                <thead>
+                  <tr>
+                    <th className="vm-px-4 vm-py-4 vm-text-left">ID</th>
+                    <th className="vm-px-4 vm-py-4 vm-text-left">Title</th>
+                    <th className="vm-px-4 vm-py-4 vm-text-left">
+                      Video Source
+                    </th>
+                    <th className="vm-px-4 vm-py-4 vm-text-left">Shortcode</th>
+                    <th className="vm-px-4 vm-py-4 vm-text-left">
+                      Gallery Theme
+                    </th>
+                    <th className="vm-px-4 vm-py-4 vm-text-left">Created on</th>
+                    <th className="vm-px-4 vm-py-4 vm-text-left">Actions</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {data.map((gallery: Gallery) => {
+                    return (
+                      <GalleryRow
+                        key={gallery.id}
+                        gallery={gallery}
+                        setDuplicateGalleryModalOpen={
+                          setDuplicateGalleryModalOpen
+                        }
+                        setGalleryToDuplicate={setGalleryToDuplicate}
+                      />
+                    );
+                  })}
+                </tbody>
+              </table>
+            </Route>
 
-          <ErrorBoundary
-            FallbackComponent={
-              <div>Get import/export tools with Vimeography Pro</div>
-            }
-          >
-            <React.Suspense fallback={<div />}>
-              <Route path="/tools" exact>
-                <ProTools />
-              </Route>
-            </React.Suspense>
-          </ErrorBoundary>
+            <Route path="/tools" exact>
+              <ErrorBoundary FallbackComponent={ProToolsAd}>
+                <React.Suspense fallback={<div />}>
+                  <ProTools />
+                </React.Suspense>
+              </ErrorBoundary>
+            </Route>
 
-          {/* <Route path="/filters">
-            <Filters />
-          </Route> */}
-        </Switch>
-      )}
+            <Route path="/filters">
+              <Filters />
+            </Route>
+          </Switch>
+        )}
+      </div>
     </>
   );
 };
