@@ -267,14 +267,28 @@ const GalleryProvider = (props: GalleryProviderProps) => {
       if (!customStyle) return;
       console.log(`custom style found!`);
       console.log(customStyle);
+      console.log(`rules:`);
+      console.dir(customStyle.sheet.cssRules);
       // since it is possible that the element it hidden (as in a modal)
       // try to get the defined value based on the loaded stylesheet
       activeTheme.settings.map((setting) => {
         setting.properties.map((prop) => {
           // build the expected selector
+
+          // accounts for incorrect single-colon pseudo selectors in any theme settings
+          // https://regex101.com/r/zzlv1J/1
+          const modifiedTarget = prop.target.replace(
+            /([^:])(:)([^:])/g,
+            "$1::$3"
+          );
+
           const selectorToMatch = setting.namespace
-            ? `#vimeography-gallery-${props.id}${prop.target}`
-            : prop.target;
+            ? `#vimeography-gallery-${props.id}${modifiedTarget}`
+            : modifiedTarget;
+
+          console.log(
+            `attempting to match theme setting in custom stylesheet rules: ${selectorToMatch}`
+          );
 
           // search the stylesheet for the selector
           for (let rule of customStyle.sheet.cssRules) {
@@ -282,6 +296,8 @@ const GalleryProvider = (props: GalleryProviderProps) => {
 
             if (rule.selectorText === selectorToMatch) {
               // get the value for the current prop attribute
+
+              console.log(`we have a match`);
 
               let value = rule.style.getPropertyValue(
                 convertToDashedAttribute(prop.attribute)
