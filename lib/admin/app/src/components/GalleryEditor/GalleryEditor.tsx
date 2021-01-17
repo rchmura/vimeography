@@ -211,7 +211,9 @@ const GalleryEditor = () => {
           credentials: "same-origin",
           headers: {
             "Content-Type": "application/json",
-            "X-WP-Nonce": window.vimeographyApiSettings.nonce,
+            "X-WP-Nonce": window.wpApiSettings
+              ? window.wpApiSettings.nonce
+              : window.vimeographyApiSettings.nonce,
             // 'Content-Type': 'application/x-www-form-urlencoded',
           },
           body: JSON.stringify(payload), // body data type must match "Content-Type" header

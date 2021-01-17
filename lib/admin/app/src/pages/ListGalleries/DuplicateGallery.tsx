@@ -34,7 +34,9 @@ const DuplicateGallery = (props: DuplicateGalleryProps) => {
           credentials: "same-origin",
           headers: {
             "Content-Type": "application/json",
-            "X-WP-Nonce": (window as any).vimeographyApiSettings.nonce,
+            "X-WP-Nonce": window.wpApiSettings
+              ? window.wpApiSettings.nonce
+              : window.vimeographyApiSettings.nonce,
           },
           body: JSON.stringify({
             id: payload.gallery_id,
