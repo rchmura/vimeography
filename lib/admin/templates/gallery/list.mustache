@@ -1,82 +1,5 @@
-<script type="text/javascript">
-(function($){
-  $(document).ready(function(){
-    $('.vimeography-question').tooltip();
-
-    var $info = $("#modal-content");
-    $info.dialog({
-      'dialogClass'   : 'wp-dialog',
-      'modal'         : true,
-      'autoOpen'      : false,
-      'closeOnEscape' : true,
-      'minWidth'      : 400,
-      'buttons'       : [
-        {
-          text: "Duplicate Gallery",
-          click: function(){
-            $('#vimeography-duplicate-gallery-form').submit();
-          }
-        },
-        {
-          text: "Cancel",
-          click: function() {
-            $(this).dialog('close');
-          }
-        }
-      ]
-    });
-
-    $(".vimeography-duplicate-gallery").click(function(event) {
-        event.preventDefault();
-        var title  = $(this).attr('data-title') + ' copy';
-        var source = $(this).attr('data-source');
-        var gallery_id = $(this).attr('data-gallery-id');
-
-        $('#vimeography-duplicate-gallery-title').attr({value: title, placeholder: title });
-        $('#vimeography-duplicate-gallery-source').attr({value: source, placeholder: source });
-        $('#vimeography-duplicate-gallery-id').val(gallery_id);
-        $info.dialog('open');
-    });
-
-    $('.row-actions .delete a').click(function(e){
-      if ( ! confirm('WARNING: You are about to delete this gallery. \'Cancel\' to stop, \'OK\' to delete.') ) {
-        e.preventDefault();
-      }
-    });
-  });
-})(jQuery)
-</script>
-
-<style type="text/css">
-.vimeography-question {display: inline-block; width: 18px; height: 20px;}
-td.column-source_url,
-td.column-shortcode {
-  font-weight: 700;
-}
-
-.column-id {width: 50px;}
-.column-title {width: 200px;}
-.column-title > a {font-weight: 700;}
-.column-source_url {width: 330px;}
-.column-shortcode {width: 200px;}
-
-input.current-page { width: 48px; }
-
-#vimeography-duplicate-gallery-form input[type="text"] {
-  width: 330px;
-  height: 30px;
-  margin: 0 0 20px;
-}
-
-.wp-admin select { height: 28px !important; }
-
-.search-box input[name="s"] {
-  padding: 0 0 0 6px;
-}
-</style>
-
 <div class="wrap">
-  <h2 class="page-title">Edit Galleries <a href="{{new_gallery_url}}" class="add-new-h2">Add New</a></h2>
+  <h2 class="page-title">All galleries <a href="{{new_gallery_url}}" class="add-new-h2">Add New</a></h2>
 
   {{#messages}}
     <div class="{{type}}">
@@ -84,32 +7,5 @@ input.current-page { width: 48px; }
     </div>
   {{/messages}}
 
-  {{#galleries_to_show}}
-
-    {{{gallery_table}}}
-
-    <div id="modal-content" title="Duplicate Gallery">
-      <form id="vimeography-duplicate-gallery-form" class="form-wrap" method="get" action="">
-        {{{duplicate_gallery_nonce}}}
-        <input type="hidden" name="vimeography-action" value="duplicate_gallery" />
-        <input type="hidden" name="page" value="vimeography-edit-galleries" />
-        <input type="hidden" id="vimeography-duplicate-gallery-id" name="gallery_id" value="" />
-
-        <label for="vimeography-duplicate-gallery-title"><strong>New Gallery Title</strong></label>
-        <input type="text" id="vimeography-duplicate-gallery-title" name="gallery_title" />
-
-        <label for="vimeography-duplicate-gallery-source"><strong>Show the videos from</strong></label>
-        <input type="text" id="vimeography-duplicate-gallery-source" name="gallery_source" />
-
-        <p>
-          <label for="vimeography-duplicate-gallery-appearance"><input id="vimeography-duplicate-gallery-appearance" name="duplicate_appearance" type="checkbox" checked="checked" /> Also copy gallery appearance settings</label>
-        </p>
-      </form>
-    </div>
-
-  {{/galleries_to_show}}
-
-  {{^galleries_to_show}}
-    <h1>You don't have any galleries. <a href="{{new_gallery_url}}" title="Create a new gallery">Care to make one?</a></h1>
-  {{/galleries_to_show}}
+ <div id="vimeography_admin_app">Loading…</div> <!-- React mounting point -->
 </div>

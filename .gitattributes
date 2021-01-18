@@ -15,3 +15,12 @@ browserstack-logo.svg export-ignore
 /vimeography-harvestone/package-lock.json export-ignore
 /vimeography-harvestone/webpack.config.js export-ignore
 /vimeography-harvestone/src export-ignore
+
+/lib/admin/app/src export-ignore
+/lib/admin/app/node_modules export-ignore
+/lib/admin/app/package.json export-ignore
+/lib/admin/app/package-lock.json export-ignore
+/lib/admin/app/webpack.config.js export-ignore
+/lib/admin/app/tsconfig.json export-ignore
+/lib/admin/app/tailwind.config.js export-ignore
+/lib/admin/app/postcss.config.js export-ignore
