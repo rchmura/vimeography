@@ -6,8 +6,8 @@ import { QueryClient, QueryClientProvider } from "react-query";
 const queryClient = new QueryClient();
 
 import ThemesProvider from "../providers/Themes";
-
 import GalleryProvider from "../providers/Gallery";
+import NotificationProvider from "../providers/Notification";
 import GalleryEditor from "../components/GalleryEditor/GalleryEditor";
 
 import ListGalleries from "../pages/ListGalleries/ListGalleries";
@@ -25,17 +25,19 @@ const App = () => {
 
   return (
     <QueryClientProvider client={queryClient}>
-      <Router>
-        <ThemesProvider>
-          {isListGalleries && <ListGalleries />}
+      <NotificationProvider>
+        <Router>
+          <ThemesProvider>
+            {isListGalleries && <ListGalleries />}
 
-          {isEditGallery && (
-            <GalleryProvider id={id}>
-              <GalleryEditor />
-            </GalleryProvider>
-          )}
-        </ThemesProvider>
-      </Router>
+            {isEditGallery && (
+              <GalleryProvider id={id}>
+                <GalleryEditor />
+              </GalleryProvider>
+            )}
+          </ThemesProvider>
+        </Router>
+      </NotificationProvider>
     </QueryClientProvider>
   );
 };
