@@ -24,7 +24,7 @@ const ListGalleriesMenu = () => {
     <div className="vm-my-8">
       <MenuItem to="/">Galleries</MenuItem>
       <MenuItem to="/tools">Tools</MenuItem>
-      {/* <MenuItem to="/filters">Filters</MenuItem> */}
+      <MenuItem to="/filters">Filters</MenuItem>
     </div>
   );
 };
