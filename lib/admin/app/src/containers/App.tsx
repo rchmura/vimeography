@@ -1,6 +1,6 @@
 import * as React from "react";
 import URLSearchParams from "@ungap/url-search-params";
-import { MemoryRouter as Router, Switch, Route } from "react-router-dom";
+import { HashRouter as Router, Switch, Route } from "react-router-dom";
 
 import { QueryClient, QueryClientProvider } from "react-query";
 const queryClient = new QueryClient();
@@ -26,8 +26,8 @@ const App = () => {
   return (
     <QueryClientProvider client={queryClient}>
       <NotificationProvider>
-        <Router>
-          <ThemesProvider>
+        <ThemesProvider>
+          <Router>
             {isListGalleries && <ListGalleries />}
 
             {isEditGallery && (
@@ -35,8 +35,8 @@ const App = () => {
                 <GalleryEditor />
               </GalleryProvider>
             )}
-          </ThemesProvider>
-        </Router>
+          </Router>
+        </ThemesProvider>
       </NotificationProvider>
     </QueryClientProvider>
   );
