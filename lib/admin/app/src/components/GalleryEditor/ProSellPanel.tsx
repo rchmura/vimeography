@@ -92,7 +92,7 @@ const ProSellPanel = () => {
       <a
         href="https://vimeography.com/pro"
         target="_blank"
-        className="vm-px-4 vm-py-3 vm-rounded vm-border vm-shadow-sm vm-mx-auto vm-text-base vm-bg-white vm-text-indigo-800 vm-text-center vm-mb-2 vm-inline-flex vm-items-center vm-justify-center vm-w-full"
+        className="vm-box-border vm-px-4 vm-py-3 vm-rounded vm-border vm-shadow-sm vm-mx-auto vm-text-base vm-bg-white vm-text-indigo-800 vm-text-center vm-mb-2 vm-inline-flex vm-items-center vm-justify-center vm-w-full"
       >
         <svg
           className="vm-w-5 vm-h-5 vm-mr-1"

@@ -46,7 +46,7 @@ const BasicSettings = () => {
           </select>
 
           <button
-            className="vm-flex vm-items-center vm-text-blue-500 vm-outline-none focus:vm-outline-none"
+            className="vm-flex vm-items-center vm-text-blue-500 vm-outline-none focus:vm-outline-none vm-border-0 vm-bg-transparent"
             onClick={() => {
               setIsRefreshing(true);
               const url =

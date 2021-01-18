@@ -60,7 +60,10 @@ const GalleryRow = (props: GalleryRowProps) => {
       <td className="vm-p-4">{gallery.id}</td>
       <td>
         <strong>
-          <a href={`?page=vimeography-edit-galleries&id=${gallery.id}`}>
+          <a
+            className="vm-no-underline vm-text-gray-600"
+            href={`?page=vimeography-edit-galleries&id=${gallery.id}`}
+          >
             {gallery.title}
           </a>
         </strong>

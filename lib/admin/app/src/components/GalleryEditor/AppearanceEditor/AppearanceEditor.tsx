@@ -51,7 +51,7 @@ const AppearanceEditor = () => {
 
             <Link
               to="/appearance/themes"
-              className="vm-bg-white vm-px-2 vm-py-1 vm-rounded vm-text-gray-700 vm-flex vm-items-center vm-text-xs vm-border"
+              className="vm-bg-white vm-px-2 vm-py-1 vm-rounded vm-text-gray-700 vm-flex vm-items-center vm-text-xs vm-border vm-no-underline"
             >
               <svg
                 className="vm-w-4 vm-h-4 vm-mr-1"
@@ -68,7 +68,7 @@ const AppearanceEditor = () => {
       </div>
 
       <button
-        className="vm-p-4 vm-text-blue-500 vm-flex vm-items-center hover:vm-underline"
+        className="vm-p-4 vm-text-blue-500 vm-flex vm-items-center hover:vm-underline vm-border-0 vm-bg-transparent"
         onClick={() => {
           gallery.dispatch({ type: `RESET_GALLERY_APPEARANCE` });
           themesCtx.dispatch({ type: `RESET`, payload: themesCtx.data });

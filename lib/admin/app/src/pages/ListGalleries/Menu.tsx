@@ -9,7 +9,7 @@ type MenuItemProps = {
 const MenuItem = (props: MenuItemProps) => {
   return (
     <NavLink
-      className="vm-mr-6 vm-py-2 vm-text-base focus:vm-outline-none vm-font-semibold vm-text-gray-600"
+      className="vm-mr-6 vm-py-2 vm-text-base focus:vm-outline-none vm-font-semibold vm-text-gray-600 vm-no-underline"
       activeClassName="vm-border-b-4 vm-border-indigo-500"
       to={props.to}
       exact={props.to === "/"}

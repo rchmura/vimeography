@@ -19,7 +19,7 @@ const ThemeList = () => {
     <div>
       <Link
         to="/appearance"
-        className="vm-text-blue-500 vm-p-4 vm-flex vm-items-center"
+        className="vm-text-blue-500 vm-p-4 vm-flex vm-items-center vm-no-underline"
       >
         <svg
           className="vm-w-4 vm-h-4 vm-mr-1"
