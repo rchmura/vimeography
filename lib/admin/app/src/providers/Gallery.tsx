@@ -400,47 +400,6 @@ const GalleryProvider = (props: GalleryProviderProps) => {
     [data, themesCtx]
   );
 
-  const saveCSS = useDebouncedCallback(
-    // function
-    async (stylesheetId) => {
-      const styles = document.getElementById(stylesheetId).innerText;
-      console.log({ styles });
-
-      const response = await fetch(
-        window.vimeographyApiSettings.root +
-          `vimeography/v1/galleries/${props.id}/appearance`,
-        {
-          method: "POST",
-          mode: "same-origin",
-          cache: "no-cache",
-          credentials: "same-origin",
-          headers: {
-            "Content-Type": "application/json",
-            "X-WP-Nonce": window.wpApiSettings
-              ? window.wpApiSettings.nonce
-              : window.vimeographyApiSettings.nonce,
-            // 'Content-Type': 'application/x-www-form-urlencoded',
-          },
-          body: JSON.stringify({ css: styles }), // body data type must match "Content-Type" header
-        }
-      );
-
-      console.log(response.ok);
-    },
-    // delay in ms
-    2500
-  );
-
-  React.useEffect(
-    () => {
-      if (!data) return;
-
-      console.log(`appearanceRules changed, debouncing and syncing…`);
-      saveCSS.callback(`vimeography-gallery-${props.id}-custom-css-preview`);
-    },
-    [state.appearanceRules]
-  );
-
   return (
     <GalleryContext.Provider
       value={{

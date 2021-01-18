@@ -1,7 +1,7 @@
 import * as React from "react";
 import { NavLink, Route, Switch, useRouteMatch } from "react-router-dom";
 import GalleryContext from "~/context/Gallery";
-
+import { useNotification } from "~/hooks/useNotification";
 import AppearanceEditor from "./AppearanceEditor/AppearanceEditor";
 import BasicSettings from "./BasicSettings/BasicSettings";
 import ThemeList from "./ThemeList/ThemeList";
@@ -15,7 +15,7 @@ const NavItem = (props) => (
   <NavLink
     to={props.to}
     exact
-    className="vm-bg-gray-50 vm-border-b vm-flex vm-items-center vm-px-4 vm-py-3 vm-text-gray-700 vm-outline-none hover:no-underline focus:vm-outline-none focus:vm-no-underline vm-font-semibold"
+    className="vm-bg-gray-50 vm-border-b vm-no-underline vm-flex vm-items-center vm-px-4 vm-py-3 vm-text-gray-700 vm-outline-none hover:no-underline focus:vm-outline-none focus:vm-no-underline vm-font-semibold"
     activeClassName="vm-bg-white vm-border-l-4 vm-border-indigo-700 vm-outline-none focus:vm-outline-none focus:vm-no-underline"
   >
     {props.children}
@@ -189,6 +189,7 @@ const Skeleton = () => {
 const GalleryEditor = () => {
   const ctx = React.useContext(GalleryContext);
   const [submitting, setSubmitting] = React.useState(false);
+  const { showNotification } = useNotification();
 
   const handleSubmit = async () => {
     setSubmitting(true);
@@ -201,6 +202,33 @@ const GalleryEditor = () => {
         appearanceRules,
         ...payload
       } = ctx.state;
+
+      const styles = document.getElementById(
+        `vimeography-gallery-${ctx.data.id}-custom-css-preview`
+      ).innerText;
+      console.log({ styles });
+
+      const responseA = await fetch(
+        window.vimeographyApiSettings.root +
+          `vimeography/v1/galleries/${ctx.data.id}/appearance`,
+        {
+          method: "POST",
+          mode: "same-origin",
+          cache: "no-cache",
+          credentials: "same-origin",
+          headers: {
+            "Content-Type": "application/json",
+            "X-WP-Nonce": window.wpApiSettings
+              ? window.wpApiSettings.nonce
+              : window.vimeographyApiSettings.nonce,
+            // 'Content-Type': 'application/x-www-form-urlencoded',
+          },
+          body: JSON.stringify({ css: styles }), // body data type must match "Content-Type" header
+        }
+      );
+
+      console.log(`styles saved: ${responseA.ok}`);
+
       const response = await fetch(
         window.vimeographyApiSettings.root +
           `vimeography/v1/galleries/${ctx.data.id}`,
@@ -221,8 +249,10 @@ const GalleryEditor = () => {
       );
 
       await response.json();
+      showNotification(`success`, "Saved! Reloading gallery…");
     } catch (error) {
       console.log(error);
+      showNotification(`error`, "Whoops! We hit a snag saving your settings.");
     } finally {
       // setSubmitting(false);
       location.reload();
@@ -234,7 +264,7 @@ const GalleryEditor = () => {
   return (
     <div className="vm-bg-gray-100 vm-rounded vm-border vm-border-gray-200 vm-mt-5 vm-sticky vm-top-10">
       <div className="vm-p-4 vm-bg-indigo-700 vm-rounded-t">
-        <h2 className="vm-text-lg vm-text-white vm-font-bold">
+        <h2 className="vm-text-lg vm-text-white vm-font-bold vm-my-0">
           {ctx.state.title}
         </h2>
         <a href={ctx.state.source_url} className="vm-text-indigo-50 vm-text-sm">
@@ -243,16 +273,14 @@ const GalleryEditor = () => {
       </div>
 
       <Menu />
-      <div>
-        <div className="vm-m-4 vm-flex vm-justify-end">
-          <button
-            className="vm-bg-blue-600 vm-text-white vm-px-3 vm-py-2 vm-rounded"
-            onClick={handleSubmit}
-            disabled={submitting}
-          >
-            {submitting ? "Saving…" : "Save changes"}
-          </button>
-        </div>
+      <div className="vm-flex vm-justify-end">
+        <button
+          className="vm-bg-blue-600 hover:vm-bg-blue-700 vm-m-4 vm-text-white vm-px-3 vm-py-2 vm-rounded vm-border-0 vm-cursor-pointer"
+          onClick={handleSubmit}
+          disabled={submitting}
+        >
+          {submitting ? "Saving…" : "Save changes"}
+        </button>
       </div>
     </div>
   );
