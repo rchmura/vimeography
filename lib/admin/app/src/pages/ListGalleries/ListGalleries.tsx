@@ -72,7 +72,12 @@ const ListGalleries = () => {
     });
   });
 
-  if (isLoading) return <div>Loading...</div>;
+  if (isLoading)
+    return (
+      <div className="vm-bg-gray-200 vm-w-full vm-h-32 vm-my-10 vm-animate-pulse vm-flex vm-items-center vm-justify-center vm-rounded vm-text-gray-700">
+        Loading galleries…
+      </div>
+    );
 
   return (
     <>
