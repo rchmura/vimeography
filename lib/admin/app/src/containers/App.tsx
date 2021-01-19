@@ -1,6 +1,6 @@
 import * as React from "react";
 import URLSearchParams from "@ungap/url-search-params";
-import { HashRouter as Router, Switch, Route } from "react-router-dom";
+import { MemoryRouter as Router, Switch, Route } from "react-router-dom";
 
 import { QueryClient, QueryClientProvider } from "react-query";
 const queryClient = new QueryClient();
