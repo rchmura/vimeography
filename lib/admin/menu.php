@@ -133,31 +133,8 @@ class Vimeography_Admin_Menu
         $this->_controller = new Vimeography_Gallery_Edit();
       }
 
-      $this->_mustache->setPartialsLoader(
-        new Mustache_Loader_CascadingLoader(array(
-          new Mustache_Loader_FilesystemLoader(
-            VIMEOGRAPHY_PATH . 'lib/admin/templates/gallery/edit/partials'
-          )
-        ))
-      );
-
-      apply_filters(
-        'vimeography-pro/load-edit-partials',
-        $this->_mustache->getPartialsLoader()
-      );
-
-      //$this->_mustache->setPartialsLoader(new Mustache_Loader_FilesystemLoader(VIMEOGRAPHY_PATH . 'lib/admin/templates/gallery/edit/partials'));
-
       $this->_view = $this->_mustache->loadTemplate('gallery/edit/layout');
     } else {
-      $args = array(
-        'label' => __('Galleries to show per page', 'vimeography'),
-        'default' => 10,
-        'option' => 'vimeography_galleries_per_page'
-      );
-
-      add_screen_option('per_page', $args);
-
       require_once VIMEOGRAPHY_PATH . 'lib/admin/controllers/gallery/list.php';
       if (is_plugin_active('vimeography-pro/vimeography-pro.php')) {
         do_action('vimeography-pro/load-list');
