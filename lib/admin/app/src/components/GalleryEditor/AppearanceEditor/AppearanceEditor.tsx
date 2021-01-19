@@ -68,7 +68,7 @@ const AppearanceEditor = () => {
       </div>
 
       <button
-        className="vm-p-4 vm-text-blue-500 vm-flex vm-items-center hover:vm-underline vm-border-0 vm-bg-transparent"
+        className="vm-p-4 vm-text-blue-500 vm-flex vm-items-center hover:vm-underline vm-border-0 vm-bg-transparent vm-cursor-pointer"
         onClick={() => {
           gallery.dispatch({ type: `RESET_GALLERY_APPEARANCE` });
           themesCtx.dispatch({ type: `RESET`, payload: themesCtx.data });
