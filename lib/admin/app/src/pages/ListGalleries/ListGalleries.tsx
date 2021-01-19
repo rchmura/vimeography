@@ -10,7 +10,7 @@ import Menu from "./Menu";
 // Pro tools
 import { ErrorBoundary } from "react-error-boundary";
 const ProTools = React.lazy(() => import("vimeography_pro/ProTools"));
-const Filters = React.lazy(() => import("vimeography_pro/Filters"));
+// const Filters = React.lazy(() => import("vimeography_pro/Filters"));
 
 export type Gallery = {
   id: string;
@@ -52,9 +52,9 @@ const ProToolsAd = () => {
   );
 };
 
-const FiltersAd = () => {
-  return <div>Coming soon…</div>;
-};
+// const FiltersAd = () => {
+//   return <div>Coming soon…</div>;
+// };
 
 const ListGalleries = () => {
   const [
@@ -139,13 +139,13 @@ const ListGalleries = () => {
               </ErrorBoundary>
             </Route>
 
-            <Route path="/filters">
+            {/* <Route path="/filters">
               <ErrorBoundary FallbackComponent={FiltersAd}>
                 <React.Suspense fallback={<div />}>
                   <Filters />
                 </React.Suspense>
               </ErrorBoundary>
-            </Route>
+            </Route> */}
           </Switch>
         )}
       </div>
