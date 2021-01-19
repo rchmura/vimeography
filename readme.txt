@@ -1,9 +1,9 @@
 === Vimeography: Vimeo Video Gallery WordPress Plugin ===
 Contributors: iamdavekiss, videogallery
 Tags: video gallery, gallery, video, vimeo, vimeo gallery
-Requires at least: 3.8
-Tested up to: 5.5
-Stable tag: 2.1.2
+Requires at least: 4.7
+Tested up to: 5.6
+Stable tag: 2.2
 License: GPL-3.0
 
 The easiest way to create beautiful Vimeo video galleries on your WordPress site.
@@ -138,6 +138,13 @@ Vimeography will load your template for the defined module instead of the defaul
 4. Gain additional features with Vimeography PRO.
 
 == Changelog ==
+= 2.2 =
+* [IMPORTANT] Vimeography now requires WordPress 4.7+
+* [New] Vimeography Admin has been rebuilt from scratch in React
+* [New] Introduced `/galleries` and `/themes` API endpoints
+* [Update] Mark compatibility with WordPress 5.6
+* [Update] Custom CSS is now saved as a DB entry
+
 = 2.1.2 =
 * [Update] Mark compatibility with WordPress 5.5
 * [Update] Swap out video on Pro page
@@ -618,6 +625,9 @@ Vimeography will load your template for the defined module instead of the defaul
 * First public release.
 
 == Upgrade Notice ==
+= 2.2 =
+IMPORTANT: Vimeography now requires WordPress 4.7 or above!
+
 = 1.5.1 = 
 IMPORTANT: Before performing this update, please be sure you have installed the latest versions of any Vimeography themes that you have purchased.
 
