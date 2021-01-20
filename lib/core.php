@@ -252,10 +252,18 @@ abstract class Core
 
       /**
        * Add parameters which are common to all requests
+       * Note: Signature changed in PHP7.4.0, but we still support 5.3+
        */
+      if (version_compare(phpversion(), '7.4.0', '<')) {
+        // php version isn't high enough
+        $imploded_fields = implode($fields, ',');
+      } else {
+        $imploded_fields = implode(',', $fields);
+      }
+
       $params = array_merge(
         array(
-          'fields' => implode($fields, ',')
+          'fields' => $imploded_fields
         ),
         $params
       );
