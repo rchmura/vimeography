@@ -73,6 +73,9 @@ if (!class_exists('Vimeography')) {
         self::$instance->addons = new Vimeography_Addons();
         new Vimeography_Robots();
         new Vimeography_Shortcode();
+
+        new \Vimeography\Logger();
+
         new \Vimeography\Api\Galleries();
         new \Vimeography\Api\Themes();
       }
@@ -162,6 +165,8 @@ if (!class_exists('Vimeography')) {
 
       require_once VIMEOGRAPHY_PATH . 'lib/engine.php';
       require_once VIMEOGRAPHY_PATH . 'lib/shortcode.php';
+
+      require_once VIMEOGRAPHY_PATH . 'lib/logger.php';
       require_once VIMEOGRAPHY_PATH . 'lib/api/galleries.php';
       require_once VIMEOGRAPHY_PATH . 'lib/api/themes.php';
 

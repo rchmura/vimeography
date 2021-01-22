@@ -39,6 +39,18 @@ class Vimeography_Gallery_Edit extends Vimeography_Base
     }
 
     $this->_gallery_id = intval($_GET['id']);
+
+    if (isset($_GET['debug'])) {
+      $logged_contents = get_site_transient(
+        "vimeography_gallery_" . $this->_gallery_id . "_response"
+      );
+
+      echo "<pre>";
+      var_dump($logged_contents);
+      echo "</pre>";
+      die();
+    }
+
     $this->load_gallery();
 
     require_once VIMEOGRAPHY_PATH . 'lib/deprecated/cache.php';

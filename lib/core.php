@@ -313,6 +313,16 @@ abstract class Core
         $headers
       );
 
+      do_action(
+        'vimeography.request.response',
+        $response,
+        $this->gallery_id,
+        $this->gallery_settings,
+        $endpoint,
+        $params,
+        $headers
+      );
+
       // if ( isset( $response['headers']['X-RateLimit-Limit'] ) ) {
       //   $reset_date = new \DateTime();
       //   $reset_date->setTimestamp( $response['headers']['X-RateLimit-Reset'] );
