@@ -3,7 +3,7 @@
 /*
  * This file is part of Mustache.php.
  *
- * (c) 2013 Justin Hileman
+ * (c) 2010-2017 Justin Hileman
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -15,10 +15,9 @@
  */
 class Mustache_Test_Functional_CallTest extends PHPUnit_Framework_TestCase
 {
-
     public function testCallEatsContext()
     {
-        $m = new Mustache_Engine;
+        $m = new Mustache_Engine();
         $tpl = $m->loadTemplate('{{# foo }}{{ label }}: {{ name }}{{/ foo }}');
 
         $foo = new Mustache_Test_Functional_ClassWithCall();
@@ -33,6 +32,7 @@ class Mustache_Test_Functional_CallTest extends PHPUnit_Framework_TestCase
 class Mustache_Test_Functional_ClassWithCall
 {
     public $name;
+
     public function __call($method, $args)
     {
         return 'unknown value';
