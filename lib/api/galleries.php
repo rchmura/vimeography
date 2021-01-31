@@ -108,7 +108,7 @@ class Galleries extends \WP_REST_Controller
               'Link to the video which should appear first in the gallery.',
               'vimeography'
             ),
-            'type' => 'string'
+            "default" => ''
           ),
           'gallery_width' => array(
             'description' => esc_html__(
