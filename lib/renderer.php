@@ -48,6 +48,24 @@ class Renderer
       'pages' => array(
         'default' => array(),
         'filter' => array()
+      ),
+      'settings' => array(
+        'player' => array(
+          'dnt' => apply_filters('vimeography.player.settings.dnt', false),
+          'transparent' => apply_filters(
+            'vimeography.player.settings.transparent',
+            true
+          ),
+          'responsive' => apply_filters(
+            'vimeography.player.settings.responsive',
+            true
+          ),
+          'speed' => apply_filters('vimeography.player.settings.speed', true),
+          'playsinline' => apply_filters(
+            'vimeography.player.settings.playsinline',
+            false
+          )
+        )
       )
     );
 
