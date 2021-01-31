@@ -150,17 +150,17 @@ const reducer = (state: GalleryState, action: Action) => {
         expressions = [],
       } = action.payload;
 
-      properties.map((property) => {
+      properties.map((property, index) => {
         const computedValue = computeValue(type, property.transform, value);
         const attribute = convertToDashedAttribute(property.attribute);
 
         rules.push({
-          id,
+          id: `${id}-property-${index}`,
           css: buildCSS(property.target, attribute, computedValue, label),
         });
       });
 
-      expressions.map((expression) => {
+      expressions.map((expression, index) => {
         const attribute = convertToDashedAttribute(expression.attribute);
 
         let calculatedValue;
@@ -195,7 +195,7 @@ const reducer = (state: GalleryState, action: Action) => {
         );
 
         rules.push({
-          id,
+          id: `${id}-expression-${index}`,
           css: buildCSS(expression.target, attribute, computedValue, label),
         });
       });
@@ -238,167 +238,159 @@ const GalleryProvider = (props: GalleryProviderProps) => {
     { staleTime: Infinity }
   );
 
-  React.useEffect(
-    () => {
-      if (!data) return;
-      dispatch({ payload: data, type: "HYDRATE" });
-    },
-    [data]
-  );
+  React.useEffect(() => {
+    if (!data) return;
+    dispatch({ payload: data, type: "HYDRATE" });
+  }, [data]);
 
   // Detect any theme CSS customizations on load and
   // send them to the themes context to hydrate
   // the appearance controls with the correct values
-  React.useEffect(
-    () => {
-      if (!data) return;
-      if (!themesCtx.data) return;
+  React.useEffect(() => {
+    if (!data) return;
+    if (!themesCtx.data) return;
 
-      const activeTheme: Theme = themesCtx.data.find(
-        (theme: Theme) => theme.name === data.theme_name
-      );
+    const activeTheme: Theme = themesCtx.data.find(
+      (theme: Theme) => theme.name === data.theme_name
+    );
 
-      if (!activeTheme) return;
+    if (!activeTheme) return;
 
-      const customStyle = document.getElementById(
-        `vimeography-gallery-${props.id}-custom-css`
-      );
+    const customStyle = document.getElementById(
+      `vimeography-gallery-${props.id}-custom-css`
+    );
 
-      if (!customStyle) return;
-      console.log(`custom style found!`);
-      console.log(customStyle);
-      console.log(`rules:`);
-      console.dir(customStyle.sheet.cssRules);
-      // since it is possible that the element it hidden (as in a modal)
-      // try to get the defined value based on the loaded stylesheet
-      activeTheme.settings.map((setting) => {
-        setting.properties.map((prop) => {
-          // build the expected selector
+    if (!customStyle) return;
+    console.log(`custom style found!`);
+    console.log(customStyle);
+    console.log(`rules:`);
+    console.dir(customStyle.sheet.cssRules);
+    // since it is possible that the element it hidden (as in a modal)
+    // try to get the defined value based on the loaded stylesheet
+    activeTheme.settings.map((setting) => {
+      setting.properties.map((prop) => {
+        // build the expected selector
 
-          // accounts for incorrect single-colon pseudo selectors in any theme settings
-          // https://regex101.com/r/zzlv1J/1
-          const modifiedTarget = prop.target.replace(
-            /([^:])(:)([^:])/g,
-            "$1::$3"
-          );
+        // accounts for incorrect single-colon pseudo selectors in any theme settings
+        // https://regex101.com/r/zzlv1J/1
+        const modifiedTarget = prop.target.replace(
+          /([^:])(:)([^:])/g,
+          "$1::$3"
+        );
 
-          const selectorToMatch = setting.namespace
-            ? `#vimeography-gallery-${props.id}${modifiedTarget}`
-            : modifiedTarget;
+        const selectorToMatch = setting.namespace
+          ? `#vimeography-gallery-${props.id}${modifiedTarget}`
+          : modifiedTarget;
 
-          console.log(
-            `attempting to match theme setting in custom stylesheet rules: ${selectorToMatch}`
-          );
+        console.log(
+          `attempting to match theme setting in custom stylesheet rules: ${selectorToMatch}`
+        );
 
-          // search the stylesheet for the selector
-          for (let rule of customStyle.sheet.cssRules) {
-            // need to find a match for the target defined in our theme settings
+        // search the stylesheet for the selector
+        for (let rule of customStyle.sheet.cssRules) {
+          // need to find a match for the target defined in our theme settings
 
-            if (rule.selectorText === selectorToMatch) {
-              // get the value for the current prop attribute
+          if (rule.selectorText === selectorToMatch) {
+            // get the value for the current prop attribute
 
-              console.log(`we have a match`);
+            console.log(`we have a match`);
 
-              let value = rule.style.getPropertyValue(
-                convertToDashedAttribute(prop.attribute)
+            let value = rule.style.getPropertyValue(
+              convertToDashedAttribute(prop.attribute)
+            );
+
+            // if no value, no customization found for this particular setting
+            if (!value) continue;
+
+            // console.log(`value found for ${selectorToMatch}!`);
+            // console.log(value);
+
+            // check if it needs to be un-transformed to extract the value
+            if (prop.transform) {
+              // console.log(
+              //   `extracting value from transform ${prop.transform}`
+              // );
+
+              const searchTerm = `{{value}}`;
+
+              // find the index of `{{value}}` in the transform
+              const tokenIndex = prop.transform.indexOf(searchTerm);
+
+              // find the characters which appear after the searchTerm in the transform
+              const terminator = prop.transform.substr(
+                tokenIndex + searchTerm.length
               );
 
-              // if no value, no customization found for this particular setting
-              if (!value) continue;
+              // get the index of the terminating characters within the existing customized css value
+              const terminatorIndex = value.indexOf(terminator);
 
-              // console.log(`value found for ${selectorToMatch}!`);
-              // console.log(value);
-
-              // check if it needs to be un-transformed to extract the value
-              if (prop.transform) {
-                // console.log(
-                //   `extracting value from transform ${prop.transform}`
-                // );
-
-                const searchTerm = `{{value}}`;
-
-                // find the index of `{{value}}` in the transform
-                const tokenIndex = prop.transform.indexOf(searchTerm);
-
-                // find the characters which appear after the searchTerm in the transform
-                const terminator = prop.transform.substr(
-                  tokenIndex + searchTerm.length
-                );
-
-                // get the index of the terminating characters within the existing customized css value
-                const terminatorIndex = value.indexOf(terminator);
-
-                // pull the value out of the string
-                const extractedValue = value.substring(
-                  tokenIndex,
-                  terminatorIndex
-                );
-
-                // console.log(
-                //   `extracted ${extractedValue} as the value based on the transform`
-                // );
-
-                value = extractedValue;
-              }
-
-              // reformat the incoming `action.payload.value` to the expected format for the ui control based on the settings type `setting.type`
-
-              let computedValue;
-
-              // console.log(setting);
-
-              switch (setting.type) {
-                case "colorpicker": {
-                  // { r: 51, g: 51, b: 51, a: 1 } react-color may already convert this for us, test!
-                  computedValue = value;
-                  break;
-                }
-
-                case "numeric":
-                case "slider": {
-                  // must be a number
-                  const strippedValue = value.replace("px", "");
-                  const convertedValue = Math.ceil(strippedValue);
-
-                  computedValue = convertedValue;
-                  break;
-                }
-
-                default: {
-                  computedValue = value;
-                  break;
-                }
-              }
-
-              console.log(
-                `updating value for ${setting.id} to ${computedValue}`
+              // pull the value out of the string
+              const extractedValue = value.substring(
+                tokenIndex,
+                terminatorIndex
               );
 
-              // update the default `activeTheme`s `setting.value` for `setting.id` to the determined configured `value`
-              themesCtx.dispatch({
-                type: `THEME.SETTING.UPDATE_DEFAULT_VALUE`,
-                payload: {
-                  themeName: activeTheme.name,
-                  settingId: setting.id,
-                  value: computedValue,
-                },
-              });
+              // console.log(
+              //   `extracted ${extractedValue} as the value based on the transform`
+              // );
 
-              dispatch({
-                type: `UPDATE_GALLERY_APPEARANCE`,
-                payload: { ...setting, value: computedValue },
-              });
+              value = extractedValue;
             }
-          }
-        });
-      });
 
-      // Remove the style that came from the server since we'll be
-      // generating a new one in the client anyway
-      customStyle.remove();
-    },
-    [data, themesCtx]
-  );
+            // reformat the incoming `action.payload.value` to the expected format for the ui control based on the settings type `setting.type`
+
+            let computedValue;
+
+            // console.log(setting);
+
+            switch (setting.type) {
+              case "colorpicker": {
+                // { r: 51, g: 51, b: 51, a: 1 } react-color may already convert this for us, test!
+                computedValue = value;
+                break;
+              }
+
+              case "numeric":
+              case "slider": {
+                // must be a number
+                const strippedValue = value.replace("px", "");
+                const convertedValue = Math.ceil(strippedValue);
+
+                computedValue = convertedValue;
+                break;
+              }
+
+              default: {
+                computedValue = value;
+                break;
+              }
+            }
+
+            console.log(`updating value for ${setting.id} to ${computedValue}`);
+
+            // update the default `activeTheme`s `setting.value` for `setting.id` to the determined configured `value`
+            themesCtx.dispatch({
+              type: `THEME.SETTING.UPDATE_DEFAULT_VALUE`,
+              payload: {
+                themeName: activeTheme.name,
+                settingId: setting.id,
+                value: computedValue,
+              },
+            });
+
+            dispatch({
+              type: `UPDATE_GALLERY_APPEARANCE`,
+              payload: { ...setting, value: computedValue },
+            });
+          }
+        }
+      });
+    });
+
+    // Remove the style that came from the server since we'll be
+    // generating a new one in the client anyway
+    customStyle.remove();
+  }, [data, themesCtx]);
 
   return (
     <GalleryContext.Provider
