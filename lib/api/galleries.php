@@ -428,22 +428,22 @@ class Galleries extends \WP_REST_Controller
     $data = array();
     $format = array();
 
-    if ($params['cache_timeout']) {
+    if (isset($params['cache_timeout'])) {
       $data['cache_timeout'] = $params['cache_timeout'];
       $format[] = '%d';
     }
 
-    if ($params['video_limit']) {
+    if (isset($params['video_limit'])) {
       $data['video_limit'] = $params['video_limit'];
       $format[] = '%d';
     }
 
-    if ($params['featured_video']) {
+    if (isset($params['featured_video'])) {
       $data['featured_video'] = $params['featured_video'];
       $format[] = '%s';
     }
 
-    if ($params['gallery_width']) {
+    if (isset($params['gallery_width'])) {
       $data['gallery_width'] = $params['gallery_width'];
       $format[] = '%s';
     }
