@@ -1,12 +1,13 @@
 <script>
 import { mapState } from "vuex";
-import { Mixins } from "vimeography-blueprint";
+import { Mixins, DownloadLink } from 'vimeography-blueprint'
 
 const defaultTemplate = `
   <figure :class="this.thumbnailClass">
     <router-link class="vimeography-link" :title="video.name" :to="this.query" exact exact-active-class="vimeography-link-active">
       <img loading="lazy" class="vimeography-thumbnail-img" :src="thumbnailUrl" :alt="video.name" />
     </router-link>
+    <download-link :video="video"></download-link>
   </figure>
 `;
 
@@ -16,6 +17,9 @@ const userTemplate = document.querySelector(
 
 const Thumbnail = {
   props: ["video"],
+  components: {
+    DownloadLink
+  },
   mixins: [Mixins.Thumbnail],
   template: userTemplate ? userTemplate.innerText : defaultTemplate,
   computed: {
@@ -73,7 +77,9 @@ export default Thumbnail;
   cursor: pointer;
 }
 
-.vimeography-title {
+.vimeography-title,
+/deep/ .vimeography-download
+ {
   font-size: 1rem;
   line-height: 1.2rem;
   text-align: center;
