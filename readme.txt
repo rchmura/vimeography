@@ -142,8 +142,13 @@ Vimeography will load your template for the defined module instead of the defaul
 * [IMPORTANT] Vimeography now requires WordPress 4.7+
 * [New] Vimeography Admin has been rebuilt from scratch in React
 * [New] Introduced `/galleries` and `/themes` API endpoints
+* [New] Introduced rudimentary request logging (https://github.com/davekiss/vimeography/commit/7749744017d3ab9ba49b2d31090b286a21f45bcc)
+* [New] Added player settings to renderer, including DNT (https://github.com/davekiss/vimeography/commit/0041f18df96ab194b3dc9d937ba5316016b684cd)
+* [New] Harvestone theme is now capable of showing download links with Vimeography PRO
 * [Update] Mark compatibility with WordPress 5.6
 * [Update] Custom CSS is now saved as a DB entry
+* [Update] Now using latest version of MustachePHP
+* [Fix] Add compatibility for PHP implode deprecation
 
 = 2.1.2 =
 * [Update] Mark compatibility with WordPress 5.5
