@@ -78,10 +78,17 @@ class Vimeography_Admin_Scripts
 
             $script_url =
               VIMEOGRAPHY_URL . 'lib/admin/app/dist/' . $manifest['index.js'];
+
+            if (is_plugin_active('vimeography-pro/vimeography-pro.php')) {
+              $deps = array('vimeography_pro_admin');
+            } else {
+              $deps = array();
+            }
+
             wp_enqueue_script(
               'vimeography_admin_react',
               $script_url,
-              [],
+              $deps,
               "1.0",
               true
             );
