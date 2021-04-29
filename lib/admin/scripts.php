@@ -94,19 +94,22 @@ class Vimeography_Admin_Scripts
             );
           }
 
-          wp_localize_script(
-            "vimeography_admin_react",
-            "vimeographyThemeNonce",
-            wp_create_nonce("vimeography-theme-action")
+          wp_add_inline_script(
+            'vimeography_admin_react',
+            'var vimeographyThemeNonce = "' .
+              wp_create_nonce("vimeography-theme-action") .
+              '";',
+            'before'
           );
 
-          wp_localize_script(
+          wp_add_inline_script(
             'vimeography_admin_react',
-            'vimeographyApiSettings',
-            array(
-              'root' => esc_url_raw(rest_url()),
-              'nonce' => wp_create_nonce('wp_rest')
-            )
+            'var vimeographyApiSettings = ' .
+              json_encode(array(
+                'root' => esc_url_raw(rest_url()),
+                'nonce' => wp_create_nonce('wp_rest')
+              )),
+            'before'
           );
 
           break;

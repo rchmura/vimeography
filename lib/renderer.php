@@ -142,30 +142,41 @@ class Renderer
       wp_enqueue_style("vimeography-{$theme_name}");
     }
 
-    wp_localize_script(
+    wp_add_inline_script(
       "vimeography-{$theme_name}",
-      'vimeographyBuildPath',
-      $this->theme['app_path']
+      'var vimeographyBuildPath = "' . $this->theme['app_path'] . '";',
+      'before'
     );
 
     $router_mode = apply_filters('vimeography.pro.router_mode', 'abstract');
-    wp_localize_script(
+
+    wp_add_inline_script(
       "vimeography-{$theme_name}",
-      'vimeographyRouterMode',
-      $router_mode
+      'var vimeographyRouterMode = "' . $router_mode . '";',
+      'before'
     );
 
-    wp_localize_script(
+    wp_add_inline_script(
       "vimeography-{$theme_name}",
-      "vimeography2 = window.vimeography2 || {};
-      window.vimeography2.galleries = window.vimeography2.galleries || {};
-      window.vimeography2.galleries.{$theme_name} = window.vimeography2.galleries.{$theme_name} || {};
-      vimeography2.unused",
-      $local_data
+      '
+        window.vimeography2 = window.vimeography2 || {};
+        window.vimeography2.galleries = window.vimeography2.galleries || {};
+        window.vimeography2.galleries.' .
+        $theme_name .
+        ' = window.vimeography2.galleries.' .
+        $theme_name .
+        ' || {};
+
+        window.vimeography2.galleries.' .
+        $data['theme'] .
+        '["' .
+        $data['id'] .
+        '"] = ' .
+        json_encode($data),
+      'before'
     );
 
     wp_enqueue_script("vimeography-{$theme_name}");
-
     return $this;
   }
 

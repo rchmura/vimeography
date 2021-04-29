@@ -21,7 +21,8 @@ function vimeography_gallery_block_init() {
 	// Add all galleries to window for dropdown population
 	global $wpdb;
 	$galleries = $wpdb->get_results('SELECT id, title FROM '. $wpdb->vimeography_gallery);
-	wp_localize_script('vimeography-gallery-block-editor', 'vimeography_galleries', $galleries);
+
+	wp_add_inline_script( 'vimeography-gallery-block-editor', 'var vimeography_galleries = ' . json_encode($galleries), 'before' );
 
 	$editor_css = 'editor.css';
 	wp_register_style(
