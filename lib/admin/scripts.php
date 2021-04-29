@@ -79,7 +79,20 @@ class Vimeography_Admin_Scripts
             $script_url =
               VIMEOGRAPHY_URL . 'lib/admin/app/dist/' . $manifest['index.js'];
 
-            if (is_plugin_active('vimeography-pro/vimeography-pro.php')) {
+            // There was a bug introduced in Vimeography Pro 2.1 where Pro JS mistakenly depended
+            // on `vimeography_admin_react` to be loaded before itself, which led to a
+            // race condition of scripts loading as expected. We've corrected this
+            // issue in Pro 2.1.1, so let's check to see if the user has the corrected
+            // version, and if so, we can safely avoid a circular dependency loop
+            // Otherwise, the user will have to live with the race condition bug
+            // until they update to 2.1.1
+
+            // Ref: https://github.com/davekiss/vimeography-pro/commit/08099c072928df96a7df6cc5b4050fe9390b35b3
+            if (
+              is_plugin_active('vimeography-pro/vimeography-pro.php') &&
+              defined('VIMEOGRAPHY_PRO_VERSION') &&
+              version_compare(VIMEOGRAPHY_PRO_VERSION, '2.1.1', '>=')
+            ) {
               $deps = array('vimeography_pro_admin');
             } else {
               $deps = array();
