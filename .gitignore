@@ -2,3 +2,5 @@
 .htaccess
 vendor/.git
 node_modules
+lib/admin/app/dist/
+vimeography-harvestone/dist/
