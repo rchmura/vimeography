@@ -261,7 +261,8 @@ class Galleries extends \WP_REST_Controller
 
     register_rest_route($namespace, '/' . $base . '/schema', array(
       'methods' => \WP_REST_Server::READABLE,
-      'callback' => array($this, 'get_public_item_schema')
+      'callback' => array($this, 'get_public_item_schema'),
+      'permission_callback' => '__return_true'
     ));
   }
 
@@ -928,6 +929,8 @@ class Galleries extends \WP_REST_Controller
           }
         } elseif (function_exists('wp_update_custom_css_post')) {
           // if 4.7+, find styles in db and copy to new gallery.
+          // These are saved in the `wp_posts` table with a `post_title`
+          // of vimeography_gallery_{n}
           $styles = wp_get_custom_css('vimeography_gallery_' . $id); // returns css string
 
           if ($styles) {
