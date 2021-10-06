@@ -13,13 +13,13 @@ jobs:
       - name: Build theme
         working-directory: ./vimeography-harvestone
         run: |
-          yarn install --frozen-lockfile
-          yarn build
+          npm ci
+          npm run build
       - name: Build admin app
         working-directory: ./lib/admin/app
         run: |
-          yarn install --frozen-lockfile
-          yarn build
+          npm ci
+          npm run build
       - name: WordPress Plugin Deploy
         id: deploy
         uses: 10up/action-wordpress-plugin-deploy@stable
