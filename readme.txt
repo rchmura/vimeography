@@ -2,15 +2,15 @@
 Contributors: iamdavekiss, videogallery
 Tags: video gallery, gallery, video, vimeo, vimeo gallery
 Requires at least: 4.7
-Tested up to: 5.7
-Stable tag: 2.2.1
+Tested up to: 5.8
+Stable tag: 2.2.2
 License: GPL-3.0
 
 The easiest way to create beautiful Vimeo video galleries on your WordPress site.
 
 == Description ==
 
-#### 95+ 5-star Reviews! Vimeography is the Best and Most Powerful Video Gallery Plugin for Membership and Course Sites. ★★★★★
+#### 100+ 5-star Reviews! Vimeography is the Best and Most Powerful Video Gallery Plugin for Membership and Course Sites. ★★★★★
 
 http://vimeo.com/44555634
 
@@ -138,6 +138,10 @@ Vimeography will load your template for the defined module instead of the defaul
 4. Gain additional features with Vimeography PRO.
 
 == Changelog ==
+= 2.2.2 =
+* [Update] Mark compatibility with WordPress 5.8
+* [Update] Add embedUrl value to player schema meta
+
 = 2.2.1 =
 * [Update] Mark compatibility with WordPress 5.7
 * [Update] Add fitvidsignore class to prevent fitvids padding on player
