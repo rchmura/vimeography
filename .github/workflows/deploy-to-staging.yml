@@ -1,4 +1,4 @@
-name: Deploy to Staging (real-id-wp-staging.getverdict.com)
+name: Deploy to Plugin Staging
 on:
   push:
     branches:
