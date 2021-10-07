@@ -28,4 +28,4 @@ jobs:
           rsync -rc --exclude-from="$GITHUB_WORKSPACE/.distignore" "$GITHUB_WORKSPACE/" trunk/ --delete --delete-excluded
           # rsync up to staging
           # https://explainshell.com/explain?cmd=rsync+-p+--chmod%3D%2Brwx+-e+%22ssh+-i+userserver.pem%22+--copy-unsafe-links+-rz+user%40server%3A~%2F+%2Fdb_backups%2Fwww%2F
-          sshpass -p "${{ secrets.VIMEOGRAPHY_WP_STAGING_SSH_PASSWORD }}" rsync -azv --no-o --no-g --chmod=ugo=rwX --delete --exclude=logs "$GITHUB_WORKSPACE/trunk/" root@${{ secrets.VIMEOGRAPHY_WP_STAGING_SSH_HOST }}:/var/www/wordpress/wp-content/plugins/vimeography
+          sshpass -p "${{ secrets.VIMEOGRAPHY_WP_STAGING_SSH_PASSWORD }}" rsync -azv --no-o --no-g --chmod=ugo=rwX --delete --exclude=logs "$GITHUB_WORKSPACE/trunk/" root@${{ secrets.VIMEOGRAPHY_WP_STAGING_SSH_HOST }}:/var/www/html/wp-content/plugins/vimeography
