@@ -75,9 +75,9 @@ class Vimeography_Addons {
       if ( version_compare( $plugin['version'], '2.0', '>=' ) ) {
 
         if ( defined('VIMEOGRAPHY_DEV') && VIMEOGRAPHY_DEV ) {
-          $plugin['app_path'] = 'https://localhost:8080/';
-          $plugin['app_js'] = 'https://localhost:8080/scripts.js';
-          $plugin['app_css'] = 'https://localhost:8080/styles.css';
+          $plugin['app_path'] = 'http://localhost:8080/';
+          $plugin['app_js'] = 'http://localhost:8080/scripts.js';
+          $plugin['app_css'] = 'http://localhost:8080/styles.css';
         } else {
           $manifest = $plugin['plugin_path'] . 'dist/manifest.json';
           $manifest = file_get_contents( $manifest );

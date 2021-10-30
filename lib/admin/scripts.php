@@ -66,7 +66,7 @@ class Vimeography_Admin_Scripts
           if (defined('VIMEOGRAPHY_DEV') && VIMEOGRAPHY_DEV) {
             wp_enqueue_script(
               'vimeography_admin_react',
-              'https://localhost:8024/index.js',
+              'http://localhost:8024/index.js',
               [],
               "1.0",
               true
