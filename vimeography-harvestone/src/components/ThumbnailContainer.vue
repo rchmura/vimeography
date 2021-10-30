@@ -3,17 +3,21 @@
 import { mapActions, mapState } from "vuex";
 
 // Import Swiper and modules
-import { Swiper, Navigation, Pagination } from "swiper/js/swiper.esm.js";
-
-// Install modules
-Swiper.use([Navigation, Pagination]);
+// import { Swiper, Navigation, Pagination } from "swiper/js/swiper.esm.js";
+import Swiper, { Navigation, Pagination } from "swiper";
 
 import Thumbnail from "./Thumbnail.vue";
-require("swiper/css/swiper.min.css");
+
+// swiper core styles
+import 'swiper/css';
+
+// modules styles
+import 'swiper/css/navigation';
+import 'swiper/css/pagination';
 
 const template = `
     <div class="vimeography-thumbnail-container" v-observe-visibility="visibilityChanged">
-      <div class="swiper-container">
+      <div class="swiper">
         <div class="swiper-wrapper">
           <thumbnail
             v-for="(video, index) in videos"
@@ -75,6 +79,7 @@ const ThumbnailContainer = {
       this.$store.getters.getVideoIndex(this.activeVideoId) + 1;
 
     this.swiper = new Swiper(this.$el.childNodes[0], {
+      modules: [Navigation, Pagination],
       initialSlide,
       slidesPerView: "auto",
       spaceBetween: 10,

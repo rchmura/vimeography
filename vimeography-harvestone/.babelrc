@@ -3,14 +3,13 @@
     [
       "@babel/preset-env",
       {
-        "debug": true,
-        "useBuiltIns": "usage",
-        "forceAllTransforms": true,
         "targets": {
-          "browsers": ["last 2 versions", "safari >= 7"]
+          "browsers": ["last 2 versions"]
         }
       }
     ]
   ],
-  "plugins": ["@babel/plugin-transform-runtime"]
+  "plugins": [
+    "@babel/plugin-transform-runtime"
+  ]
 }

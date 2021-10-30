@@ -1,30 +1,26 @@
 const webpack = require("webpack");
 const path = require("path");
-const ManifestPlugin = require("webpack-manifest-plugin");
+const { WebpackManifestPlugin } = require('webpack-manifest-plugin');
 const { CleanWebpackPlugin } = require("clean-webpack-plugin");
-const MinifyPlugin = require("babel-minify-webpack-plugin");
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
-const VueLoaderPlugin = require("vue-loader/lib/plugin");
+const { VueLoaderPlugin } = require('vue-loader')
+const postcssPresetEnv = require('postcss-preset-env');
 
 const isProduction = process.env.NODE_ENV === "production";
 
 module.exports = {
   devtool: isProduction ? "cheap-module-source-map" : "eval-source-map",
   devServer: {
-    publicPath: "http://localhost:8080/",
-    contentBase: "./dist",
-    https: true,
+    static: {
+      publicPath: "http://localhost:8080/",
+      directory: "./dist",
+    },
     hot: true,
-    inline: true,
-    disableHostCheck: true,
+    allowedHosts: "all",
     historyApiFallback: true,
     headers: {
       "Access-Control-Allow-Origin": "*",
-    },
-    watchOptions: {
-      aggregateTimeout: 300,
-      poll: true,
-    },
+    }
   },
   target: "web",
   entry: "./src/index",
@@ -43,32 +39,36 @@ module.exports = {
       },
       {
         test: /\.vue$/,
-        loader: "vue-loader",
+        use: [
+          'vue-loader',
+        ],
         exclude: /node_modules/,
-        options: {
-          postcss: [require("postcss-cssnext")()],
-        },
       },
       {
         test: /\.(scss|css)$/,
-
         use: [
-          {
-            loader: MiniCssExtractPlugin.loader,
-            options: {
-              hmr: process.env.NODE_ENV === "development",
-            },
-          },
+          'vue-style-loader',
           {
             loader: "css-loader",
             options: {
               sourceMap: true,
+              importLoaders: 1
             },
           },
           {
-            loader: "sass-loader",
+            loader: "postcss-loader",
             options: {
-              sourceMap: true,
+              postcssOptions: {
+                plugins: [
+                  require('postcss-nested'),
+                  [
+                    "postcss-preset-env",
+                    {
+                      // Options
+                    },
+                  ],
+                ],
+              },
             },
           },
         ],
@@ -88,16 +88,6 @@ module.exports = {
     new MiniCssExtractPlugin({
       filename: isProduction ? "styles.[hash:8].css" : "styles.css",
     }),
-    new ManifestPlugin(),
+    new WebpackManifestPlugin(),
   ],
 };
-
-if (isProduction) {
-  module.exports.plugins.push(
-    new MinifyPlugin({
-      mangle: {
-        safari10: true,
-      },
-    })
-  );
-}
