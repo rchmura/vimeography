@@ -75,10 +75,15 @@ class Vimeography_Addons {
       if ( version_compare( $plugin['version'], '2.0', '>=' ) ) {
 
         if ( defined('VIMEOGRAPHY_DEV') && VIMEOGRAPHY_DEV ) {
-          $plugin['app_path'] = 'http://localhost:8080/';
-          $plugin['app_js'] = 'http://localhost:8080/scripts.js';
-          $plugin['app_css'] = 'http://localhost:8080/styles.css';
+          $slug = strtolower($plugin['name']);
+          $port = $slug === 'harvestone' ? "8080" : "8346";
+          $bundle = $slug === 'harvestone' ? "scripts.js" : "vimeography-$slug/dist/$slug.js";
+          $plugin['app_path'] = "http://localhost:$port/";
+          $plugin['app_js'] = "http://localhost:$port/$bundle";
+          $plugin['app_css'] = "http://localhost:8080/styles.css";
         } else {
+          // note: can use $plugin['version'] for cachebusting.
+
           $manifest = $plugin['plugin_path'] . 'dist/manifest.json';
           $manifest = file_get_contents( $manifest );
           $manifest = (array) json_decode( $manifest );
