@@ -42,6 +42,6 @@
   },
   "scripts": {
     "start": "npx webpack serve --hot --mode=development",
-    "build": "NODE_ENV=production webpack -p --progress --colors --env production"
+    "build": "NODE_ENV=production webpack --color --env production"
   }
 }
