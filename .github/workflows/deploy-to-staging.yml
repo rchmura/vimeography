@@ -16,6 +16,7 @@ jobs:
         working-directory: ./vimeography-harvestone
         run: |
           npm ci
+          git clone https://github.com/davekiss/vimeography-blueprint.git node_modules/vimeography-blueprint
           npm run build
       - name: Build admin app
         working-directory: ./lib/admin/app
