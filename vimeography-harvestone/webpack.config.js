@@ -28,6 +28,7 @@ module.exports = {
   output: {
     filename: isProduction ? "scripts.[hash:8].js" : "scripts.js",
     path: path.resolve(__dirname, "dist"),
+    publicPath: ""
   },
 
   module: {
