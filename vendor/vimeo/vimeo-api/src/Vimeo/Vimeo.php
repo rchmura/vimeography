@@ -72,7 +72,6 @@ class Vimeo
         CURLOPT_SSL_VERIFYPEER => true,
         //Certificate must indicate that the server is the server to which you meant to connect.
         CURLOPT_SSL_VERIFYHOST => 2,
-        CURLOPT_CAINFO => realpath(__DIR__ . '/../..') . self::CERTIFICATE_PATH
       )
     );
   }
