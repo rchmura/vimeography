@@ -428,6 +428,23 @@ class Galleries extends \WP_REST_Controller
     $params = $request->get_params();
     $data = array();
     $format = array();
+    global $wpdb;
+
+    if (isset($params['title']) && $params['title'] !== "") {
+      $result = $wpdb->update(
+        $wpdb->vimeography_gallery,
+        array('title' => $params['title']),
+        array('id' => $params['id']),
+        array('%s'),
+        array('%d')
+      );
+
+      if ($result === false) {
+        return new \WP_Error('cant-update', __('Could not update gallery title', 'vimeography'), array(
+          'status' => 500
+        ));
+      }
+    }
 
     if (isset($params['cache_timeout'])) {
       $data['cache_timeout'] = $params['cache_timeout'];
@@ -449,7 +466,19 @@ class Galleries extends \WP_REST_Controller
       $format[] = '%s';
     }
 
-    global $wpdb;
+    if (isset($params['source_url']) && $params['source_url'] !== "") {
+      try {
+        $data['resource_uri'] = \Vimeography::validate_vimeo_source( $params['source_url'] );
+        $format[] = '%s';
+
+        $data['source_url'] = $params['source_url'];
+        $format[] = '%s';
+      } catch (Error $e) {
+        return new \WP_Error('cant-update', __('Invalid Vimeo collection URL.', 'vimeography'), array(
+          'status' => 500
+        ));
+      }
+    }
 
     $result = $wpdb->update(
       $wpdb->vimeography_gallery_meta,
@@ -460,7 +489,7 @@ class Galleries extends \WP_REST_Controller
     );
 
     if ($result === false) {
-      return new \WP_Error('cant-update', __('message', 'text-domain'), array(
+      return new \WP_Error('cant-update', __('Could not update gallery metadata', 'vimeography'), array(
         'status' => 500
       ));
     }

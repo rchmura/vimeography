@@ -186,6 +186,64 @@ const Skeleton = () => {
   );
 };
 
+const GalleryEditorHeading = () => {
+  const ctx = React.useContext(GalleryContext);
+  const [isEditing, setIsEditing] = React.useState(false);
+  const handleUpdate = (payload) => {
+    ctx.dispatch({
+      type: `EDIT_GALLERY_STATE`,
+      payload,
+    });
+  };
+
+  return (
+    <div className="vm-p-4 vm-bg-indigo-700 vm-rounded-t vm-flex">
+      <div className="vm-flex-1">
+        {isEditing ? (
+          <div className="vm-pr-4">
+            <label className="vm-text-white vm-font-semibold vm-block vm-mb-1">Gallery title</label>
+            <input
+              type="text"
+              placeholder="eg. 960px, 35%"
+              value={ctx.state.title}
+              onChange={(e) => handleUpdate({ title: e.target.value })}
+              className="vm-mb-4 vm-w-full"
+            />
+            <label className="vm-text-white vm-font-semibold vm-block vm-mb-1">Vimeo collection URL</label>
+            <input
+              type="text"
+              placeholder="eg. 960px, 35%"
+              value={ctx.state.source_url}
+              onChange={(e) => handleUpdate({ source_url: e.target.value })}
+              className="vm-mb-2 vm-w-full"
+            />
+          </div>
+        ) : (
+          <>
+            <h2 className="vm-text-lg vm-text-white vm-font-bold vm-my-0">
+              {ctx.state.title}
+            </h2>
+            <a href={ctx.state.source_url} className="vm-text-indigo-50 vm-text-sm">
+              {ctx.state.source_url}
+            </a>
+          </>
+        )}
+      </div>
+      <div className="vm-cursor-pointer" onClick={() => setIsEditing(!isEditing)}>
+        {isEditing ? (
+          <svg xmlns="http://www.w3.org/2000/svg" className="vm-text-white vm-h-5 vm-w-5" viewBox="0 0 20 20" fill="currentColor">
+            <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
+          </svg>
+        ) : (
+          <svg xmlns="http://www.w3.org/2000/svg" className="vm-text-white vm-h-5 vm-w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+          </svg>
+        )}
+      </div>
+    </div>
+  )
+}
+
 const GalleryEditor = () => {
   const ctx = React.useContext(GalleryContext);
   const [submitting, setSubmitting] = React.useState(false);
@@ -210,7 +268,7 @@ const GalleryEditor = () => {
 
       const responseA = await fetch(
         window.vimeographyApiSettings.root +
-          `vimeography/v1/galleries/${ctx.data.id}/appearance`,
+        `vimeography/v1/galleries/${ctx.data.id}/appearance`,
         {
           method: "POST",
           mode: "same-origin",
@@ -231,7 +289,7 @@ const GalleryEditor = () => {
 
       const response = await fetch(
         window.vimeographyApiSettings.root +
-          `vimeography/v1/galleries/${ctx.data.id}`,
+        `vimeography/v1/galleries/${ctx.data.id}`,
         {
           method: "PATCH",
           mode: "same-origin",
@@ -263,14 +321,7 @@ const GalleryEditor = () => {
 
   return (
     <div className="vm-bg-gray-100 vm-rounded vm-border vm-border-gray-200 vm-mt-5 vm-sticky vm-top-10">
-      <div className="vm-p-4 vm-bg-indigo-700 vm-rounded-t">
-        <h2 className="vm-text-lg vm-text-white vm-font-bold vm-my-0">
-          {ctx.state.title}
-        </h2>
-        <a href={ctx.state.source_url} className="vm-text-indigo-50 vm-text-sm">
-          {ctx.state.source_url}
-        </a>
-      </div>
+      <GalleryEditorHeading />
 
       <Menu />
       <div className="vm-flex vm-justify-end">
