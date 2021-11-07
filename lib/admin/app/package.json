@@ -17,7 +17,7 @@
     "@dnd-kit/utilities": "^1.0.1",
     "@ungap/url-search-params": "^0.2.2",
     "framer-motion": "^3.1.4",
-    "immer": "^8.0.0",
+    "immer": "^8.0.1",
     "nanoid": "^3.1.20",
     "postcss": "^8.2.2",
     "rc-input-number": "^6.1.2",
