@@ -38,6 +38,19 @@ class Renderer
   {
     $theme_name = strtolower($this->theme['name']);
 
+    $player_settings = apply_filters('vimeography.player.settings', array(
+      'dnt'         => apply_filters('vimeography.player.settings.dnt', false, $this->gallery_id, $this->gallery_settings),
+      'playsinline' => apply_filters('vimeography.player.settings.playsinline', false, $this->gallery_id, $this->gallery_settings),
+      'transparent' => apply_filters('vimeography.player.settings.transparent', true, $this->gallery_id, $this->gallery_settings),
+      'responsive'  => apply_filters('vimeography.player.settings.responsive', true, $this->gallery_id, $this->gallery_settings),
+      'speed'       => apply_filters('vimeography.player.settings.speed', true, $this->gallery_id, $this->gallery_settings),
+      'autoplay'    => apply_filters('vimeography.player.settings.autoplay', false, $this->gallery_id, $this->gallery_settings),
+      'background'  => apply_filters('vimeography.player.settings.background', false, $this->gallery_id, $this->gallery_settings),
+      'muted'       => apply_filters('vimeography.player.settings.muted', false, $this->gallery_id, $this->gallery_settings),
+      'loop'        => apply_filters('vimeography.player.settings.loop', false, $this->gallery_id, $this->gallery_settings),
+      'pip'         => apply_filters('vimeography.player.settings.pip', false, $this->gallery_id, $this->gallery_settings),
+    ));
+
     // Set base data for every single gallery
     $data = array(
       'id' => $this->gallery_id,
@@ -50,22 +63,7 @@ class Renderer
         'filter' => array()
       ),
       'settings' => array(
-        'player' => array(
-          'dnt' => apply_filters('vimeography.player.settings.dnt', false),
-          'transparent' => apply_filters(
-            'vimeography.player.settings.transparent',
-            true
-          ),
-          'responsive' => apply_filters(
-            'vimeography.player.settings.responsive',
-            true
-          ),
-          'speed' => apply_filters('vimeography.player.settings.speed', true),
-          'playsinline' => apply_filters(
-            'vimeography.player.settings.playsinline',
-            false
-          )
-        )
+        'player' => $player_settings
       )
     );
 
