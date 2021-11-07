@@ -126,7 +126,7 @@ const ThumbnailContainer = {
       },
     });
 
-    this.swiper.on("progress", (progress) => {
+    this.swiper.on("progress", (swiper, progress) => {
       if (!this.pro) {
         console.log(
           "Vimeography PRO is not installed, pagination is unavailable."
