@@ -17,8 +17,6 @@ jobs:
         run: |
           npm ci
           git clone https://github.com/davekiss/vimeography-blueprint.git node_modules/vimeography-blueprint
-          cd node_modules/vimeography-blueprint && npm ci && npm run build
-          cd ../../
           npm run build
       - name: Build admin app
         working-directory: ./lib/admin/app
