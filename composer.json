@@ -8,7 +8,7 @@
     }
   ],
   "require": {
-    "mustache/mustache": "2.13.0",
+    "mustache/mustache": "2.14.1",
     "vimeo/vimeo-api": "dev-vimeography"
   },
   "license": "GPL3",
