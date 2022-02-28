@@ -11,8 +11,9 @@ const isProduction = process.env.NODE_ENV === "production";
 module.exports = {
   devtool: isProduction ? "cheap-module-source-map" : "eval-source-map",
   devServer: {
+    port: 8153,
     static: {
-      publicPath: "http://localhost:8080/",
+      publicPath: "http://localhost:8153/",
       directory: "./dist",
     },
     hot: true,

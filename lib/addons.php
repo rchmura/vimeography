@@ -76,7 +76,7 @@ class Vimeography_Addons {
 
         if ( defined('VIMEOGRAPHY_DEV') && VIMEOGRAPHY_DEV ) {
           $slug = strtolower($plugin['name']);
-          $port = $slug === 'harvestone' ? "8080" : "8346";
+          $port = $slug === 'harvestone' ? "8153" : "8346";
           $bundle = $slug === 'harvestone' ? "scripts.js" : "vimeography-$slug/dist/$slug.js";
           $plugin['app_path'] = "http://localhost:$port/";
           $plugin['app_js'] = "http://localhost:$port/$bundle";
