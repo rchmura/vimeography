@@ -82,6 +82,7 @@ module.exports = {
     alias: {
       vue$: "vue/dist/vue.esm.js",
     },
+    modules: ['node_modules', path.resolve(__dirname, '../../..')],
   },
 
   plugins: [
