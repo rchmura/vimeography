@@ -78,9 +78,21 @@ class Vimeography_Addons {
           $slug = strtolower($plugin['name']);
           $port = $slug === 'harvestone' ? "8153" : "8346";
           $bundle = $slug === 'harvestone' ? "scripts.js" : "vimeography-$slug/dist/$slug.js";
-          $plugin['app_path'] = "http://localhost:$port/";
-          $plugin['app_js'] = "http://localhost:$port/$bundle";
-          $plugin['app_css'] = "http://localhost:8080/styles.css";
+
+          // Use the gitpod env vars if they are defined
+          if (defined('VIMEOGRAPHY_THEME_BUNDLE_JS_URL') && $port === "8346") {
+            $plugin['app_path'] = VIMEOGRAPHY_THEME_BUNDLE_JS_URL . "/";
+            $plugin['app_js'] = VIMEOGRAPHY_THEME_BUNDLE_JS_URL . '/' . $bundle;
+            $plugin['app_css'] = VIMEOGRAPHY_THEME_BUNDLE_JS_URL . "/styles.css";
+          } elseif (defined('VIMEOGRAPHY_HARVESTONE_JS_URL') && $port === "8153") {
+            $plugin['app_path'] = VIMEOGRAPHY_HARVESTONE_JS_URL . "/";
+            $plugin['app_js'] = VIMEOGRAPHY_HARVESTONE_JS_URL . '/' . $bundle;
+            $plugin['app_css'] = VIMEOGRAPHY_HARVESTONE_JS_URL . "/styles.css";
+          } else {
+            $plugin['app_path'] = "http://localhost:$port/";
+            $plugin['app_js'] = "http://localhost:$port/$bundle";
+            $plugin['app_css'] = "http://localhost:8080/styles.css";
+          }
         } else {
           // note: can use $plugin['version'] for cachebusting.
 

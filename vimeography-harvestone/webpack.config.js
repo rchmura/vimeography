@@ -13,7 +13,7 @@ module.exports = {
   devServer: {
     port: 8153,
     static: {
-      publicPath: "http://localhost:8153/",
+      publicPath: process.env.VIMEOGRAPHY_HARVESTONE_DEV_SERVER_URL || "http://localhost:8153/",
       directory: "./dist",
     },
     hot: true,

@@ -64,9 +64,10 @@ class Vimeography_Admin_Scripts
           break;
         case "toplevel_page_vimeography-edit-galleries":
           if (defined('VIMEOGRAPHY_DEV') && VIMEOGRAPHY_DEV) {
+            $devserver_path = defined('VIMEOGRAPHY_ADMIN_JS_URL') ? VIMEOGRAPHY_ADMIN_JS_URL : 'http://localhost:8024';
             wp_enqueue_script(
               'vimeography_admin_react',
-              'http://localhost:8024/index.js',
+              $devserver_path . '/index.js',
               [],
               "1.0",
               true
