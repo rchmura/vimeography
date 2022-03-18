@@ -29,7 +29,7 @@ class Vimeography_Init extends Vimeography
     $enable = apply_filters('vimeography.privacy.enable_referrer', false);
 
     if ($enable) {
-      echo '<meta name="referrer" content="origin">';
+      echo '<meta name="referrer" content="origin-when-crossorigin">';
     }
 
     return;
