@@ -29,12 +29,23 @@ yarn install
 yarn start
 ```
 
-## Building Themes for Production
+## Releasing to WordPress.org
+Vimeography uses tagged releases and GitHub actions to trigger deploys to WordPress.org
 
+1. Make sure you've updated the Stable Tag in `readme.txt` and added revision notes to the changelog at the bottom of that file.
+2. Make sure to update `vimeography.php` with the new version number on 
+
+```php
+// line ~6
+Version: 2.3.1
+
+// later, on line ~128
+define('VIMEOGRAPHY_VERSION', '2.3.1');
 ```
-cd wp-content/plugins/vimeography/vimeography-harvestone
-yarn build
-```
+
+3. Visit https://github.com/davekiss/vimeography/releases/new to create a new tag. Then, add any release notes pertaining to this version. When you're ready, click publish.
+
+By following this process, you'll fire off a new GitHub action workflow which will build the plugin and upload it to WordPress.org via Subversion. Nice!
 
 ## Tests
 
