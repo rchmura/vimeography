@@ -23,7 +23,7 @@ jobs:
       - name: Build admin app
         working-directory: ./lib/admin/app
         run: |
-          npm ci
+          npm install
           npm run build
       - name: Deploy build to staging WordPress server
         run: |
