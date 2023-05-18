@@ -217,12 +217,39 @@ abstract class Vimeography_Core {
         // Vimeography themes actually use.
         $fields = apply_filters( 'vimeography.request.fields', $this->fields );
 
-        // Add parameters which are common to all requests
-        $params = array_merge( array(
-          'fields' => implode( $fields, ',' ),
-          'filter' => 'embeddable',
-          'filter_embeddable' => 'true',
-        ), $params );
+        /**
+         * Add parameters which are common to all requests
+         * Note: Signature changed in PHP7.4.0, but we still support 5.3+
+         */
+        if (version_compare(phpversion(), '7.4.0', '<')) {
+          // php version isn't high enough
+          $imploded_fields = implode($fields, ',');
+        } else {
+          $imploded_fields = implode(',', $fields);
+        }
+
+        $params = array_merge(
+          array(
+            'fields' => $imploded_fields
+          ),
+          $params
+        );
+  
+        /**
+         * Allows Vimeography to disclude videos in the request response
+         * that cannot be embedded due to their privacy settings or domain restrictions.
+         */
+        $filter = apply_filters(
+          'vimeography.request.privacy.filter',
+          'embeddable',
+          $this->gallery_id,
+          $this->gallery_settings
+        );
+  
+        if ($filter === 'embeddable') {
+          $params['filter'] = 'embeddable';
+          $params['filter_embeddable'] = 'true';
+        }
 
       }
 
