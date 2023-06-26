@@ -219,7 +219,7 @@ abstract class Vimeography_Core {
 
         // Add parameters which are common to all requests
         $params = array_merge( array(
-          'fields' => implode( $fields, ',' ),
+          'fields' => implode( ',', $fields ),
           'filter' => 'embeddable',
           'filter_embeddable' => 'true',
         ), $params );
