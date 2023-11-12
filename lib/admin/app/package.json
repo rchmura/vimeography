@@ -55,7 +55,7 @@
     "style-loader": "^2.0.0",
     "svg-inline-loader": "^0.8.2",
     "ts-loader": "^8.4.0",
-    "webpack": "^5.89.0",
+    "webpack": "^5.11.1",
     "webpack-cli": "^4.10.0",
     "webpack-dev-server": "^4.15.1",
     "webpack-manifest-plugin": "^3.2.0"
