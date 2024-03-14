@@ -106,6 +106,7 @@ const GalleryRow = (props: GalleryRowProps) => {
           <a
             href="#"
             className="vm-cursor-pointer"
+			title="Duplicate GalleryTan"
             onClick={(e) => {
               e.preventDefault();
               props.setGalleryToDuplicate(gallery.id);

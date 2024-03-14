@@ -1,7 +1,7 @@
 import * as React from "react";
 import GalleryContext from "../context/Gallery";
 import { useQuery } from "react-query";
-import produce from "immer";
+import { produce } from "immer";
 import { Helmet } from "react-helmet";
 import { useDebouncedCallback } from "use-debounce";
 

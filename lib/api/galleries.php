@@ -654,7 +654,7 @@ class Galleries extends \WP_REST_Controller
    */
   public function create_item_permissions_check($request)
   {
-    return current_user_can('edit_posts'); // admin
+    return current_user_can('manage_options'); // admin
   }
 
   /**
@@ -817,18 +817,14 @@ class Galleries extends \WP_REST_Controller
   {
     $params = json_decode($request->get_body());
 
-    if (
-      isset($_POST['vimeography_duplicate_gallery_serialized']) &&
-      !empty($_POST['vimeography_duplicate_gallery_serialized'])
-    ) {
-      $params = unserialize(
-        stripslashes($_POST['vimeography_duplicate_gallery_serialized'])
-      );
+    if ( !empty( $request->get_param( 'vimeography_duplicate_gallery_serialized' ) ) ) {
+      $params = json_decode( $request->get_param( 'vimeography_duplicate_gallery_serialized' ) );
+	  $params = ( is_object( $params ) || is_array( $params ) ) ? (array) $params : [];
     }
 
     if ($params->copy_appearance === true) {
       // Do filesystem stuffs here… a simple file_put_contents would be nice.
-      $_POST['vimeography_duplicate_gallery_serialized'] = serialize($params);
+      $_POST['vimeography_duplicate_gallery_serialized'] = json_encode($params);
 
       $url = wp_nonce_url(
         network_admin_url(

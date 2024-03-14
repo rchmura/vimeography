@@ -86,7 +86,6 @@ abstract class Core
     'name',
     'uri',
     'link',
-    'player_embed_url',
     'description',
     'duration',
     'width',

@@ -2,8 +2,8 @@
 Contributors: iamdavekiss, videogallery
 Tags: video gallery, gallery, video, vimeo, vimeo gallery
 Requires at least: 4.7
-Tested up to: 6.0
-Stable tag: 2.3.1
+Tested up to: 6.4
+Stable tag: 2.3.3
 License: GPL-3.0
 
 The easiest way to create beautiful Vimeo video galleries on your WordPress site.
@@ -138,6 +138,15 @@ Vimeography will load your template for the defined module instead of the defaul
 4. Gain additional features with Vimeography PRO.
 
 == Changelog ==
+
+= 2.3.3 =
+* [Fix] Vulnerability issue: PHP Object Injection (`seialize` and `unserialize`) on Duplicate gallery via REST API
+* [Update] Only Admin can execute Duplicate gallery via REST API
+
+= 2.3.2 =
+* [Fix] Minor optimization.
+* [Fix] Showing PHP 8.0.x warning error when choosing Bugsauce theme
+
 = 2.3.1 =
 * [Update] Mark compatibility with WordPress 6.0
 * [Fix] Return true from API permissions endpoint (https://github.com/davekiss/vimeography/commit/164e9eb1e8f92a2def217bbbd091fcf00d72f192)

@@ -1,7 +1,7 @@
 import * as React from "react";
 import ThemesContext from "../context/Themes";
 import { useQuery } from "react-query";
-import produce from "immer";
+import { produce } from "immer";
 
 type ThemesProviderProps = React.PropsWithChildren<{ id?: string }>;
 
