@@ -1,0 +1,99 @@
+[
+    {
+        "name": "mustache/mustache",
+        "version": "v2.13.0",
+        "version_normalized": "2.13.0.0",
+        "source": {
+            "type": "git",
+            "url": "https://github.com/bobthecow/mustache.php.git",
+            "reference": "e95c5a008c23d3151d59ea72484d4f72049ab7f4"
+        },
+        "dist": {
+            "type": "zip",
+            "url": "https://api.github.com/repos/bobthecow/mustache.php/zipball/e95c5a008c23d3151d59ea72484d4f72049ab7f4",
+            "reference": "e95c5a008c23d3151d59ea72484d4f72049ab7f4",
+            "shasum": ""
+        },
+        "require": {
+            "php": ">=5.2.4"
+        },
+        "require-dev": {
+            "friendsofphp/php-cs-fixer": "~1.11",
+            "phpunit/phpunit": "~3.7|~4.0|~5.0"
+        },
+        "time": "2019-11-23T21:40:31+00:00",
+        "type": "library",
+        "installation-source": "dist",
+        "autoload": {
+            "psr-0": {
+                "Mustache": "src/"
+            }
+        },
+        "notification-url": "https://packagist.org/downloads/",
+        "license": [
+            "MIT"
+        ],
+        "authors": [
+            {
+                "name": "Justin Hileman",
+                "email": "justin@justinhileman.info",
+                "homepage": "http://justinhileman.com"
+            }
+        ],
+        "description": "A Mustache implementation in PHP.",
+        "homepage": "https://github.com/bobthecow/mustache.php",
+        "keywords": [
+            "mustache",
+            "templating"
+        ]
+    },
+    {
+        "name": "vimeo/vimeo-api",
+        "version": "dev-vimeography",
+        "version_normalized": "dev-vimeography",
+        "source": {
+            "type": "git",
+            "url": "https://github.com/davekiss/vimeo.php.git",
+            "reference": "aa16d3c5fbca1009b331f685baee1d6a91e0395e"
+        },
+        "require": {
+            "ext-curl": "*",
+            "ext-json": "*",
+            "php": ">=5.3.0"
+        },
+        "require-dev": {
+            "phpunit/phpunit": "^4.8"
+        },
+        "time": "2017-12-16T14:47:03+00:00",
+        "type": "library",
+        "installation-source": "source",
+        "autoload": {
+            "psr-4": {
+                "Vimeo\\": "src/Vimeo"
+            }
+        },
+        "scripts": {
+            "coverage": [
+                "phpunit --coverage-html reports/"
+            ],
+            "tests": [
+                "phpunit"
+            ]
+        },
+        "license": [
+            "Apache-2.0"
+        ],
+        "authors": [
+            {
+                "name": "Vimeo",
+                "homepage": "http://vimeo.com"
+            }
+        ],
+        "description": "Official PHP library for the Vimeo API.",
+        "homepage": "https://github.com/vimeo/vimeo.php",
+        "keywords": [
+            "video",
+            "vimeo"
+        ]
+    }
+]

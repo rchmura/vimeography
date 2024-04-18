@@ -1,0 +1,56 @@
+<div class="step-1">
+  <div class="instructions">
+    <h2>Welcome!</h2>
+    <p>We've started you off with this demo video gallery.</p>
+    <p>It looks nice, but it'll look much better with your videos.</p>
+    <p>Enter the link to your own <strong>Vimeo user, showcase, channel, or group below</strong> to change it to your own videos.</p>
+
+    <form id="vimeography_new_gallery" method="post" action="{{admin_url}}new-gallery&noheader=true&redirect=welcome">
+      <input type="hidden" name="vimeography_new_gallery_settings[gallery_title]" value="My First Gallery" />
+      <input type="hidden" name="vimeography_new_gallery_settings[gallery_theme]" value="Harvestone" />
+      <input type="text" name="vimeography_new_gallery_settings[source_url]" placeholder="eg. https://vimeo.com/johnsmith" autofocus />
+      {{{nonce}}}
+      <div class="vimeography-input-container">
+        <input type="submit" value="Update Gallery" />
+      </div>
+    </form>
+  </div>
+  {{{gallery}}}
+</div>
+
+<script>
+  jQuery('form').on('submit', function() {
+    jQuery('input[type="submit"]').prop('disabled', true).val('Loading your Videos…');
+  });
+
+  jQuery('.step-1 .instructions').children().each(function(index) {
+    jQuery(this).delay(1000 * index).fadeIn(1000);
+  });
+
+  jQuery('input[name="vimeography_new_gallery_settings[source_url]"]').focus();
+</script>
+
+<style>
+  .vimeography-welcome .step-1 {
+    display: grid;
+    grid-template-columns: 25% 75%;
+    grid-column-gap: 80px;
+    padding: 2rem 0;
+  }
+
+  #vimeography_new_gallery {
+    display: none;
+  }
+
+  .vimeography-welcome .step-1 .instructions p {
+    display: none;
+  }
+
+  .vimeography-welcome .step-1 .instructions p:last-of-type {
+    margin-bottom: 2rem;
+  }
+
+  .vimeography-theme-harvestone {
+    margin: 0 !important;
+  }
+</style>

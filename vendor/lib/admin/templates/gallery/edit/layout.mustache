@@ -1,0 +1,29 @@
+<div class="wrap wp_bootstrap">
+  <h2 class="page-title">Gallery Editor {{#gallery}}:: {{title}}{{/gallery}}</h2>
+
+  {{#messages}}
+    <div class="{{type}}">
+      <p><strong>{{heading}}</strong> {{message}}</p>
+    </div>
+  {{/messages}}
+
+  {{^has_pro}}
+    <div class="updated">
+      <p><strong>Unlock extra features!</strong> With <a href="http://vimeography.com/pro?utm_source=plugin&utm_medium=edit_gallery" title="Learn more about Vimeography Pro" target="_blank">Vimeography Pro,</a> you can show hidden videos, sort your videos, show unlimited videos, search your gallery, create playlists, allow downloads and more.</p>
+    </div>
+  {{/has_pro}}
+
+  {{#gallery}}
+
+  <div id="vimeography-gallery-editor" class="vimeography-group">
+
+    <div style="display: grid; grid-template-columns: 320px 1000px;">
+      <div id="vimeography_admin_app"></div> <!-- React mounting point -->
+
+      <div id="vimeography-gallery-container">
+        {{{vimeography}}}
+      </div>
+    </div>
+  </div>
+  {{/gallery}}
+</div>

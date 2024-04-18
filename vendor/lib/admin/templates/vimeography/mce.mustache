@@ -1,0 +1,43 @@
+<script type="text/javascript">
+  (function($){
+    $(document).ready(function(){
+      $('#vimeography-insert-gallery').click(function(){
+            var gallery_id = jQuery("#vimeography_gallery_id").val();
+            if (gallery_id == ""){
+                alert("Please select a gallery");
+                return;
+            }
+
+            window.send_to_editor("[vimeography id=\"" + gallery_id + "\"]");
+      });
+    });
+  })(jQuery)
+</script>
+
+<div id="select_vimeography_gallery" style="display:none;">
+    <div class="wrap">
+        <div>
+            <div style="padding:15px 15px 0 15px;">
+                <h3 style="color:#5A5A5A!important; font-family:Georgia,Times New Roman,Times,serif!important; font-size:1.8em!important; font-weight:normal!important;">Insert a Gallery</h3>
+                <span>
+                    Select a gallery below to add it to your post or page.
+                </span>
+            </div>
+            <div style="padding:15px 15px 0 15px;">
+                <select id="vimeography_gallery_id">
+                    <option value="">  Select a Gallery  </option>
+
+                  {{#galleries}}
+                    <option value="{{id}}">{{title}}</option>
+                  {{/galleries}}
+
+                </select> <br/>
+                <div style="padding:8px 0 0 0; font-size:11px; font-style:italic; color:#5A5A5A">Can't find your gallery? Make sure it is active.</div>
+            </div>
+            <div style="padding:15px;">
+                <input id="vimeography-insert-gallery" type="button" class="button-primary" value="Insert Gallery" />&nbsp;&nbsp;&nbsp;
+              <a class="button" style="color:#bbb;" href="#" onclick="tb_remove(); return false;">Cancel</a>
+            </div>
+        </div>
+    </div>
+</div>
