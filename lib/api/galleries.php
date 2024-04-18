@@ -281,27 +281,20 @@ class Galleries extends \WP_REST_Controller
 
     if (isset($_GET['s']) && !empty($_GET['s'])) {
       $term = sanitize_text_field($_GET['s']);
-
+  
       if (intval($term) == 0) {
-        $filter = 'WHERE gallery.title LIKE "%' . $term . '%" ';
+          $filter = $wpdb->prepare('WHERE gallery.title LIKE %s ', '%' . $term . '%');
       } else {
-        $filter = 'WHERE gallery.id = "' . $term . '" ';
+          $filter = $wpdb->prepare('WHERE gallery.id = %d ', $term);
       }
     } else {
-      $filter = '';
+        $filter = '';
     }
-
+    
     $sort = $this->_get_sort();
     $result = $wpdb->get_results(
-      'SELECT * from ' .
-        $wpdb->vimeography_gallery_meta .
-        ' AS meta JOIN ' .
-        $wpdb->vimeography_gallery .
-        ' AS gallery ON meta.gallery_id = gallery.id ' .
-        $filter .
-        $sort .
-        ';',
-      ARRAY_A
+        'SELECT * FROM ' . $wpdb->vimeography_gallery_meta . ' AS meta JOIN ' . $wpdb->vimeography_gallery . ' AS gallery ON meta.gallery_id = gallery.id ' . $filter . $sort . ';',
+        ARRAY_A
     );
     // echo '<pre>';
     // var_dump($result);
@@ -331,20 +324,18 @@ class Galleries extends \WP_REST_Controller
     global $wpdb;
 
     $result = $wpdb->get_results(
-      '
-    SELECT * FROM ' .
-        $wpdb->vimeography_gallery_meta .
-        ' AS meta
-    JOIN ' .
-        $wpdb->vimeography_gallery .
-        ' AS gallery
-    ON meta.gallery_id = gallery.id
-    WHERE meta.gallery_id = ' .
-        $gallery_id .
-        '
-    LIMIT 1;
-  '
-    );
+      $wpdb->prepare(
+          '
+          SELECT *
+          FROM ' . $wpdb->vimeography_gallery_meta . ' AS meta
+          JOIN ' . $wpdb->vimeography_gallery . ' AS gallery
+          ON meta.gallery_id = gallery.id
+          WHERE meta.gallery_id = %d
+          LIMIT 1;
+          ',
+          $gallery_id
+      )
+  );
 
     $settings = $result[0];
 
@@ -365,16 +356,15 @@ class Galleries extends \WP_REST_Controller
 
     if (is_plugin_active('vimeography-pro/vimeography-pro.php')) {
       $pro_settings = $wpdb->get_results(
-        '
-        SELECT *
-        FROM ' .
-          $wpdb->vimeography_pro_meta .
-          ' AS pro
-        WHERE pro.gallery_id = ' .
-          $gallery_id .
-          '
-        LIMIT 1;
-        '
+          $wpdb->prepare(
+              '
+              SELECT *
+              FROM ' . $wpdb->vimeography_pro_meta . ' AS pro
+              WHERE pro.gallery_id = %d
+              LIMIT 1;
+              ',
+              $gallery_id
+          )
       );
 
       if (empty($pro_settings)) {
@@ -583,15 +573,11 @@ class Galleries extends \WP_REST_Controller
     try {
       global $wpdb;
       $result = $wpdb->query(
-        'DELETE gallery, meta FROM ' .
-          $wpdb->vimeography_gallery .
-          ' gallery, ' .
-          $wpdb->vimeography_gallery_meta .
-          ' meta WHERE gallery.id = ' .
-          $id .
-          ' AND meta.gallery_id = ' .
-          $id .
-          ';'
+          $wpdb->prepare(
+              'DELETE gallery, meta FROM ' . $wpdb->vimeography_gallery . ' gallery, ' . $wpdb->vimeography_gallery_meta . ' meta WHERE gallery.id = %d AND meta.gallery_id = %d;',
+              $id,
+              $id
+          )
       );
 
       if ($result === false) {
@@ -867,13 +853,17 @@ class Galleries extends \WP_REST_Controller
 
       global $wpdb;
       $duplicate = $wpdb->get_results(
-        'SELECT * from ' .
-          $wpdb->vimeography_gallery_meta .
-          ' AS meta JOIN ' .
-          $wpdb->vimeography_gallery .
-          ' AS gallery ON meta.gallery_id = gallery.id WHERE meta.gallery_id = ' .
-          $id .
-          ' LIMIT 1;'
+          $wpdb->prepare(
+              '
+              SELECT *
+              FROM ' . $wpdb->vimeography_gallery_meta . ' AS meta
+              JOIN ' . $wpdb->vimeography_gallery . ' AS gallery
+              ON meta.gallery_id = gallery.id
+              WHERE meta.gallery_id = %d
+              LIMIT 1;
+              ',
+              $id
+          )
       );
 
       $result = $wpdb->insert($wpdb->vimeography_gallery, array(
@@ -978,10 +968,11 @@ class Galleries extends \WP_REST_Controller
 
       return new \WP_REST_Response(null, 201);
     } catch (\Vimeography_Exception $e) {
+      $message = $e->getMessage();
       return new \WP_Error(
         'cant-update',
         __(
-          'Your gallery could not be duplicated. ' . $e->getMessage(),
+          "Your gallery could not be duplicated. $message",
           'vimeography'
         ),
         array(

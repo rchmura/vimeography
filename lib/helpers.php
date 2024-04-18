@@ -184,10 +184,10 @@ class Vimeography_Helpers
 
     if (is_wp_error($oembed)) {
       throw new Vimeography_Exception(
-        __(
+        wp_kses_post(__(
           'Vimeography could not retrieve the featured video: ',
           'vimeography'
-        ) . $oembed->get_error_message()
+        ) . $oembed->get_error_message())
       );
     } else {
       switch ($oembed['response']['code']) {
@@ -201,10 +201,10 @@ class Vimeography_Helpers
           return $oembed->html;
         case 403:
           throw new Vimeography_Exception(
-            __(
+            wp_kses_post(__(
               'Your video privacy settings for must be adjusted to allow displaying this video on your site.',
               'vimeography'
-            )
+            ))
           );
         default:
           break;

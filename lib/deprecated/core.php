@@ -171,7 +171,7 @@ abstract class Vimeography_Core {
   public function fetch( $last_modified = NULL ) {
 
     if ( ! $this->_verify_vimeo_endpoint( $this->_endpoint ) ) {
-      throw new Vimeography_Exception( sprintf( __('Endpoint %s is not valid.', 'vimeography'), $this->_endpoint ) );
+      throw new Vimeography_Exception( sprintf( wp_kses_post(__('Endpoint %s is not valid.', 'vimeography'), $this->_endpoint )) );
     }
 
     $response = $this->_make_vimeo_request($this->_endpoint, $this->_params, $last_modified);
@@ -278,7 +278,7 @@ abstract class Vimeography_Core {
       }
     } catch (Exception $e) {
       throw new Vimeography_Exception(
-        __('the request to Vimeo failed. ', 'vimeography') . $e->getMessage()
+        wp_kses_post(__('the request to Vimeo failed. ', 'vimeography') . $e->getMessage())
       );
     }
   }

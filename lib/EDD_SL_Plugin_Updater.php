@@ -307,13 +307,13 @@ class EDD_SL_Plugin_Updater
       $wp_list_table = _get_list_table('WP_Plugins_List_Table');
       # <tr class="plugin-update-tr"><td colspan="' . $wp_list_table->get_column_count() . '" class="plugin-update colspanchange">
       echo '<tr class="plugin-update-tr" id="' .
-        $this->slug .
+        wp_kses_post($this->slug) .
         '-update" data-slug="' .
-        $this->slug .
+        wp_kses_post($this->slug) .
         '" data-plugin="' .
-        $this->slug .
+        wp_kses_post($this->slug) .
         '/' .
-        $file .
+        wp_kses_post($file) .
         '">';
       echo '<td colspan="3" class="plugin-update colspanchange">';
       echo '<div class="update-message notice inline notice-warning notice-alt">';
@@ -328,10 +328,10 @@ class EDD_SL_Plugin_Updater
 
       if (empty($version_info->download_link)) {
         printf(
-          __(
+          wp_kses_post(__(
             'There is a new version of %1$s available. %2$sView version %3$s details%4$s.',
             'easy-digital-downloads'
-          ),
+          )),
           esc_html($version_info->name),
           '<a target="_blank" class="thickbox" href="' .
             esc_url($changelog_link) .
@@ -341,10 +341,10 @@ class EDD_SL_Plugin_Updater
         );
       } else {
         printf(
-          __(
+          wp_kses_post(__(
             'There is a new version of %1$s available. %2$sView version %3$s details%4$s or %5$supdate now%6$s.',
             'easy-digital-downloads'
-          ),
+          )),
           esc_html($version_info->name),
           '<a target="_blank" class="thickbox" href="' .
             esc_url($changelog_link) .
@@ -620,11 +620,11 @@ class EDD_SL_Plugin_Updater
 
     if (!current_user_can('update_plugins')) {
       wp_die(
-        __(
+        wp_kses_post(__(
           'You do not have permission to install plugin updates',
           'easy-digital-downloads'
-        ),
-        __('Error', 'easy-digital-downloads'),
+        )),
+        wp_kses_post(__('Error', 'easy-digital-downloads')),
         array('response' => 403)
       );
     }
@@ -679,7 +679,7 @@ class EDD_SL_Plugin_Updater
 
     if (!empty($version_info) && isset($version_info->sections['changelog'])) {
       echo '<div style="background:#fff;padding:10px;">' .
-        $version_info->sections['changelog'] .
+        wp_kses_post($version_info->sections['changelog']) .
         '</div>';
     }
 

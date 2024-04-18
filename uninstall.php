@@ -1,7 +1,7 @@
 <?php
 
 if (!defined('WP_UNINSTALL_PLUGIN'))
-    wp_die(__('Plugin uninstallation can not be executed in this fashion.'));
+    wp_die(wp_kses_post(__('Plugin uninstallation can not be executed in this fashion.')));
 
 global $wpdb;
 
