@@ -146,7 +146,7 @@ class Engine {
             $message .= sprintf( __('If your Vimeography Pro license key is expired, you can gain access to <strong>another year of updates and support</strong> by <a href="%s">renewing your license key on this page.</a>', 'vimeography'), $link );
           }
 
-          throw new \Vimeography_Exception( $message );
+          throw new \Vimeography_Exception( wp_kses_post($message) );
         }
 
         $this->core = new \Vimeography_Core_Pro( $this->gallery_settings );
@@ -198,7 +198,7 @@ class Engine {
     }
 
     if ( empty( $result->video_set ) ) {
-      throw new \Vimeography_Exception( __('the Vimeo source for this gallery does not have any videos.', 'vimeography') );
+      throw new \Vimeography_Exception( wp_kses_post(__('the Vimeo source for this gallery does not have any videos.', 'vimeography')) );
     }
 
     $this->data = $result;

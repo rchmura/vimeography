@@ -123,6 +123,7 @@ class Vimeography_Pro_About extends Vimeography_Base {
               'type' => 'updated',
               'heading' => __('Success!', 'vimeography'),
               'message' => sprintf(
+                /* translators: %s refers to the theme name */
                 __('Your Vimeo access token for %s has been added and saved.', 'vimeography'),
                 $response['body']->name
               )

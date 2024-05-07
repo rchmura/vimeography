@@ -60,7 +60,7 @@ class Vimeography_Gallery_New extends Vimeography_Base {
         require_once(ABSPATH . 'wp-admin/admin-header.php');
         $this->messages[] = array(
           'type' => 'error',
-          'heading' => __('Heads up!', 'vimeography'),
+          'heading' => wp_kses_post(__('Heads up!', 'vimeography')),
           'message' => $e->getMessage()
         );
       }
@@ -86,13 +86,13 @@ class Vimeography_Gallery_New extends Vimeography_Base {
   protected function _validate_form($input) {
     if ( check_admin_referer('vimeography-gallery-action','vimeography-gallery-verification') ) {
       if ( empty( $input['gallery_title'] ) || empty( $input['source_url'] ) ) {
-        throw new Vimeography_Exception( __('Make sure you fill out all of the fields below!', 'vimeography') );
+        throw new Vimeography_Exception( wp_kses_post(__('Make sure you fill out all of the fields below!', 'vimeography') ));
       }
 
       $themes = array_map( array($this, 'get_theme_name'), $this->themes() );
 
       if ( ! in_array( $input['gallery_theme'], $themes ) ) {
-        throw new Vimeography_Exception( __('The theme you are trying to use is not installed or activated.', 'vimeography') );
+        throw new Vimeography_Exception( wp_kses_post(__('The theme you are trying to use is not installed or activated.', 'vimeography')) );
       }
 
       $input['gallery_theme'] == strtolower( sanitize_text_field( $input['gallery_theme'] ) );
@@ -126,7 +126,7 @@ class Vimeography_Gallery_New extends Vimeography_Base {
 
     if (! $result) {
       throw new Vimeography_Exception(
-        __("We couldn't create a new gallery. Try upgrading or reinstalling the Vimeography plugin.", 'vimeography')
+        wp_kses_post(__("We couldn't create a new gallery. Try upgrading or reinstalling the Vimeography plugin.", 'vimeography'))
       );
     } else {
       $gallery_id = $wpdb->insert_id;
@@ -144,7 +144,7 @@ class Vimeography_Gallery_New extends Vimeography_Base {
 
       if (! $result) {
         throw new Vimeography_Exception(
-          __("We couldn't create a new gallery. Try upgrading or reinstalling the Vimeography plugin.", 'vimeography')
+          wp_kses_post(__("We couldn't create a new gallery. Try upgrading or reinstalling the Vimeography plugin.", 'vimeography'))
         );
       }
     }
@@ -189,15 +189,15 @@ class Vimeography_Gallery_New extends Vimeography_Base {
           // So be specific in which sources are currently supported.
           //throw new Vimeography_Exception('Vimeography PRO allows you to show videos from all of your users, channels, albums, & groups.');
         else:
-          throw new Vimeography_Exception(__("Looks like you don't have the permission to subscribe to this collection.", 'vimeography'));
+          throw new Vimeography_Exception(wp_kses_post(__("Looks like you don't have the permission to subscribe to this collection.", 'vimeography')));
         endif;
         break;
       case 405: case 500:
         // Unsupported container uri
-        throw new Vimeography_Exception(__('The resource that was entered is currently unsupported.', 'vimeography') );
+        throw new Vimeography_Exception(wp_kses_post(__('The resource that was entered is currently unsupported.', 'vimeography')));
         break;
       default:
-        throw new Vimeography_Exception( serialize($response) );
+        throw new Vimeography_Exception(wp_kses_post(serialize($response)) );
         break;
     }
   }

@@ -248,10 +248,10 @@ class Vimeography_Admin_Menu
 
     if (!current_user_can($capability)) {
       wp_die(
-        __(
+        wp_kses_post(__(
           'You do not have sufficient permissions to access this page.',
           'vimeography'
-        )
+        ))
       );
     }
 

@@ -86,7 +86,6 @@ abstract class Core
     'name',
     'uri',
     'link',
-	'player_embed_url',
     'description',
     'duration',
     'width',
@@ -199,7 +198,7 @@ abstract class Core
     if (!$this->_verify_vimeo_resource($this->_resource)) {
       throw new \Vimeography_Exception(
         sprintf(
-          __('The "%s" resource is not valid.', 'vimeography'),
+          wp_kses_post(__('The "%s" resource is not valid.', 'vimeography')),
           $this->_resource
         )
       );
@@ -410,7 +409,7 @@ abstract class Core
       }
     } catch (Exception $e) {
       throw new \Vimeography_Exception(
-        __('the request to Vimeo failed. ', 'vimeography') . $e->getMessage()
+        wp_kses_post(__('the request to Vimeo failed. ', 'vimeography') . $e->getMessage())
       );
     }
   }

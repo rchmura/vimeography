@@ -107,7 +107,7 @@ class Vimeography_Update {
 
     // Make sure there are no errors
     if ( is_wp_error( $response ) ) {
-      throw new Exception( __('The HTTP Request failed: ' . $response->get_error_message(), 'vimeography') );
+      throw new Exception( wp_kses_post(__('The HTTP Request failed: ' . $response->get_error_message(), 'vimeography') ));
     }
 
     // Decode license data
@@ -120,17 +120,17 @@ class Vimeography_Update {
       // Add failed message
       switch ($license_data->error) {
         case 'missing': case 'revoked':
-          throw new Exception( __('That license key could not be found in our system.', 'vimeography') );
+          throw new Exception( wp_kses_post(__('That license key could not be found in our system.', 'vimeography') ));
         case 'no_activations_left':
-          throw new Exception( __('You have reached the max number of sites that this license can be used on.', 'vimeography') );
+          throw new Exception( wp_kses_post(__('You have reached the max number of sites that this license can be used on.', 'vimeography') ));
         case 'expired':
-          throw new Exception( __('The license key you entered has expired. Please visit http://vimeography.com to renew it.', 'vimeography') );
+          throw new Exception( wp_kses_post(__('The license key you entered has expired. Please visit http://vimeography.com to renew it.', 'vimeography') ));
         case 'key_mismatch':
-          throw new Exception( __('The license key you entered does not match the one we have on file.', 'vimeography') );
+          throw new Exception( wp_kses_post(__('The license key you entered does not match the one we have on file.', 'vimeography') ));
         case 'license_not_activable':
-          throw new Exception( __('Looks like you are trying to activate your bundle license. Please activate each of the products in your bundle separately by using their respective individual licenses.', 'vimeography') );
+          throw new Exception( wp_kses_post(__('Looks like you are trying to activate your bundle license. Please activate each of the products in your bundle separately by using their respective individual licenses.', 'vimeography') ));
         default:
-          throw new Exception( __('Unknown error: ' . $license_data->error, 'vimeography') );
+          throw new Exception( wp_kses_post(__('Unknown error: ' . $license_data->error, 'vimeography') ));
       }
     }
   }
@@ -173,7 +173,7 @@ class Vimeography_Update {
     $this->_vimeography_remove_activation_key( $key );
 
     if ( ! $license_data->success ) {
-      throw new Exception( __('That license key has been removed from your site, but could not be deactivated in our system.', 'vimeography') );
+      throw new Exception( wp_kses_post(__('That license key has been removed from your site, but could not be deactivated in our system.', 'vimeography')) );
     }
   }
 
@@ -334,7 +334,7 @@ class Vimeography_Update {
 
     echo '<tr class="plugin-update-tr"><td colspan="3" class="plugin-update"><div class="update-message notice inline notice-warning notice-alt">';
     echo '<span style="display: block; padding: 5px;">';
-    printf( __('Hey! Don\'t forget to <a title="Activate my Vimeography Addon" href="%1$sadmin.php?page=vimeography-manage-activations">enter your activation key</a> to receive the latest updates for the %2$s plugin.', 'vimeography'), get_admin_url(), $plugin_data['Name'] );
+    printf( wp_kses_post(__('Hey! Don\'t forget to <a title="Activate my Vimeography Addon" href="%1$sadmin.php?page=vimeography-manage-activations">enter your activation key</a> to receive the latest updates for the %2$s plugin.', 'vimeography'), get_admin_url(), $plugin_data['Name']));
     echo '</span>';
     echo '</div></td></tr>';
   }

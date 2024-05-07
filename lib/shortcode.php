@@ -199,29 +199,26 @@ class Vimeography_Shortcode extends Vimeography
     global $wpdb;
 
     $db_gallery_settings = $wpdb->get_results(
-      '
-      SELECT *
-      FROM ' .
-        $wpdb->vimeography_gallery_meta .
-        ' AS meta
-      JOIN ' .
-        $wpdb->vimeography_gallery .
-        ' AS gallery
-      ON meta.gallery_id = gallery.id
-      WHERE meta.gallery_id = ' .
-        $id .
-        '
-      LIMIT 1;
-    '
-    );
+      $wpdb->prepare(
+          '
+          SELECT *
+          FROM ' . $wpdb->vimeography_gallery_meta . ' AS meta
+          JOIN ' . $wpdb->vimeography_gallery . ' AS gallery
+          ON meta.gallery_id = gallery.id
+          WHERE meta.gallery_id = %d
+          LIMIT 1;
+          ',
+          $id
+      )
+  );
 
     if (empty($db_gallery_settings)) {
       throw new Vimeography_Exception(
         sprintf(
-          __(
+          wp_kses_post(__(
             'a Vimeography gallery with an ID of "%1$s" was not found.',
             'vimeography'
-          ),
+          )),
           intval($id)
         )
       );
@@ -354,11 +351,11 @@ class Vimeography_Shortcode extends Vimeography
       ob_start();
       ?>
         <div class="vimeography-error">
-          <h2><?php _e(
+          <h2><?php wp_kses_post(_e(
             'This video gallery couldn\'t be loaded.',
             'vimeography'
-          ); ?></h2>
-          <p><?php echo $e->getMessage(); ?></p>
+          )); ?></h2>
+          <p><?php echo wp_kses_post($e->getMessage()); ?></p>
         </div>
 
         <style>
