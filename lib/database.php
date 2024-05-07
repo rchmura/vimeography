@@ -37,14 +37,19 @@ class Vimeography_Database extends Vimeography {
       $original_blog_id = get_current_blog_id();
 
       // Get all blogs in the network and activate plugin on each one
-      $blogs = $wpdb->get_results("
-          SELECT blog_id
-          FROM {$wpdb->blogs}
-          WHERE site_id = '{$wpdb->siteid}'
-          AND spam = '0'
-          AND deleted = '0'
-          AND archived = '0'
-      ");
+      $blogs = $wpdb->get_results(
+          $wpdb->prepare(
+              "
+              SELECT blog_id
+              FROM {$wpdb->blogs}
+              WHERE site_id = %s
+              AND spam = '0'
+              AND deleted = '0'
+              AND archived = '0'
+              ",
+              $wpdb->siteid
+          )
+      );
 
       foreach ( $blogs as $blog ) {
         switch_to_blog( $blog->blog_id );

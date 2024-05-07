@@ -77,7 +77,7 @@ class Vimeography_Renderer {
   protected function _set_active_theme($settings) {
     if ( ! isset( $settings['theme'] ) ) {
       throw new Vimeography_Exception(
-        __('You must specify a theme in either the admin panel or the shortcode.', 'vimeography')
+        wp_kses_post(__('You must specify a theme in either the admin panel or the shortcode.', 'vimeography'))
       );
     }
 
@@ -102,13 +102,13 @@ class Vimeography_Renderer {
       // If it doesn't exist, throw an appropriate error message.
       if ( empty( $theme['name'] ) ) {
         throw new Vimeography_Exception(
-          __('This Vimeography gallery does not have a theme assigned to it.', 'vimeography')
+          wp_kses_post(__('This Vimeography gallery does not have a theme assigned to it.', 'vimeography'))
         );
       } else {
         throw new Vimeography_Exception(
           sprintf(
-            __('The "%s" theme does not exist or is improperly structured.', 'vimeography'),
-            $theme['name']
+            wp_kses_post(__('The "%s" theme does not exist or is improperly structured.', 'vimeography')),
+            wp_kses_post($theme['name'])
           )
         );
       }
@@ -120,8 +120,8 @@ class Vimeography_Renderer {
     if ( ! class_exists( $class ) ) {
       throw new Vimeography_Exception(
         sprintf(
-          __('The "%s" theme class does not exist or is improperly named.', 'vimeography'),
-          $theme['name']
+          wp_kses_post(__('The "%s" theme class does not exist or is improperly named.', 'vimeography')),
+          wp_kses_post($theme['name'])
         )
       );
     }

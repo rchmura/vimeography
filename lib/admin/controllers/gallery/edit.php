@@ -92,19 +92,17 @@ class Vimeography_Gallery_Edit extends Vimeography_Base
     global $wpdb;
 
     $this->_gallery = $wpdb->get_results(
-      '
-      SELECT * FROM ' .
-        $wpdb->vimeography_gallery_meta .
-        ' AS meta
-      JOIN ' .
-        $wpdb->vimeography_gallery .
-        ' AS gallery
-      ON meta.gallery_id = gallery.id
-      WHERE meta.gallery_id = ' .
-        $this->_gallery_id .
-        '
-      LIMIT 1;
-    '
+        $wpdb->prepare(
+            '
+            SELECT *
+            FROM ' . $wpdb->vimeography_gallery_meta . ' AS meta
+            JOIN ' . $wpdb->vimeography_gallery . ' AS gallery
+            ON meta.gallery_id = gallery.id
+            WHERE meta.gallery_id = %d
+            LIMIT 1;
+            ',
+            $this->_gallery_id
+        )
     );
 
     if (!$this->_gallery) {
@@ -281,7 +279,8 @@ class Vimeography_Gallery_Edit extends Vimeography_Base
           'type' => 'updated',
           'heading' => __('Theme updated.', 'vimeography'),
           'message' => sprintf(
-            __('You are now using the "%s" theme.', 'vimeography'),
+            /* translators: %s refers to the theme name */
+            __( 'You are now using the "%s" theme.',  'vimeography' ),
             $theme
           )
         );

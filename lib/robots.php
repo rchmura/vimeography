@@ -19,7 +19,7 @@ class Vimeography_Robots {
    */
   public static function vimeography_block_robots() {
     $blocked_asset_path = str_ireplace(site_url(), '', VIMEOGRAPHY_ASSETS_URL);
-    echo 'Disallow: '.$blocked_asset_path."\n";
+    echo 'Disallow: '.wp_kses_post($blocked_asset_path)."\n";
   }
 
 }

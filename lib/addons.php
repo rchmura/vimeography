@@ -157,7 +157,7 @@ class Vimeography_Addons {
 
     if ( ! $this->active_theme ) {
       throw new Vimeography_Exception(
-        __('The Vimeography theme you are trying to use is not installed or activated.', 'vimeography')
+        esc_html__('The Vimeography theme you are trying to use is not installed or activated.', 'vimeography')
       );
     }
 
