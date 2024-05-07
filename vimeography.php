@@ -3,7 +3,7 @@
 Plugin Name: Vimeography
 Plugin URI: https://vimeography.com
 Description: Vimeography is the easiest way to set up a custom Vimeo gallery on your site.
-Version: 2.3.3
+Version: 2.4.0
 Requires PHP: 5.3
 Author: Dave Kiss
 Author URI: https://davekiss.com
@@ -12,7 +12,7 @@ Text Domain: vimeography
 */
 
 if (!function_exists('json_decode')) {
-  wp_die(__('Vimeography requires the JSON PHP extension.', 'vimeography'));
+  wp_die(wp_kses_post(__('Vimeography requires the JSON PHP extension.', 'vimeography')));
 }
 
 if (!class_exists('Vimeography')) {
@@ -125,7 +125,7 @@ if (!class_exists('Vimeography')) {
         content_url() . '/vimeography/assets/css/'
       );
       define('VIMEOGRAPHY_BASENAME', plugin_basename(__FILE__));
-      define('VIMEOGRAPHY_VERSION', '2.3.3');
+      define('VIMEOGRAPHY_VERSION', '2.4.0');
       define('VIMEOGRAPHY_CURRENT_PAGE', basename($_SERVER['PHP_SELF']));
       define('VIMEOGRAPHY_ACCESS_TOKEN', 'eaf47146f04b5550a3e394f3bbf8273f');
     }
@@ -256,10 +256,10 @@ if (!class_exists('Vimeography')) {
         return $resource;
       } else {
         throw new Vimeography_Exception(
-          __(
+          wp_kses_post(__(
             'That site doesn\'t look like a valid link to a Vimeo collection.',
             'vimeography'
-          )
+          ))
         );
       }
     }

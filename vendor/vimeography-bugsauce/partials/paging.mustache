@@ -1,0 +1,58 @@
+<script type="text/javascript">
+  (function($){
+    $(document).ready(function(){
+
+      var $gallery = $('#vimeography-gallery-{{gallery_id}}');
+      var slider = $gallery.find('.vimeography-thumbnails').data('flexslider');
+
+      //Adding a Public Property
+      vimeography.pagination.request = {
+          _ajax_nonce : '{{pagination_nonce}}',
+          _ajax_url   : '{{ajax_url}}',
+          theme       : 'bugsauce',
+          gallery_id  : {{gallery_id}},
+          per_page    : {{per_page}},
+          limit       : {{limit}},
+          sort        : '{{sort}}'
+      };
+
+      vimeography.pagination.endpoint     = '{{source}}';
+      vimeography.pagination.per_page     = {{per_page}};
+      vimeography.pagination.current_page = {{page}};
+      vimeography.pagination.total        = {{total}};
+
+      // Public methods
+      vimeography.pagination.set_pages();
+      vimeography.pagination.set_paging_controls();
+
+      var last_page = Math.ceil(vimeography.pagination.total / vimeography.pagination.per_page);
+      var is_fetching = false;
+
+      slider.vars.after = function(){
+
+        if (!is_fetching && slider.currentSlide >= slider.last - 2 && vimeography.pagination.current_page != last_page)
+        {
+          is_fetching = true;
+          var element = $('<div />').data('go-to', 'next');
+          var promise = vimeography.pagination.paginate(element);
+
+          promise.done(function(response){
+            is_fetching = false;
+            if (response.result == 'success')
+            {
+              var $videos = $($.trim(response.html)).filter('li');
+
+              $videos.each(function(i, v){
+                slider.addSlide(v);
+              });
+
+              slider.setProps();
+            }
+          });
+
+        }
+      };
+
+    });
+  }(jQuery))
+</script>

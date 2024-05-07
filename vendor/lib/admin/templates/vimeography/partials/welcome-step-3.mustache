@@ -1,0 +1,76 @@
+<div class="step-3">
+  <div class="instructions">
+    <h2>Style your Videos</h2>
+    <p>Here's how your videos would look by using one of our <strong>top 3 best-selling gallery themes.</strong></p>
+    <p>Looking for something a bit more custom? We have 14 different gallery theme options <a href="https://vimeography.com/themes?utm_source=plugin&utm_content=onboarding">available on our website.</a></p>
+
+    <div class="vimeography-newsletter">
+      <h3>Psst. Join our Newsletter!</h3>
+      <p>Join now and we'll send you a discount code good for 10% off any of our gallery themes.</p>
+      <p><strong>This offer won't be shown again,</strong> so take advantage of it while you can!</p>
+      <input type="email" placeholder="eg. john.smith@gmail.com" value="{{admin_email}}" />
+      <input type="submit" value="Join the Newsletter" />
+    </div>
+  </div>
+
+  <div class="vimeography-browser">
+    <iframe src="https://vimeography.com/onboard?theme=hero&source={{gallery_source}}">
+      <p>Your browser does not support iframes.</p>
+    </iframe>
+    <a href="{{edit_gallery_url}}">I'll check out the custom themes later.</a>
+  </div>
+</div>
+
+<style>
+  .vimeography-welcome .step-3 {
+    display: grid;
+    grid-template-columns: 25% 50% 25%;
+    padding: 2rem 0;
+  }
+
+  .vimeography-newsletter {
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.15);
+    padding: 1rem;
+    border-left: 2px solid green;
+    margin-top: 4rem;
+    display: none;
+  }
+
+  .vimeography-newsletter h3 {
+    font-size: 1.1rem;
+    margin: 0 0 10px;
+    line-height: 1.1rem;
+  }
+
+  .vimeography-newsletter p {
+    font-size: 1rem;
+  }
+
+  .vimeography-browser {
+    background: url(data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTAwMiIgaGVpZ2h0PSI2OTgiIHZpZXdCb3g9IjAgMCAxMDAyIDY5OCIgdmVyc2lvbj0iMS4xIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHhtbG5zOnhsaW5rPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5L3hsaW5rIj48dGl0bGU+Y2hyb21lLWZsYXQtYnJvd3NlcjwvdGl0bGU+PGRlc2M+Q3JlYXRlZCB1c2luZyBGaWdtYTwvZGVzYz48ZyBpZD0iQ2FudmFzIiB0cmFuc2Zvcm09InRyYW5zbGF0ZSg3MjcgNDU5KSI+PGcgaWQ9ImNocm9tZS1mbGF0LWJyb3dzZXIiPjxnIGlkPSJnMTAiPjxnIGlkPSJnMTIiPjxnIGlkPSJnMTQiPjxnIGlkPSJnMjAiPjxnIGlkPSJwYXRoMjIiPjx1c2UgeGxpbms6aHJlZj0iI3BhdGgwX2ZpbGwiIHRyYW5zZm9ybT0ibWF0cml4KDEuMjUgMCAwIC0xLjI1IC03MjcgLTQzMC4yNSkiIGZpbGw9IiNDQ0NDQ0MiLz48L2c+PC9nPjxnIGlkPSJnMjQiPjxnIGlkPSJnMzIiPjxnIGlkPSJnMzQiIG9wYWNpdHk9IjAuNzEwMDA3Ij48ZyBpZD0iZzM2IiBvcGFjaXR5PSIwLjcxMDAwNyI+PGcgaWQ9InBhdGgzOCIgb3BhY2l0eT0iMC43MTAwMDciPjx1c2UgeGxpbms6aHJlZj0iI3BhdGgxX2ZpbGwiIHRyYW5zZm9ybT0ibWF0cml4KDEuMjUgMCAwIC0xLjI1IC03MTYuNTI1IC00MzcuNDg5KSIgZmlsbD0iI0U3NEMzQyIvPjwvZz48L2c+PC9nPjwvZz48L2c+PGcgaWQ9Imc0MCI+PGcgaWQ9Imc0OCI+PGcgaWQ9Imc1MCIgb3BhY2l0eT0iMC43MTAwMDciPjxnIGlkPSJnNTIiIG9wYWNpdHk9IjAuNzEwMDA3Ij48ZyBpZD0icGF0aDU0IiBvcGFjaXR5PSIwLjcxMDAwNyI+PHVzZSB4bGluazpocmVmPSIjcGF0aDFfZmlsbCIgdHJhbnNmb3JtPSJtYXRyaXgoMS4yNSAwIDAgLTEuMjUgLTY5Ny4yNjEgLTQzNy40ODkpIiBmaWxsPSIjRjFDNDBGIi8+PC9nPjwvZz48L2c+PC9nPjwvZz48ZyBpZD0iZzU2Ij48ZyBpZD0iZzY0Ij48ZyBpZD0iZzY2IiBvcGFjaXR5PSIwLjcxMDAwNyI+PGcgaWQ9Imc2OCIgb3BhY2l0eT0iMC43MTAwMDciPjxnIGlkPSJwYXRoNzAiIG9wYWNpdHk9IjAuNzEwMDA3Ij48dXNlIHhsaW5rOmhyZWY9IiNwYXRoMV9maWxsIiB0cmFuc2Zvcm09Im1hdHJpeCgxLjI1IDAgMCAtMS4yNSAtNjc3Ljk5NyAtNDM3LjQ4OSkiIGZpbGw9IiMyRUNDNzEiLz48L2c+PC9nPjwvZz48L2c+PC9nPjxnIGlkPSJnNzIiPjxnIGlkPSJwYXRoNzQiPjx1c2UgeGxpbms6aHJlZj0iI3BhdGgyX2ZpbGwiIHRyYW5zZm9ybT0ibWF0cml4KDEuMjUgMCAwIC0xLjI1IC02NDcgLTQzMC4yNDkpIiBmaWxsPSIjRTZFNkU2Ii8+PC9nPjwvZz48ZyBpZD0iZzc2Ij48ZyBpZD0icGF0aDc4Ij48dXNlIHhsaW5rOmhyZWY9IiNwYXRoM19maWxsIiB0cmFuc2Zvcm09Im1hdHJpeCgxLjI1IDAgMCAtMS4yNSAtNzI3IDIzOC41KSIgZmlsbD0iI0YyRjJGMiIvPjwvZz48L2c+PGcgaWQ9InBhdGg4MCI+PHVzZSB4bGluazpocmVmPSIjcGF0aDRfZmlsbCIgdHJhbnNmb3JtPSJtYXRyaXgoMS4yNSAwIDAgLTEuMjUgLTcyNyAtNDA0KSIgZmlsbD0iI0U2RTZFNiIvPjwvZz48L2c+PC9nPjwvZz48L2c+PC9nPjxkZWZzPjxwYXRoIGlkPSJwYXRoMF9maWxsIiBkPSJNIDgwMSAwTCAwIDBMIDAgMThDIDAgMjAuNzYxIDIuMjYwOTkgMjMgNS4wNDk5OSAyM0wgNzk1Ljk0OSAyM0MgNzk4LjczOSAyMyA4MDEgMjAuNzYxIDgwMSAxOEwgODAxIDBaIi8+PHBhdGggaWQ9InBhdGgxX2ZpbGwiIGQ9Ik0gOS40MTggNC43MDlDIDkuNDE4IDIuMTA4IDcuMzEgLTEuMTA2MjZlLTA3IDQuNzA5IC0xLjEwNjI2ZS0wN0MgMi4xMDggLTEuMTA2MjZlLTA3IC0yLjIxMjUyZS0wNyAyLjEwOCAtMi4yMTI1MmUtMDcgNC43MDlDIC0yLjIxMjUyZS0wNyA3LjMxIDIuMTA4IDkuNDE4IDQuNzA5IDkuNDE4QyA3LjMxIDkuNDE4IDkuNDE4IDcuMzEgOS40MTggNC43MDlaIi8+PHBhdGggaWQ9InBhdGgyX2ZpbGwiIGQ9Ik0gMTAzIDEzLjk1N0MgMTAyLjYwNCAxNS4xNDYgMTAxLjY1NyAxNiAxMDAgMTZMIDkgMTZDIDcuMzQzIDE2IDYuMzk2IDE1LjEwNCA2IDEzLjk1N0wgMiAxLjUzQyAxLjY1NiAwLjUzMiAwIDIuMjEyNTJlLTA3IDAgMi4yMTI1MmUtMDdMIDEwOSAyLjIxMjUyZS0wN0MgMTA5IDIuMjEyNTJlLTA3IDEwNy4zNDQgMC40MzggMTA3IDEuNTNMIDEwMyAxMy45NTdaIi8+PHBhdGggaWQ9InBhdGgzX2ZpbGwiIGQ9Ik0gODAxIDYuMDY3QyA4MDEgMi43MTYgNzk4LjQ5MiA4Ljc3MzhlLTA4IDc5NS4zOTcgOC43NzM4ZS0wOEwgNS42MDMwMyA4Ljc3MzhlLTA4QyAyLjUwODAzIDguNzczOGUtMDggLTEuMTM2ODdlLTEzIDIuNzE2IC0xLjEzNjg3ZS0xMyA2LjA2N0wgLTEuMTM2ODdlLTEzIDUxNEwgODAxIDUxNEwgODAxIDYuMDY3WiIvPjxwYXRoIGlkPSJwYXRoNF9maWxsIiBkPSJNIDgwMSAwTCAwIDBMIDAgMjFMIDgwMSAyMUwgODAxIDBaIi8+PC9kZWZzPjwvc3ZnPg==) no-repeat;
+    justify-self: center;
+    padding: 5vh 0 0;
+    box-sizing: border-box;
+    background-size: cover;
+    width: 90%;
+    border-radius: 8px;
+    height: 60vh;
+  }
+
+  .vimeography-browser > iframe {
+    width: 100%;
+    height: 100%;
+    overflow-y: auto;
+    margin: 0 auto 1rem;
+    display: block;
+    background: url(data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMzgiIGhlaWdodD0iMzgiIHZpZXdCb3g9IjAgMCAzOCAzOCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIiBzdHJva2U9IiMwNDhlZDkiPiAgICA8ZyBmaWxsPSJub25lIiBmaWxsLXJ1bGU9ImV2ZW5vZGQiPiAgICAgICAgPGcgdHJhbnNmb3JtPSJ0cmFuc2xhdGUoMSAxKSIgc3Ryb2tlLXdpZHRoPSIyIj4gICAgICAgICAgICA8Y2lyY2xlIHN0cm9rZS1vcGFjaXR5PSIuNSIgY3g9IjE4IiBjeT0iMTgiIHI9IjE4Ii8+ICAgICAgICAgICAgPHBhdGggZD0iTTM2IDE4YzAtOS45NC04LjA2LTE4LTE4LTE4Ij4gICAgICAgICAgICAgICAgPGFuaW1hdGVUcmFuc2Zvcm0gICAgICAgICAgICAgICAgICAgIGF0dHJpYnV0ZU5hbWU9InRyYW5zZm9ybSIgICAgICAgICAgICAgICAgICAgIHR5cGU9InJvdGF0ZSIgICAgICAgICAgICAgICAgICAgIGZyb209IjAgMTggMTgiICAgICAgICAgICAgICAgICAgICB0bz0iMzYwIDE4IDE4IiAgICAgICAgICAgICAgICAgICAgZHVyPSIxcyIgICAgICAgICAgICAgICAgICAgIHJlcGVhdENvdW50PSJpbmRlZmluaXRlIi8+ICAgICAgICAgICAgPC9wYXRoPiAgICAgICAgPC9nPiAgICA8L2c+PC9zdmc+) no-repeat center center;
+  }
+
+  @keyframes spin {
+    to { -webkit-transform: rotate(360deg); }
+  }
+
+  @-webkit-keyframes spin {
+    to { -webkit-transform: rotate(360deg); }
+  }
+</style>

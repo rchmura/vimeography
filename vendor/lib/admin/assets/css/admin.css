@@ -1,0 +1,412 @@
+body {
+  position: relative;
+  background-color: transparent;
+}
+hr {
+  border: 0;
+  height: 0;
+  border-top: 1px solid rgba(0, 0, 0, 0.1);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.3);
+}
+
+.vimeography-group:before,
+.vimeography-group:after {
+  content: "";
+  display: table;
+}
+.vimeography-group:after {
+  clear: both;
+}
+.vimeography-group {
+  *zoom: 1;
+}
+
+.wp-admin select {
+  height: auto;
+}
+
+#wpcontent option {
+  padding: 2px 5px 2px 2px;
+}
+
+.clearfix:after {
+  clear: both;
+  content: ".";
+  display: block;
+  height: 0;
+  visibility: hidden;
+}
+.clearfix {
+  display: block;
+}
+
+.wp_bootstrap h2.page-title {
+  border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+  margin-bottom: 20px;
+  padding-bottom: 10px;
+}
+
+#vimeography-basic-settings-form th {
+  width: 265px;
+}
+
+#vimeography-basic-settings-form th h2 {
+  color: #111;
+  font-weight: 500;
+  font-size: 1.4em;
+  line-height: 1.4em;
+  margin: 0;
+}
+
+/* Themes List */
+#vimeography-appearance-form {
+  clear: both;
+}
+
+ul.vimeography-theme-list {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+}
+
+ul.vimeography-theme-list li {
+  margin: 20px 25px 0;
+  padding: 0;
+  position: relative;
+  width: 220px;
+}
+
+ul.vimeography-theme-list li .theme-container {
+  background: none repeat scroll 0 0 #ffffff;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.25);
+  clear: left;
+  margin-bottom: 10px;
+  position: relative;
+  padding: 10px;
+}
+
+ul.vimeography-theme-list li .theme-container.active {
+  background-color: #fdffb7;
+}
+
+ul.vimeography-theme-list li div.theme-image {
+  height: 150px;
+  overflow: hidden;
+  width: 200px;
+}
+
+ul.vimeography-theme-list div.theme-details {
+  font-size: 12px;
+  color: #aaa;
+  margin-top: 5px;
+}
+
+ul.vimeography-theme-list div.theme-details a {
+  text-decoration: none;
+  color: #666;
+  font-weight: bold;
+}
+
+ul.vimeography-theme-list div.theme-details span {
+  float: right;
+}
+
+ul.vimeography-theme-list a.theme-info {
+  background: none repeat scroll 0 0 rgba(255, 255, 255, 0.95);
+  color: #888888;
+  font-size: 12px;
+  height: 130px;
+  left: 10px;
+  line-height: 2;
+  margin: 0;
+  opacity: 0;
+  overflow: hidden;
+  padding: 10px;
+  position: absolute;
+  text-decoration: none;
+  top: 10px;
+  width: 180px;
+}
+
+ul.vimeography-theme-list a.theme-info strong {
+  color: #444444;
+  display: block;
+  font-size: 14px;
+  font-weight: bold;
+  line-height: 1.2;
+  margin: 0 0 4px;
+}
+
+ul.vimeography-theme-list a.theme-info span {
+  display: block;
+  font-size: 12px;
+  line-height: 1.4;
+  margin: 0 0 10px;
+}
+
+/* New gallery editor */
+#vimeography-gallery-editor {
+  position: relative;
+  height: 100%;
+}
+
+#vimeography-gallery-editor form {
+  margin: 0;
+}
+
+#vimeography-gallery-menu-container h1 {
+  font-size: 16px;
+  line-height: 16px;
+  margin: 0;
+  padding: 5px 0;
+}
+
+#vimeography-gallery-menu-container h2 {
+  font-size: 12px;
+  line-height: 12px;
+  color: #808080;
+  margin: 0;
+  padding: 0;
+}
+
+#vimeography-gallery-menu-container {
+  overflow: hidden;
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  height: 600px;
+  width: 280px;
+  border: 1px solid #c4c4c4;
+  -webkit-border-radius: 4px;
+  -moz-border-radius: 4px;
+  border-radius: 4px;
+  display: block;
+  background: #f4f4f4; /* Old browsers */
+  /* IE9 SVG, needs conditional override of 'filter' to 'none' */
+  background: url(data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiA/Pgo8c3ZnIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIgd2lkdGg9IjEwMCUiIGhlaWdodD0iMTAwJSIgdmlld0JveD0iMCAwIDEgMSIgcHJlc2VydmVBc3BlY3RSYXRpbz0ibm9uZSI+CiAgPGxpbmVhckdyYWRpZW50IGlkPSJncmFkLXVjZ2ctZ2VuZXJhdGVkIiBncmFkaWVudFVuaXRzPSJ1c2VyU3BhY2VPblVzZSIgeDE9IjAlIiB5MT0iMCUiIHgyPSIwJSIgeTI9IjEwMCUiPgogICAgPHN0b3Agb2Zmc2V0PSIwJSIgc3RvcC1jb2xvcj0iI2Y0ZjRmNCIgc3RvcC1vcGFjaXR5PSIxIi8+CiAgICA8c3RvcCBvZmZzZXQ9IjEwMCUiIHN0b3AtY29sb3I9IiNlNWU1ZTgiIHN0b3Atb3BhY2l0eT0iMSIvPgogIDwvbGluZWFyR3JhZGllbnQ+CiAgPHJlY3QgeD0iMCIgeT0iMCIgd2lkdGg9IjEiIGhlaWdodD0iMSIgZmlsbD0idXJsKCNncmFkLXVjZ2ctZ2VuZXJhdGVkKSIgLz4KPC9zdmc+);
+  background: -moz-linear-gradient(top, #f4f4f4 0%, #e5e5e8 100%); /* FF3.6+ */
+  background: -webkit-gradient(
+    linear,
+    left top,
+    left bottom,
+    color-stop(0%, #f4f4f4),
+    color-stop(100%, #e5e5e8)
+  ); /* Chrome,Safari4+ */
+  background: -webkit-linear-gradient(
+    top,
+    #f4f4f4 0%,
+    #e5e5e8 100%
+  ); /* Chrome10+,Safari5.1+ */
+  background: -o-linear-gradient(
+    top,
+    #f4f4f4 0%,
+    #e5e5e8 100%
+  ); /* Opera 11.10+ */
+  background: -ms-linear-gradient(top, #f4f4f4 0%, #e5e5e8 100%); /* IE10+ */
+  background: linear-gradient(to bottom, #f4f4f4 0%, #e5e5e8 100%); /* W3C */
+  filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#f4f4f4', endColorstr='#e5e5e8',GradientType=0 ); /* IE6-8 */
+}
+
+.vimeography-gallery-meta {
+  display: block;
+  padding: 10px 13px 15px;
+  height: 38px;
+  border-top: 1px solid #fff;
+  border-bottom: 1px solid #ddd;
+  background: #f7fafc; /* Old browsers */
+  /* IE9 SVG, needs conditional override of 'filter' to 'none' */
+  background: url(data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiA/Pgo8c3ZnIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIgd2lkdGg9IjEwMCUiIGhlaWdodD0iMTAwJSIgdmlld0JveD0iMCAwIDEgMSIgcHJlc2VydmVBc3BlY3RSYXRpbz0ibm9uZSI+CiAgPGxpbmVhckdyYWRpZW50IGlkPSJncmFkLXVjZ2ctZ2VuZXJhdGVkIiBncmFkaWVudFVuaXRzPSJ1c2VyU3BhY2VPblVzZSIgeDE9IjAlIiB5MT0iMCUiIHgyPSIwJSIgeTI9IjEwMCUiPgogICAgPHN0b3Agb2Zmc2V0PSIwJSIgc3RvcC1jb2xvcj0iI2Y3ZjdmNyIgc3RvcC1vcGFjaXR5PSIxIi8+CiAgICA8c3RvcCBvZmZzZXQ9IjEwMCUiIHN0b3AtY29sb3I9IiNlOWU5ZTkiIHN0b3Atb3BhY2l0eT0iMSIvPgogIDwvbGluZWFyR3JhZGllbnQ+CiAgPHJlY3QgeD0iMCIgeT0iMCIgd2lkdGg9IjEiIGhlaWdodD0iMSIgZmlsbD0idXJsKCNncmFkLXVjZ2ctZ2VuZXJhdGVkKSIgLz4KPC9zdmc+);
+  background: -moz-linear-gradient(top, #f7fafc 0%, #edf2f7 100%); /* FF3.6+ */
+  background: -webkit-gradient(
+    linear,
+    left top,
+    left bottom,
+    color-stop(0%, #f7fafc),
+    color-stop(100%, #edf2f7)
+  ); /* Chrome,Safari4+ */
+  background: -webkit-linear-gradient(
+    top,
+    #f7fafc 0%,
+    #edf2f7 100%
+  ); /* Chrome10+,Safari5.1+ */
+  background: -o-linear-gradient(
+    top,
+    #f7fafc 0%,
+    #edf2f7 100%
+  ); /* Opera 11.10+ */
+  background: -ms-linear-gradient(top, #f7fafc 0%, #edf2f7 100%); /* IE10+ */
+  background: linear-gradient(to bottom, #f7fafc 0%, #edf2f7 100%); /* W3C */
+  filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#f7fafc', endColorstr='#edf2f7',GradientType=0 ); /* IE6-8 */
+}
+
+#vimeography-gallery-main-menu-container,
+#vimeography-gallery-themes-container,
+#vimeography-gallery-theme-settings-container {
+  width: 280px;
+  float: left;
+  height: 100%;
+  position: relative;
+}
+
+#vimeography-gallery-main-menu,
+#vimeography-themes-container,
+#vimeography-theme-settings-container {
+  position: absolute;
+  bottom: 0;
+  top: 65px;
+  width: 280px;
+  overflow-y: auto;
+  overflow-x: hidden;
+  background-color: #e2e8f0;
+}
+
+.vimeography-gallery-menu-group {
+  border-bottom: 1px solid #e2e8f0;
+}
+
+.vimeography-gallery-menu-heading {
+  background: #f7fafc;
+  box-shadow: 0px 0px 2px rgba(0, 0, 0, 0.1);
+}
+
+.vimeography-gallery-menu-group:nth-child(odd) .theme-container {
+  background: #f0f0f0;
+}
+
+.vimeography-gallery-menu-heading:hover,
+.vimeography-gallery-menu-group:nth-child(odd) .theme-container:hover {
+  background: #f9f9f9;
+}
+
+.vimeography-gallery-menu-heading a {
+  font-size: 13px;
+  line-height: 13px;
+  font-weight: 500;
+  color: #333;
+  margin: 0;
+  padding: 13px 13px 13px 16px;
+  display: block;
+  text-shadow: 0px 1px 0px #fff;
+}
+
+.vimeography-gallery-menu-heading a:hover {
+  text-decoration: none;
+  color: #232323;
+}
+
+.vimeography-gallery-menu-heading.active,
+.vimeography-gallery-menu-heading.selected {
+  background-color: #2d3748 !important;
+  -moz-box-shadow: inset 0 0 5px #000000;
+  -webkit-box-shadow: inset 0 0 5px #000000;
+  box-shadow: inset 0 0 5px #000000;
+  border: none;
+}
+
+.vimeography-gallery-menu-heading.active a,
+.vimeography-gallery-menu-heading.selected a {
+  color: #f4f4f4;
+  text-shadow: none;
+}
+
+.vimeography-gallery-menu-heading.theme-container img {
+  float: left;
+}
+
+.vimeography-gallery-menu-heading .theme-name {
+  vertical-align: top;
+  margin-left: 7px;
+}
+
+.vimeography-gallery-menu-heading .theme-version {
+  font-size: 10px;
+  margin-left: 7px;
+}
+
+.vimeography-gallery-menu-heading .icon-ok,
+.vimeography-gallery-menu-heading .icon-pencil {
+  margin: -7px 0 0 0;
+}
+
+.vimeography-gallery-menu-heading .icon-ok {
+  display: none;
+}
+
+.vimeography-gallery-menu-heading .icon-wrench {
+  background-position: -360px -144px;
+}
+
+.vimeography-gallery-menu-heading .icon-tasks {
+  background-position: -384px -144px;
+}
+
+.vimeography-gallery-menu-content {
+  padding: 0 17px;
+  background-color: #e2e8f0;
+}
+
+.vimeography-gallery-menu-setting {
+  padding: 15px 0;
+  border-bottom: 1px solid #d4d4d4;
+  border-top: 1px solid #f3f3f3;
+}
+
+.vimeography-gallery-menu-setting.first {
+  border-top: none;
+}
+.vimeography-gallery-menu-setting.last {
+  border-bottom: none;
+}
+
+.vimeography-gallery-menu-setting label {
+  color: #444;
+  font-weight: 700;
+  text-shadow: 0px 1px 0px #fff;
+  margin: 0 0 5px 2px;
+}
+
+.vimeography-gallery-menu-setting input,
+.vimeography-gallery-menu-setting select {
+  font-size: 13px;
+  margin: 0;
+}
+
+.vimeography-gallery-menu-setting input[type="text"].span3 {
+  width: 210px;
+  line-height: 18px;
+  padding: 4px;
+  height: auto;
+}
+
+.popover-content p {
+  margin: 0;
+}
+#vimeography-gallery-menu-container.affix {
+  position: fixed;
+  top: 40px;
+  left: 182px;
+}
+#vimeography-gallery-menu-container.affix-bottom {
+  position: absolute;
+  bottom: 150px;
+}
+
+.wp_bootstrap .form-table input {
+  width: 460px;
+  font-size: 22px;
+  line-height: 22px;
+  height: 35px;
+}
+table.widefat.fixed {
+  border-collapse: separate;
+}
+
+.alert h3 {
+  line-height: 20px;
+}
+
+/* menu */
+.wp-submenu.wp-submenu-wrap {
+  margin: 0;
+}

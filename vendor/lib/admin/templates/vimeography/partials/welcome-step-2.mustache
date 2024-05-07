@@ -1,0 +1,44 @@
+<style>
+  .vimeography-welcome .step-2 {
+    display: grid;
+    grid-template-columns: 25% 75%;
+    grid-column-gap: 80px;
+    padding: 2rem 0;
+  }
+
+  .vimeography-button-wrapper {
+    display: none;
+  }
+
+  .vimeography-welcome .step-2 .instructions p {
+    display: none;
+  }
+
+  .vimeography-welcome .step-2 .instructions p:last-of-type {
+    margin-bottom: 2rem;
+  }
+
+  .vimeography-theme-harvestone {
+    margin: 0 !important;
+  }
+</style>
+
+<div class="step-2">
+  <div class="instructions">
+    <h2>Nice work!</h2>
+    <p>You've successfully created your first video gallery. Easy, right?</p>
+    <p>You can easily <strong>change the appearance of your video gallery</strong> by using one of our custom gallery themes.</p>
+    <div class="vimeography-button-wrapper">
+      <div class="vimeography-input-container">
+        <a class="vimeography-button" href="{{step_3_welcome_url}}">Preview the Themes</a>
+      </div>
+    </div>
+  </div>
+  {{{gallery}}}
+</div>
+
+<script>
+  jQuery('.step-2 .instructions').children().each(function(index) {
+    jQuery(this).delay(1000 * index).fadeIn(1000);
+  });
+</script>

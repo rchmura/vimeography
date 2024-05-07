@@ -1,0 +1,267 @@
+<div class="wrap wp_bootstrap vimeography">
+
+
+    <div class="vimeography-help">
+      <h1>Vimeography Help</h1>
+      <h2>Let's get that question of yours answered, shall we?</h2>
+
+      {{{tutorials_gallery}}}
+
+      <div class="faq">
+        <h1>Frequently Asked Questions</h1>
+
+        <article>
+          <h2>Help! My theme doesn't look right!</h2>
+          <div class="answer">
+            <p>First of all, don't worry! I promise you that we can get it looking right. This can be caused by a multitude of things, so try the following (in the order of appearance):</p>
+            <ul>
+              <li>Try surrounding your Vimeography shortcode in <code>[r<em></em>aw][/r<em></em>aw]</code> tags.</li>
+              <li>Make sure that your WordPress theme is not including multiple versions of jQuery and is using the latest version.</li>
+              <li>Make sure that your theme is calling the <code>wp_fo<em></em>oter();</code> function so that all of the Vimeography stylesheets are printed.</li>
+              <li>Try disabling other plugins that are used for photo galleries, minifying scripts, widgets, or otherwise alter your blog's appearance, one by one, and really determining if you need it.</li>
+            </ul>
+          </div>
+        </article>
+
+        <article>
+          <h2>How do I show my video's title/description in the gallery?</h2>
+          <div class="answer">
+            <p>The default Vimeography theme doesn't support Vimeo metadata out of the box. You may be interested in checking out <a href="http://vimeography.com/themes" title="See all Vimeography themes">our other themes available for your galleries</a> - they will allow you to show other info associated with the videos on Vimeo.</p>
+          </div>
+        </article>
+
+        <article>
+          <h2>How do I show my hidden Vimeo videos in my gallery?</h2>
+          <div class="answer">
+            <p>With <a href="http://vimeography.com/pro?ref=faq-sort" title="Learn More about Vimeography Pro">Vimeography Pro</a>, you can mark a video as Hidden from Vimeo and then place it in a public Vimeo album. Then, when you create a new gallery, you use that Vimeo album as the source for your gallery. The videos will not appear anywhere on Vimeo, but will still be accessible by the <a href="http://vimeography.com/pro?ref=faq-sort" title="Learn More about Vimeography Pro">Vimeography Pro</a> plugin.</p>
+          </div>
+        </article>
+
+        <article>
+          <h2>How do I change the order of my videos in my gallery?</h2>
+          <div class="answer">
+            <p>You can also do this with <a href="http://vimeography.com/pro?ref=faq-sort" title="Learn More about Vimeography Pro">Vimeography Pro</a>, an add-on plugin that gives you much more control over your galleries. Did I mention it is awesome?</p>
+          </div>
+        </article>
+
+        <article>
+          <h2>What is Vimeography Pro, and why is it awesome?</h2>
+          <div class="answer">
+            <p><a href="http://vimeography.com/pro?ref=faq-learn-more" title="Learn More about Vimeography Pro">Vimeography Pro</a> allows you to create playlists, show unlimited videos, allow downloads, show hidden videos, sort your videos, and more! Go check it out, seriously, you're missing out.</p>
+          </div>
+        </article>
+
+        <article>
+          <h2>How do I install a theme?</h2>
+          <div class="answer">
+            <p>Vimeography theme are installed just like any other WordPress plugin. Visit the plugins page and click on the <strong>Upload</strong> tab. Then, select the .zip file that you downloaded from your Vimeography receipt and you should be all set.</p>
+          </div>
+        </article>
+
+        <article>
+          <h2>Where can I get a new download link for my Vimeography product that I purchased?</h2>
+          <div class="answer">
+            <p>Please contact us for a new download link: http://vimeography.com/contact</p>
+          </div>
+        </article>
+
+        <article>
+          <h2>Can I override my Vimeography theme template with some custom code?</h2>
+          <div class="answer">
+            <p>Sure, why not. Simply copy your theme's <code>.mustache</code> file(s) into a new folder located at <code>wp-content/themes/[my_wordpress_theme]/vimeography/[my_vimeography_theme]</code> or <code>wp-content/themes/[my_wordpress_theme]/vimeography/[my_vimeography_theme]/partials</code> and hack away. Vimeography will load that template instead of the default one for your theme.</p>
+          </div>
+        </article>
+
+        <article>
+          <h2>How do I add my gallery to a post or page?</h2>
+          <div class="answer">
+            <p>Easy! All you have to do is type <code>[vimeography id="<span style="color:blue;">#</span>"]</code>, where <span style="color:blue;">#</span> is replaced by the ID number of your gallery.</p>
+          </div>
+        </article>
+
+        <article>
+          <h2>Where do I find the ID number of my gallery?</h2>
+          <div class="answer">
+            <p>Each gallery's ID number is located next to the gallery's title in the first column on the edit galleries page.</p>
+          </div>
+        </article>
+
+        <article>
+          <h2>Can I override my gallery settings in the shortcode?</h2>
+          <div class="answer">
+            <p>Sure thing! You can define all of the properties found in the admin panel right in your shortcode as well. Try using one, any, or all of the following parameters:</p>
+            <code>[vimeo<em></em>graphy id="3" theme="journey" featured="http://vimeo.com/28380190" source="http://vimeo.com/channels/staffpicks" coupon="PUNCTILIOUS" cache="3600" width="600px"]</code>
+          </div>
+        </article>
+
+        <article>
+          <h2>Can I add the gallery to my theme's sidebar/footer/header etc.?</h2>
+          <div class="answer">
+            <p>Yes, but you'll need some PHP knowledge to do it! Open the file you want to add the gallery to, and type <code>&lt;?php echo do_shortcode('[vimeography id="<span style="color:blue;">#</span>"]</strong>'); ?&gt;</code>, where <span style="color:blue;">#</span> is replaced by the ID number of your gallery.</p>
+          </div>
+        </article>
+
+        <article>
+          <h2>I have Vimeography Pro, but I can still only show 25 videos. What gives?</h2>
+          <div class="answer">
+            <p>To show all of your videos in your gallery, make sure the <strong>"Number of Videos"</strong> setting in the Gallery editor is set to <strong>0</strong> - that will bypass all limits and get every video in your Vimeo collection.</p>
+          </div>
+        </article>
+
+        <article>
+          <h2>Can I change the colors/layout of my theme?</h2>
+          <div class="answer">
+            <p>Heck yeah! Use the appearance controls on the Vimeography gallery editor page to change your theme's style so that it matches your site perfectly.</p>
+          </div>
+        </article>
+
+        <article>
+          <h2>I'm getting an error: the plugin did not retrieve data from the Vimeo API! connect() timed out! </h2>
+          <div class="answer">
+            <p>This usually means that Vimeo is having some network issues. Check out the <a href="http://www.vimeostatus.com/" title="Vimeo Status Page">Vimeo Status Page</a> for updates.</p>
+            <p>If Vimeo is not reporting any issues, you'll need to contact your host and ask why you are unable to connect to Vimeo's IP address. It may be that your host has blocked server access via a firewall.</p>
+          </div>
+        </article>
+
+        <article>
+          <h2>Can I get a discount on a Vimeography product?</h2>
+          <div class="answer">
+            <p>Find the Easter Egg!</p>
+          </div>
+        </article>
+
+        <article>
+          <h2>You're funny/handsome/smart, can I follow you on Twitter?</h2>
+          <div class="answer">
+            <p>That's really sweet of you. My Twitter handle is <a href="http://twitter.com/davekiss" title="Follow Dave Kiss on Twitter">@davekiss</a></p>
+          </div>
+        </article>
+
+        <article>
+          <h2>My question isn't answered here. Help!</h2>
+          <div class="answer">
+            <p>Are you sure you've tried everything? Okay. If you're still having problems, reach out on the <a href="http://vimeography.com/contact" title="Vimeography contact page">Vimeography contact page.</a></p>
+          </div>
+        </article>
+
+      </div>
+
+    </div>
+</div> <!-- End Help -->
+
+<style>
+
+  @media screen and (min-width: 320px) {
+
+    .vimeography {
+      margin: 20px auto;
+    }
+
+    .vimeography h1,
+    .vimeography h2,
+    .vimeography h3,
+    .vimeography h4,
+    .vimeography h5,
+    .vimeography h6 {
+      font-family: 'Open Sans', sans-serif;
+      font-weight: 300;
+    }
+
+    .vimeography-help {
+      text-align: center;
+    }
+
+    .group:before,
+    .group:after {
+      content: "";
+      display: table;
+    }
+    .group:after {
+      clear: both;
+    }
+    .group {
+      *zoom: 1;
+      margin: 0 auto;
+      max-width: 1100px;
+    }
+
+    .faq {
+      max-width: 600px;
+      margin: 80px auto 0;
+      background-color: #fafafa;
+      padding: 40px;
+      box-shadow: 0 0 2px rgba(0,0,0,0.2);
+    }
+
+    .faq h1 {
+      margin-bottom: 50px;
+    }
+
+    .faq h2 {
+      line-height: 1.4em;
+      padding: 0;
+    }
+
+    .faq .answer {
+      display: none;
+      margin-top: 20px;
+    }
+
+    .faq p {
+      font-size: 15px;
+      line-height: 1.6em;
+    }
+
+    .faq article {
+      padding: 40px 20px;
+      border-top: 1px solid #eaeaea;
+      border-left: 1px solid #eaeaea;
+      border-right: 1px solid #eaeaea;
+      text-align: left;
+      cursor: pointer;
+    }
+
+    .faq article:last-child {
+      border: 1px solid #eaeaea;
+    }
+
+    .faq article:nth-child(even) {
+      background-color: #f4f4f4;
+    }
+
+    .faq article:hover {
+      background-color: #FFFBCC;
+    }
+
+    .faq article li {
+      list-style-type: disc;
+      padding: 5px 0;
+    }
+
+    .faq code {
+      white-space: normal;
+    }
+
+    .wp-box {
+      background: none repeat scroll 0 0 #FFFFFF;
+      border: 1px solid #E1E1E1;
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+      position: relative;
+    }
+
+  }
+
+</style>
+
+<script>
+  (function($){
+    $(document).ready(function(){
+      $('.faq h2').on('click', function(){
+        $(this).next().slideToggle();
+      })
+    });
+  })(jQuery);
+</script>
+
+
+</style>

@@ -1,0 +1,281 @@
+<div class="wrap vimeography">
+
+  {{#messages}}
+    <div class="{{type}}">
+      <p><strong>{{heading}}</strong> {{message}}</p>
+    </div>
+  {{/messages}}
+
+  <div id="vimeography_gallery_builder_heading">
+    <h1>Vimeography Gallery Builder&trade;</h1>
+
+    <div id="vimeography_gallery_builder_steps">
+      <div class="vimeography-gallery-builder-step">
+        <h2>Name your Gallery</h2>
+      </div>
+      <div class="vimeography-gallery-builder-step">
+        <h2>Enter a Vimeo Link</h2>
+      </div>
+      <div class="vimeography-gallery-builder-step">
+        <h2>Choose a Theme</h2>
+      </div>
+    </div>
+
+  </div>
+
+  <form id="vimeography-basic-settings-form" method="post" action="{{admin_url}}new-gallery&noheader=true">
+
+    <div id="vimeography_gallery_builder">
+      <div class="section">
+        <h2>Step 1</h2>
+        <h3>Give your gallery a name</h3>
+        <input id="gallery_title" type="text" size="40" name="vimeography_new_gallery_settings[gallery_title]" placeholder="eg. My Best Videos" value="" />
+        <p>This is only used to help you stay organized.<br />It won't be shown anywhere on your site.</p>
+
+        <div class="next-step">
+          <span>Scroll to Next Step</span>
+          <svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+             viewBox="0 0 20 20" enable-background="new 0 0 20 20" xml:space="preserve">
+            <g>
+              <g>
+                <path fill-rule="evenodd" clip-rule="evenodd" d="M16,6c-0.28,0-0.53,0.11-0.71,0.29L10,11.59L4.71,6.29C4.53,6.11,4.28,6,4,6
+                  C3.45,6,3,6.45,3,7c0,0.28,0.11,0.53,0.29,0.71l6,6C9.47,13.89,9.72,14,10,14s0.53-0.11,0.71-0.29l6-6C16.89,7.53,17,7.28,17,7
+                  C17,6.45,16.55,6,16,6z"/>
+              </g>
+            </g>
+          </svg>
+        </div>
+
+      </div>
+
+      <div class="section">
+        <h2>Step 2</h2>
+        <h3>Enter the link to your Vimeo collection</h3>
+        <input id="gallery_source_url" type="text" size="40" name="vimeography_new_gallery_settings[source_url]" placeholder="eg. {{#get_vimeography_defaults}}{{source_url}}{{/get_vimeography_defaults}}" />
+        <p>Want to show videos that are hidden from Vimeo?<br />Check out <a href="https://vimeography.com/pro?utm_source=vimeography&utm_medium=new_gallery" target="_blank">Vimeography Pro</a></p>
+        <div class="next-step">
+          <span>Scroll to Last Step</span>
+          <svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+             viewBox="0 0 20 20" enable-background="new 0 0 20 20" xml:space="preserve">
+            <g>
+              <g>
+                <path fill-rule="evenodd" clip-rule="evenodd" d="M16,6c-0.28,0-0.53,0.11-0.71,0.29L10,11.59L4.71,6.29C4.53,6.11,4.28,6,4,6
+                  C3.45,6,3,6.45,3,7c0,0.28,0.11,0.53,0.29,0.71l6,6C9.47,13.89,9.72,14,10,14s0.53-0.11,0.71-0.29l6-6C16.89,7.53,17,7.28,17,7
+                  C17,6.45,16.55,6,16,6z"/>
+              </g>
+            </g>
+          </svg>
+        </div>
+      </div>
+
+      <div class="section">
+        <h2>Step 3</h2>
+        <h3>Choose your gallery theme</h3>
+        <select id="gallery_theme_selector" name="vimeography_new_gallery_settings[gallery_theme]" style="width: 180px;">
+          {{#themes}}
+            <option value='{{name}}' {{#is_default}}selected="selected"{{/is_default}}>{{name}}</option>
+          {{/themes}}
+        </select>
+        <p>You can display your gallery using many different designs.<br />For more choices, check out our <a href="https://vimeography.com/themes?utm_source=vimeography&utm_medium=new_gallery" target="_blank">Vimeography Gallery Themes.</a></p>
+        {{{nonce}}}
+        <input id="submit_new_gallery" class="button button-primary button-large" type="submit" value="Create Gallery">
+      </div>
+    </div>
+  </form>
+</div>
+
+<script>
+  jQuery(function($){
+    $('#gallery_theme_selector').select2();
+    $('#vimeography_gallery_builder').fullpage({
+      onLeave: function(index, nextIndex, direction){
+        var realIndex = index - 1;
+        var step = $('.vimeography-gallery-builder-step')[realIndex];
+
+        if (! $(step).hasClass('is-completed') && direction == 'down' ) {
+          return false;
+        }
+
+        /* var leavingSection = $(this); */
+      }
+    });
+
+    $('.section input[type="text"]').on('input', function() {
+
+      if (this.id == 'gallery_title' && $(this).val() != '') {
+        var step = $('.vimeography-gallery-builder-step')[0];
+        $(step).addClass('is-completed');
+      }
+
+      if (this.id == 'gallery_source_url' && $(this).val() != '') {
+        var step = $('.vimeography-gallery-builder-step')[1];
+        $(step).addClass('is-completed');
+      }
+
+      $(this).siblings('.next-step').fadeIn();
+    });
+
+    $('#gallery_theme_selector').on('change', function (evt) {
+        var step = $('.vimeography-gallery-builder-step')[2];
+        $(step).addClass('is-completed');
+    });
+
+    $('.wrap.vimeography').show();
+
+    $('.next-step').click(function(){
+      $.fn.fullpage.moveSectionDown();
+    });
+  });
+</script>
+
+<style>
+  div.updated,
+  div.update-nag,
+  .notice-error,
+  .notice-warning,
+  .notice-success,
+  .notice-info {
+    display: none !important;
+  }
+
+  .wrap.vimeography {
+    display: none;
+    position: relative;
+  }
+
+  #vimeography_gallery_builder_heading {
+    background: #fff;
+    width: 100%;
+    display: block;
+    z-index: 1;
+    padding: 3em 0 0;
+    text-align: center;
+    position: absolute;
+  }
+
+  #vimeography_gallery_builder_heading h1 {
+    margin-bottom: 1em;
+  }
+
+  #vimeography_gallery_builder_steps {
+    text-transform: uppercase;
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    width: 500px;
+    max-width: 100%;
+    margin: 0 auto;
+  }
+
+  .vimeography-gallery-builder-step {
+    -webkit-box-flex: 0;
+        -ms-flex: 0 1 33%;
+            flex: 0 1 33%;
+    text-align: center;
+    position: relative;
+  }
+
+  .vimeography-gallery-builder-step h2 {
+    font-size: 0.9em;
+  }
+
+  .vimeography-gallery-builder-step:before {
+    content: "";
+    border-radius: 50%;
+    width: 24px;
+    height: 24px;
+    display: block;
+    margin: 0 auto;
+
+    border: 1px solid rgba(0, 0, 0, 0.2);
+    background-image: -webkit-radial-gradient(circle closest-side,rgba(0, 0, 0, 0.2),rgba(0, 0, 0, 0.2) 70%,transparent 0,transparent);
+    background-image: radial-gradient(circle closest-side,rgba(0, 0, 0, 0.2),rgba(0, 0, 0, 0.2) 70%,transparent 0,transparent);
+  }
+
+  .vimeography-gallery-builder-step.is-completed:before {
+    border: 1px solid #02dc87;
+    background-image: -webkit-radial-gradient(circle closest-side,#02dc87,#02dc87 70%,transparent 0,transparent);
+    background-image: radial-gradient(circle closest-side,#02dc87,#02dc87 70%,transparent 0,transparent);
+  }
+
+  .vimeography-gallery-builder-step:not(:last-child):after {
+    content: "";
+    display: inline-block;
+    width: 1px;
+    position: absolute;
+    width: calc(100% - 24px);
+    top: 12px;
+    left: calc(50% + 12px);
+    height: 1px;
+    background-color: rgba(0, 0, 0, 0.2);
+  }
+
+  #vimeography_gallery_builder {
+    text-align: center;
+  }
+
+  #vimeography_gallery_builder h2 {
+    font-size: 1.5em;
+    color: rgba(0, 0, 0, 0.6);
+    margin: 0 0 0.75em;
+  }
+
+  #vimeography_gallery_builder h3 {
+    font-size: 1.75em;
+    font-weight: bold;
+    margin: 0 0 1em;
+  }
+
+  .next-step {
+    position: absolute;
+    bottom: 20px;
+    width: 100%;
+    display: none;
+    cursor: pointer;
+  }
+
+  .next-step span {
+    font-weight: bold;
+    text-transform: uppercase;
+    color: #555;
+    font-size: 1.25em;
+    letter-spacing: 1px;
+  }
+
+  #vimeography_gallery_builder svg {
+    fill: #ccc;
+    width: 60px;
+    height: 60px;
+    display: block;
+    margin: 0 auto;
+    -webkit-animation: 1s arrowbounce;
+            animation: 1s arrowbounce;
+    -webkit-animation-iteration-count: infinite;
+            animation-iteration-count: infinite;
+  }
+
+  .select2-container {
+    margin: 0 0 1em;
+  }
+
+  #submit_new_gallery {
+    display: block;
+    margin: 0 auto;
+  }
+
+  @-webkit-keyframes arrowbounce {
+    0% { -webkit-transform: translateY(0); transform: translateY(0); }
+    50% { -webkit-transform: translateY(5px); transform: translateY(5px); }
+    100% { -webkit-transform: translateY(0); transform: translateY(0); }
+  }
+
+  @keyframes arrowbounce {
+    0% { -webkit-transform: translateY(0); transform: translateY(0); }
+    50% { -webkit-transform: translateY(5px); transform: translateY(5px); }
+    100% { -webkit-transform: translateY(0); transform: translateY(0); }
+  }
+
+  input[type="text"] {
+    padding: 1.2em;
+  }
+</style>
