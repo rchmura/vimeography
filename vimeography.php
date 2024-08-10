@@ -3,7 +3,7 @@
 Plugin Name: Vimeography
 Plugin URI: https://vimeography.com
 Description: Vimeography is the easiest way to set up a custom Vimeo gallery on your site.
-Version: 2.4.1
+Version: 2.4.2
 Requires PHP: 5.3
 Author: Dave Kiss
 Author URI: https://davekiss.com

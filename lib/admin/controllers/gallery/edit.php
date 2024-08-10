@@ -170,6 +170,7 @@ class Vimeography_Gallery_Edit extends Vimeography_Base
    */
   public function vimeography_refresh_gallery_cache()
   {
+    $this->nonceSecurityCheck("nonce_refresh_gallery_cache");
     if ($this->_cache->exists()) {
       $this->_cache->delete();
     }
@@ -180,6 +181,27 @@ class Vimeography_Gallery_Edit extends Vimeography_Base
       'message' => __('Your videos have been refreshed.', 'vimeography')
     );
   }
+  
+  /**
+   * nonceSecurityCheck
+   * Check nonce value in the session.
+   *
+   * @param  mixed $nonceKey
+   * @return void
+   */
+  private function nonceSecurityCheck($nonceKey){
+        // Vérifier que le nonce existe dans la session
+        if (!isset($_SESSION[$nonceKey])) {
+          wp_die(__('Security check failed.', 'vimeography'));
+      }
+  
+      // Vérifier le nonce avec wp_verify_nonce pour plus de sécurité
+      if (!wp_verify_nonce($_SESSION[$nonceKey], $nonceKey)) {
+          wp_die(__('Security check failed.', 'vimeography'));
+      }
+  
+      unset($_SESSION[$nonceKey]);
+  }
 
   /**
    * Removes the custom CSS file associated with
@@ -189,6 +211,7 @@ class Vimeography_Gallery_Edit extends Vimeography_Base
    */
   public function vimeography_refresh_gallery_appearance()
   {
+    $this->nonceSecurityCheck("nonce_refresh_gallery_appearance");
     if (
       file_exists(
         VIMEOGRAPHY_CUSTOMIZATIONS_PATH .
@@ -231,6 +254,7 @@ class Vimeography_Gallery_Edit extends Vimeography_Base
    */
   public function vimeography_set_gallery_theme($input)
   {
+    $this->nonceSecurityCheck("nonce_set_gallery_theme");
     // if this fails, check_admin_referer() will automatically print a "failed" page and die.
     if (
       check_admin_referer(
