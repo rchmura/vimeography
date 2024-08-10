@@ -266,13 +266,30 @@ class Vimeography_Admin_Menu
    */
   public static function vimeography_process_actions()
   {
+    
     if (isset($_POST['vimeography-action'])) {
+      self::setActionNonce($_POST['vimeography-action']);
       do_action('vimeography_action_' . $_POST['vimeography-action'], $_POST);
     }
 
     if (isset($_GET['vimeography-action'])) {
+      self::setActionNonce($_GET['vimeography-action']);
       do_action('vimeography_action_' . $_GET['vimeography-action'], $_GET);
     }
+  }
+  
+  /**
+   * setActionNonce create and save nonce in the session
+   *
+   * @param  mixed $key
+   * @return void
+   */
+  private static function setActionNonce($key){
+    $key = "nonce_$key";
+    // Générer le nonce
+    $nonce = wp_create_nonce($key);
+    // Stocker le nonce dans la session
+    $_SESSION[$key] = $nonce;
   }
 
   /**
