@@ -334,7 +334,16 @@ class Vimeography_Update {
 
     echo '<tr class="plugin-update-tr"><td colspan="3" class="plugin-update"><div class="update-message notice inline notice-warning notice-alt">';
     echo '<span style="display: block; padding: 5px;">';
-    printf( wp_kses_post(__('Hey! Don\'t forget to <a title="Activate my Vimeography Addon" href="%1$sadmin.php?page=vimeography-manage-activations">enter your activation key</a> to receive the latest updates for the %2$s plugin.', 'vimeography'), get_admin_url(), $plugin_data['Name']));
+    printf(
+    wp_kses_post(
+          __(
+              'Hey! Don\'t forget to <a title="Activate my Vimeography Addon" href="%1$sadmin.php?page=vimeography-manage-activations">enter your activation key</a> to receive the latest updates for the %2$s plugin.',
+              'vimeography'
+          )
+      ),
+          esc_url(get_admin_url()), // Premier argument %1$s
+          esc_html($plugin_data['Name']) // Deuxième argument %2$s
+    );
     echo '</span>';
     echo '</div></td></tr>';
   }
