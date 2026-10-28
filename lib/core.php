@@ -407,7 +407,7 @@ abstract class Core
             )
           );
       }
-    } catch (Exception $e) {
+    } catch (\Exception $e) {
       throw new \Vimeography_Exception(
         wp_kses_post(__('the request to Vimeo failed. ', 'vimeography') . $e->getMessage())
       );
